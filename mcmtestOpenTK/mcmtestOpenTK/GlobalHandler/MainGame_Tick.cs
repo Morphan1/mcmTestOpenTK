@@ -8,6 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.AudioHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -42,8 +43,19 @@ namespace mcmtestOpenTK.GlobalHandler
                 }
 
                 // Record current input
+                PreviousMouse = CurrentMouse;
+                PreviousKeyboard = CurrentKeyboard;
                 CurrentMouse = Mouse.GetState();
                 CurrentKeyboard = Keyboard.GetState();
+                // Prevent null errors in very first tick.
+                if (PreviousMouse == null)
+                {
+                    PreviousMouse = CurrentMouse;
+                    PreviousKeyboard = CurrentKeyboard;
+                }
+
+                // Update audio
+                SimpleAudioTest.RecalculateChannels();
 
                 // Update the input line
                 keymark_bouncer++;
@@ -89,6 +101,11 @@ namespace mcmtestOpenTK.GlobalHandler
                 else if (CurrentKeyboard.IsKeyDown(Key.Down))
                 {
                     movetestY += (float)(Delta * 100f);
+                }
+                if (CurrentKeyboard.IsKeyDown(Key.Space) && !PreviousKeyboard.IsKeyDown(Key.Space))
+                {
+                    Console.WriteLine("Playing audio!");
+                    SimpleAudioTest.PlayTestSound();
                 }
                 debug.Text = "Delta: " + (Delta * 1000) + "\nGraphics Delta: " + (GraphicsDelta * 1000) + "\ncFPS: " + cFPS + "\ngFPS: " + gFPS;
             }

@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioHandlers\FMod\fmod.cs" />
+    <Compile Include="AudioHandlers\FMod\fmod_dsp.cs" />
+    <Compile Include="AudioHandlers\FMod\fmod_errors.cs" />
+    <Compile Include="AudioHandlers\FMod\fmod_memoryinfo.cs" />
+    <Compile Include="AudioHandlers\SimpleAudioTest.cs" />
     <Compile Include="CommonHandlers\ErrorHandler.cs" />
     <Compile Include="CommonHandlers\Util.cs" />
     <Compile Include="GlobalHandler\MainGame_Defs.cs" />

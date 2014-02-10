@@ -28,6 +28,8 @@ namespace mcmtestOpenTK.GlobalHandler
         public static int cFPS = 0;
         public static MouseState CurrentMouse;
         public static KeyboardState CurrentKeyboard;
+        public static MouseState PreviousMouse;
+        public static KeyboardState PreviousKeyboard;
         // Public data on current render tick
         public static double GraphicsDelta = 1;
         public static int gFPS = 0;
