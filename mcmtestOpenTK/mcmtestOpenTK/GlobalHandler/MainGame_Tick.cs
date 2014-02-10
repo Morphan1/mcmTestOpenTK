@@ -18,6 +18,8 @@ namespace mcmtestOpenTK.GlobalHandler
         static int keymark_bouncer = 0;
         static bool keymark_add = false;
         static string rendertext = "";
+        static float movetestX;
+        static float movetestY;
         /// <summary>
         /// Called every update tick - should handle all logic!
         /// </summary>
@@ -72,6 +74,22 @@ namespace mcmtestOpenTK.GlobalHandler
                 // Temporary for testing
                 X = PrimaryGameWindow.Mouse.X;
                 Y = PrimaryGameWindow.Mouse.Y;
+                if (CurrentKeyboard.IsKeyDown(Key.Left))
+                {
+                    movetestX -= (float)(Delta * 100f);
+                }
+                else if (CurrentKeyboard.IsKeyDown(Key.Right))
+                {
+                    movetestX += (float)(Delta * 100f);
+                }
+                if (CurrentKeyboard.IsKeyDown(Key.Up))
+                {
+                    movetestY -= (float)(Delta * 100f);
+                }
+                else if (CurrentKeyboard.IsKeyDown(Key.Down))
+                {
+                    movetestY += (float)(Delta * 100f);
+                }
                 debug.Text = "Delta: " + (Delta * 1000) + "\nGraphics Delta: " + (GraphicsDelta * 1000) + "\ncFPS: " + cFPS + "\ngFPS: " + gFPS;
             }
             catch (Exception ex)

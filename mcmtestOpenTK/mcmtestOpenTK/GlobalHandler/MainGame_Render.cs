@@ -19,8 +19,8 @@ namespace mcmtestOpenTK.GlobalHandler
         /// <summary>
         /// Called every render tick - should handle all graphics!
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Irrelevant</param>
+        /// <param name="e">Irrelevant</param>
         static void PrimaryGameWindow_RenderFrame(object sender, FrameEventArgs e)
         {
             try
@@ -39,8 +39,6 @@ namespace mcmtestOpenTK.GlobalHandler
 
                 // Clear the current render buffer, should always be done before any rendering is handled.
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-                GL.ClearColor(Color.Black);
 
                 // Set basic settings
                 GL.MatrixMode(MatrixMode.Projection);
@@ -64,16 +62,36 @@ namespace mcmtestOpenTK.GlobalHandler
                 TextRenderer.Primary.RenderFinal();
 
                 // Temporary for testing
-                // Begin triangle rendering
-                GL.Begin(PrimitiveType.Triangles);
-                // Make a colorful triangle
-                GL.Color3(Color.White);
-                GL.Vertex2(X, Y);
+                if (CurrentMouse.LeftButton == ButtonState.Pressed)
+                {
+                    // Begin triangle rendering
+                    GL.Begin(PrimitiveType.Triangles);
+                    // Make a colorful triangle
+                    GL.Color3(Color.White);
+                    GL.Vertex2(X, Y);
+                    GL.Color3(Color.Red);
+                    GL.Vertex2(2, ScreenHeight - 2);
+                    GL.Color3(Color.Green);
+                    GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
+                    // End triangle rendering
+                    GL.End();
+                }
+
+                // Temporary for testing
+                // Line
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color3(Color.Black);
+                GL.Vertex2(0, ScreenHeight / 2);
                 GL.Color3(Color.Red);
-                GL.Vertex2(2, ScreenHeight - 2);
+                GL.Vertex2(movetestX, movetestY);
+                GL.End();
+                // Box
+                GL.Begin(PrimitiveType.Quads);
                 GL.Color3(Color.Green);
-                GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
-                // End triangle rendering
+                GL.Vertex2(movetestX - 2, movetestY - 2);
+                GL.Vertex2(movetestX - 2, movetestY + 2);
+                GL.Vertex2(movetestX + 2, movetestY + 2);
+                GL.Vertex2(movetestX + 2, movetestY - 2);
                 GL.End();
 
                 // Send the newly drawn code in, should always be done after all rendering is handled.

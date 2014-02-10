@@ -60,6 +60,8 @@ namespace mcmtestOpenTK.GlobalHandler
             }
             // Disable user-induced window resizing. Only do this from the code.
             PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
+            // Set the background color to clear to
+            GL.ClearColor(Color.Black);
         }
     }
 }
