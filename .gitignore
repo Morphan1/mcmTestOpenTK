@@ -1,0 +1,12 @@
+*.log
+*.xml
+*.suo
+*.user
+*.cachefile
+*.cache
+*.pdb
+*.exe.manifest
+*.application
+obj/
+bin/
+*default.cfg

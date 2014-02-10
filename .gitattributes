@@ -1,0 +1,13 @@
+# Auto detect text files and perform LF normalization
+* text eol=lf
+*.gitattributes diff=asplaintext
+*.gitignore diff=asplaintext
+
+*.cs diff=csharp
+*.cs text eol=crlf
+*.sln diff=asplaintext
+*.sln text eol=crlf
+*.csproj diff=asplaintext
+*.csproj text eol=crlf
+*.cfg text eol=lf
+*.exe binary
