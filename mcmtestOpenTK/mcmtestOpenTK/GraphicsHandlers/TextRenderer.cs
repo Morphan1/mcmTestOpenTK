@@ -67,7 +67,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
         /// <param name="height">max height of the object</param>
         public TextRenderer(int width, int height)
         {
-            Width = width - 100;
+            Width = width;
             Height = height;
         }
 
@@ -282,6 +282,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
             int pY = 0;
             Font font = text.font;
             StringFormat sf = StringFormat.GenericTypographic;
+            graphics.TranslateTransform(text.Position.X, text.Position.Y);
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
@@ -290,14 +291,14 @@ namespace mcmtestOpenTK.GraphicsHandlers
                 {
                     if ((line[x] == '^' && x + 1 < line.Length && IsColorSymbol(line[x + 1])) || (x + 1 == line.Length))
                     {
-                        string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0: 1));
+                        string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
                         start = x + 2;
                         x++;
                         if (drawme.Length > 0)
                         {
-                            graphics.TranslateTransform((text.Position.X + X) - pX, (text.Position.Y + Y) - pY);
-                            pX = (text.Position.X + X);
-                            pY = (text.Position.Y + Y);
+                            graphics.TranslateTransform(X - pX, Y - pY);
+                            pX = X;
+                            pY = Y;
                             float width = graphics.MeasureString(drawme, font, new PointF(0, 0), sf).Width;
                             if (highlight)
                             {
@@ -331,43 +332,49 @@ namespace mcmtestOpenTK.GraphicsHandlers
                                     }
                                 }
                             }
-                            if (obfu || pseudo || random || jello)
+#if SYSTEM_FONT_HANDLING
+                            if (obfu || pseudo || random || jello) // Must be handled manually regardless of settings.
                             {
-                                for (int z = 0; z < drawme.Length; z++)
+#endif
+                            for (int z = 0; z < drawme.Length; z++)
+                            {
+                                char chr = drawme[z];
+                                int col = color;
+                                if (pseudo)
                                 {
-                                    char chr = drawme[z];
-                                    int col = color;
-                                    if (pseudo)
-                                    {
-                                        col = chr % colors.Length;
-                                    }
-                                    if (random)
-                                    {
-                                        col = Util.random.Next(colors.Length);
-                                    }
-                                    if (obfu)
-                                    {
-                                        chr = (char)Util.random.Next(33, 126);
-                                    }
-                                    int iX = 0;
-                                    int iY = 0;
-                                    if (jello)
-                                    {
-                                        iX = Util.random.Next(-1, 1);
-                                        iY = Util.random.Next(-1, 1);
-                                    }
-                                    graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX, iY), sf);
-                                    float size = graphics.MeasureString(drawme[z].ToString(), font, new PointF(0, 0), sf).Width;
-                                    X += size;
-                                    pX += size;
-                                    graphics.TranslateTransform(size, 0);
+                                    col = chr % colors.Length;
                                 }
+                                if (random)
+                                {
+                                    col = Util.random.Next(colors.Length);
+                                }
+                                if (obfu)
+                                {
+                                    chr = (char)Util.random.Next(33, 126);
+                                }
+                                int iX = 0;
+                                int iY = 0;
+                                if (jello)
+                                {
+                                    iX = Util.random.Next(-1, 1);
+                                    iY = Util.random.Next(-1, 1);
+                                }
+                                graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX, iY), sf);
+                                float size = graphics.MeasureString(drawme[z].ToString(), font, new PointF(0, 0), sf).Width;
+                                X += size;
+                                pX += size;
+                                graphics.TranslateTransform(size, 0);
+                            }
+#if SYSTEM_FONT_HANDLING
                             }
                             else
                             {
+                                // Spaces strings differently depending on character count... meaning all the text will shift
+                                // if you add characters to the end. Which is bad.
                                 graphics.DrawString(drawme, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
                                 X += width;
                             }
+#endif
                             if (strike)
                             {
                                 graphics.DrawLine(new Pen(ColorFor(scolor, strans), 1), new PointF(0, font.Height * 0.5f), new PointF(width, font.Height * 0.5f));
@@ -423,7 +430,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
                                             sub = false;
                                             graphics.TranslateTransform(0, -text.font.Height / 2);
                                         }
-                                        font = bold && italic ? text.font_bolditalichalf: bold ? text.font_boldhalf: italic ? text.font_italichalf: text.font_half;
+                                        font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
                                     }
                                     super = true;
                                     break;
@@ -445,16 +452,28 @@ namespace mcmtestOpenTK.GraphicsHandlers
                                 case 'R': /*if (!CVar.t_norandom.bvalue)*/ { random = true; } break;
                                 case 'p': pseudo = true; break;
                                 case 'f':
-                                    flip = true;
-                                    graphics.ScaleTransform(1, -1);
-                                    graphics.TranslateTransform(0, -text.font.Height);
+                                    if (!flip)
+                                    {
+                                        flip = true;
+                                        graphics.ScaleTransform(1, -1);
+                                        graphics.TranslateTransform(0, -text.font.Height);
+                                        if (X == 0)
+                                        {
+                                            Y += -2 * text.font.Height;
+                                        }
+                                    }
                                     break;
                                 case 'r':
                                     font = text.font;
                                     if (flip)
                                     {
-                                        graphics.ScaleTransform(1, -1); graphics.TranslateTransform(0, -text.font.Height);
+                                        graphics.ScaleTransform(1, -1);
+                                        graphics.TranslateTransform(0, -text.font.Height);
                                         flip = false;
+                                        if (X == 0)
+                                        {
+                                            Y += 2 * text.font.Height;
+                                        }
                                     }
                                     if (sub)
                                     {
@@ -482,7 +501,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
                         }
                     }
                 }
-                Y += text.font.Height;
+                Y += (flip ? -1: 1) * text.font.Height;
                 X = 0;
             }
             graphics.Transform = new Matrix();

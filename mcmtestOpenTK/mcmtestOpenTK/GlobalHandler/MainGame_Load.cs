@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.GlobalHandler
                                             " ^^7S is ^SSuperScript^r, ^^7l is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^8d is Drop-Shadow,^r^7 ^f^^7f is flip,^r ^^7r is regular text.", new Point(10, 10)));
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 4 * 3));
                 TextRenderer.Primary.texts.Add(debug);
-                input = new PieceOfText("", new Point(ScreenWidth / 2, 10));
+                input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
                 TextRenderer.Primary.texts.Add(input);
                 ReloadGraphics();
                 SimpleAudioTest.LoadSound();
@@ -71,6 +71,9 @@ namespace mcmtestOpenTK.GlobalHandler
             PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
             // Set the background color to clear to
             GL.ClearColor(Color.Black);
+
+            // Temporary for testing
+            //NewRenderTry_Init();
         }
     }
 }

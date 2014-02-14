@@ -16,6 +16,7 @@ namespace mcmtestOpenTK.GlobalHandler
     {
         public static string KeyboardString = "";
         public static int KeyboardString_InitBS = 0;
+        public static bool KeyboardString_CopyPressed = false;
 
         /// <summary>
         /// Called every time a key is pressed, adds to the Keyboard String.
@@ -25,9 +26,26 @@ namespace mcmtestOpenTK.GlobalHandler
         static void PrimaryGameWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
             char c = e.KeyChar;
+            Console.WriteLine("Press: " + (c == '\a' ? "\a": c.ToString()) + " is " + ((int)c));
             if (c == 13) // Enter key
             {
                 c = '\n';
+            }
+            else if (c == 22) // CTRL-V (Paste)
+            {
+                KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ').Replace('\n', ' ');
+                for (int i = 0; i < KeyboardString.Length; i++)
+                {
+                    if (KeyboardString[i] < 32)
+                    {
+                        KeyboardString = KeyboardString.Substring(0, i) + KeyboardString.Substring(i + 1, KeyboardString.Length - (i + 1));
+                        i--;
+                    }
+                }
+            }
+            else if (c == 3) // CTRL-C (Copy)
+            {
+                KeyboardString_CopyPressed = true;
             }
             else if (c == 8) // Backspace
             {
@@ -45,8 +63,17 @@ namespace mcmtestOpenTK.GlobalHandler
             {
                 return;
             }
-            Console.WriteLine("Press: " + c + " is " + ((int)c));
             KeyboardString += c.ToString();
+        }
+
+        /// <summary>
+        /// Clears all recorded KeyboardString information.
+        /// </summary>
+        public static void Clear()
+        {
+            KeyboardString = "";
+            KeyboardString_InitBS = 0;
+            KeyboardString_CopyPressed = false;
         }
     }
 }

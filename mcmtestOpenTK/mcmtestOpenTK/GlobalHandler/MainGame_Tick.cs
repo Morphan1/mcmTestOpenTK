@@ -82,6 +82,11 @@ namespace mcmtestOpenTK.GlobalHandler
                     KeyboardString = "";
                 }
                 input.Text = rendertext + (keymark_add ? "|" : "");
+                if (KeyboardString_CopyPressed)
+                {
+                    System.Windows.Forms.Clipboard.SetText(rendertext, System.Windows.Forms.TextDataFormat.Text);
+                    KeyboardString_CopyPressed = false;
+                }
 
                 // Temporary for testing
                 X = PrimaryGameWindow.Mouse.X;

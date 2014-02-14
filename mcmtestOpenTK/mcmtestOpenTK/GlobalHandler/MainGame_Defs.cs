@@ -16,7 +16,7 @@ namespace mcmtestOpenTK.GlobalHandler
         // Globally required
         public static GameWindow PrimaryGameWindow;
         // Basic settings
-        public static int ScreenWidth = 1500;
+        public static int ScreenWidth = 1000;
         public static int ScreenHeight = 600;
         public static int VSync = 0;
         public static int Target_cFPS = 60;
