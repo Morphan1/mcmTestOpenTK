@@ -16,6 +16,7 @@ namespace mcmtestOpenTK.GlobalHandler
     {
         public static string KeyboardString = "";
         public static int KeyboardString_InitBS = 0;
+        public static bool KeyboardString_ControlDown = false;
         public static bool KeyboardString_CopyPressed = false;
 
         /// <summary>
@@ -25,45 +26,80 @@ namespace mcmtestOpenTK.GlobalHandler
         /// <param name="e">Holds the pressed key</param>
         static void PrimaryGameWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
-            char c = e.KeyChar;
-            Console.WriteLine("Press: " + (c == '\a' ? "\a": c.ToString()) + " is " + ((int)c));
-            if (c == 13) // Enter key
+            if (Char.IsControl(e.KeyChar))
             {
-                c = '\n';
+                return;
             }
-            else if (c == 22) // CTRL-V (Paste)
+            KeyboardString += e.KeyChar;
+        }
+
+        /// <summary>
+        /// Called every time a key is pressed down, handles control codes for the Keyboard String.
+        /// </summary>
+        /// <param name="sender">Irrelevant</param>
+        /// <param name="e">Holds the pressed key</param>
+        static void PrimaryGameWindow_KeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            switch (e.Key)
             {
-                KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ').Replace('\n', ' ');
-                for (int i = 0; i < KeyboardString.Length; i++)
-                {
-                    if (KeyboardString[i] < 32)
+                case Key.Enter:
+                    KeyboardString += "\n";
+                    break;
+                case Key.BackSpace:
+                    if (KeyboardString.Length == 0)
                     {
-                        KeyboardString = KeyboardString.Substring(0, i) + KeyboardString.Substring(i + 1, KeyboardString.Length - (i + 1));
-                        i--;
+                        KeyboardString_InitBS++;
                     }
-                }
+                    else
+                    {
+                        KeyboardString = KeyboardString.Substring(0, KeyboardString.Length - 1);
+                    }
+                    break;
+                case Key.ControlLeft:
+                case Key.ControlRight:
+                    KeyboardString_ControlDown = true;
+                    break;
+                case Key.C:
+                    if (KeyboardString_ControlDown)
+                    {
+                        KeyboardString_CopyPressed = true;
+                    }
+                    break;
+                case Key.V:
+                    if (KeyboardString_ControlDown)
+                    {
+                        KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ').Replace('\n', ' ');
+                        for (int i = 0; i < KeyboardString.Length; i++)
+                        {
+                            if (KeyboardString[i] < 32)
+                            {
+                                KeyboardString = KeyboardString.Substring(0, i) + KeyboardString.Substring(i + 1, KeyboardString.Length - (i + 1));
+                                i--;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
-            else if (c == 3) // CTRL-C (Copy)
+        }
+
+        /// <summary>
+        /// Called every time a key is released, handles control codes for the Keyboard String.
+        /// </summary>
+        /// <param name="sender">Irrelevant</param>
+        /// <param name="e">Holds the pressed key</param>
+        static void PrimaryGameWindow_KeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            switch (e.Key)
             {
-                KeyboardString_CopyPressed = true;
+                case Key.ControlLeft:
+                case Key.ControlRight:
+                    KeyboardString_ControlDown = false;
+                    break;
+                default:
+                    break;
             }
-            else if (c == 8) // Backspace
-            {
-                if (KeyboardString.Length == 0)
-                {
-                    KeyboardString_InitBS++;
-                }
-                else
-                {
-                    KeyboardString = KeyboardString.Substring(0, KeyboardString.Length - 1);
-                }
-                return;
-            }
-            else if (c < 32) // Any other controls
-            {
-                return;
-            }
-            KeyboardString += c.ToString();
         }
 
         /// <summary>

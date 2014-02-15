@@ -29,6 +29,8 @@ namespace mcmtestOpenTK.GlobalHandler
             PrimaryGameWindow.UpdateFrame += new EventHandler<FrameEventArgs>(PrimaryGameWindow_UpdateFrame);
             PrimaryGameWindow.RenderFrame += new EventHandler<FrameEventArgs>(PrimaryGameWindow_RenderFrame);
             PrimaryGameWindow.KeyPress += new EventHandler<KeyPressEventArgs>(PrimaryGameWindow_KeyPress);
+            PrimaryGameWindow.KeyDown += new EventHandler<KeyboardKeyEventArgs>(PrimaryGameWindow_KeyDown);
+            PrimaryGameWindow.KeyUp += new EventHandler<KeyboardKeyEventArgs>(PrimaryGameWindow_KeyUp);
             // Begin running the game.
             PrimaryGameWindow.Run(Target_cFPS, Target_gFPS);
         }
