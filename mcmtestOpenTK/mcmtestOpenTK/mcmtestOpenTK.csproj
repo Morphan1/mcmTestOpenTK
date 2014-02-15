@@ -54,6 +54,12 @@
     <Compile Include="AudioHandlers\SimpleAudioTest.cs" />
     <Compile Include="CommonHandlers\ErrorHandler.cs" />
     <Compile Include="CommonHandlers\Util.cs" />
+    <Compile Include="GameplayerHandlers\Breakable.cs" />
+    <Compile Include="GameplayerHandlers\Entity.cs" />
+    <Compile Include="GameplayerHandlers\Player.cs" />
+    <Compile Include="GlobalHandler\MainGame_Exit.cs" />
+    <Compile Include="GlobalHandler\MainGame_World.cs" />
+    <Compile Include="GraphicsHandlers\Renderable.cs" />
     <Compile Include="GlobalHandler\MainGame_Defs.cs" />
     <Compile Include="GlobalHandler\MainGame_Base.cs" />
     <Compile Include="GlobalHandler\MainGame_KeyHandler.cs" />

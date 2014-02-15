@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
 using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.GameplayerHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -39,64 +40,26 @@ namespace mcmtestOpenTK.GlobalHandler
 
                 // Clear the current render buffer, should always be done before any rendering is handled.
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-                
-                // Set basic settings
-                GL.MatrixMode(MatrixMode.Projection);
-                GL.LoadIdentity();
-                GL.Ortho(0, ScreenWidth, ScreenHeight, 0, -50, 50);
 
-                // Temporary for testing
-                // Begin triangle rendering
-                GL.Begin(PrimitiveType.Triangles);
-                // Make a colorful triangle
-                GL.Color3(Color.White);
-                GL.Vertex2(X, Y);
-                GL.Color3(Color.Red);
-                GL.Vertex2(ScreenWidth - 2, 2);
-                GL.Color3(Color.Green);
-                GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
-                // End triangle rendering
-                GL.End();
-
-                // Render global text
-                TextRenderer.Primary.RenderFinal();
-
-                // Temporary for testing
-                if (CurrentMouse.LeftButton == ButtonState.Pressed)
-                {
-                    // Begin triangle rendering
-                    GL.Begin(PrimitiveType.Triangles);
-                    // Make a colorful triangle
-                    GL.Color3(Color.White);
-                    GL.Vertex2(X, Y);
-                    GL.Color3(Color.Red);
-                    GL.Vertex2(2, ScreenHeight - 2);
-                    GL.Color3(Color.Green);
-                    GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
-                    // End triangle rendering
-                    GL.End();
-                }
-
-                // Temporary for testing
-                // Line
-                GL.Begin(PrimitiveType.Lines);
-                GL.Color3(Color.Black);
-                GL.Vertex2(0, ScreenHeight / 2);
-                GL.Color3(Color.Red);
-                GL.Vertex2(movetestX, movetestY);
-                GL.End();
-                // Box
-                GL.Begin(PrimitiveType.Quads);
-                GL.Color3(Color.Green);
-                GL.Vertex2(movetestX - 2, movetestY - 2);
-                GL.Vertex2(movetestX - 2, movetestY + 2);
-                GL.Vertex2(movetestX + 2, movetestY + 2);
-                GL.Vertex2(movetestX + 2, movetestY - 2);
-                GL.End();
-                
-                // Temporary for testing
+                // Set to 3D mode
                 GL.PushMatrix();
-                NewRenderTry_Draw();
+                setup3D();
+
+                // Render all 3D graphics
+                Standard3D();
+
+                // End 3D
+                end3D();
+                GL.PopMatrix();
+
+                // Set to begin 2D rendering
+                GL.PushMatrix();
+                Setup2D();
+
+                // Render all 2D graphics
+                Standard2D();
+
+                // End 2D
                 GL.PopMatrix();
 
                 // Turn off first-graphics-draw mode: Always last!
@@ -117,14 +80,130 @@ namespace mcmtestOpenTK.GlobalHandler
             }
         }
 
-        // FOR THE TESTING REASONS
+        /// <summary>
+        /// Sets the graphics for 2D screen rendering.
+        /// </summary>
+        public static void Setup2D()
+        {
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, ScreenWidth, ScreenHeight, 0, -50, 50);
+        }
 
+        static Matrix4 Perspective;
+        static Matrix4 View;
+
+        /// <summary>
+        /// Sets the graphics for 3D screen rendering.
+        /// </summary>
+        public static void setup3D()
+        {
+            // Initialise the projection view matrix
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+
+            // Setup a perspective view
+            GL.MultMatrix(ref Perspective);
+            View = Matrix4.LookAt(Player.player.Location, Player.player.Location + Forward, new Vector3(0, 0, 1));
+            GL.MultMatrix(ref View);
+
+            // Enable depth and culling
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
+        }
+
+        // Closes the 3D rendering mode.
+        public static void end3D()
+        {
+            GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.CullFace);
+        }
+
+        /// <summary>
+        /// Called every render frame to handle all 2D graphics.
+        /// </summary>
+        public static void Standard2D()
+        {
+            // Temporary for testing
+            // Begin triangle rendering
+            GL.Begin(PrimitiveType.Triangles);
+            // Make a colorful triangle
+            GL.Color3(Color.White);
+            GL.Vertex2(X, Y);
+            GL.Color3(Color.Red);
+            GL.Vertex2(ScreenWidth - 2, 2);
+            GL.Color3(Color.Green);
+            GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
+            // End triangle rendering
+            GL.End();
+
+            // Render global text
+            GL.PushMatrix();
+            TextRenderer.Primary.RenderFinal();
+            GL.PopMatrix();
+
+            // Temporary for testing
+            // Line
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(Color.Black);
+            GL.Vertex2(0, ScreenHeight / 2);
+            GL.Color3(Color.Red);
+            GL.Vertex2(movetestX, movetestY);
+            GL.End();
+            // Box
+            GL.Begin(PrimitiveType.Quads);
+            GL.Color3(Color.Green);
+            GL.Vertex2(movetestX - 2, movetestY - 2);
+            GL.Vertex2(movetestX - 2, movetestY + 2);
+            GL.Vertex2(movetestX + 2, movetestY + 2);
+            GL.Vertex2(movetestX + 2, movetestY - 2);
+            GL.End();
+
+            if (CurrentMouse.LeftButton == ButtonState.Pressed)
+            {
+                // Begin triangle rendering
+                GL.Begin(PrimitiveType.Triangles);
+                // Make a colorful triangle
+                GL.Color3(Color.White);
+                GL.Vertex2(X, Y);
+                GL.Color3(Color.Red);
+                GL.Vertex2(2, ScreenHeight - 2);
+                GL.Color3(Color.Green);
+                GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
+                // End triangle rendering
+                GL.End();
+            }
+        }
+
+        /// <summary>
+        /// Called every render frame to handle all 3D graphics.
+        /// </summary>
+        public static void Standard3D()
+        {
+            // Temporary for testing
+            DrawCube(50, 0, 0, 0);
+            DrawCube(100, 0, 0, 0);
+            DrawCube(-50, 0, 0, 0);
+            DrawCube(-100, 0, 0, 0);
+            DrawCube(0, 50, 0, 0);
+            DrawCube(0, 100, 0, 0);
+            DrawCube(0, -50, 0, 0);
+            DrawCube(0, -100, 0, 0);
+        }
+
+        /// <summary>
+        /// Temporary for testing: Draw a cube model
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <param name="ori"></param>
         static void DrawCube(float x, float y, float z, float ori)
         {
             GL.PushMatrix();
 
             GL.Translate(x, y, z);
-            GL.Rotate(ori, 0, 1, 0);
+            // GL.Rotate(ori, 0, 1, 0);
 
             GL.Begin(PrimitiveType.Quads);
 
@@ -155,45 +234,6 @@ namespace mcmtestOpenTK.GlobalHandler
             GL.End();
 
             GL.PopMatrix();
-        }
-        static void NewRenderTry_Init()
-        {
-            // Initialise the projection view matrix
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-
-            // Setup a perspective view
-            float FOVradians = MathHelper.DegreesToRadians(45);
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(FOVradians, (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
-            GL.MultMatrix(ref perspective);
-
-            // Set the viewport to the whole window
-            GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
-
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
-        }
-        static void NewRenderTry_Draw()
-        {
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-
-            GL.Rotate(movetestX, 0, 0, 1);
-            GL.Rotate(movetestY, 0, 1, 0);
-
-            // Draw a thing
-            /*GL.Color3(Color.Orange);
-            GL.Translate(50, 20, -200);
-            GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(0, 0, 0);
-            GL.Vertex3(20, 0, 0);
-            GL.Vertex3(20, 20, 0);
-            GL.Vertex3(0, 20, 0);
-            GL.End();*/
-            DrawCube(0, 0, -200, 0);
-            DrawCube(100, 0, -200, 20);
-            DrawCube(200, 0, -200, 0);
-            DrawCube(300, 0, -200, 20);
         }
     }
 }

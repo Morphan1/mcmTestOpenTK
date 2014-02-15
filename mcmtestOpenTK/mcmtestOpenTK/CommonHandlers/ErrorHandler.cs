@@ -8,11 +8,26 @@ namespace mcmtestOpenTK.CommonHandlers
 {
     class ErrorHandler
     {
+        /// <summary>
+        /// Handles and reports an Exception.
+        /// </summary>
+        /// <param name="ex">The exception to handle.</param>
         public static void HandleError(Exception ex)
         {
-            File.AppendAllText("errors.log", "ERROR at " + DateTime.Now.ToString() + ": " + ex.ToString() + "\n\n\n");
-            Console.WriteLine(ex.ToString());
+            HandleError(ex.ToString());
         }
+
+        /// <summary>
+        /// Reports an error message.
+        /// </summary>
+        /// <param name="error">The message to report.</param>
+        public static void HandleError(string error)
+        {
+            File.AppendAllText("errors.log", "ERROR at " + DateTime.Now.ToString() + ": " + error + "\n\n\n");
+            Console.WriteLine(error);
+        }
+
+        // Temporary, for testing.
         public static void HandleOutput(string outp)
         {
             File.AppendAllText("output.log", outp + "\n");

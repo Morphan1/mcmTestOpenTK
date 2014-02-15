@@ -175,13 +175,9 @@ namespace mcmtestOpenTK.GraphicsHandlers
             GL.TexCoord2(1, 1); GL.Vertex2(TextBitmap.Width, TextBitmap.Height);
             GL.TexCoord2(0, 1); GL.Vertex2(0, TextBitmap.Height);
             GL.End();
-            GL.PopMatrix();
 
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
-
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.PopMatrix();
         }
 
         public const int DefaultColor = 7;

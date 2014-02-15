@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.CommonHandlers;
 using mcmtestOpenTK.AudioHandlers;
+using mcmtestOpenTK.GameplayerHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -26,12 +27,12 @@ namespace mcmtestOpenTK.GlobalHandler
         /// </summary>
         /// <param name="sender">Irrelevant</param>
         /// <param name="e">Holds the delta timing information</param>
-        static void PrimaryGameWindow_UpdateFrame(object sender, FrameEventArgs e)
+        static void PrimaryGameWindow_UpdateFrame(object sender, FrameEventArgs EventArgs)
         {
             try
             {
                 // Record delta: always first!
-                Delta = e.Time;
+                Delta = EventArgs.Time;
                 // Calculate cFPS: always first!
                 cticknumber++;
                 ctickdelta += Delta;
@@ -112,7 +113,23 @@ namespace mcmtestOpenTK.GlobalHandler
                     Console.WriteLine("Playing audio!");
                     SimpleAudioTest.PlayTestSound();
                 }
-                debug.Text = "Delta: " + (Delta * 1000) + "\nGraphics Delta: " + (GraphicsDelta * 1000) + "\ncFPS: " + cFPS + "\ngFPS: " + gFPS;
+
+                // Closeable yay
+                if (CurrentKeyboard.IsKeyDown(Key.Escape))
+                {
+                    Exit();
+                }
+
+                // Update all entities
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    Entity e = entities[i];
+                    e.Update();
+                }
+
+                // Debug stuff, always near end
+                debug.Text = "Delta: " + ((float)Delta) + "\nGraphics Delta: " + ((float)GraphicsDelta) + "\ncFPS: " + cFPS + "\ngFPS: " + gFPS
+                    + "\nPos: " + Player.player.Location.ToString() + "\nMouse: " + MainGame.PrimaryGameWindow.Mouse.X + "\nOrig: " +Player.CenterX;
             }
             catch (Exception ex)
             {

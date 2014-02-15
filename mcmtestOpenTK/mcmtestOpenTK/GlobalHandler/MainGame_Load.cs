@@ -10,6 +10,7 @@ using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
 using mcmtestOpenTK.AudioHandlers;
 using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.GameplayerHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -24,7 +25,8 @@ namespace mcmtestOpenTK.GlobalHandler
         {
             try
             {
-                // Initialize side-code
+                // Prepare graphics-related code
+                ReloadGraphics();
                 TextRenderer.Init();
                 TextRenderer.Primary.texts.Add(new PieceOfText("ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890\nXX XX\tXX\nXX\tXX\nX\tXX\nX\tX\n" +
                                                                "TESTCOLORS^1RED^2GREEN^3THREE\n" +
@@ -36,8 +38,11 @@ namespace mcmtestOpenTK.GlobalHandler
                 TextRenderer.Primary.texts.Add(debug);
                 input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
                 TextRenderer.Primary.texts.Add(input);
-                ReloadGraphics();
+                // Prepare audio-related code
                 SimpleAudioTest.LoadSound();
+                // Prepare gameplay-related code
+                Player.player = new Player();
+                SpawnEntity(Player.player);
             }
             catch (Exception ex)
             {
@@ -71,9 +76,9 @@ namespace mcmtestOpenTK.GlobalHandler
             PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
             // Set the background color to clear to
             GL.ClearColor(Color.Black);
-
-            // Temporary for testing
-            //NewRenderTry_Init();
+            // Re-create the "Perspective" matrix
+            float FOVradians = MathHelper.DegreesToRadians(45);
+            Perspective = Matrix4.CreatePerspectiveFieldOfView(FOVradians, (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
         }
     }
 }

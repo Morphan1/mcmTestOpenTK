@@ -8,6 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
+using mcmtestOpenTK.GameplayerHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -22,6 +23,7 @@ namespace mcmtestOpenTK.GlobalHandler
         public static int Target_cFPS = 60;
         public static int Target_gFPS = 60;
         public static int FontSize = 12;
+        public static double MouseSensitivity = 3f;
         public static string WindowTitle = "mcmonkey's OpenTK Test Game";
         // Public data on current tick
         public static double Delta = 1;
@@ -33,12 +35,14 @@ namespace mcmtestOpenTK.GlobalHandler
         // Public data on current render tick
         public static double GraphicsDelta = 1;
         public static int gFPS = 0;
+        public static Vector3 Forward = Vector3.UnitX;
         public static bool IsFirstGraphicsDraw = true;
-
         // Temporary, for testing
         public static int X = 0;
         public static int Y = 0;
         public static PieceOfText debug;
         public static PieceOfText input;
+        // Public gameplay data
+        public static List<Entity> entities = new List<Entity>();
     }
 }
