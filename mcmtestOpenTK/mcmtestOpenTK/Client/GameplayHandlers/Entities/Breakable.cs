@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.GlobalHandler;
+using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.GameplayHandlers.Entities
+namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public class Breakable: Entity
     {

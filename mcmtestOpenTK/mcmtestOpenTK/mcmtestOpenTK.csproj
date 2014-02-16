@@ -47,31 +47,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioHandlers\FMod\fmod.cs" />
-    <Compile Include="AudioHandlers\FMod\fmod_dsp.cs" />
-    <Compile Include="AudioHandlers\FMod\fmod_errors.cs" />
-    <Compile Include="AudioHandlers\FMod\fmod_memoryinfo.cs" />
-    <Compile Include="AudioHandlers\SimpleAudioTest.cs" />
-    <Compile Include="CommonHandlers\CVar.cs" />
-    <Compile Include="CommonHandlers\ErrorHandler.cs" />
-    <Compile Include="CommonHandlers\Util.cs" />
-    <Compile Include="GameplayHandlers\Entities\Breakable.cs" />
-    <Compile Include="GameplayHandlers\Entities\Entity.cs" />
-    <Compile Include="GameplayHandlers\Entities\Player.cs" />
-    <Compile Include="GlobalHandler\MainGame_Exit.cs" />
-    <Compile Include="GlobalHandler\MainGame_World.cs" />
-    <Compile Include="GraphicsHandlers\Renderable.cs" />
-    <Compile Include="GlobalHandler\MainGame_Defs.cs" />
-    <Compile Include="GlobalHandler\MainGame_Base.cs" />
-    <Compile Include="GlobalHandler\MainGame_KeyHandler.cs" />
-    <Compile Include="GlobalHandler\MainGame_Load.cs" />
-    <Compile Include="GlobalHandler\MainGame_Render.cs" />
-    <Compile Include="GlobalHandler\MainGame_Tick.cs" />
-    <Compile Include="GraphicsHandlers\Text\PieceOfText.cs" />
-    <Compile Include="GraphicsHandlers\Text\TextRenderer.cs" />
-    <Compile Include="GraphicsHandlers\Text\TextStyle.cs" />
+    <Compile Include="Client\AudioHandlers\FMod\fmod.cs" />
+    <Compile Include="Client\AudioHandlers\FMod\fmod_dsp.cs" />
+    <Compile Include="Client\AudioHandlers\FMod\fmod_errors.cs" />
+    <Compile Include="Client\AudioHandlers\FMod\fmod_memoryinfo.cs" />
+    <Compile Include="Client\AudioHandlers\SimpleAudioTest.cs" />
+    <Compile Include="Client\CommonHandlers\CVar.cs" />
+    <Compile Include="Client\CommonHandlers\ErrorHandler.cs" />
+    <Compile Include="Client\CommonHandlers\Util.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\Breakable.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Exit.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_World.cs" />
+    <Compile Include="Client\GraphicsHandlers\Renderable.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Defs.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Base.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_KeyHandler.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Load.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Render.cs" />
+    <Compile Include="Client\GlobalHandler\MainGame_Tick.cs" />
+    <Compile Include="Client\GraphicsHandlers\Text\PieceOfText.cs" />
+    <Compile Include="Client\GraphicsHandlers\Text\TextRenderer.cs" />
+    <Compile Include="Client\GraphicsHandlers\Text\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIHandlers\UIConsole.cs" />
+    <Compile Include="Client\UIHandlers\UIConsole.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace mcmtestOpenTK.GraphicsHandlers.Text
+namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
     public class TextStyle
     {

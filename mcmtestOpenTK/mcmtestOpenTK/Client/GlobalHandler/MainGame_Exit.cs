@@ -7,9 +7,9 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.GlobalHandler
+namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {

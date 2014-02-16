@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using mcmtestOpenTK.GraphicsHandlers;
-using mcmtestOpenTK.GlobalHandler;
-using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GraphicsHandlers.Text;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 
-namespace mcmtestOpenTK.UIHandlers
+namespace mcmtestOpenTK.Client.UIHandlers
 {
     public class UIConsole
     {

@@ -10,10 +10,10 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using mcmtestOpenTK.GlobalHandler;
-using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.GraphicsHandlers.Text
+namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
     class TextRenderer: Renderable
     {

@@ -6,10 +6,10 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics;
-using mcmtestOpenTK.GlobalHandler;
-using mcmtestOpenTK.CommonHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.GameplayHandlers.Entities
+namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public class Player : Breakable
     {

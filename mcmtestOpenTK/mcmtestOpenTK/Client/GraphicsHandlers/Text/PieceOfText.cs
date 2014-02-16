@@ -9,7 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
-namespace mcmtestOpenTK.GraphicsHandlers.Text
+namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
     public class PieceOfText
     {

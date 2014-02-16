@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace mcmtestOpenTK.GraphicsHandlers
+namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
     public abstract class Renderable
     {

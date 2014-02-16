@@ -7,14 +7,14 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using mcmtestOpenTK.GraphicsHandlers;
-using mcmtestOpenTK.GraphicsHandlers.Text;
-using mcmtestOpenTK.AudioHandlers;
-using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GameplayHandlers.Entities;
-using mcmtestOpenTK.UIHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Client.AudioHandlers;
+using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.UIHandlers;
 
-namespace mcmtestOpenTK.GlobalHandler
+namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {

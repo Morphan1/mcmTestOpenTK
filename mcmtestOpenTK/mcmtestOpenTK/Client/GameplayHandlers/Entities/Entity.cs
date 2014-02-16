@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
-using mcmtestOpenTK.GraphicsHandlers;
-using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GlobalHandler;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.GameplayHandlers.Entities
+namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public class Entity: Renderable
     {

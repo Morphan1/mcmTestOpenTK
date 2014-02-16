@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenTK;
 
-namespace mcmtestOpenTK.CommonHandlers
+namespace mcmtestOpenTK.Client.CommonHandlers
 {
     class Util
     {
