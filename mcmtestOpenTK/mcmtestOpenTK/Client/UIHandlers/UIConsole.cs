@@ -7,6 +7,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
@@ -42,7 +43,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static void InitConsole()
         {
-            ConsoleText = new PieceOfText(Util.CopyText("\n", Lines), new Point(0, 0));
+            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(0, 0));
             textrender = new TextRenderer(MainGame.ScreenWidth, MainGame.ScreenHeight / 2);
             textrender.AddText(ConsoleText);
         }
@@ -58,7 +59,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             {
                 NewText += text;
             }
-            int lines = Util.CountCharacter(text, '\n');
+            int lines = Utilities.CountCharacter(text, '\n');
             int linecount = 0;
             int i = 0;
             for (i = 0; i < ConsoleText.Text.Length; i++)

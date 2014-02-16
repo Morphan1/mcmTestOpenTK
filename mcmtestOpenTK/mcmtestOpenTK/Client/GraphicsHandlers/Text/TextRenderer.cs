@@ -12,6 +12,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
@@ -518,18 +519,18 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     }
                     if (random)
                     {
-                        col = Util.random.Next(colors.Length);
+                        col = Utilities.random.Next(colors.Length);
                     }
                     if (obfu)
                     {
-                        chr = (char)Util.random.Next(33, 126);
+                        chr = (char)Utilities.random.Next(33, 126);
                     }
                     int iX = 0;
                     int iY = 0;
                     if (jello)
                     {
-                        iX = Util.random.Next(-1, 1);
-                        iY = Util.random.Next(-1, 1);
+                        iX = Utilities.random.Next(-1, 1);
+                        iY = Utilities.random.Next(-1, 1);
                     }
                     // TODO: Efficient replacement! Possibly make a separate class, with pre-build character spritesheets of some form...
                     graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX + X, iY), sf);

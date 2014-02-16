@@ -17,11 +17,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// Global entry point, should never be directly called!
         /// </summary>
         /// <param name="args">Command line input args</param>
-        [STAThread]
-        static void Main(string[] args)
+        public static void Client_Main(string[] args)
         {
-            // Utilties are prepared before anything else
-            Util.Init();
             // Create the window and establish basic event info / settings
             PrimaryGameWindow = new GameWindow(ScreenWidth, ScreenHeight);
             PrimaryGameWindow.Title = WindowTitle;

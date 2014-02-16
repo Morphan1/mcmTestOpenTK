@@ -8,15 +8,6 @@ namespace mcmtestOpenTK.Client.CommonHandlers
 {
     class Util
     {
-        public static Random random;
-        /// <summary>
-        /// Called once at system begin to prepare the Utilities.
-        /// </summary>
-        public static void Init()
-        {
-            random = new Random();
-        }
-
         /// <summary>
         /// Returns a one-length vector of the Yaw/Pitch angle input.
         /// </summary>
@@ -44,41 +35,6 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             float cos = (float)Math.Cos(yaw);
             float sin = (float)Math.Sin(yaw);
             return new Vector2((vec.X * cos) - (vec.Y * sin), (vec.X * sin) + (vec.Y * cos));
-        }
-
-        /// <summary>
-        /// Returns a peice of text copied a specified number of times.
-        /// </summary>
-        /// <param name="text">What text to copy</param>
-        /// <param name="times">How many times to copy it</param>
-        /// <returns></returns>
-        public static string CopyText(string text, int times)
-        {
-            StringBuilder toret = new StringBuilder(text.Length * times);
-            for (int i = 0; i < times; i++)
-            {
-                toret.Append(text);
-            }
-            return toret.ToString();
-        }
-
-        /// <summary>
-        /// Returns the number of times a character occurs in a string.
-        /// </summary>
-        /// <param name="input">The string containing the character</param>
-        /// <param name="countme">The character which the string contains</param>
-        /// <returns>How many times the character occurs</returns>
-        public static int CountCharacter(string input, char countme)
-        {
-            int count = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (input[i] == countme)
-                {
-                    count++;
-                }
-            }
-            return count;
         }
     }
 }
