@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Shared;
 
@@ -37,7 +36,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         // Temporary, for testing.
         public static void HandleOutput(string outp)
         {
-            File.AppendAllText("output.log", outp + "\n");
+            FileHandler.AppendText("output.log", outp + "\n");
         }
     }
 }

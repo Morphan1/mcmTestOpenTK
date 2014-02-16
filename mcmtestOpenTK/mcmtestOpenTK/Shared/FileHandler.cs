@@ -92,6 +92,16 @@ namespace mcmtestOpenTK.Shared
         }
 
         /// <summary>
+        /// Returns a stream of the byte data in a file.
+        /// </summary>
+        /// <param name="filename">The name of the file to read</param>
+        /// <returns>The file's data, as a stream</returns>
+        public static DataStream ReadToStream(string filename)
+        {
+            return new DataStream(ReadBytes(filename));
+        }
+
+        /// <summary>
         /// Returns all the text data in a file.
         /// </summary>
         /// <param name="filename">The name of the file to read</param>

@@ -161,15 +161,13 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// </summary>
         public override void Draw()
         {
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BindTexture(TextureTarget.Texture2D, TextureID);
             if (modified || MainGame.IsFirstGraphicsDraw)
             {
                 RenderText();
             }
-
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Texture2D);
-            GL.BindTexture(TextureTarget.Texture2D, TextureID);
 
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0, 0); GL.Vertex2(0, 0);
@@ -179,7 +177,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             GL.End();
 
             GL.Disable(EnableCap.Blend);
-            GL.Disable(EnableCap.Texture2D);
         }
 
         public const int DefaultColor = 7;

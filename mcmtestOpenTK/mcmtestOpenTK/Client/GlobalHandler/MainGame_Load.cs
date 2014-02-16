@@ -61,6 +61,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             // Tell everything to re-calculate with disregard for modified state.
             IsFirstGraphicsDraw = true;
+            // Prepare the texture system
+            Texture.InitTextureSystem();
             // Set the title
             PrimaryGameWindow.Title = WindowTitle;
             // Setup VSync mode
@@ -83,6 +85,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Re-create the "Perspective" matrix
             float FOVradians = MathHelper.DegreesToRadians(45);
             Perspective = Matrix4.CreatePerspectiveFieldOfView(FOVradians, (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
+            // Textures are always enabled and in-use
+            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

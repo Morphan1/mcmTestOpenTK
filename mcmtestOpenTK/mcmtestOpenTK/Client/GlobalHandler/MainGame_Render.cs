@@ -138,14 +138,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void Standard3D()
         {
             // Temporary for testing
-            DrawCube(50, 0, 0, 0);
-            DrawCube(100, 0, 0, 0);
-            DrawCube(-50, 0, 0, 0);
-            DrawCube(-100, 0, 0, 0);
-            DrawCube(0, 50, 0, 0);
-            DrawCube(0, 100, 0, 0);
-            DrawCube(0, -50, 0, 0);
-            DrawCube(0, -100, 0, 0);
+            DrawCube(50, 0, 0);
+            DrawCube(100, 0, 0);
+            DrawCube(-50, 0, 0);
+            DrawCube(-100, 0, 0);
+            DrawCube(0, 50, 0);
+            DrawCube(0, 100, 0);
+            DrawCube(0, -50, 0);
+            DrawCube(0, -100, 0);
         }
 
         /// <summary>
@@ -155,38 +155,68 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="y"></param>
         /// <param name="z"></param>
         /// <param name="ori"></param>
-        static void DrawCube(float x, float y, float z, float ori)
+        static void DrawCube(float x, float y, float z)
         {
             GL.PushMatrix();
 
             GL.Translate(x, y, z);
-            // GL.Rotate(ori, 0, 1, 0);
 
+            GL.BindTexture(TextureTarget.Texture2D, Texture.Test.Internal_Texture);
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Color3(Color.Orange);
-            GL.Vertex3(0, 0, 0); GL.Vertex3(20, 0, 0);
-            GL.Vertex3(20, 20, 0); GL.Vertex3(0, 20, 0);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(20, 0, 0);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(20, 20, 0);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(0, 20, 0);
 
-            GL.Color3(Color.Red);
-            GL.Vertex3(20, 0, 0); GL.Vertex3(20, 0, -20);
-            GL.Vertex3(20, 20, -20); GL.Vertex3(20, 20, 0);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(20, 0, 0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(20, 0, -20);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(20, 20, -20);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(20, 20, 0);
 
-            GL.Color3(Color.Yellow);
-            GL.Vertex3(0, 0, 0); GL.Vertex3(0, 0, -20);
-            GL.Vertex3(20, 0, -20); GL.Vertex3(20, 0, 0);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(0, 0, -20);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(20, 0, -20);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(20, 0, 0);
 
-            GL.Color3(Color.Green);
-            GL.Vertex3(0, 0, -20); GL.Vertex3(0, 0, 0);
-            GL.Vertex3(0, 20, 0); GL.Vertex3(0, 20, -20);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(0, 0, -20);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(0, 20, 0);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(0, 20, -20);
 
-            GL.Color3(Color.HotPink);
-            GL.Vertex3(0, 20, 0); GL.Vertex3(20, 20, 0);
-            GL.Vertex3(20, 20, -20); GL.Vertex3(0, 20, -20);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(0, 20, 0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(20, 20, 0);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(20, 20, -20);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(0, 20, -20);
 
-            GL.Color3(Color.Blue);
-            GL.Vertex3(20, 0, -20); GL.Vertex3(0, 0, -20);
-            GL.Vertex3(0, 20, -20); GL.Vertex3(20, 20, -20);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(20, 0, -20);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(0, 0, -20);
+            GL.TexCoord2(1, 1);
+            GL.Vertex3(0, 20, -20);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(20, 20, -20);
 
             GL.End();
 
