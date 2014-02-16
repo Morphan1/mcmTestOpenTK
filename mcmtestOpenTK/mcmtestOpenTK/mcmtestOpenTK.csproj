@@ -68,6 +68,7 @@
     <Compile Include="GlobalHandler\MainGame_Tick.cs" />
     <Compile Include="GraphicsHandlers\PieceOfText.cs" />
     <Compile Include="GraphicsHandlers\TextRenderer.cs" />
+    <Compile Include="GraphicsHandlers\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

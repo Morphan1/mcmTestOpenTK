@@ -30,7 +30,7 @@ namespace mcmtestOpenTK.CommonHandlers
         // Temporary, for testing.
         public static void HandleOutput(string outp)
         {
-            File.AppendAllText("output.log", outp + "\n");
+            File.AppendAllText("output.log", outp.Replace('\r', ' ') + "\n");
         }
     }
 }

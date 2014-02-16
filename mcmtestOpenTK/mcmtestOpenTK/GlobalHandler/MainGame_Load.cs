@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.GlobalHandler
                                             "^7Text styles: ^b^^7b is bold,^r ^i^^7i is italic,^r ^u^^7u is underline,^r ^s^^7s is strike-through,^r ^O^^7O is overline,^r ^7^h^0^^0h is highlight,^r^7 ^j^^jj is jello (AKA jiggle), ^r\n" +
                                             " ^2^e^0^^0e is emphasis,^r^7 ^t^^7t is transparent,^r ^T^^7T is more transparent,^r ^o^^7o is opaque,^r ^R^^RR is random,^r ^p^^pp is pseudo-random,^r ^^7k is obfuscated (^kobfu^r),^r\n" +
                                             " ^^7S is ^SSuperScript^r, ^^7l is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^8d is Drop-Shadow,^r^7 ^f^^7f is flip,^r ^^7r is regular text.", new Point(10, 10)));
-                debug = new PieceOfText("", new Point(5, ScreenHeight / 4 * 3));
+                debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 TextRenderer.Primary.texts.Add(debug);
                 input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
                 TextRenderer.Primary.texts.Add(input);

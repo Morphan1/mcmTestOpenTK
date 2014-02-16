@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
@@ -118,7 +119,7 @@ namespace mcmtestOpenTK.GlobalHandler
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.CullFace);
         }
-
+        public static Stopwatch SW;
         /// <summary>
         /// Called every render frame to handle all 2D graphics.
         /// </summary>
@@ -137,10 +138,16 @@ namespace mcmtestOpenTK.GlobalHandler
             // End triangle rendering
             GL.End();
 
+            // Temporary for testing
+            SW = new Stopwatch();
+
             // Render global text
             GL.PushMatrix();
             TextRenderer.Primary.RenderFinal();
             GL.PopMatrix();
+
+            // Temp, testing
+            input.Text = SW.ElapsedMilliseconds + " ms";
 
             // Temporary for testing
             // Line

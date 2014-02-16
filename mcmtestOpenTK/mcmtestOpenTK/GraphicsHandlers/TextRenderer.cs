@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text;
 using System.Drawing;
@@ -205,6 +206,30 @@ namespace mcmtestOpenTK.GraphicsHandlers
             Color.FromArgb(64, 64, 64),   // 20 // ) // DarkGray
             Color.FromArgb(61, 38, 17),   // 21 // A // DarkBrown
         };
+        public static Point[] ShadowPoints = new Point[] {
+            new Point(0, 1),
+            new Point(0, 2),
+            new Point(1, 0),
+            new Point(1, 1),
+            new Point(1, 2),
+            new Point(2, 0),
+            new Point(2, 1),
+            new Point(2, 2),
+        };
+        public static Point[] EmphasisPoints = new Point[] {
+            new Point(0, -1),
+            new Point(0, 1),
+            new Point(1, 0),
+            new Point(-1, 0),
+            new Point(0, -2),
+            new Point(0, 2),
+            new Point(2, 0),
+            new Point(-2, 0),
+            new Point(-1, -1),
+            new Point(-1, 1),
+            new Point(1, -1),
+            new Point(1, 1),
+        };
 
         /// <summary>
         /// Used to identify if an input character is a valid color symbol (generally the character that follows a '^'), for use by RenderColoredText
@@ -310,67 +335,25 @@ namespace mcmtestOpenTK.GraphicsHandlers
                             }
                             if (shadow)
                             {
-                                for (int shadX = 0; shadX < 3; shadX++)
+                                foreach (Point point in ShadowPoints)
                                 {
-                                    for (int shadY = 1; shadY < 3; shadY++)
-                                    {
-                                        graphics.DrawString(drawme, font, new SolidBrush(Color.Black), new PointF(shadX, shadY), sf);
-                                    }
+                                    //graphics.DrawString(drawme, font, new SolidBrush(Color.Black), point, sf);
+                                    graphics.TranslateTransform(point.X, point.Y);
+                                    RenderBaseText(graphics, drawme, font, 0, sf);
+                                    graphics.TranslateTransform(-point.X, -point.Y);
                                 }
                             }
                             if (emphasis)
                             {
-                                for (int empX = -1; empX < 2; empX += 2)
+                                foreach (Point point in EmphasisPoints)
                                 {
-                                    for (int empY = -1; empY < 2; empY += 2)
-                                    {
-                                        graphics.DrawString(drawme, font, new SolidBrush(ColorFor(ecolor, etrans)), new PointF(empX, empY), sf);
-                                    }
+                                    //graphics.DrawString(drawme, font, new SolidBrush(ColorFor(ecolor, etrans)), point, sf);
+                                    graphics.TranslateTransform(point.X, point.Y);
+                                    RenderBaseText(graphics, drawme, font, ecolor, sf, etrans);
+                                    graphics.TranslateTransform(-point.X, -point.Y);
                                 }
                             }
-#if SYSTEM_FONT_HANDLING
-                            if (obfu || pseudo || random || jello) // Must be handled manually regardless of settings.
-                            {
-#endif
-                            for (int z = 0; z < drawme.Length; z++)
-                            {
-                                char chr = drawme[z];
-                                int col = color;
-                                if (pseudo)
-                                {
-                                    col = chr % colors.Length;
-                                }
-                                if (random)
-                                {
-                                    col = Util.random.Next(colors.Length);
-                                }
-                                if (obfu)
-                                {
-                                    chr = (char)Util.random.Next(33, 126);
-                                }
-                                int iX = 0;
-                                int iY = 0;
-                                if (jello)
-                                {
-                                    iX = Util.random.Next(-1, 1);
-                                    iY = Util.random.Next(-1, 1);
-                                }
-                                graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX, iY), sf);
-                                float size = graphics.MeasureString(drawme[z].ToString(), font, new PointF(0, 0), sf).Width;
-                                X += size;
-                                pX += size;
-                                graphics.TranslateTransform(size, 0);
-                            }
-#if SYSTEM_FONT_HANDLING
-                            }
-                            else
-                            {
-                                // Spaces strings differently depending on character count... meaning all the text will shift
-                                // if you add characters to the end. Which is bad.
-                                graphics.DrawString(drawme, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
-                                X += width;
-                            }
-#endif
+                            X += RenderBaseText(graphics, drawme, font, color, sf, trans, pseudo, random, jello, obfu);
                             if (strike)
                             {
                                 graphics.DrawLine(new Pen(ColorFor(scolor, strans), 1), new PointF(0, font.Height * 0.5f), new PointF(width, font.Height * 0.5f));
@@ -501,6 +484,71 @@ namespace mcmtestOpenTK.GraphicsHandlers
                 X = 0;
             }
             graphics.Transform = new Matrix();
+        }
+
+        /// <summary>
+        /// Semi-internal rendering of text strings.
+        /// </summary>
+        /// <param name="graphics">The image graphics object to render with</param>
+        /// <param name="text">The text to render</param>
+        /// <param name="font">The font to use</param>
+        /// <param name="color">The color ID number to use</param>
+        /// <param name="sf">The format</param>
+        /// <param name="trans">Transparency</param>
+        /// <param name="pseudo">Whether to use pseudo-random color</param>
+        /// <param name="random">Whether to use real-random color</param>
+        /// <param name="jello">Whether to use a jello effect</param>
+        /// <param name="obfu">Whether to randomize letters</param>
+        /// <returns></returns>
+        public static float RenderBaseText(Graphics graphics, string text, Font font, int color,
+            StringFormat sf, int trans = 255, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
+        {
+#if SYSTEM_FONT_HANDLING
+            if (obfu || pseudo || random || jello) // These must be handled manually regardless of settings.
+            {
+#endif
+            float X = 0;
+            for (int z = 0; z < text.Length; z++)
+            {
+                char chr = text[z];
+                int col = color;
+                if (pseudo)
+                {
+                    col = chr % colors.Length;
+                }
+                if (random)
+                {
+                    col = Util.random.Next(colors.Length);
+                }
+                if (obfu)
+                {
+                    chr = (char)Util.random.Next(33, 126);
+                }
+                int iX = 0;
+                int iY = 0;
+                if (jello)
+                {
+                    iX = Util.random.Next(-1, 1);
+                    iY = Util.random.Next(-1, 1);
+                }
+                MainGame.SW.Start();
+                // TODO: Efficient replacement! Possibly make a separate class, with pre-build character spritesheets of some form...
+                graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX + X, iY), sf);
+                MainGame.SW.Stop();
+                float size = graphics.MeasureString(text[z].ToString(), font, new PointF(0, 0), sf).Width;
+                X += size;
+            }
+            return X;
+#if SYSTEM_FONT_HANDLING
+            }
+            else
+            {
+                // Spaces strings differently depending on character count... meaning all the text will shift
+                // if you add characters to the end. Which is bad.
+                graphics.DrawString(drawme, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
+                return graphics.MeasureString(text, font, new PointF(0, 0), sf).Width;
+            }
+#endif
         }
     }
 }

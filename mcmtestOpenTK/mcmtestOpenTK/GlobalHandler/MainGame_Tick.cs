@@ -10,6 +10,7 @@ using OpenTK.Input;
 using mcmtestOpenTK.CommonHandlers;
 using mcmtestOpenTK.AudioHandlers;
 using mcmtestOpenTK.GameplayerHandlers;
+using mcmtestOpenTK.GraphicsHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -82,7 +83,7 @@ namespace mcmtestOpenTK.GlobalHandler
                     rendertext += KeyboardString;
                     KeyboardString = "";
                 }
-                input.Text = rendertext + (keymark_add ? "|" : "");
+                //input.Text = rendertext + (keymark_add ? "|" : "");
                 if (KeyboardString_CopyPressed)
                 {
                     System.Windows.Forms.Clipboard.SetText(rendertext, System.Windows.Forms.TextDataFormat.Text);
@@ -128,8 +129,14 @@ namespace mcmtestOpenTK.GlobalHandler
                 }
 
                 // Debug stuff, always near end
-                debug.Text = "Delta: " + ((float)Delta) + "\nGraphics Delta: " + ((float)GraphicsDelta) + "\ncFPS: " + cFPS + "\ngFPS: " + gFPS
-                    + "\nPos: " + Player.player.Location.ToString() + "\nMouse: " + MainGame.PrimaryGameWindow.Mouse.X + "\nOrig: " +Player.CenterX;
+                debug.Text = TextStyle.Readable +
+                    "Delta: " + ((float)Delta) +
+                    "\nGraphics Delta: " + ((float)GraphicsDelta) +
+                    "\ncFPS: " + cFPS +
+                    "\ngFPS: " + gFPS +
+                    "\nPos: " + Player.player.Location.ToString() +
+                    "\nMouse: " + MainGame.PrimaryGameWindow.Mouse.X +
+                    "\nOrig: " +Player.CenterX;
             }
             catch (Exception ex)
             {
