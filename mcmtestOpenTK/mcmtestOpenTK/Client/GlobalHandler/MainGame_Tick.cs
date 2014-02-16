@@ -134,8 +134,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
                     "\nPos: " + Player.player.Location.ToString() +
-                    "\nMouse: " + MainGame.PrimaryGameWindow.Mouse.X +
-                    "\nOrig: " +Player.CenterX;
+                    "\nAngle: " + Player.player.Angle.ToString() +
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
             }
             catch (Exception ex)
             {

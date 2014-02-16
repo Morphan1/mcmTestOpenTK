@@ -15,5 +15,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         public static string Transparent = "^t";
         public static string Opaque = "^o";
         public static string Readable = "^r^7^e^0^b";
+        public static string Error = "^0^e^3";
+        public static string White = "^7";
     }
 }

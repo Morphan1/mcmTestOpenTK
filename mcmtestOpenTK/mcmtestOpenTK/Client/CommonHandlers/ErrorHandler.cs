@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
 {
@@ -14,7 +16,12 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         /// <param name="ex">The exception to handle.</param>
         public static void HandleError(Exception ex)
         {
-            HandleError(ex.ToString());
+            HandleError("Internal unidentified error at " + Utilities.DateTimeToString(DateTime.Now) + ": " + ex.ToString());
+        }
+
+        public static void HandleError(string cause, Exception ex)
+        {
+            HandleError("Error at " + Utilities.DateTimeToString(DateTime.Now) + ": " + cause + ": " + ex.ToString());
         }
 
         /// <summary>
@@ -23,14 +30,14 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         /// <param name="error">The message to report.</param>
         public static void HandleError(string error)
         {
-            File.AppendAllText("errors.log", "ERROR at " + DateTime.Now.ToString() + ": " + error + "\n\n\n");
-            Console.WriteLine(error);
+            FileHandler.AppendText("errors.log", error + "\n\n\n");
+            Console.WriteLine(TextStyle.Reset + TextStyle.Error + error);
         }
 
         // Temporary, for testing.
         public static void HandleOutput(string outp)
         {
-            File.AppendAllText("output.log", outp.Replace('\r', ' ') + "\n");
+            File.AppendAllText("output.log", outp + "\n");
         }
     }
 }

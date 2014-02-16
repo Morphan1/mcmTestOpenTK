@@ -5,6 +5,9 @@ using System.Text;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -34,6 +37,31 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 }
             }
             LoadedTextures = new List<Texture>();
+        }
+
+        /// <summary>
+        /// Loads a texture from file.
+        /// </summary>
+        /// <param name="filename">The name of the file to use</param>
+        /// <returns>The loaded texture, or null if it does not exist.</returns>
+        public static Texture LoadTexture(string filename)
+        {
+            try
+            {
+                if (!FileHandler.Exists(filename))
+                {
+                    ErrorHandler.HandleError("Cannot load texture, file '" +
+                        TextStyle.Italic + TextStyle.White + filename + TextStyle.Reset + TextStyle.Error +
+                        "' does not exist.");
+                    return null;
+                }
+                return null; // TODO: Actually load
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError(ex);
+                return null;
+            }
         }
 
         /// <summary>

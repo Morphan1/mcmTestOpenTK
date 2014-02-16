@@ -98,7 +98,7 @@ namespace mcmtestOpenTK.Shared
         /// <returns>The file's data, as a string</returns>
         public static string ReadText(string filename)
         {
-            return encoding.GetString(ReadBytes(filename));
+            return encoding.GetString(ReadBytes(filename)).Replace('\r', ' ');
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace mcmtestOpenTK.Shared
         /// <param name="text">The text data to write</param>
         public static void WriteText(string filename, string text)
         {
-            WriteBytes(filename, encoding.GetBytes(text));
+            WriteBytes(filename, encoding.GetBytes(text.Replace('\r', ' ')));
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace mcmtestOpenTK.Shared
             {
                 Directory.CreateDirectory(dir);
             }
-            File.AppendAllText(BaseDirectory + fname, text, encoding);
+            File.AppendAllText(BaseDirectory + fname, text.Replace('\r', ' '), encoding);
         }
     }
 }
