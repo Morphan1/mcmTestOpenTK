@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.GlobalHandler;
 
-namespace mcmtestOpenTK.GameplayerHandlers
+namespace mcmtestOpenTK.GameplayHandlers.Entities
 {
     public class Breakable: Entity
     {

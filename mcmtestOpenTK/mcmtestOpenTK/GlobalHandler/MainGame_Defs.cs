@@ -8,7 +8,8 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
-using mcmtestOpenTK.GameplayerHandlers;
+using mcmtestOpenTK.GraphicsHandlers.Text;
+using mcmtestOpenTK.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.GlobalHandler
 {

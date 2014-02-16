@@ -13,9 +13,9 @@ using OpenTK.Input;
 using mcmtestOpenTK.GlobalHandler;
 using mcmtestOpenTK.CommonHandlers;
 
-namespace mcmtestOpenTK.GraphicsHandlers
+namespace mcmtestOpenTK.GraphicsHandlers.Text
 {
-    class TextRenderer
+    class TextRenderer: Renderable
     {
         public static TextRenderer Primary;
         public static Font DefaultFont;
@@ -158,7 +158,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
         /// <summary>
         /// Called by the render tick, to show the rendered text on the screen.
         /// </summary>
-        public void RenderFinal()
+        public override void Draw()
         {
             if (modified || MainGame.IsFirstGraphicsDraw)
             {

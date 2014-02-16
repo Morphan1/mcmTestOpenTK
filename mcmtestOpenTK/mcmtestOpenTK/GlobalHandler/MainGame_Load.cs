@@ -8,9 +8,11 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
+using mcmtestOpenTK.GraphicsHandlers.Text;
 using mcmtestOpenTK.AudioHandlers;
 using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GameplayerHandlers;
+using mcmtestOpenTK.GameplayHandlers.Entities;
+using mcmtestOpenTK.UIHandlers;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -38,6 +40,8 @@ namespace mcmtestOpenTK.GlobalHandler
                 TextRenderer.Primary.texts.Add(debug);
                 input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
                 TextRenderer.Primary.texts.Add(input);
+                // Prepare the console
+                UIConsole.InitConsole();
                 // Prepare audio-related code
                 SimpleAudioTest.LoadSound();
                 // Prepare gameplay-related code

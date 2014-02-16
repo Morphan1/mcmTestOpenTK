@@ -55,9 +55,9 @@
     <Compile Include="CommonHandlers\CVar.cs" />
     <Compile Include="CommonHandlers\ErrorHandler.cs" />
     <Compile Include="CommonHandlers\Util.cs" />
-    <Compile Include="GameplayerHandlers\Breakable.cs" />
-    <Compile Include="GameplayerHandlers\Entity.cs" />
-    <Compile Include="GameplayerHandlers\Player.cs" />
+    <Compile Include="GameplayHandlers\Entities\Breakable.cs" />
+    <Compile Include="GameplayHandlers\Entities\Entity.cs" />
+    <Compile Include="GameplayHandlers\Entities\Player.cs" />
     <Compile Include="GlobalHandler\MainGame_Exit.cs" />
     <Compile Include="GlobalHandler\MainGame_World.cs" />
     <Compile Include="GraphicsHandlers\Renderable.cs" />
@@ -67,10 +67,11 @@
     <Compile Include="GlobalHandler\MainGame_Load.cs" />
     <Compile Include="GlobalHandler\MainGame_Render.cs" />
     <Compile Include="GlobalHandler\MainGame_Tick.cs" />
-    <Compile Include="GraphicsHandlers\PieceOfText.cs" />
-    <Compile Include="GraphicsHandlers\TextRenderer.cs" />
-    <Compile Include="GraphicsHandlers\TextStyle.cs" />
+    <Compile Include="GraphicsHandlers\Text\PieceOfText.cs" />
+    <Compile Include="GraphicsHandlers\Text\TextRenderer.cs" />
+    <Compile Include="GraphicsHandlers\Text\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIHandlers\UIConsole.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

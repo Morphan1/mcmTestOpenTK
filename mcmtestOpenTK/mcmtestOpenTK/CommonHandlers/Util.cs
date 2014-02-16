@@ -45,5 +45,21 @@ namespace mcmtestOpenTK.CommonHandlers
             float sin = (float)Math.Sin(yaw);
             return new Vector2((vec.X * cos) - (vec.Y * sin), (vec.X * sin) + (vec.Y * cos));
         }
+
+        /// <summary>
+        /// Returns a peice of text copied a specified number of times.
+        /// </summary>
+        /// <param name="text">What text to copy</param>
+        /// <param name="times">How many times to copy it</param>
+        /// <returns></returns>
+        public static string CopyText(string text, int times)
+        {
+            StringBuilder toret = new StringBuilder(text.Length * times);
+            for (int i = 0; i < times; i++)
+            {
+                toret.Append(text);
+            }
+            return toret.ToString();
+        }
     }
 }

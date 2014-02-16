@@ -9,7 +9,7 @@ using OpenTK.Graphics;
 using mcmtestOpenTK.GlobalHandler;
 using mcmtestOpenTK.CommonHandlers;
 
-namespace mcmtestOpenTK.GameplayerHandlers
+namespace mcmtestOpenTK.GameplayHandlers.Entities
 {
     public class Player : Breakable
     {

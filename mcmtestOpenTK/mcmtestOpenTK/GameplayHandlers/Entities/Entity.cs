@@ -7,7 +7,7 @@ using mcmtestOpenTK.GraphicsHandlers;
 using mcmtestOpenTK.CommonHandlers;
 using mcmtestOpenTK.GlobalHandler;
 
-namespace mcmtestOpenTK.GameplayerHandlers
+namespace mcmtestOpenTK.GameplayHandlers.Entities
 {
     public class Entity: Renderable
     {

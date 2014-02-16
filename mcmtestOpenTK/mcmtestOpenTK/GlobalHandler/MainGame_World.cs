@@ -10,7 +10,7 @@ using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
 using mcmtestOpenTK.AudioHandlers;
 using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GameplayerHandlers;
+using mcmtestOpenTK.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.GlobalHandler
 {

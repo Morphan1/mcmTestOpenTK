@@ -9,8 +9,9 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.GraphicsHandlers;
+using mcmtestOpenTK.GraphicsHandlers.Text;
 using mcmtestOpenTK.CommonHandlers;
-using mcmtestOpenTK.GameplayerHandlers;
+using mcmtestOpenTK.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.GlobalHandler
 {
@@ -127,7 +128,7 @@ namespace mcmtestOpenTK.GlobalHandler
         {
             // Render global text
             GL.PushMatrix();
-            TextRenderer.Primary.RenderFinal();
+            TextRenderer.Primary.Draw();
             GL.PopMatrix();
         }
 
