@@ -119,67 +119,16 @@ namespace mcmtestOpenTK.GlobalHandler
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.CullFace);
         }
-        public static Stopwatch SW;
+
         /// <summary>
         /// Called every render frame to handle all 2D graphics.
         /// </summary>
         public static void Standard2D()
         {
-            // Temporary for testing
-            // Begin triangle rendering
-            GL.Begin(PrimitiveType.Triangles);
-            // Make a colorful triangle
-            GL.Color3(Color.White);
-            GL.Vertex2(X, Y);
-            GL.Color3(Color.Red);
-            GL.Vertex2(ScreenWidth - 2, 2);
-            GL.Color3(Color.Green);
-            GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
-            // End triangle rendering
-            GL.End();
-
-            // Temporary for testing
-            SW = new Stopwatch();
-
             // Render global text
             GL.PushMatrix();
             TextRenderer.Primary.RenderFinal();
             GL.PopMatrix();
-
-            // Temp, testing
-            input.Text = SW.ElapsedMilliseconds + " ms";
-
-            // Temporary for testing
-            // Line
-            GL.Begin(PrimitiveType.Lines);
-            GL.Color3(Color.Black);
-            GL.Vertex2(0, ScreenHeight / 2);
-            GL.Color3(Color.Red);
-            GL.Vertex2(movetestX, movetestY);
-            GL.End();
-            // Box
-            GL.Begin(PrimitiveType.Quads);
-            GL.Color3(Color.Green);
-            GL.Vertex2(movetestX - 2, movetestY - 2);
-            GL.Vertex2(movetestX - 2, movetestY + 2);
-            GL.Vertex2(movetestX + 2, movetestY + 2);
-            GL.Vertex2(movetestX + 2, movetestY - 2);
-            GL.End();
-
-            if (CurrentMouse.LeftButton == ButtonState.Pressed)
-            {
-                // Begin triangle rendering
-                GL.Begin(PrimitiveType.Triangles);
-                // Make a colorful triangle
-                GL.Color3(Color.White);
-                GL.Vertex2(X, Y);
-                GL.Color3(Color.Red);
-                GL.Vertex2(2, ScreenHeight - 2);
-                GL.Color3(Color.Green);
-                GL.Vertex2(ScreenWidth - 2, ScreenHeight - 2);
-                // End triangle rendering
-                GL.End();
-            }
         }
 
         /// <summary>

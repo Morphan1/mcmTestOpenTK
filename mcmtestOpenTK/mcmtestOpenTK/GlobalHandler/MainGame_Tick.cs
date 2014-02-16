@@ -18,7 +18,6 @@ namespace mcmtestOpenTK.GlobalHandler
     {
         static int cticknumber = 0;
         static double ctickdelta = 0;
-        static int keymark_bouncer = 0;
         static bool keymark_add = false;
         static string rendertext = "";
         static float movetestX;
@@ -60,11 +59,9 @@ namespace mcmtestOpenTK.GlobalHandler
                 SimpleAudioTest.RecalculateChannels();
 
                 // Update the input line
-                keymark_bouncer++;
-                if (keymark_bouncer == 30)
+                if (cticknumber == 0)
                 {
                     keymark_add = !keymark_add;
-                    keymark_bouncer = 0;
                 }
                 if (KeyboardString_InitBS > 0)
                 {
@@ -83,7 +80,7 @@ namespace mcmtestOpenTK.GlobalHandler
                     rendertext += KeyboardString;
                     KeyboardString = "";
                 }
-                //input.Text = rendertext + (keymark_add ? "|" : "");
+                input.Text = rendertext + (keymark_add ? "|" : "");
                 if (KeyboardString_CopyPressed)
                 {
                     System.Windows.Forms.Clipboard.SetText(rendertext, System.Windows.Forms.TextDataFormat.Text);
@@ -112,7 +109,7 @@ namespace mcmtestOpenTK.GlobalHandler
                 if (CurrentKeyboard.IsKeyDown(Key.Space) && !PreviousKeyboard.IsKeyDown(Key.Space))
                 {
                     Console.WriteLine("Playing audio!");
-                    SimpleAudioTest.PlayTestSound();
+                    //SimpleAudioTest.PlayTestSound();
                 }
 
                 // Closeable yay

@@ -480,7 +480,7 @@ namespace mcmtestOpenTK.GraphicsHandlers
                         }
                     }
                 }
-                Y += (flip ? -1: 1) * text.font.Height;
+                Y += (flip ? -1 : 1) * text.font.Height;
                 X = 0;
             }
             graphics.Transform = new Matrix();
@@ -503,50 +503,49 @@ namespace mcmtestOpenTK.GraphicsHandlers
         public static float RenderBaseText(Graphics graphics, string text, Font font, int color,
             StringFormat sf, int trans = 255, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
         {
-#if SYSTEM_FONT_HANDLING
+#if !LOCAL_FONT_HANDLING
             if (obfu || pseudo || random || jello) // These must be handled manually regardless of settings.
             {
 #endif
-            float X = 0;
-            for (int z = 0; z < text.Length; z++)
-            {
-                char chr = text[z];
-                int col = color;
-                if (pseudo)
+                float X = 0;
+                for (int z = 0; z < text.Length; z++)
                 {
-                    col = chr % colors.Length;
+                    char chr = text[z];
+                    int col = color;
+                    if (pseudo)
+                    {
+                        col = chr % colors.Length;
+                    }
+                    if (random)
+                    {
+                        col = Util.random.Next(colors.Length);
+                    }
+                    if (obfu)
+                    {
+                        chr = (char)Util.random.Next(33, 126);
+                    }
+                    int iX = 0;
+                    int iY = 0;
+                    if (jello)
+                    {
+                        iX = Util.random.Next(-1, 1);
+                        iY = Util.random.Next(-1, 1);
+                    }
+                    // TODO: Efficient replacement! Possibly make a separate class, with pre-build character spritesheets of some form...
+                    graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX + X, iY), sf);
+                    float size = graphics.MeasureString(text[z].ToString(), font, new PointF(0, 0), sf).Width;
+                    X += size;
                 }
-                if (random)
-                {
-                    col = Util.random.Next(colors.Length);
-                }
-                if (obfu)
-                {
-                    chr = (char)Util.random.Next(33, 126);
-                }
-                int iX = 0;
-                int iY = 0;
-                if (jello)
-                {
-                    iX = Util.random.Next(-1, 1);
-                    iY = Util.random.Next(-1, 1);
-                }
-                MainGame.SW.Start();
-                // TODO: Efficient replacement! Possibly make a separate class, with pre-build character spritesheets of some form...
-                graphics.DrawString(chr.ToString(), font, new SolidBrush(ColorFor(col, trans)), new PointF(iX + X, iY), sf);
-                MainGame.SW.Stop();
-                float size = graphics.MeasureString(text[z].ToString(), font, new PointF(0, 0), sf).Width;
-                X += size;
-            }
-            return X;
-#if SYSTEM_FONT_HANDLING
+                return X;
+#if !LOCAL_FONT_HANDLING
             }
             else
             {
                 // Spaces strings differently depending on character count... meaning all the text will shift
                 // if you add characters to the end. Which is bad.
-                graphics.DrawString(drawme, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
-                return graphics.MeasureString(text, font, new PointF(0, 0), sf).Width;
+                graphics.DrawString(text, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
+                float width = graphics.MeasureString(text, font, new PointF(0, 0), sf).Width;
+                return width;
             }
 #endif
         }

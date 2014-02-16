@@ -52,6 +52,7 @@
     <Compile Include="AudioHandlers\FMod\fmod_errors.cs" />
     <Compile Include="AudioHandlers\FMod\fmod_memoryinfo.cs" />
     <Compile Include="AudioHandlers\SimpleAudioTest.cs" />
+    <Compile Include="CommonHandlers\CVar.cs" />
     <Compile Include="CommonHandlers\ErrorHandler.cs" />
     <Compile Include="CommonHandlers\Util.cs" />
     <Compile Include="GameplayerHandlers\Breakable.cs" />
