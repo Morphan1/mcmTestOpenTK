@@ -61,5 +61,24 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             }
             return toret.ToString();
         }
+
+        /// <summary>
+        /// Returns the number of times a character occurs in a string.
+        /// </summary>
+        /// <param name="input">The string containing the character</param>
+        /// <param name="countme">The character which the string contains</param>
+        /// <returns>How many times the character occurs</returns>
+        public static int CountCharacter(string input, char countme)
+        {
+            int count = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == countme)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 }

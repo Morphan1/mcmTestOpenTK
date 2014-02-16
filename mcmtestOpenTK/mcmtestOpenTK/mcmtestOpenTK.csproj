@@ -67,11 +67,13 @@
     <Compile Include="Client\GlobalHandler\MainGame_Load.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Render.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Tick.cs" />
+    <Compile Include="Client\GraphicsHandlers\Texture.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\PieceOfText.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\TextRenderer.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Client\UIHandlers\UIConsole.cs" />
+    <Compile Include="Shared\FileHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

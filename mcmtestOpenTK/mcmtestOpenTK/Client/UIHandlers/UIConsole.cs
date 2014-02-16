@@ -18,16 +18,33 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static PieceOfText ConsoleText;
 
         /// <summary>
+        /// Holds the TextRender used for rendering.
+        /// </summary>
+        public static TextRenderer textrender;
+
+        /// <summary>
         /// How many lines the console should have.
         /// </summary>
         public static int Lines = 100;
 
         /// <summary>
-        /// Prepares the console
+        /// Any added text, for logging purposes.
+        /// </summary>
+        public static string NewText = "";
+
+        /// <summary>
+        /// Reference for locking the NewText variable.
+        /// </summary>
+        public static Object NewTextLock = new Object();
+
+        /// <summary>
+        /// Prepares the console.
         /// </summary>
         public static void InitConsole()
         {
             ConsoleText = new PieceOfText(Util.CopyText("\n", Lines), new Point(0, 0));
+            textrender = new TextRenderer(MainGame.ScreenWidth, MainGame.ScreenHeight / 2);
+            textrender.AddText(ConsoleText);
         }
 
         /// <summary>
@@ -36,6 +53,27 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <param name="text">The text to be written</param>
         public static void WriteLine(string text)
         {
+            text = text.Replace('\r', ' ');
+            lock (NewTextLock)
+            {
+                NewText += text;
+            }
+            int lines = Util.CountCharacter(text, '\n');
+            int linecount = 0;
+            int i = 0;
+            for (i = 0; i < ConsoleText.Text.Length; i++)
+            {
+                if (ConsoleText.Text[i] == '\n')
+                {
+                    linecount++;
+                    if (linecount > lines)
+                    {
+                        break;
+                    }
+                }
+            }
+            ConsoleText.Text = ConsoleText.Text.Substring(0, i + 1) + text;
+            textrender.modified = true;
         }
 
         /// <summary>
@@ -43,6 +81,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static void Draw()
         {
+            textrender.Draw();
         }
     }
 }

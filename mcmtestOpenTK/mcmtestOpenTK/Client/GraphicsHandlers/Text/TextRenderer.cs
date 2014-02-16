@@ -15,11 +15,11 @@ using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
-    class TextRenderer: Renderable
+    public class TextRenderer: Renderable
     {
         public static TextRenderer Primary;
         public static Font DefaultFont;
-        public int TextureID = -1;
+        public uint TextureID = 0;
         public Bitmap TextBitmap = null;
         public int Width = 0;
         public int Height = 0;
@@ -77,7 +77,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// </summary>
         public void ReInit()
         {
-            if (TextureID != -1)
+            if (GL.IsTexture(TextureID))
             {
                 GL.DeleteTexture(TextureID);
             }
@@ -87,7 +87,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             }
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (float)TextureEnvMode.Replace);
             TextBitmap = new Bitmap(Width, Height);
-            TextureID = GL.GenTexture();
+            GL.GenTextures(1, out TextureID);
             GL.BindTexture(TextureTarget.Texture2D, TextureID);
 
             BitmapData data = TextBitmap.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
