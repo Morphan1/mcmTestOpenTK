@@ -32,6 +32,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 
         // This set: general preloaded common-use textures.
         public static Texture Test = null;
+        public static Texture Console = null;
+
+        public static Bitmap EmptyBitmap = null;
+        public static Graphics GenericGraphicsObject = null;
 
         /// <summary>
         /// Starts or restarts the texture system.
@@ -47,6 +51,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                     i--;
                 }
             }
+            EmptyBitmap = new Bitmap(1, 1);
+            GenericGraphicsObject = Graphics.FromImage(EmptyBitmap);
             // Reset texture list
             LoadedTextures = new List<Texture>();
             // Pregenerate a few needed textures
@@ -54,11 +60,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedTextures.Add(White);
             Black = GenerateForColor(Color.Black, "Black");
             LoadedTextures.Add(Black);
-            ErrorHandler.HandleOutput("White: " + White.Name + ", ID: " + White.Internal_Texture);
             // Preload a few common textures
-            Test = LoadTexture("test");
+            Test = LoadTexture("common/test");
             LoadedTextures.Add(Test);
-            ErrorHandler.HandleOutput("Test: " + Test.Name + ", ID: " + Test.Internal_Texture);
+            Console = LoadTexture("common/console");
         }
 
         /// <summary>
@@ -108,14 +113,14 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 {
                     filename = filename + ".png";
                 }
-                if (!FileHandler.Exists(filename))
+                if (!FileHandler.Exists("textures/" + filename))
                 {
                     ErrorHandler.HandleError("Cannot load texture, file '" +
-                        TextStyle.Italic + TextStyle.White + filename + TextStyle.Reset + TextStyle.Error +
+                        TextStyle.Color_Standout + "textures/" + filename + TextStyle.Color_Error +
                         "' does not exist.");
                     return null;
                 }
-                Bitmap bmp = new Bitmap(FileHandler.ReadToStream(filename));
+                Bitmap bmp = new Bitmap(FileHandler.ReadToStream("textures/" + filename));
                 Texture texture = new Texture();
                 texture.Name = filename;
                 GL.GenTextures(1, out texture.Internal_Texture);
@@ -127,7 +132,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             catch (Exception ex)
             {
                 ErrorHandler.HandleError("Failed to load texture from filename '" +
-                    TextStyle.Italic + TextStyle.White + filename + TextStyle.Reset + TextStyle.Error + "'", ex);
+                    TextStyle.Color_Standout + "textures/" + filename + TextStyle.Color_Error + "'", ex);
                 return null;
             }
         }
@@ -165,7 +170,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
                 OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
-            ErrorHandler.HandleOutput("Locking bmp at " + bmp.Width + ", " + bmp.Height);
             bmp.UnlockBits(bmp_data);
             // Disable mipmapping
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);

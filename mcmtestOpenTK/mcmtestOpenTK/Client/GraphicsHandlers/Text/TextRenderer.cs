@@ -161,7 +161,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// </summary>
         public override void Draw()
         {
-            GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.BindTexture(TextureTarget.Texture2D, TextureID);
             if (modified || MainGame.IsFirstGraphicsDraw)
@@ -170,13 +169,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             }
 
             GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0, 0); GL.Vertex2(0, 0);
-            GL.TexCoord2(1, 0); GL.Vertex2(TextBitmap.Width, 0);
-            GL.TexCoord2(1, 1); GL.Vertex2(TextBitmap.Width, TextBitmap.Height);
-            GL.TexCoord2(0, 1); GL.Vertex2(0, TextBitmap.Height);
+            GL.TexCoord2(0, 0);
+            GL.Vertex2(0, 0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(TextBitmap.Width, 0);
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(TextBitmap.Width, TextBitmap.Height);
+            GL.TexCoord2(0, 1);
+            GL.Vertex2(0, TextBitmap.Height);
             GL.End();
-
-            GL.Disable(EnableCap.Blend);
         }
 
         public const int DefaultColor = 7;
@@ -297,6 +298,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int utrans = (int)(255 * transmod);
             float X = 0;
             int Y = 0;
+            int realY = text.Position.Y;
             float pX = 0;
             int pY = 0;
             Font font = text.font;
@@ -305,6 +307,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
+                if (realY < font.Height || line.Length == 0)
+                {
+                    realY += text.font.Height;
+                    Y += (flip ? -1 : 1) * text.font.Height;
+                    continue;
+                }
                 int start = 0;
                 for (int x = 0; x < line.Length; x++)
                 {
@@ -478,6 +486,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         }
                     }
                 }
+                realY += text.font.Height;
                 Y += (flip ? -1 : 1) * text.font.Height;
                 X = 0;
             }
@@ -546,6 +555,69 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 return width;
             }
 #endif
+        }
+
+        /// <summary>
+        /// Measures fancy notated text strings.
+        /// Note: Do not include newlines!
+        /// </summary>
+        /// <param name="graphics">The graphic object to measure with</param>
+        /// <param name="line">The text to measure</param>
+        /// <param name="text">The PieceOfText to get fonts from</param>
+        /// <returns>the X-width of the text</returns>
+        public static float MeasureFancyText(Graphics graphics, string line, PieceOfText text)
+        {
+            bool bold = false;
+            bool italic = false;
+            bool sub = false;
+            float X = 0;
+            Font font = text.font;
+            StringFormat sf = StringFormat.GenericTypographic;
+            int start = 0;
+            for (int x = 0; x < line.Length; x++)
+            {
+                if ((line[x] == '^' && x + 1 < line.Length && IsColorSymbol(line[x + 1])) || (x + 1 == line.Length))
+                {
+                    string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
+                    start = x + 2;
+                    x++;
+                    if (drawme.Length > 0)
+                    {
+                        X += graphics.MeasureString(drawme, font, new PointF(0, 0), sf).Width;
+                    }
+                    if (x < line.Length)
+                    {
+                        switch (line[x])
+                        {
+                            case 'r':
+                                font = text.font;
+                                bold = false;
+                                sub = false;
+                                italic = false;
+                                break;
+                            case 'S':
+                            case 'l':
+                                if (!sub)
+                                {
+                                    font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                }
+                                sub = true;
+                                break;
+                            case 'i':
+                                italic = true;
+                                font = (sub) ? (bold ? text.font_bolditalichalf : text.font_italichalf) : (bold ? text.font_bolditalic : text.font_italic);
+                                break;
+                            case 'b':
+                                bold = true;
+                                font = (sub) ? (italic ? text.font_bolditalichalf : text.font_boldhalf) : (italic ? text.font_bolditalic : text.font_bold);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            return X;
         }
     }
 }

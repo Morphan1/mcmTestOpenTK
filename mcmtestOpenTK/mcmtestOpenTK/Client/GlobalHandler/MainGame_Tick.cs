@@ -12,16 +12,15 @@ using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {
-        static int cticknumber = 0;
+        public static int cticknumber = 0;
         static double ctickdelta = 0;
-        static bool keymark_add = false;
-        static string rendertext = "";
         static float movetestX;
         static float movetestY;
         /// <summary>
@@ -46,48 +45,21 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Record current input
-                PreviousMouse = CurrentMouse;
                 PreviousKeyboard = CurrentKeyboard;
-                CurrentMouse = Mouse.GetState();
                 CurrentKeyboard = Keyboard.GetState();
-                // Prevent null errors in very first tick.
-                if (PreviousMouse == null)
+                MouseHandler.Tick();
+
+                // Closeable yay
+                if (CurrentKeyboard.IsKeyDown(Key.Escape))
                 {
-                    PreviousMouse = CurrentMouse;
-                    PreviousKeyboard = CurrentKeyboard;
+                    Exit();
                 }
+
+                // Update console
+                UIConsole.Tick();
 
                 // Update audio
                 SimpleAudioTest.RecalculateChannels();
-
-                // Update the input line
-                if (cticknumber == 0)
-                {
-                    keymark_add = !keymark_add;
-                }
-                if (KeyboardString_InitBS > 0)
-                {
-                    if (rendertext.Length > KeyboardString_InitBS)
-                    {
-                        rendertext = rendertext.Substring(0, rendertext.Length - KeyboardString_InitBS);
-                    }
-                    else
-                    {
-                        rendertext = "";
-                    }
-                    KeyboardString_InitBS = 0;
-                }
-                if (KeyboardString.Length > 0)
-                {
-                    rendertext += KeyboardString;
-                    KeyboardString = "";
-                }
-                input.Text = rendertext + (keymark_add ? "|" : "");
-                if (KeyboardString_CopyPressed)
-                {
-                    System.Windows.Forms.Clipboard.SetText(rendertext, System.Windows.Forms.TextDataFormat.Text);
-                    KeyboardString_CopyPressed = false;
-                }
 
                 // Temporary for testing
                 X = PrimaryGameWindow.Mouse.X;
@@ -114,12 +86,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     //SimpleAudioTest.PlayTestSound();
                 }
 
-                // Closeable yay
-                if (CurrentKeyboard.IsKeyDown(Key.Escape))
-                {
-                    Exit();
-                }
-
                 // Update all entities
                 for (int i = 0; i < entities.Count; i++)
                 {
@@ -128,14 +94,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Debug stuff, always near end
-                debug.Text = TextStyle.Readable +
+                debug.Text = TextStyle.Color_Readable +
                     "Delta: " + ((float)Delta) +
                     "\nGraphics Delta: " + ((float)GraphicsDelta) +
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
                     "\nPos: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
+                    "\nConsole: " + (UIConsole.Open ? "Open ": "Closed ") + UIConsole.ConsoleText.Position.Y + "... typing: " + UIConsole.Typing.Position.Y;
             }
             catch (Exception ex)
             {

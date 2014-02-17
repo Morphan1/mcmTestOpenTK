@@ -12,6 +12,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -62,6 +63,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Standard2D();
 
                 // End 2D
+                End2D();
                 GL.PopMatrix();
 
                 // Turn off first-graphics-draw mode: Always last!
@@ -90,6 +92,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, ScreenWidth, ScreenHeight, 0, -50, 50);
+            GL.Enable(EnableCap.Blend);
+        }
+
+        /// <summary>
+        /// Closes the 2D rendering mode.
+        /// </summary>
+        public static void End2D()
+        {
+            GL.Disable(EnableCap.Blend);
         }
 
         static Matrix4 Perspective;
@@ -114,7 +125,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.Enable(EnableCap.CullFace);
         }
 
-        // Closes the 3D rendering mode.
+        /// <summary>
+        /// Closes the 3D rendering mode.
+        /// </summary>
         public static void end3D()
         {
             GL.Disable(EnableCap.DepthTest);
@@ -127,9 +140,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void Standard2D()
         {
             // Render global text
-            GL.PushMatrix();
             TextRenderer.Primary.Draw();
-            GL.PopMatrix();
+
+            // Render console
+            UIConsole.Draw();
         }
 
         /// <summary>

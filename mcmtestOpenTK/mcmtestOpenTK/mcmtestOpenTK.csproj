@@ -47,14 +47,14 @@
     <Compile Include="Client\GraphicsHandlers\Renderable.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Defs.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Base.cs" />
-    <Compile Include="Client\GlobalHandler\MainGame_KeyHandler.cs" />
+    <Compile Include="Client\UIHandlers\KeyHandler.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Load.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Render.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Tick.cs" />
     <Compile Include="Client\GraphicsHandlers\Texture.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\PieceOfText.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\TextRenderer.cs" />
-    <Compile Include="Client\GraphicsHandlers\Text\TextStyle.cs" />
+    <Compile Include="Shared\TextStyle.cs" />
     <Compile Include="Client\UIHandlers\UIConsole.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\UIHandlers\MouseHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\DataStream.cs" />
     <Compile Include="Shared\FileHandler.cs" />

@@ -8,6 +8,7 @@ using OpenTK.Input;
 using OpenTK.Graphics;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -17,8 +18,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// The default player - there's only ever one!
         /// </summary>
         public static Player player;
-        public static int CenterX = 0;
-        static int CenterY = 0;
 
         /// <summary>
         /// Called to tick the default player.
@@ -26,14 +25,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override void Update()
         {
             // Mouse based rotation
-            Point center = MainGame.PrimaryGameWindow.PointToScreen(new Point(MainGame.ScreenWidth / 2, MainGame.ScreenHeight / 2));
-            Angle.X += (float)(((MainGame.ScreenWidth / 2) - MainGame.PrimaryGameWindow.Mouse.X) * MainGame.Delta * MainGame.MouseSensitivity);
-            Angle.Y += (float)(((MainGame.ScreenHeight / 2) - MainGame.PrimaryGameWindow.Mouse.Y) * MainGame.Delta * MainGame.MouseSensitivity);
-            Mouse.SetPosition(center.X, center.Y);
-            CenterX = center.X;
-            CenterY = center.Y;
+            Angle.X += MouseHandler.MouseDelta.X;
+            Angle.Y += MouseHandler.MouseDelta.Y;
             MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
-
+            if (MainGame.CurrentKeyboard.IsKeyDown(Key.LShift) && !MainGame.PreviousKeyboard.IsKeyDown(Key.LShift))
+            {
+                if (MouseHandler.MouseCaptured)
+                {
+                    MouseHandler.ReleaseMouse();
+                    Console.WriteLine("Release mouse!");
+                }
+                else
+                {
+                    MouseHandler.CaptureMouse();
+                    Console.WriteLine("Capture mouse!");
+                }
+            }
             // Keyboard based movement.
             Vector2 movement = Vector2.Zero;
             bool left = MainGame.CurrentKeyboard.IsKeyDown(Key.D);

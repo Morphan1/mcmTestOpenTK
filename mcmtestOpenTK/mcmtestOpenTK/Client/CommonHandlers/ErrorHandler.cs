@@ -30,7 +30,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         public static void HandleError(string error)
         {
             FileHandler.AppendText("errors.log", error + "\n\n\n");
-            Console.WriteLine(TextStyle.Reset + TextStyle.Error + error);
+            Console.WriteLine(TextStyle.Color_Error + error);
         }
 
         // Temporary, for testing.

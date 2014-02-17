@@ -12,22 +12,28 @@ using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
-    public partial class MainGame
+    public class KeyHandler
     {
         public static string KeyboardString = "";
-        public static int KeyboardString_InitBS = 0;
-        public static bool KeyboardString_ControlDown = false;
-        public static bool KeyboardString_CopyPressed = false;
+        public static int InitBS = 0;
+        public static bool ControlDown = false;
+        public static bool CopyPressed = false;
+        public static bool TogglerPressed = false;
 
         /// <summary>
         /// Called every time a key is pressed, adds to the Keyboard String.
         /// </summary>
         /// <param name="sender">Irrelevant</param>
         /// <param name="e">Holds the pressed key</param>
-        static void PrimaryGameWindow_KeyPress(object sender, KeyPressEventArgs e)
+        public static void PrimaryGameWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (Char.IsControl(e.KeyChar))
             {
+                return;
+            }
+            if (e.KeyChar == '`' || e.KeyChar == '~')
+            {
+                TogglerPressed = true;
                 return;
             }
             KeyboardString += e.KeyChar;
@@ -38,7 +44,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         /// <param name="sender">Irrelevant</param>
         /// <param name="e">Holds the pressed key</param>
-        static void PrimaryGameWindow_KeyDown(object sender, KeyboardKeyEventArgs e)
+        public static void PrimaryGameWindow_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -48,7 +54,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 case Key.BackSpace:
                     if (KeyboardString.Length == 0)
                     {
-                        KeyboardString_InitBS++;
+                        InitBS++;
                     }
                     else
                     {
@@ -57,18 +63,18 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     break;
                 case Key.ControlLeft:
                 case Key.ControlRight:
-                    KeyboardString_ControlDown = true;
+                    ControlDown = true;
                     break;
                 case Key.C:
-                    if (KeyboardString_ControlDown)
+                    if (ControlDown)
                     {
-                        KeyboardString_CopyPressed = true;
+                        CopyPressed = true;
                     }
                     break;
                 case Key.V:
-                    if (KeyboardString_ControlDown)
+                    if (ControlDown)
                     {
-                        KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ').Replace('\n', ' ');
+                        KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ');//.Replace('\n', ' ');
                         for (int i = 0; i < KeyboardString.Length; i++)
                         {
                             if (KeyboardString[i] < 32)
@@ -89,13 +95,13 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         /// <param name="sender">Irrelevant</param>
         /// <param name="e">Holds the pressed key</param>
-        static void PrimaryGameWindow_KeyUp(object sender, KeyboardKeyEventArgs e)
+        public static void PrimaryGameWindow_KeyUp(object sender, KeyboardKeyEventArgs e)
         {
             switch (e.Key)
             {
                 case Key.ControlLeft:
                 case Key.ControlRight:
-                    KeyboardString_ControlDown = false;
+                    ControlDown = false;
                     break;
                 default:
                     break;
@@ -108,8 +114,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void Clear()
         {
             KeyboardString = "";
-            KeyboardString_InitBS = 0;
-            KeyboardString_CopyPressed = false;
+            InitBS = 0;
+            CopyPressed = false;
+            TogglerPressed = false;
         }
     }
 }
