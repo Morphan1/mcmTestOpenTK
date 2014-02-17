@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
@@ -31,6 +32,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         {
             FileHandler.AppendText("errors.log", error + "\n\n\n");
             Console.WriteLine(TextStyle.Color_Error + error);
+            UIConsole.WriteLine(TextStyle.Color_Error + error);
         }
 
         // Temporary, for testing.

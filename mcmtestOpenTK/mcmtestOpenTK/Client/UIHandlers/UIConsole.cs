@@ -8,6 +8,7 @@ using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.CommandHandlers;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -219,11 +220,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     TypingText += KeyHandler.KeyboardString;
                     textrender.modified = true;
                     KeyHandler.KeyboardString = "";
-                    if (TypingText.Contains("\n"))
-                    {
-                        Write(TypingText);
-                        TypingText = "";
-                    }
                     while (TypingText.Contains('\n'))
                     {
                         int index = TypingText.IndexOf('\n');
@@ -236,6 +232,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         {
                             TypingText = "";
                         }
+                        Write("] " + input + "\n");
+                        Commands.ExecuteCommands(input);
                     }
                 }
                 Typing.Text = ">" + TypingText + (keymark_add ? "|" : "");
