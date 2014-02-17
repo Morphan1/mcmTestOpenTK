@@ -13,6 +13,7 @@ using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.CommandHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -32,16 +33,18 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 TextRenderer.Init();
                 TextRenderer.Primary.texts.Add(new PieceOfText("ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890\nXX XX\tXX\nXX\tXX\nX\tXX\nX\tX\n" +
                                                                "TESTCOLORS^1RED^2GREEN^3THREE\n" +
-                                                               "^r^7Text Colors: ^0^h^1^^11 ^!^^!! ^2^^22 ^@^^@@ ^3^^33 ^#^^## ^4^^44 ^$^^$$ ^5^^55 ^%^^%% ^6^^66 ^-^^-- ^7^^77 ^&^^&& ^8^^88 ^*^^** ^9^^99 ^(^^(( ^&^h^0^^00^h ^)^^)) ^a^^aa ^A^^AA\n" +
-                                            "^7Text styles: ^b^^7b is bold,^r ^i^^7i is italic,^r ^u^^7u is underline,^r ^s^^7s is strike-through,^r ^O^^7O is overline,^r ^7^h^0^^0h is highlight,^r^7 ^j^^jj is jello (AKA jiggle), ^r\n" +
-                                            " ^2^e^0^^0e is emphasis,^r^7 ^t^^7t is transparent,^r ^T^^7T is more transparent,^r ^o^^7o is opaque,^r ^R^^RR is random,^r ^p^^pp is pseudo-random,^r ^^7k is obfuscated (^kobfu^r),^r\n" +
-                                            " ^^7S is ^SSuperScript^r, ^^7l is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^8d is Drop-Shadow,^r^7 ^f^^7f is flip,^r ^^7r is regular text.", new Point(10, 10)));
+                                                               "^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
+                                            "^7Text styles: ^b^^nb is bold,^r ^i^^ni is italic,^r ^u^^nu is underline,^r ^s^^ns is strike-through,^r ^O^^nO is overline,^r ^7^h^0^^nh is highlight,^r^7 ^j^^nj is jello (AKA jiggle), ^r\n" +
+                                            "^2^e^0^^ne is emphasis,^r^7 ^t^^nt is transparent,^r ^T^^nT is more transparent,^r ^o^^no is opaque,^r ^R^^nR is random,^r ^p^^np is pseudo-random,^r ^^nk is obfuscated (^kobfu^r),^r\n" +
+                                            "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).", new Point(10, 10)));
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 TextRenderer.Primary.AddText(debug);
                 input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
                 TextRenderer.Primary.AddText(input);
                 // Prepare the console
                 UIConsole.InitConsole();
+                // Prepares the command system
+                Commands.Init();
                 // Prepare audio-related code
                 SimpleAudioTest.LoadSound();
                 // Prepare gameplay-related code

@@ -5,11 +5,17 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.CommandHandlers.Common;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
     public class Commands
     {
+        /// <summary>
+        /// A full list of all registered commands.
+        /// </summary>
+        public static List<AbstractCommand> RegisteredCommands;
+
         /// <summary>
         /// Seperates a string list of command inputs (separated by newlines, semicolons, ...)
         /// and returns a list of the individual commands.
@@ -35,7 +41,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 {
                     if (i - start > 0)
                     {
-                        CommandList.Add(commands.Substring(start, i - start));
+                        CommandList.Add(commands.Substring(start, i - start).Trim());
                     }
                     start = i + 1;
                     quoted = false;
@@ -65,13 +71,68 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         {
             try
             {
-                UIConsole.WriteLine(TextStyle.Color_Chat + "Executing command '" + TextStyle.Color_Standout + command + TextStyle.Color_Chat + "'.");
-                throw new Exception("Potato!");
+                string BaseCommand = "";
+                List<string> args = new List<string>();
+                int start = 0;
+                bool quoted = false;
+                for (int i = 0; i < command.Length; i++)
+                {
+                    if (command[i] == '"')
+                    {
+                        quoted = !quoted;
+                    }
+                    else if (!quoted && command[i] == ' ' && (i - start > 0))
+                    {
+                        string arg = command.Substring(start, i - start).Trim().Replace("\"", "");
+                        args.Add(arg);
+                        start = i + 1;
+                    }
+                }
+                if (command.Length - start > 0)
+                {
+                    string arg = command.Substring(start, command.Length - start).Trim().Replace("\"", "");
+                    args.Add(arg);
+                }
+                if (args.Count == 0)
+                {
+                    return;
+                }
+                BaseCommand = args[0].ToLower();
+                args.RemoveAt(0);
+                for (int i = 0; i < RegisteredCommands.Count; i++)
+                {
+                    if (BaseCommand == RegisteredCommands[i].Name)
+                    {
+                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args);
+                        RegisteredCommands[i].Execute(info);
+                        return;
+                    }
+                }
+                UIConsole.WriteLine(TextStyle.Color_Error + "Unknown command '" +
+                    TextStyle.Color_Standout + BaseCommand + TextStyle.Color_Error + "'.");
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError("Command '" + TextStyle.Color_Standout + command + TextStyle.Color_Error + "' threw an error", ex);
             }
+        }
+
+        /// <summary>
+        /// Adds a command to the registered command list.
+        /// </summary>
+        /// <param name="command">The command to register</param>
+        public static void RegisterCommand(AbstractCommand command)
+        {
+            RegisteredCommands.Add(command);
+        }
+
+        /// <summary>
+        /// Prepares the command system, registering all base commands.
+        /// </summary>
+        public static void Init()
+        {
+            RegisteredCommands = new List<AbstractCommand>();
+            RegisterCommand(new EchoCommand());
         }
     }
 }

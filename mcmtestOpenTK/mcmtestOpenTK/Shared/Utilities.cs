@@ -99,5 +99,21 @@ namespace mcmtestOpenTK.Shared
             }
             return count;
         }
+
+        /// <summary>
+        /// Combines a list of strings into a single string, separated by spaces.
+        /// </summary>
+        /// <param name="input">The list of strings to combine</param>
+        /// <param name="start">The index to start from</param>
+        /// <returns>The combined string</returns>
+        public static string Concat(List<string> input, int start = 0)
+        {
+            StringBuilder output = new StringBuilder();
+            for (int i = start; i < input.Count; i++)
+            {
+                output.Append(input[i]).Append(" ");
+            }
+            return (output.Length > 0 ? output.ToString().Substring(0, output.Length - 1) : "");
+        }
     }
 }

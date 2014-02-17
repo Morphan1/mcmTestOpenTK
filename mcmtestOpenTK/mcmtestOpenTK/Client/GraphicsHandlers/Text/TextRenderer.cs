@@ -38,7 +38,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             // Setup the StringFormat
             sf = new StringFormat(StringFormat.GenericTypographic);
-            sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+            sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.FitBlackBox | StringFormatFlags.NoWrap;
             // Choose a default font: Segoe UI, Arial, Calibri, or generic.
             FontFamily[] families = FontFamily.Families;
             FontFamily family = FontFamily.GenericMonospace;
@@ -242,11 +242,20 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <returns>whether the character is a valid color symbol</returns>
         public static bool IsColorSymbol(char c)
         {
-            return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'b') || (c == 'A') || (c == 'f') || (c == 'r') ||
-                   (c == 'i') || (c == 'h') || (c == 'e') || (c == 't') || (c == 'T') || (c == 'o') || (c == 'O') ||
-                   (c == '!') || (c == '@') || (c == 'l') || (c == 'd') || (c == 'S') || (c == 'k') || (c == 'j') ||
-                   ((c >= '#') && (c <= '&')) /* #$%& */ || (c == '-') || (c == 'q') || (c == 'R') || (c == 'p') ||
-                   ((c >= '(') && (c <= '*')) /* ()* */ || (c == 'u') || (c == 's'));
+            return ((c >= '0' && c <= '9') /* 0123456789 */ ||
+                    (c >= 'a' && c <= 'b') /* ab */ ||
+                    (c >= 'd' && c <= 'f') /* def */ ||
+                    (c >= 'h' && c <= 'l') /* hijkl */ ||
+                    (c >= 'n' && c <= 'u') /* nopqrstu */ ||
+                    (c >= 'R' && c <= 'T') /* RST */ ||
+                    (c >= '#' && c <= '&') /* #$%& */ || // 35 - 38
+                    (c >= '(' && c <= '*') /* ()* */ || // 40 - 42
+                    (c == 'A') ||
+                    (c == 'O') ||
+                    (c == '-') || // 45
+                    (c == '!') || // 33
+                    (c == '@')    // 64
+                   );
         }
 
         /// <summary>
@@ -311,7 +320,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
-                if (realY < font.Height || line.Length == 0)
+                if (line.Length == 0)
                 {
                     realY += text.font.Height;
                     Y += (flip ? -1 : 1) * text.font.Height;
@@ -325,7 +334,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
                         start = x + 2;
                         x++;
-                        if (drawme.Length > 0)
+                        if (drawme.Length > 0 && realY >= -font.Height)
                         {
                             graphics.TranslateTransform(X - pX, Y - pY);
                             pX = X;
@@ -452,6 +461,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         }
                                     }
                                     break;
+                                case 'n':
+                                    break;
                                 case 'r':
                                     font = text.font;
                                     if (flip)
@@ -577,6 +588,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             float X = 0;
             Font font = text.font;
             int start = 0;
+            line = line.Replace("^q", "\"").Replace("^n", "");
             for (int x = 0; x < line.Length; x++)
             {
                 if ((line[x] == '^' && x + 1 < line.Length && IsColorSymbol(line[x + 1])) || (x + 1 == line.Length))

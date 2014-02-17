@@ -18,6 +18,7 @@ namespace mcmtestOpenTK.Shared
         public static string Color_Standout = "^r^0^h^5";
         public static string Color_Readable = "^r^7^e^0^b";
         public static string Color_Chat = "^r^2^d";
-        public static string Color_Error = "^r^0^e^3";
+        public static string Color_Error = "^r^0^h^3";
+        public static string Color_Commandhelp = "^r^0^h^1";
     }
 }
