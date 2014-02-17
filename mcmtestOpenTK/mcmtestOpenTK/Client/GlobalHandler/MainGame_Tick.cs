@@ -45,12 +45,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Record current input
-                PreviousKeyboard = CurrentKeyboard;
-                CurrentKeyboard = Keyboard.GetState();
                 MouseHandler.Tick();
+                KeyHandler.Tick();
 
                 // Closeable yay
-                if (CurrentKeyboard.IsKeyDown(Key.Escape))
+                if (KeyHandler.IsDown(Key.Escape))
                 {
                     Exit();
                 }
@@ -64,23 +63,23 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Temporary for testing
                 X = PrimaryGameWindow.Mouse.X;
                 Y = PrimaryGameWindow.Mouse.Y;
-                if (CurrentKeyboard.IsKeyDown(Key.Left))
+                if (KeyHandler.IsDown(Key.Left))
                 {
                     movetestX -= (float)(Delta * 100f);
                 }
-                else if (CurrentKeyboard.IsKeyDown(Key.Right))
+                else if (KeyHandler.IsDown(Key.Right))
                 {
                     movetestX += (float)(Delta * 100f);
                 }
-                if (CurrentKeyboard.IsKeyDown(Key.Up))
+                if (KeyHandler.IsDown(Key.Up))
                 {
                     movetestY -= (float)(Delta * 100f);
                 }
-                else if (CurrentKeyboard.IsKeyDown(Key.Down))
+                else if (KeyHandler.IsDown(Key.Down))
                 {
                     movetestY += (float)(Delta * 100f);
                 }
-                if (CurrentKeyboard.IsKeyDown(Key.Space) && !PreviousKeyboard.IsKeyDown(Key.Space))
+                if (KeyHandler.IsPressed(Key.Space))
                 {
                     Console.WriteLine("Playing audio!");
                     //SimpleAudioTest.PlayTestSound();
@@ -101,8 +100,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\ngFPS: " + gFPS +
                     "\nPos: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
-                    "\nConsole: " + (UIConsole.Open ? "Open ": "Closed ") + UIConsole.ConsoleText.Position.Y + "... typing: " + UIConsole.Typing.Position.Y;
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
             }
             catch (Exception ex)
             {

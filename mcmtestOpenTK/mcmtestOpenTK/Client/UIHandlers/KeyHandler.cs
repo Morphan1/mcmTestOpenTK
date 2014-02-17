@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -74,10 +75,16 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 case Key.V:
                     if (ControlDown)
                     {
-                        KeyboardString += System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat.Text).Replace('\r', ' ');//.Replace('\n', ' ');
+                        string copied;
+                        copied = System.Windows.Forms.Clipboard.GetText().Replace('\r', ' ');
+                        if (copied.Length > 0 && copied.EndsWith("\n"))
+                        {
+                            copied = copied.Substring(0, copied.Length - 1);
+                        }
+                        KeyboardString += copied;
                         for (int i = 0; i < KeyboardString.Length; i++)
                         {
-                            if (KeyboardString[i] < 32)
+                            if (KeyboardString[i] < 32 && KeyboardString[i] != '\n')
                             {
                                 KeyboardString = KeyboardString.Substring(0, i) + KeyboardString.Substring(i + 1, KeyboardString.Length - (i + 1));
                                 i--;
@@ -117,6 +124,47 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             InitBS = 0;
             CopyPressed = false;
             TogglerPressed = false;
+        }
+
+        public static KeyboardState CurrentKeyboard;
+        public static KeyboardState PreviousKeyboard;
+
+        /// <summary>
+        /// Updates the keyboard state.
+        /// </summary>
+        public static void Tick()
+        {
+            PreviousKeyboard = CurrentKeyboard;
+            CurrentKeyboard = Keyboard.GetState();
+        }
+
+        /// <summary>
+        /// Checks whether the system is listening to keyboard input.
+        /// </summary>
+        /// <returns>Whether the keyboard is useable</returns>
+        public static bool IsValid()
+        {
+            return MainGame.PrimaryGameWindow.Focused && !UIConsole.Open;
+        }
+
+        /// <summary>
+        /// Checks whether a key is pressed down.
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <returns>Whether it is down</returns>
+        public static bool IsDown(Key key)
+        {
+            return IsValid() && CurrentKeyboard.IsKeyDown(key);
+        }
+
+        /// <summary>
+        /// Checks whether a key was just pressed this tick.
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <returns>Whether it was just pressed</returns>
+        public static bool IsPressed(Key key)
+        {
+            return IsValid() && CurrentKeyboard.IsKeyDown(key) && !PreviousKeyboard.IsKeyDown(key);
         }
     }
 }

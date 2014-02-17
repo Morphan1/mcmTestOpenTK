@@ -20,6 +20,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
     {
         public static TextRenderer Primary;
         public static Font DefaultFont;
+        public static StringFormat sf;
+
         public uint TextureID = 0;
         public Bitmap TextBitmap = null;
         public int Width = 0;
@@ -34,6 +36,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// </summary>
         public static void Init()
         {
+            // Setup the StringFormat
+            sf = new StringFormat(StringFormat.GenericTypographic);
+            sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
             // Choose a default font: Segoe UI, Arial, Calibri, or generic.
             FontFamily[] families = FontFamily.Families;
             FontFamily family = FontFamily.GenericMonospace;
@@ -302,7 +307,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             float pX = 0;
             int pY = 0;
             Font font = text.font;
-            StringFormat sf = StringFormat.GenericTypographic;
             graphics.TranslateTransform(text.Position.X, text.Position.Y);
             for (int i = 0; i < lines.Length; i++)
             {
@@ -345,7 +349,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 {
                                     //graphics.DrawString(drawme, font, new SolidBrush(Color.Black), point, sf);
                                     graphics.TranslateTransform(point.X, point.Y);
-                                    RenderBaseText(graphics, drawme, font, 0, sf);
+                                    RenderBaseText(graphics, drawme, font, 0);
                                     graphics.TranslateTransform(-point.X, -point.Y);
                                 }
                             }
@@ -355,11 +359,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 {
                                     //graphics.DrawString(drawme, font, new SolidBrush(ColorFor(ecolor, etrans)), point, sf);
                                     graphics.TranslateTransform(point.X, point.Y);
-                                    RenderBaseText(graphics, drawme, font, ecolor, sf, etrans);
+                                    RenderBaseText(graphics, drawme, font, ecolor, etrans);
                                     graphics.TranslateTransform(-point.X, -point.Y);
                                 }
                             }
-                            X += RenderBaseText(graphics, drawme, font, color, sf, trans, pseudo, random, jello, obfu);
+                            X += RenderBaseText(graphics, drawme, font, color, trans, pseudo, random, jello, obfu);
                             if (strike)
                             {
                                 graphics.DrawLine(new Pen(ColorFor(scolor, strans), 1), new PointF(0, font.Height * 0.5f), new PointF(width, font.Height * 0.5f));
@@ -508,7 +512,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="obfu">Whether to randomize letters</param>
         /// <returns></returns>
         public static float RenderBaseText(Graphics graphics, string text, Font font, int color,
-            StringFormat sf, int trans = 255, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
+            int trans = 255, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
         {
 #if !LOCAL_FONT_HANDLING
             if (obfu || pseudo || random || jello) // These must be handled manually regardless of settings.
@@ -572,7 +576,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             bool sub = false;
             float X = 0;
             Font font = text.font;
-            StringFormat sf = StringFormat.GenericTypographic;
             int start = 0;
             for (int x = 0; x < line.Length; x++)
             {

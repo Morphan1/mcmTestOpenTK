@@ -28,7 +28,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Angle.X += MouseHandler.MouseDelta.X;
             Angle.Y += MouseHandler.MouseDelta.Y;
             MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
-            if (MainGame.CurrentKeyboard.IsKeyDown(Key.LShift) && !MainGame.PreviousKeyboard.IsKeyDown(Key.LShift))
+            if (KeyHandler.IsPressed(Key.LShift))
             {
                 if (MouseHandler.MouseCaptured)
                 {
@@ -43,10 +43,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             // Keyboard based movement.
             Vector2 movement = Vector2.Zero;
-            bool left = MainGame.CurrentKeyboard.IsKeyDown(Key.D);
-            bool right = MainGame.CurrentKeyboard.IsKeyDown(Key.A);
-            bool forward = MainGame.CurrentKeyboard.IsKeyDown(Key.W);
-            bool back = MainGame.CurrentKeyboard.IsKeyDown(Key.S);
+            bool left = KeyHandler.IsDown(Key.D);
+            bool right = KeyHandler.IsDown(Key.A);
+            bool forward = KeyHandler.IsDown(Key.W);
+            bool back = KeyHandler.IsDown(Key.S);
             if (left && !right)
             {
                 movement.Y = 1;

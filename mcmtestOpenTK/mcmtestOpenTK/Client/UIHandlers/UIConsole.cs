@@ -156,7 +156,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
         }
 
         static bool keymark_add = false;
-        static double keymark_delta = 0f; 
+        static double keymark_delta = 0f;
+        static bool mouse_was_captured = false;
 
         /// <summary>
         /// Updates the console, called every tick.
@@ -172,10 +173,17 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 if (Open)
                 {
                     ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
+                    mouse_was_captured = MouseHandler.MouseCaptured;
+                    MouseHandler.ReleaseMouse();
                 }
                 else
                 {
                     ConsoleText.Position.Y -= MainGame.ScreenHeight / 2;
+                    Typing.Text = "";
+                    if (mouse_was_captured)
+                    {
+                        MouseHandler.CaptureMouse();
+                    }
                 }
             }
             if (!Open)
@@ -216,12 +224,27 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         Write(TypingText);
                         TypingText = "";
                     }
+                    while (TypingText.Contains('\n'))
+                    {
+                        int index = TypingText.IndexOf('\n');
+                        string input = TypingText.Substring(0, index);
+                        if (index + 1 < TypingText.Length)
+                        {
+                            TypingText = TypingText.Substring(index + 1);
+                        }
+                        else
+                        {
+                            TypingText = "";
+                        }
+                    }
                 }
                 Typing.Text = ">" + TypingText + (keymark_add ? "|" : "");
                 if (KeyHandler.CopyPressed)
                 {
-                    System.Windows.Forms.Clipboard.SetText(TypingText, System.Windows.Forms.TextDataFormat.Text);
-                    textrender.modified = true;
+                    if (TypingText.Length > 0)
+                    {
+                        System.Windows.Forms.Clipboard.SetText(TypingText);
+                    }
                     KeyHandler.CopyPressed = false;
                 }
             }

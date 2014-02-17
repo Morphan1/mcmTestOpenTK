@@ -39,6 +39,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         {
             CenterMouse();
             MouseCaptured = true;
+            MainGame.PrimaryGameWindow.CursorVisible = false;
         }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void ReleaseMouse()
         {
             MouseCaptured = false;
+            MainGame.PrimaryGameWindow.CursorVisible = true;
         }
 
         /// <summary>
