@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers.Common;
+using mcmtestOpenTK.Client.CommandHandlers.Graphics;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -132,7 +133,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public static void Init()
         {
             RegisteredCommands = new List<AbstractCommand>();
+
+            // Common
             RegisterCommand(new EchoCommand());
+
+            // Graphics
+            RegisterCommand(new LoadtextureCommand());
+            RegisterCommand(new RemaptextureCommand());
+            RegisterCommand(new TexturelistCommand());
         }
     }
 }

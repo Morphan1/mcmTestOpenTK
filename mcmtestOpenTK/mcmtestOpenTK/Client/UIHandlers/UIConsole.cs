@@ -62,18 +62,24 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static string TypingText = "";
 
+        static bool ready = false;
+
+        static string pre_waiting = "";
+
         /// <summary>
         /// Prepares the console.
         /// </summary>
         public static void InitConsole()
         {
-            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(0, (-(Lines + 2) * TextRenderer.DefaultFont.Height) - 5));
-            Typing = new PieceOfText("", new Point(0, ((MainGame.ScreenHeight / 2) - TextRenderer.DefaultFont.Height) - 5));
+            ready = true;
+            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * TextRenderer.DefaultFont.Height) - 5));
+            Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - TextRenderer.DefaultFont.Height) - 5));
             textrender = new TextRenderer(MainGame.ScreenWidth, MainGame.ScreenHeight / 2);
             textrender.AddText(ConsoleText);
             textrender.AddText(Typing);
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
+            Write(pre_waiting);
         }
 
         /// <summary>
@@ -91,6 +97,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <param name="text">The text to be written</param>
         public static void Write(string text)
         {
+            if (!ready)
+            {
+                pre_waiting += text;
+                return;
+            }
             if (!ConsoleText.Text.EndsWith("\n"))
             {
                 for (int x = ConsoleText.Text.Length - 1; x > 0; x--)
@@ -232,7 +243,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         {
                             TypingText = "";
                         }
-                        Write("] " + input + "\n");
+                        WriteLine("] " + input);
                         Commands.ExecuteCommands(input);
                     }
                 }

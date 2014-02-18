@@ -18,13 +18,13 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
 
         public override void Execute(CommandInfo info)
         {
-            if (info.Arguments.Count == 0)
+            if (info.Arguments.Count < 1)
             {
                 ShowUsage(info);
             }
             else
             {
-                UIConsole.WriteLine(TextStyle.Color_Simple + Utilities.Concat(info.Arguments));
+                UIConsole.WriteLine(Utilities.Concat(info.Arguments));
             }
         }
     }

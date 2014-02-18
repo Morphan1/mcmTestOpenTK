@@ -58,12 +58,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             // Pregenerate a few needed textures
             White = GenerateForColor(Color.White, "white");
             LoadedTextures.Add(White);
-            Black = GenerateForColor(Color.Black, "Black");
+            Black = GenerateForColor(Color.Black, "black");
             LoadedTextures.Add(Black);
             // Preload a few common textures
-            Test = LoadTexture("common/test");
-            LoadedTextures.Add(Test);
-            Console = LoadTexture("common/console");
+            Test = GetTexture("common/test");
+            Console = GetTexture("common/console");
         }
 
         /// <summary>
@@ -74,10 +73,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Texture GetTexture(string texturename)
         {
             texturename = FileHandler.CleanFileName(texturename);
-            if (texturename.Length < 4 || texturename[texturename.Length - 4] != '.')
-            {
-                texturename = texturename + ".png";
-            }
             for (int i = 0; i < LoadedTextures.Count; i++)
             {
                 if (LoadedTextures[i].Name == texturename)
@@ -86,16 +81,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 }
             }
             Texture Loaded = LoadTexture(texturename);
-            if (Loaded != null)
-            {
-                LoadedTextures.Add(Loaded);
-            }
-            else
+            if (Loaded == null)
             {
                 Loaded = new Texture();
                 Loaded.Name = texturename;
-                Loaded.Internal_Texture = White.Internal_Texture;
+                Loaded.Internal_Texture = White.Original_InternalID;
+                Loaded.Original_InternalID = White.Original_InternalID;
+                Loaded.LoadedProperly = false;
             }
+            LoadedTextures.Add(Loaded);
             return Loaded;
         }
 
@@ -109,30 +103,28 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             try
             {
                 filename = FileHandler.CleanFileName(filename);
-                if (filename.Length < 4 || filename[filename.Length - 4] != '.')
-                {
-                    filename = filename + ".png";
-                }
-                if (!FileHandler.Exists("textures/" + filename))
+                if (!FileHandler.Exists("textures/" + filename + ".png"))
                 {
                     ErrorHandler.HandleError("Cannot load texture, file '" +
-                        TextStyle.Color_Standout + "textures/" + filename + TextStyle.Color_Error +
+                        TextStyle.Color_Standout + "textures/" + filename + ".png" + TextStyle.Color_Error +
                         "' does not exist.");
                     return null;
                 }
-                Bitmap bmp = new Bitmap(FileHandler.ReadToStream("textures/" + filename));
+                Bitmap bmp = new Bitmap(FileHandler.ReadToStream("textures/" + filename + ".png"));
                 Texture texture = new Texture();
                 texture.Name = filename;
-                GL.GenTextures(1, out texture.Internal_Texture);
-                GL.BindTexture(TextureTarget.Texture2D, texture.Internal_Texture);
+                GL.GenTextures(1, out texture.Original_InternalID);
+                GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
                 LockBitmapToTexture(bmp);
                 bmp.Dispose();
+                texture.Internal_Texture = texture.Original_InternalID;
+                texture.LoadedProperly = true;
                 return texture;
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError("Failed to load texture from filename '" +
-                    TextStyle.Color_Standout + "textures/" + filename + TextStyle.Color_Error + "'", ex);
+                    TextStyle.Color_Standout + "textures/" + filename + ".png" + TextStyle.Color_Error + "'", ex);
                 return null;
             }
         }
@@ -147,8 +139,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         {
             Texture texture = new Texture();
             texture.Name = name;
-            GL.GenTextures(1, out texture.Internal_Texture);
-            GL.BindTexture(TextureTarget.Texture2D, texture.Internal_Texture);
+            GL.GenTextures(1, out texture.Original_InternalID);
+            GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
+            texture.Internal_Texture = texture.Original_InternalID;
+            texture.LoadedProperly = true;
             Bitmap bmp = new Bitmap(2, 2);
             bmp.SetPixel(0, 0, c);
             bmp.SetPixel(0, 1, c);
@@ -187,13 +181,23 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public uint Internal_Texture = 0;
 
         /// <summary>
+        /// The original OpenGL texture ID that formed this texture.
+        /// </summary>
+        public uint Original_InternalID = 0;
+
+        /// <summary>
+        /// Whether the texture loaded properly.
+        /// </summary>
+        public bool LoadedProperly = false;
+
+        /// <summary>
         /// Removes the texture from the system.
         /// </summary>
         public void Remove()
         {
-            if (GL.IsTexture(Internal_Texture))
+            if (GL.IsTexture(Original_InternalID))
             {
-                GL.DeleteTexture(Internal_Texture);
+                GL.DeleteTexture(Original_InternalID);
             }
             LoadedTextures.Remove(this);
         }
