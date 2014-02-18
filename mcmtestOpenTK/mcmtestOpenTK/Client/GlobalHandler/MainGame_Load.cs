@@ -62,6 +62,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         static void ReloadGraphics()
         {
+            // Prepare the shader system
+            Shader.InitShaderSystem();
             // Tell everything to re-calculate with disregard for modified state.
             IsFirstGraphicsDraw = true;
             // Prepare the texture system

@@ -123,6 +123,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Enable depth and culling
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
+            GL.UseProgram(Shader.AntiRed.Internal_Program);
         }
 
         /// <summary>
@@ -130,6 +131,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void end3D()
         {
+            GL.UseProgram(0);
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.CullFace);
         }

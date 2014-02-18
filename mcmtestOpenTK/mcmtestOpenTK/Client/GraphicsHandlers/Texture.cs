@@ -51,6 +51,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                     i--;
                 }
             }
+            // Create a generic graphics object for later use
             EmptyBitmap = new Bitmap(1, 1);
             GenericGraphicsObject = Graphics.FromImage(EmptyBitmap);
             // Reset texture list

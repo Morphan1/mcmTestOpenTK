@@ -8,6 +8,8 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.CommonHandlers;
+using System.IO;
+using System.Diagnostics;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
