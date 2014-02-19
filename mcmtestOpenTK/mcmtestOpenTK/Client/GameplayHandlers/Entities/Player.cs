@@ -27,6 +27,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             // Mouse based rotation
             Angle.X += MouseHandler.MouseDelta.X;
             Angle.Y += MouseHandler.MouseDelta.Y;
+            while (Angle.X < 0)
+            {
+                Angle.X += 360;
+            }
+            while (Angle.X > 360)
+            {
+                Angle.X -= 360;
+            }
+            if (Angle.Y > 80)
+            {
+                Angle.Y = 80;
+            }
+            if (Angle.Y < -80)
+            {
+                Angle.Y = -80;
+            }
             MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
             if (KeyHandler.IsPressed(Key.LShift))
             {
@@ -42,7 +58,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
             }
             // Keyboard based movement.
-            Vector2 movement = Vector2.Zero;
+            Vector3 movement = Vector3.Zero;
             bool left = KeyHandler.IsDown(Key.D);
             bool right = KeyHandler.IsDown(Key.A);
             bool forward = KeyHandler.IsDown(Key.W);
@@ -81,7 +97,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (movement.LengthSquared > 0)
             {
-                movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Angle.X));
+                movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
             }
             Velocity = new Vector3(movement * 30);
 

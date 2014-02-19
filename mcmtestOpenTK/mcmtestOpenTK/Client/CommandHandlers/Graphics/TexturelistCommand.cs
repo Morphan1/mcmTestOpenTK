@@ -29,7 +29,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             {
                 UIConsole.WriteLine("- " + TextStyle.Color_Separate + Texture.LoadedTextures[i].Original_InternalID +
                     TextStyle.Color_Simple + ") [" + TextStyle.Color_Separate + Texture.LoadedTextures[i].Internal_Texture +
-                    TextStyle.Color_Simple + "] " + TextStyle.Color_Separate + Texture.LoadedTextures[i].Name);
+                    TextStyle.Color_Simple + "] " + TextStyle.Color_Separate + Texture.LoadedTextures[i].Name +
+                    (Texture.LoadedTextures[i].Internal_Texture != Texture.LoadedTextures[i].Original_InternalID ?
+                    TextStyle.Color_Simple + " -> " + TextStyle.Color_Separate + Texture.LoadedTextures[i].RemappedTo.Name : ""));
             }
             UIConsole.WriteLine(TextStyle.Color_Outgood + "-------");
         }

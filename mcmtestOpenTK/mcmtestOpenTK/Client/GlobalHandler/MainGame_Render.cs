@@ -123,7 +123,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Enable depth and culling
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-            GL.UseProgram(Shader.AntiRed.Internal_Program);
+            GL.UseProgram(Shader.Grayscale.Internal_Program);
+            int uloc = GL.GetUniformLocation(Shader.Grayscale.Internal_Program, "mult_color");
+            GL.Uniform4(uloc, 0.1f, 0.1f, 0.5f, 1);
         }
 
         /// <summary>

@@ -24,9 +24,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader Generic;
 
         /// <summary>
-        /// A test shader that removes the red color value.
+        /// A common shader that simplifies colors to grayscale.
         /// </summary>
-        public static Shader AntiRed;
+        public static Shader Grayscale;
 
         /// <summary>
         /// Starts or restarts the shader system.
@@ -48,7 +48,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             Generic = CreateGeneric("generic");
             LoadedShaders.Add(Generic);
             // Preload a few common shaders
-            AntiRed = GetShader("test/antired");
+            Grayscale = GetShader("common/testcolor");
         }
 
         /// <summary>
@@ -71,7 +71,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             {
                 Loaded = new Shader();
                 Loaded.Name = shadername;
-                Loaded.Internal_Program = Generic.Internal_Program;
+                Loaded.Internal_Program = Generic.Original_Program;
+                Loaded.Original_Program = Generic.Original_Program;
                 Loaded.LoadedProperly = false;
             }
             LoadedShaders.Add(Loaded);
@@ -104,12 +105,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 }
                 string VS = FileHandler.ReadText("shaders/" + filename + ".vs");
                 string FS = FileHandler.ReadText("shaders/" + filename + ".fs");
-                uint Program = CompileToProgram(VS, FS);
-                Shader created = new Shader();
-                created.Name = filename;
-                created.LoadedProperly = true;
-                created.Internal_Program = Program;
-                return created;
+                return CreateShader(VS, FS, filename);
             }
             catch (Exception ex)
             {
@@ -129,11 +125,24 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             string FS = "uniform sampler2D tex;void main()" +
             "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
             "gl_FragColor = color;}";
+            return CreateShader(VS, FS, name);
+        }
+
+        /// <summary>
+        /// Creates a full Shader object for a VS/FS input.
+        /// </summary>
+        /// <param name="VS">The input VertexShader code</param>
+        /// <param name="FS">The input FragmentShader code</param>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A valid Shader object</returns>
+        public static Shader CreateShader(string VS, string FS, string name)
+        {
             uint Program = CompileToProgram(VS, FS);
             Shader generic = new Shader();
             generic.Name = name;
             generic.LoadedProperly = true;
             generic.Internal_Program = Program;
+            generic.Original_Program = Program;
             return generic;
         }
 
@@ -178,9 +187,19 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public string Name;
 
         /// <summary>
+        /// The shader this shader was remapped to.
+        /// </summary>
+        public Shader RemappedTo;
+
+        /// <summary>
         /// The internal OpenGL ID for the shader program.
         /// </summary>
         public uint Internal_Program;
+
+        /// <summary>
+        /// The original OpenGL ID that formed this shader program.
+        /// </summary>
+        public uint Original_Program;
 
         /// <summary>
         /// Whether the shader loaded properly.
@@ -192,9 +211,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public void Remove()
         {
-            if (GL.IsProgram(Internal_Program))
+            if (GL.IsProgram(Original_Program))
             {
-                GL.DeleteProgram(Internal_Program);
+                GL.DeleteProgram(Original_Program);
             }
             LoadedShaders.Remove(this);
         }

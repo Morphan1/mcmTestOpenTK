@@ -177,6 +177,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public string Name;
 
         /// <summary>
+        /// The texture that this texture was remapped to, if any.
+        /// </summary>
+        public Texture RemappedTo;
+
+        /// <summary>
         /// The internal OpenGL texture ID.
         /// </summary>
         public uint Internal_Texture = 0;

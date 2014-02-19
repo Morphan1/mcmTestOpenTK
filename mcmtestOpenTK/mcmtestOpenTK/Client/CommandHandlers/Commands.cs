@@ -138,8 +138,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new EchoCommand());
 
             // Graphics
+            RegisterCommand(new LoadshaderCommand());
             RegisterCommand(new LoadtextureCommand());
+            RegisterCommand(new RemapshaderCommand());
             RegisterCommand(new RemaptextureCommand());
+            RegisterCommand(new ShaderlistCommand());
             RegisterCommand(new TexturelistCommand());
         }
     }

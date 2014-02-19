@@ -100,6 +100,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\ngFPS: " + gFPS +
                     "\nPos: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
+                    "\nN'Angle: " + Util.VectorToAngles(Util.ForwardVector(Player.player.Angle.X * (float)Math.PI / 180, Player.player.Angle.Y * (float)Math.PI / 180)).ToString() +
                     "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
             }
             catch (Exception ex)
