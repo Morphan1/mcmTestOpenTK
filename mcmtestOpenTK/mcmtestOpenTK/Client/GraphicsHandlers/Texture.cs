@@ -117,6 +117,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 GL.GenTextures(1, out texture.Original_InternalID);
                 GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
                 LockBitmapToTexture(bmp);
+                texture.Width = bmp.Width;
+                texture.Height = bmp.Height;
                 bmp.Dispose();
                 texture.Internal_Texture = texture.Original_InternalID;
                 texture.LoadedProperly = true;
@@ -144,6 +146,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
             texture.Internal_Texture = texture.Original_InternalID;
             texture.LoadedProperly = true;
+            texture.Width = 2;
+            texture.Height = 2;
             Bitmap bmp = new Bitmap(2, 2);
             bmp.SetPixel(0, 0, c);
             bmp.SetPixel(0, 1, c);
@@ -197,6 +201,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public bool LoadedProperly = false;
 
         /// <summary>
+        /// The width of the texture.
+        /// </summary>
+        public int Width;
+
+        /// <summary>
+        /// The height of the texture.
+        /// </summary>
+        public int Height;
+
+        /// <summary>
         /// Removes the texture from the system.
         /// </summary>
         public void Remove()
@@ -206,6 +220,22 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 GL.DeleteTexture(Original_InternalID);
             }
             LoadedTextures.Remove(this);
+        }
+
+        /// <summary>
+        /// Saves the texture to a file.
+        /// </summary>
+        /// <param name="filename">The name of the file to save to.</param>
+        public void SaveToFile(string filename)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, Original_InternalID);
+            Bitmap bmp = new Bitmap(Width, Height);
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.GetTexImage(TextureTarget.Texture2D, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            bmp.UnlockBits(data);
+            DataStream ds = new DataStream();
+            bmp.Save(ds, ImageFormat.Png);
+            FileHandler.WriteBytes(filename + ".png", ds.ToArray());
         }
     }
 }

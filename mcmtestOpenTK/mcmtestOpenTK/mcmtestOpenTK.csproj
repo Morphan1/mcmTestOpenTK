@@ -73,6 +73,7 @@
     <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
     <Compile Include="Client\CommandHandlers\Commands.cs" />
     <Compile Include="Client\CommandHandlers\Common\EchoCommand.cs" />
+    <Compile Include="Client\CommandHandlers\Graphics\SavetextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\RemapshaderCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\LoadshaderCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\ShaderlistCommand.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="Client\CommandHandlers\Graphics\RemaptextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\TexturelistCommand.cs" />
     <Compile Include="Client\GraphicsHandlers\Shader.cs" />
+    <Compile Include="Client\GraphicsHandlers\Text\FontHandler.cs" />
+    <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\DataStream.cs" />

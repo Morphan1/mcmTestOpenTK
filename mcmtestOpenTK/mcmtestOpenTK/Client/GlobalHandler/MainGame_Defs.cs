@@ -38,7 +38,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static int X = 0;
         public static int Y = 0;
         public static PieceOfText debug;
-        public static PieceOfText input;
         // Public gameplay data
         public static List<Entity> entities = new List<Entity>();
     }

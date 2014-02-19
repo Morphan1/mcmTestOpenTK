@@ -93,9 +93,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Debug stuff, always near end
-                debug.Text = TextStyle.Color_Readable +
-                    "Delta: " + ((float)Delta) +
-                    "\nGraphics Delta: " + ((float)GraphicsDelta) +
+                debug.Text = //TextStyle.Color_Readable +
+                    "Delta: " + (Delta) +
+                    "\nGraphics Delta: " + (GraphicsDelta) +
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
                     "\nPos: " + Player.player.Location.ToString() +

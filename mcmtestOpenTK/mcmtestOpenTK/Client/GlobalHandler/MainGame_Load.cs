@@ -31,16 +31,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare graphics-related code
                 ReloadGraphics();
                 TextRenderer.Init();
-                TextRenderer.Primary.texts.Add(new PieceOfText("ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890\nXX XX\tXX\nXX\tXX\nX\tXX\nX\tX\n" +
+                /*TextRenderer.Primary.texts.Add(new PieceOfText("ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890\nXX XX\tXX\nXX\tXX\nX\tXX\nX\tX\n" +
                                                                "TESTCOLORS^1RED^2GREEN^3THREE\n" +
                                                                "^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
                                             "^7Text styles: ^b^^nb is bold,^r ^i^^ni is italic,^r ^u^^nu is underline,^r ^s^^ns is strike-through,^r ^O^^nO is overline,^r ^7^h^0^^nh is highlight,^r^7 ^j^^nj is jello (AKA jiggle), ^r\n" +
                                             "^2^e^0^^ne is emphasis,^r^7 ^t^^nt is transparent,^r ^T^^nT is more transparent,^r ^o^^no is opaque,^r ^R^^nR is random,^r ^p^^np is pseudo-random,^r ^^nk is obfuscated (^kobfu^r),^r\n" +
-                                            "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).", new Point(10, 10)));
+                                            "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).", new Point(10, 10)));*/
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 TextRenderer.Primary.AddText(debug);
-                input = new PieceOfText("", new Point(ScreenWidth / 3, 10));
-                TextRenderer.Primary.AddText(input);
                 // Prepare the console
                 UIConsole.InitConsole();
                 // Prepares the command system
@@ -68,6 +66,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             IsFirstGraphicsDraw = true;
             // Prepare the texture system
             Texture.InitTextureSystem();
+            // Load text font data
+            FontHandler.Init();
             // Set the title
             PrimaryGameWindow.Title = WindowTitle;
             // Setup VSync mode
