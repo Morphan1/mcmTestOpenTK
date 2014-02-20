@@ -125,7 +125,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.Enable(EnableCap.CullFace);
             GL.UseProgram(Shader.Grayscale.Internal_Program);
             int uloc = GL.GetUniformLocation(Shader.Grayscale.Internal_Program, "mult_color");
-            GL.Uniform4(uloc, 0.1f, 0.1f, 0.5f, 1);
+            Shader.ColorMultShader.Bind();
+            Shader.ColorMultShader.SetColor(Color.FromArgb(255, 10, 10, 128));
         }
 
         /// <summary>
@@ -143,8 +144,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void Standard2D()
         {
-            // Render global text
-            TextRenderer.Primary.Draw();
+            // Render debug text
+            GLFont.DrawColoredText(debug);
 
             // Render console
             UIConsole.Draw();
@@ -179,7 +180,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
             GL.Translate(x, y, z);
 
-            GL.BindTexture(TextureTarget.Texture2D, Texture.Test.Internal_Texture);
+            Texture.Test.Bind();
             GL.Begin(PrimitiveType.Quads);
 
             GL.TexCoord2(0, 0);

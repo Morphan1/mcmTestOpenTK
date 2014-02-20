@@ -28,11 +28,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static PieceOfText Typing;
 
         /// <summary>
-        /// Holds the TextRender used for rendering.
-        /// </summary>
-        public static TextRenderer textrender;
-
-        /// <summary>
         /// How many lines the console should have.
         /// </summary>
         public static int Lines = 100;
@@ -72,11 +67,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void InitConsole()
         {
             ready = true;
-            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * TextRenderer.DefaultFont.Height) - 5));
-            Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - TextRenderer.DefaultFont.Height) - 5));
-            textrender = new TextRenderer(MainGame.ScreenWidth, MainGame.ScreenHeight / 2);
-            textrender.AddText(ConsoleText);
-            textrender.AddText(Typing);
+            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * GLFont.Standard.Internal_Font.Height) - 5));
+            Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height) - 5));
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
             Write(pre_waiting);
@@ -130,7 +122,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     i++;
                     continue;
                 }
-                if (TextRenderer.MeasureFancyText(Texture.GenericGraphicsObject, text.Substring(linestart, i - linestart), ConsoleText) > MaxWidth)
+                if (GLFont.MeasureFancyText(text.Substring(linestart, i - linestart), ConsoleText) > MaxWidth)
                 {
                     i -= 1;
                     for (int x = i; x > 0 && x > linestart + 5; x--)
@@ -164,7 +156,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 ConsoleText.Text = ConsoleText.Text.Substring(i + 1, ConsoleText.Text.Length - (i + 1));
             }
             ConsoleText.Text += text;
-            textrender.modified = true;
         }
 
         static bool keymark_add = false;
@@ -181,7 +172,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
             {
                 Open = !Open;
                 KeyHandler.TogglerPressed = false;
-                textrender.modified = true;
                 if (Open)
                 {
                     ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
@@ -209,7 +199,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 if (keymark_delta > 0.5f)
                 {
                     keymark_add = !keymark_add;
-                    textrender.modified = true;
                     keymark_delta = 0f;
                 }
                 if (KeyHandler.InitBS > 0)
@@ -217,19 +206,16 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     if (TypingText.Length > KeyHandler.InitBS)
                     {
                         TypingText = TypingText.Substring(0, TypingText.Length - KeyHandler.InitBS);
-                        textrender.modified = true;
                     }
                     else
                     {
                         TypingText = "";
-                        textrender.modified = true;
                     }
                     KeyHandler.InitBS = 0;
                 }
                 if (KeyHandler.KeyboardString.Length > 0)
                 {
                     TypingText += KeyHandler.KeyboardString;
-                    textrender.modified = true;
                     KeyHandler.KeyboardString = "";
                     while (TypingText.Contains('\n'))
                     {
@@ -269,7 +255,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             {
                 // Standard console box
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                GL.BindTexture(TextureTarget.Texture2D, Texture.Console.Internal_Texture);
+                Texture.Console.Bind();
                 GL.Begin(PrimitiveType.Quads);
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, 0);
@@ -282,7 +268,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.End();
                 // Bottom line
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                GL.BindTexture(TextureTarget.Texture2D, Texture.White.Internal_Texture);
+                Texture.White.Bind();
                 GL.Begin(PrimitiveType.Quads);
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, (MainGame.ScreenHeight / 2) - 1);
@@ -293,10 +279,14 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.TexCoord2(0, 1);
                 GL.Vertex2(0, MainGame.ScreenHeight / 2);
                 GL.End();
+
+                //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+                GLFont.DrawColoredText(Typing);
             }
 
             // Render the console text
-            textrender.Draw();
+            // textrender.Draw();
+            GLFont.DrawColoredText(ConsoleText);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Debug stuff, always near end
-                debug.Text = //TextStyle.Color_Readable +
+                debug.Text = TextStyle.Color_Readable +
                     "Delta: " + (Delta) +
                     "\nGraphics Delta: " + (GraphicsDelta) +
                     "\ncFPS: " + cFPS +

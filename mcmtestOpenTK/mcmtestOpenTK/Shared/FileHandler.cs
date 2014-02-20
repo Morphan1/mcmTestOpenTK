@@ -44,10 +44,10 @@ namespace mcmtestOpenTK.Shared
                 {
                     continue;
                 }
-                // Clean non-breaking-spaces to normal spaces.
-                if (input[i] == (char)0x00A0)
+                // Clean spaces to underscores
+                if (input[i] == (char)0x00A0 || input[i] == ' ')
                 {
-                    output.Append(' ');
+                    output.Append('_');
                     continue;
                 }
                 // Remove non-ASCII symbols, ASCII control codes, and Windows control symbols

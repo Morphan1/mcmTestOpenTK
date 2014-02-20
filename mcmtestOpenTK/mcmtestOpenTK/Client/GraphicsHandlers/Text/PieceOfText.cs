@@ -14,14 +14,14 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
     public class PieceOfText
     {
         public string Text = "";
-        public Font font;
-        public Font font_bold;
-        public Font font_italic;
-        public Font font_bolditalic;
-        public Font font_half;
-        public Font font_boldhalf;
-        public Font font_italichalf;
-        public Font font_bolditalichalf;
+        public GLFont font;
+        public GLFont font_bold;
+        public GLFont font_italic;
+        public GLFont font_bolditalic;
+        public GLFont font_half;
+        public GLFont font_boldhalf;
+        public GLFont font_italichalf;
+        public GLFont font_bolditalichalf;
         public Point Position;
         public bool fancy;
 
@@ -32,19 +32,19 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="pos">X/Y screen coordinates</param>
         /// <param name="fnt">The font to use... leave out to specify the global default font</param>
         /// <param name="fncy">Whether to apply fancy text rendering to this text</param>
-        public PieceOfText(string txt, Point pos, Font fnt = null, bool fncy = true)
+        public PieceOfText(string txt, Point pos, GLFont fnt = null, bool fncy = true)
         {
             Text = txt;
             Position = pos;
             fancy = fncy;
-            font = fnt == null ? TextRenderer.DefaultFont : fnt;
-            font_bold = new Font(font, FontStyle.Bold);
-            font_italic = new Font(font, FontStyle.Italic);
-            font_bolditalic = new Font(font, FontStyle.Bold | FontStyle.Italic);
-            font_half = new Font(font.FontFamily, font.Size / 2);
-            font_boldhalf = new Font(font_bold.FontFamily, font.Size / 2, FontStyle.Bold);
-            font_italichalf = new Font(font_bold.FontFamily, font.Size / 2, FontStyle.Italic);
-            font_bolditalichalf = new Font(font_bold.FontFamily, font.Size / 2, FontStyle.Bold | FontStyle.Italic);
+            font = fnt == null ? GLFont.Standard : fnt;
+            font_bold = GLFont.GetFont(font.Name, true, false, font.Size);
+            font_italic = GLFont.GetFont(font.Name, false, true, font.Size);
+            font_bolditalic = GLFont.GetFont(font.Name, true, true, font.Size);
+            font_half = GLFont.GetFont(font.Name, false, false, font.Size / 2);
+            font_boldhalf = GLFont.GetFont(font.Name, true, false, font.Size / 2);
+            font_italichalf = GLFont.GetFont(font.Name, false, true, font.Size / 2);
+            font_bolditalichalf = GLFont.GetFont(font.Name, true, true, font.Size / 2);
         }
     }
 }

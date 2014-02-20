@@ -29,6 +29,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader Grayscale;
 
         /// <summary>
+        /// A common shader that multiplies colors.
+        /// </summary>
+        public static CMultShader ColorMultShader;
+
+        /// <summary>
+        /// The current bound shader program.
+        /// </summary>
+        public static int Bound_Program = 0;
+
+        /// <summary>
         /// Starts or restarts the shader system.
         /// </summary>
         public static void InitShaderSystem()
@@ -47,6 +57,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             // Pregenerate a few needed shader
             Generic = CreateGeneric("generic");
             LoadedShaders.Add(Generic);
+            ColorMultShader = new CMultShader();
+            LoadedShaders.Add(ColorMultShader);
             // Preload a few common shaders
             Grayscale = GetShader("common/testcolor");
         }
@@ -216,6 +228,17 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 GL.DeleteProgram(Original_Program);
             }
             LoadedShaders.Remove(this);
+        }
+
+        /// <summary>
+        /// Binds this shader to OpenGL.
+        /// </summary>
+        public void Bind()
+        {
+            if (Internal_Program != Bound_Program)
+            {
+                GL.UseProgram(Internal_Program);
+            }
         }
     }
 }

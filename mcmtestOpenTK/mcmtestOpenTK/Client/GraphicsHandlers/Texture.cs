@@ -38,6 +38,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Graphics GenericGraphicsObject = null;
 
         /// <summary>
+        /// The currently bound texture.
+        /// </summary>
+        public static uint Bound_Texture = 0;
+
+        /// <summary>
         /// Starts or restarts the texture system.
         /// </summary>
         public static void InitTextureSystem()
@@ -61,6 +66,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedTextures.Add(White);
             Black = GenerateForColor(Color.Black, "black");
             LoadedTextures.Add(Black);
+            Bound_Texture = 0;
             // Preload a few common textures
             Test = GetTexture("common/test");
             Console = GetTexture("common/console");
@@ -115,12 +121,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 Texture texture = new Texture();
                 texture.Name = filename;
                 GL.GenTextures(1, out texture.Original_InternalID);
-                GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
+                texture.Internal_Texture = texture.Original_InternalID;
+                texture.Bind();
                 LockBitmapToTexture(bmp);
                 texture.Width = bmp.Width;
                 texture.Height = bmp.Height;
                 bmp.Dispose();
-                texture.Internal_Texture = texture.Original_InternalID;
                 texture.LoadedProperly = true;
                 return texture;
             }
@@ -143,8 +149,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             Texture texture = new Texture();
             texture.Name = name;
             GL.GenTextures(1, out texture.Original_InternalID);
-            GL.BindTexture(TextureTarget.Texture2D, texture.Original_InternalID);
             texture.Internal_Texture = texture.Original_InternalID;
+            texture.Bind();
             texture.LoadedProperly = true;
             texture.Width = 2;
             texture.Height = 2;
@@ -229,6 +235,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public void SaveToFile(string filename)
         {
             GL.BindTexture(TextureTarget.Texture2D, Original_InternalID);
+            Bound_Texture = Original_InternalID;
             Bitmap bmp = new Bitmap(Width, Height);
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.GetTexImage(TextureTarget.Texture2D, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
@@ -236,6 +243,17 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             DataStream ds = new DataStream();
             bmp.Save(ds, ImageFormat.Png);
             FileHandler.WriteBytes(filename + ".png", ds.ToArray());
+        }
+
+        /// <summary>
+        /// Binds this texture to OpenGL.
+        /// </summary>
+        public void Bind()
+        {
+            if (Internal_Texture != Bound_Texture)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, Internal_Texture);
+            }
         }
     }
 }
