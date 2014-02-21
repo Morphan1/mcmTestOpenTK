@@ -120,7 +120,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         public static void LoadTextFile()
         {
             textfile = "";
-            string[] datas = FileHandler.ReadText("info/characters.txt").Split('\n');
+            string[] datas = FileHandler.ReadText("info/characters.txt").Replace("\r", "").Split('\n');
             for (int i = 0; i < datas.Length; i++)
             {
                 if (datas[i].Length > 0 && !datas[i].StartsWith("//"))
@@ -212,9 +212,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             {
                 gfx.Clear(Color.Transparent);
                 gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                float X = 0;
+                float X = 6;
                 float Y = 0;
                 float Height = font.Height;
+                gfx.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, 5, (int)Height));
                 Brush brush = new SolidBrush(Color.White);
                 for (int i = 0; i < textfile.Length; i++)
                 {
@@ -222,7 +223,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     float nwidth = gfx.MeasureString(chr, font, new PointF(0, 0), sf).Width;
                     if (X + nwidth >= 1024)
                     {
-                        Y += Height;
+                        Y += Height + 2;
                         X = 0;
                     }
                     gfx.DrawString(chr, font, brush, new PointF(X, Y), sf);
@@ -265,32 +266,33 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// Draws a single symbol at a specified location.
         /// </summary>
         /// <param name="symbol">The symbol to draw.</param>
-        /// <param name="location">The location to draw it at</param>
+        /// <param name="X">The X location to draw it at</param>
+        /// <param name="Y">The Y location to draw it at</param>
         /// <returns>The length of the character in pixels</returns>
-        private float DrawSingleCharacter(char symbol, PointF location, bool flip)
+        private float DrawSingleCharacter(char symbol, float X, float Y, bool flip)
         {
             RectangleF rec = RectForSymbol(symbol);
             if (flip)
             {
                 GL.TexCoord2(rec.X / 1024, rec.Y / 1024);
-                GL.Vertex2(location.X, location.Y + rec.Height);
+                GL.Vertex2(X, Y + rec.Height);
                 GL.TexCoord2((rec.X + rec.Width) / 1024, rec.Y / 1024);
-                GL.Vertex2(location.X + rec.Width, location.Y + rec.Height);
+                GL.Vertex2(X + rec.Width, Y + rec.Height);
                 GL.TexCoord2((rec.X + rec.Width) / 1024, (rec.Y + rec.Height) / 1024);
-                GL.Vertex2(location.X + rec.Width, location.Y);
+                GL.Vertex2(X + rec.Width, Y);
                 GL.TexCoord2(rec.X / 1024, (rec.Y + rec.Height) / 1024);
-                GL.Vertex2(location.X, location.Y);
+                GL.Vertex2(X, Y);
             }
             else
             {
                 GL.TexCoord2(rec.X / 1024, rec.Y / 1024);
-                GL.Vertex2(location.X, location.Y);
+                GL.Vertex2(X, Y);
                 GL.TexCoord2((rec.X + rec.Width) / 1024, rec.Y / 1024);
-                GL.Vertex2(location.X + rec.Width, location.Y);
+                GL.Vertex2(X + rec.Width, Y);
                 GL.TexCoord2((rec.X + rec.Width) / 1024, (rec.Y + rec.Height) / 1024);
-                GL.Vertex2(location.X + rec.Width, location.Y + rec.Height);
+                GL.Vertex2(X + rec.Width, Y + rec.Height);
                 GL.TexCoord2(rec.X / 1024, (rec.Y + rec.Height) / 1024);
-                GL.Vertex2(location.X, location.Y + rec.Height);
+                GL.Vertex2(X, Y + rec.Height);
             }
             return rec.Width;
         }
@@ -299,19 +301,23 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// Draws a string at a specified location.
         /// </summary>
         /// <param name="str">The string to draw.</param>
-        /// <param name="location">The location to draw it at</param>
+        /// <param name="X">The X location to draw it at</param>
+        /// <param name="Y">The Y location to draw it at</param>
         /// <returns>The length of the string in pixels</returns>
-        public float DrawString(string str, PointF location, bool flip = false)
+        public float DrawString(string str, float X, float Y, bool flip = false)
         {
-            BaseTexture.Bind();
-            GL.Begin(PrimitiveType.Quads);
-            float X = 0;
+            float nX = 0;
             for (int i = 0; i < str.Length; i++)
             {
-                X += DrawSingleCharacter(str[i], new PointF(location.X + X, location.Y), flip);
+                if (str[i] == '\n')
+                {
+                    Y += Internal_Font.Height;
+                    nX = 0;
+                    Console.WriteLine("\n!");
+                }
+                nX += DrawSingleCharacter(str[i], X + nX, Y, flip);
             }
-            GL.End();
-            return X;
+            return nX;
         }
 
         /// <summary>
@@ -423,7 +429,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             if (!text.fancy)
             {
-                text.font.DrawString(text.Text, text.Position);
+                text.font.DrawString(text.Text, text.Position.X, text.Position.Y);
                 return;
             }
             string[] lines = text.Text.Replace('\r', ' ').Replace(' ', (char)0x00A0).Replace("^q", "\"").Split('\n');
@@ -454,12 +460,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int htrans = (int)(255 * transmod);
             int strans = (int)(255 * transmod);
             int utrans = (int)(255 * transmod);
-            float X = 0;
-            int Y = 0;
-            float pX = 0;
-            int pY = 0;
+            float X = text.Position.X;
+            int Y = text.Position.Y;
             GLFont font = text.font;
-            PointF location = new PointF(text.Position.X, text.Position.Y);
+            font.BaseTexture.Bind();
+            Shader.ColorMultShader.Bind();
+            GL.Begin(PrimitiveType.Quads);
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
@@ -476,42 +482,39 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
                         start = x + 2;
                         x++;
-                        if (drawme.Length > 0 && (location.Y + Y) >= -font.Internal_Font.Height)
+                        if (drawme.Length > 0 && Y >= -font.Internal_Font.Height)
                         {
-                            location = new PointF(location.X + (X - pX), location.Y + (Y - pY));
-                            pX = X;
-                            pY = Y;
                             float width = font.MeasureString(drawme);
                             if (highlight)
                             {
-                                DrawRectangle(location.X - 1, location.Y, width + 1, font.Internal_Font.Height, ColorFor(hcolor, htrans));
+                                DrawRectangle(X, Y, width, font.Internal_Font.Height, ColorFor(hcolor, htrans));
                             }
                             if (underline)
                             {
-                                DrawRectangle(location.X, location.Y + (font.Internal_Font.Height * 4 / 5), width, 1, ColorFor(ucolor, utrans));
+                                DrawRectangle(X, Y + (font.Internal_Font.Height * 4 / 5), width, 1, ColorFor(ucolor, utrans));
                             }
                             if (overline)
                             {
-                                DrawRectangle(location.X, location.Y + 2, width, 1, ColorFor(ocolor, otrans));
+                                DrawRectangle(X, Y + 2, width, 1, ColorFor(ocolor, otrans));
                             }
                             if (shadow)
                             {
                                 foreach (Point point in ShadowPoints)
                                 {
-                                    RenderBaseText(new PointF(location.X + point.X, location.Y + point.Y), drawme, font, 0, 255, flip);
+                                    RenderBaseText(X + point.X, Y + point.Y, drawme, font, 0, 255, flip);
                                 }
                             }
                             if (emphasis)
                             {
                                 foreach (Point point in EmphasisPoints)
                                 {
-                                    RenderBaseText(new PointF(location.X + point.X, location.Y + point.Y), drawme, font, ecolor, etrans, flip);
+                                    RenderBaseText(X + point.X, Y + point.Y, drawme, font, ecolor, etrans, flip);
                                 }
                             }
-                            X += RenderBaseText(location, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
+                            X += RenderBaseText(X, Y, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
                             if (strike)
                             {
-                                DrawRectangle(location.X, location.Y + (font.Internal_Font.Height / 2), width, 1, ColorFor(scolor, strans));
+                                DrawRectangle(X, Y + (font.Internal_Font.Height / 2), width, 1, ColorFor(scolor, strans));
                             }
                         }
                         if (x < line.Length)
@@ -541,12 +544,30 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'a': color = 10; break;
                                 case 'A': color = 21; break;
                                 case 'i':
-                                    italic = true;
-                                    font = (super || sub) ? (bold ? text.font_bolditalichalf : text.font_italichalf) : (bold ? text.font_bolditalic : text.font_italic);
+                                    {
+                                        italic = true;
+                                        GLFont nfont = (super || sub) ? (bold ? text.font_bolditalichalf : text.font_italichalf) : (bold ? text.font_bolditalic : text.font_italic);
+                                        if (nfont != font)
+                                        {
+                                            GL.End();
+                                            font = nfont;
+                                            font.BaseTexture.Bind();
+                                            GL.Begin(PrimitiveType.Quads);
+                                        }
+                                    }
                                     break;
                                 case 'b':
-                                    bold = true;
-                                    font = (super || sub) ? (italic ? text.font_bolditalichalf : text.font_boldhalf) : (italic ? text.font_bolditalic : text.font_bold);
+                                    {
+                                        bold = true;
+                                        GLFont nfont = (super || sub) ? (italic ? text.font_bolditalichalf : text.font_boldhalf) : (italic ? text.font_bolditalic : text.font_bold);
+                                        if (nfont != font)
+                                        {
+                                            GL.End();
+                                            font = nfont;
+                                            font.BaseTexture.Bind();
+                                            GL.Begin(PrimitiveType.Quads);
+                                        }
+                                    }
                                     break;
                                 case 'u': utrans = trans; underline = true; ucolor = color; break;
                                 case 's': strans = trans; strike = true; scolor = color; break;
@@ -562,9 +583,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         if (sub)
                                         {
                                             sub = false;
-                                            location = new PointF(location.X, location.Y - (text.font.Internal_Font.Height / 2));
+                                            Y -= text.font.Internal_Font.Height / 2;
                                         }
-                                        font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        if (nfont != font)
+                                        {
+                                            GL.End();
+                                            font = nfont;
+                                            font.BaseTexture.Bind();
+                                            GL.Begin(PrimitiveType.Quads);
+                                        }
                                     }
                                     super = true;
                                     break;
@@ -575,8 +603,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         {
                                             super = false;
                                         }
-                                        location = new PointF(location.X, location.Y + (text.font.Internal_Font.Height / 2));
-                                        font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        Y += text.font.Internal_Font.Height / 2;
+                                        GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        if (nfont != font)
+                                        {
+                                            GL.End();
+                                            font = nfont;
+                                            font.BaseTexture.Bind();
+                                            GL.Begin(PrimitiveType.Quads);
+                                        }
                                     }
                                     sub = true;
                                     break;
@@ -589,28 +624,37 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'n':
                                     break;
                                 case 'r':
-                                    font = text.font;
-                                    if (sub)
                                     {
-                                        location = new PointF(location.X, location.Y - (text.font.Internal_Font.Height / 2));
+                                        GLFont nfont = text.font;
+                                        if (nfont != font)
+                                        {
+                                            GL.End();
+                                            font = nfont;
+                                            font.BaseTexture.Bind();
+                                            GL.Begin(PrimitiveType.Quads);
+                                        }
+                                        if (sub)
+                                        {
+                                            Y -= text.font.Internal_Font.Height / 2;
+                                        }
+                                        sub = false;
+                                        super = false;
+                                        flip = false;
+                                        random = false;
+                                        pseudo = false;
+                                        jello = false;
+                                        obfu = false;
+                                        shadow = lockshadow;
+                                        bold = false;
+                                        italic = false;
+                                        underline = false;
+                                        strike = false;
+                                        emphasis = false;
+                                        highlight = false;
+                                        trans = (int)(255 * transmod);
+                                        overline = false;
+                                        break;
                                     }
-                                    sub = false;
-                                    super = false;
-                                    flip = false;
-                                    random = false;
-                                    pseudo = false;
-                                    jello = false;
-                                    obfu = false;
-                                    shadow = lockshadow;
-                                    bold = false;
-                                    italic = false;
-                                    underline = false;
-                                    strike = false;
-                                    emphasis = false;
-                                    highlight = false;
-                                    trans = (int)(255 * transmod);
-                                    overline = false;
-                                    break;
                                 default:
                                     break;
                             }
@@ -620,43 +664,45 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 Y += text.font.Internal_Font.Height;
                 X = 0;
             }
+            GL.End();
             GL.UseProgram(0);
         }
 
         /// <summary>
         /// Semi-internal rendering of text strings.
         /// </summary>
-        /// <param name="location">The location to render at</param>
+        /// <param name="X">The X location to render at</param>
+        /// <param name="Y">The Y location to render at</param>
         /// <param name="text">The text to render</param>
         /// <param name="font">The font to use</param>
         /// <param name="color">The color ID number to use</param>
         /// <param name="sf">The format</param>
         /// <param name="trans">Transparency</param>
+        /// <param name="flip">Whether to flip the text</param>
         /// <param name="pseudo">Whether to use pseudo-random color</param>
         /// <param name="random">Whether to use real-random color</param>
         /// <param name="jello">Whether to use a jello effect</param>
         /// <param name="obfu">Whether to randomize letters</param>
         /// <returns>The length of the rendered text in pixels</returns>
-        public static float RenderBaseText(PointF location, string text, GLFont font, int color,
+        public static float RenderBaseText(float X, float Y, string text, GLFont font, int color,
             int trans = 255, bool flip = false, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
         {
-            Shader.ColorMultShader.Bind();
 #if !EXCESSIVE_FONT_HANDLING
             if (obfu || pseudo || random || jello) // These must be handled manually regardless of settings.
             {
 #endif
-                float X = 0;
+                float nX = 0;
                 for (int z = 0; z < text.Length; z++)
                 {
                     char chr = text[z];
                     int col = color;
                     if (pseudo)
                     {
-                        Shader.ColorMultShader.SetColor(ColorFor(chr % colors.Length, trans));
+                        GL.Color4(ColorFor((chr % (colors.Length - 1)) + 1, trans));
                     }
                     if (random)
                     {
-                        Shader.ColorMultShader.SetColor(ColorFor(Utilities.random.Next(colors.Length), trans));
+                        GL.Color4(ColorFor(Utilities.random.Next(colors.Length), trans));
                     }
                     if (obfu)
                     {
@@ -669,19 +715,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         iX = Utilities.random.Next(-1, 1);
                         iY = Utilities.random.Next(-1, 1);
                     }
-                    font.DrawString(chr.ToString(), new PointF(location.X + iX + X, location.Y + iY), flip);
-                    X += font.RectForSymbol(text[z]).Width;
+                    font.DrawSingleCharacter(chr, X + iX + nX, Y + iY, flip);
+                    nX += font.RectForSymbol(text[z]).Width;
                 }
-                return X;
+                return nX;
 #if !EXCESSIVE_FONT_HANDLING
             }
             else
             {
-                // Spaces strings differently depending on character count... meaning all the text will shift
-                // if you add characters to the end. Which is bad.
-                //graphics.DrawString(text, font, new SolidBrush(ColorFor(color, trans)), new PointF(0, 0), sf);
-                Shader.ColorMultShader.SetColor(ColorFor(color, trans));
-                float width = font.DrawString(text, location, flip);
+                GL.Color4(ColorFor(color, trans));
+                float width = font.DrawString(text, X, Y, flip);
                 return width;
             }
 #endif
@@ -759,19 +802,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="c">The color to use</param>
         public static void DrawRectangle(float X, float Y, float width, float height, Color c)
         {
-            Texture.White.Bind();
-            Shader.ColorMultShader.Bind();
-            Shader.ColorMultShader.SetColor(c);
-            GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0, 0);
+            GL.Color4(c);
+            GL.TexCoord2(2f / 1024f, 2 / 1024f);
             GL.Vertex2(X, Y);
-            GL.TexCoord2(1, 0);
+            GL.TexCoord2(4f / 1024f, 2f / 1024f);
             GL.Vertex2(X + width, Y);
-            GL.TexCoord2(1, 1);
+            GL.TexCoord2(4f / 1024f, 4f / 1024f);
             GL.Vertex2(X + width, Y + height);
-            GL.TexCoord2(0, 1);
+            GL.TexCoord2(2f / 1024f, 4f / 1024f);
             GL.Vertex2(X, Y + height);
-            GL.End();
         }
     }
 }

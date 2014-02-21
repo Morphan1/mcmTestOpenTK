@@ -79,7 +79,6 @@
     <Compile Include="Client\CommandHandlers\Graphics\LoadtextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\RemaptextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\TexturelistCommand.cs" />
-    <Compile Include="Client\GraphicsHandlers\CMultShader.cs" />
     <Compile Include="Client\GraphicsHandlers\Shader.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />

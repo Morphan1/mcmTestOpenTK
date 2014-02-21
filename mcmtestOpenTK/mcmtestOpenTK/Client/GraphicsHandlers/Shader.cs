@@ -31,7 +31,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// <summary>
         /// A common shader that multiplies colors.
         /// </summary>
-        public static CMultShader ColorMultShader;
+        public static Shader ColorMultShader;
 
         /// <summary>
         /// The current bound shader program.
@@ -57,7 +57,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             // Pregenerate a few needed shader
             Generic = CreateGeneric("generic");
             LoadedShaders.Add(Generic);
-            ColorMultShader = new CMultShader();
+            ColorMultShader = CreateMultiplier("colormultiplier");
             LoadedShaders.Add(ColorMultShader);
             // Preload a few common shaders
             Grayscale = GetShader("common/testcolor");
@@ -130,13 +130,28 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// <summary>
         /// Creates a generic shader object.
         /// </summary>
-        /// <returns>A generic no-change shader object.</returns>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A generic no-change shader object</returns>
         public static Shader CreateGeneric(string name)
         {
             string VS = "void main(){gl_TexCoord[0] = gl_MultiTexCoord0;gl_Position = ftransform();}";
             string FS = "uniform sampler2D tex;void main()" +
             "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
             "gl_FragColor = color;}";
+            return CreateShader(VS, FS, name);
+        }
+
+        /// <summary>
+        /// Creates a generic color-multiplier shader object.
+        /// </summary>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A generic color-multiplier shader object</returns>
+        public static Shader CreateMultiplier(string name)
+        {
+            string VS = "void main(){gl_FrontColor = gl_Color;gl_TexCoord[0] = gl_MultiTexCoord0;gl_Position = ftransform();}";
+            string FS = "uniform sampler2D tex;void main()" +
+            "{vec4 color = texture2D(tex,gl_TexCoord[0].st);gl_FragColor = vec4(color" +
+            "[0] * gl_Color[0], color[1] * gl_Color[1], color[2] * gl_Color[2], color[3] * gl_Color[3]);}";
             return CreateShader(VS, FS, name);
         }
 

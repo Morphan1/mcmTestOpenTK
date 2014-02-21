@@ -126,7 +126,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.UseProgram(Shader.Grayscale.Internal_Program);
             int uloc = GL.GetUniformLocation(Shader.Grayscale.Internal_Program, "mult_color");
             Shader.ColorMultShader.Bind();
-            Shader.ColorMultShader.SetColor(Color.FromArgb(255, 10, 10, 128));
+            //Shader.ColorMultShader.SetColor(Color.FromArgb(255, 10, 10, 128));
+            GL.Color4(Color.FromArgb(255, 10, 10, 128));
         }
 
         /// <summary>
