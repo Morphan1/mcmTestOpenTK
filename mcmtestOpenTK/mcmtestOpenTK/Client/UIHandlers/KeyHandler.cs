@@ -52,15 +52,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 case Key.Enter:
                     KeyboardString += "\n";
                     break;
-                case Key.BackSpace:
-                    if (KeyboardString.Length == 0)
-                    {
-                        InitBS++;
-                    }
-                    else
-                    {
-                        KeyboardString = KeyboardString.Substring(0, KeyboardString.Length - 1);
-                    }
+                case Key.Tab:
+                    KeyboardString += "    ";
                     break;
                 case Key.ControlLeft:
                 case Key.ControlRight:
@@ -70,6 +63,16 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     if (ControlDown)
                     {
                         CopyPressed = true;
+                    }
+                    break;
+                case Key.BackSpace:
+                    if (KeyboardString.Length == 0)
+                    {
+                        InitBS++;
+                    }
+                    else
+                    {
+                        KeyboardString = KeyboardString.Substring(0, KeyboardString.Length - 1);
                     }
                     break;
                 case Key.V:

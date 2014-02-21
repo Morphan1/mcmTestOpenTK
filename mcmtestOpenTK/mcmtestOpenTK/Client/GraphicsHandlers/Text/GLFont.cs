@@ -219,7 +219,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 Brush brush = new SolidBrush(Color.White);
                 for (int i = 0; i < textfile.Length; i++)
                 {
-                    string chr = textfile[i].ToString();
+                    string chr = textfile[i] == '\t' ? "    ": textfile[i].ToString();
                     float nwidth = gfx.MeasureString(chr, font, new PointF(0, 0), sf).Width;
                     if (X + nwidth >= 1024)
                     {
@@ -687,10 +687,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         public static float RenderBaseText(float X, float Y, string text, GLFont font, int color,
             int trans = 255, bool flip = false, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
         {
-#if !EXCESSIVE_FONT_HANDLING
-            if (obfu || pseudo || random || jello) // These must be handled manually regardless of settings.
+            if (obfu || pseudo || random || jello)
             {
-#endif
                 float nX = 0;
                 for (int z = 0; z < text.Length; z++)
                 {
@@ -719,7 +717,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     nX += font.RectForSymbol(text[z]).Width;
                 }
                 return nX;
-#if !EXCESSIVE_FONT_HANDLING
             }
             else
             {
@@ -727,7 +724,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 float width = font.DrawString(text, X, Y, flip);
                 return width;
             }
-#endif
         }
 
         /// <summary>
