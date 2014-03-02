@@ -69,6 +69,21 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static int ScrolledLine = 0;
 
+        /// <summary>
+        /// How many recent commands to store.
+        /// </summary>
+        public static int MaxRecentCommands = 50;
+
+        /// <summary>
+        /// A list of all recently execute command-lines.
+        /// </summary>
+        public static List<string> RecentCommands = new List<string>() { "" };
+
+        /// <summary>
+        /// What spot in the RecentCommands the user is currently at.
+        /// </summary>
+        public static int RecentSpot = 0;
+
         static bool ready = false;
 
         static string pre_waiting = "";
@@ -189,6 +204,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
                     mouse_was_captured = MouseHandler.MouseCaptured;
                     MouseHandler.ReleaseMouse();
+                    RecentSpot = RecentCommands.Count - 1;
                 }
                 else
                 {
@@ -238,6 +254,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                             TypingText = "";
                         }
                         WriteLine("] " + input);
+                        RecentCommands.Add(input);
+                        if (RecentCommands.Count > MaxRecentCommands)
+                        {
+                            RecentCommands.RemoveAt(0);
+                        }
+                        RecentSpot = RecentCommands.Count;
                         Commands.ExecuteCommands(input);
                     }
                 }
@@ -256,14 +278,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 {
                     ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) + 3;
                 }
-                if (KeyHandler.Pages > 0)
-                {
-                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) - 3;
-                }
-                if (KeyHandler.Scrolls != 0)
-                {
-                    ScrolledLine -= KeyHandler.Scrolls;
-                }
+                ScrolledLine += MouseHandler.MouseScroll;
                 if (ScrolledLine > 0)
                 {
                     ScrolledLine = 0;
@@ -271,6 +286,25 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 if (ScrolledLine < -Lines + 5)
                 {
                     ScrolledLine = -Lines + 5;
+                }
+                // Scrolling through commands
+                if (KeyHandler.Scrolls != 0)
+                {
+                    RecentSpot -= KeyHandler.Scrolls;
+                    if (RecentSpot < 0)
+                    {
+                        RecentSpot = 0;
+                        TypingText = RecentCommands[0];
+                    }
+                    else if (RecentSpot >= RecentCommands.Count)
+                    {
+                        RecentSpot = RecentCommands.Count;
+                        TypingText = "";
+                    }
+                    else
+                    {
+                        TypingText = RecentCommands[RecentSpot];
+                    }
                 }
             }
             KeyHandler.Clear();

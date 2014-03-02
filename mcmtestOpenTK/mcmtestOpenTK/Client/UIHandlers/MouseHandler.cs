@@ -33,6 +33,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static MouseState PreviousMouse;
 
         /// <summary>
+        /// How much the mouse was scrolled this tick.
+        /// </summary>
+        public static int MouseScroll = 0;
+
+        /// <summary>
         /// Captures the mouse to this window.
         /// </summary>
         public static void CaptureMouse()
@@ -60,12 +65,15 @@ namespace mcmtestOpenTK.Client.UIHandlers
             Mouse.SetPosition(center.X, center.Y);
         }
 
+        public static float pwheelstate;
+        public static float cwheelstate;
+
         /// <summary>
         /// Updates mouse movement.
         /// </summary>
         public static void Tick()
         {
-            if (MouseCaptured)
+            if (MainGame.PrimaryGameWindow.Focused && MouseCaptured)
             {
                 double MoveX = (((MainGame.ScreenWidth / 2) - MainGame.PrimaryGameWindow.Mouse.X) * MainGame.Delta * MainGame.MouseSensitivity);
                 double MoveY = (((MainGame.ScreenHeight / 2) - MainGame.PrimaryGameWindow.Mouse.Y) * MainGame.Delta * MainGame.MouseSensitivity);
@@ -73,10 +81,19 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 CenterMouse();
                 PreviousMouse = CurrentMouse;
                 CurrentMouse = Mouse.GetState();
+                pwheelstate = cwheelstate;
+                cwheelstate = CurrentMouse.WheelPrecise;
+                MouseScroll = (int)(cwheelstate - pwheelstate);
             }
             else
             {
                 MouseDelta = new Vector2(0, 0);
+            }
+            if (MainGame.PrimaryGameWindow.Focused && !MouseCaptured)
+            {
+                pwheelstate = cwheelstate;
+                cwheelstate = Mouse.GetState().WheelPrecise;
+                MouseScroll = (int)(cwheelstate - pwheelstate);
             }
         }
     }

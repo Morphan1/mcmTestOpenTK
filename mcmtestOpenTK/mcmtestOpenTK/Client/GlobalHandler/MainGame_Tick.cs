@@ -49,7 +49,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 KeyHandler.Tick();
 
                 // Closeable yay
-                if (KeyHandler.IsDown(Key.Escape))
+                if (KeyHandler.CurrentKeyboard.IsKeyDown(Key.Escape))
                 {
                     Exit();
                 }
@@ -101,7 +101,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\nPos: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
                     "\nN'Angle: " + Util.VectorToAngles(Util.ForwardVector(Player.player.Angle.X * (float)Math.PI / 180, Player.player.Angle.Y * (float)Math.PI / 180)).ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
+                    "\nMouse Scroll: " + "C: " + MouseHandler.cwheelstate + " P: " + MouseHandler.pwheelstate + " S: " + MouseHandler.MouseScroll;
             }
             catch (Exception ex)
             {
