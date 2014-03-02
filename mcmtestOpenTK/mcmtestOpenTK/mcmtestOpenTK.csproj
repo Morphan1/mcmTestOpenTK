@@ -71,6 +71,7 @@
     <Compile Include="Client\CommandHandlers\AbstractCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
     <Compile Include="Client\CommandHandlers\Commands.cs" />
+    <Compile Include="Client\CommandHandlers\Common\HelpCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\EchoCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\SavetextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\RemapshaderCommand.cs" />

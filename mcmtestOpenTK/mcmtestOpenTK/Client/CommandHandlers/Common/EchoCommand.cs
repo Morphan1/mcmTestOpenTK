@@ -24,7 +24,6 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                // TODO: Separate command for line below
                 UIConsole.WriteLine(mcmtestOpenTK.Client.GraphicsHandlers.Text.GLFont.textfile);
                 UIConsole.WriteLine(Utilities.Concat(info.Arguments));
             }

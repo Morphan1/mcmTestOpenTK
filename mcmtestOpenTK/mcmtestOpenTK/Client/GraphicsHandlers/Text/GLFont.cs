@@ -228,12 +228,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     float nwidth = gfx.MeasureString(chr, font, new PointF(0, 0), sf).Width;
                     if (X + nwidth >= 1024)
                     {
-                        Y += Height + 2;
+                        Y += Height + 4;
                         X = 0;
                     }
                     gfx.DrawString(chr, font, brush, new PointF(X, Y), sf);
                     CharacterLocations.Add(new RectangleF(X, Y, nwidth, Height));
-                    X += (float)Math.Ceiling(nwidth) + 2;
+                    X += (float)Math.Ceiling(nwidth) + 4;
                 }
             }
             data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -488,7 +488,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
                         start = x + 2;
                         x++;
-                        if (drawme.Length > 0 && Y >= -font.Height && Y <= MaxY)
+                        if (drawme.Length > 0 && Y >= -font.Height && Y - (sub ? font.Height: 0) <= MaxY)
                         {
                             float width = font.MeasureString(drawme);
                             if (highlight)
@@ -517,11 +517,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                     RenderBaseText(X + point.X, Y + point.Y, drawme, font, ecolor, etrans, flip);
                                 }
                             }
-                            X += RenderBaseText(X, Y, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
+                            RenderBaseText(X, Y, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
                             if (strike)
                             {
                                 DrawRectangle(X, Y + (font.Height / 2), width, 1, ColorFor(scolor, strans));
                             }
+                            X += width;
                         }
                         if (x < line.Length)
                         {
@@ -727,8 +728,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             else
             {
                 GL.Color4(ColorFor(color, trans));
-                float width = font.DrawString(text, X, Y, flip);
-                return width;
+                return font.DrawString(text, X, Y, flip);
             }
         }
 
@@ -744,10 +744,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             bool bold = false;
             bool italic = false;
             bool sub = false;
-            float X = 0;
+            float MeasWidth = 0;
             GLFont font = text.font;
             int start = 0;
-            line = line.Replace("^q", "\"").Replace("^n", "");
+            line = line.Replace("^q", "\"");
             for (int x = 0; x < line.Length; x++)
             {
                 if ((line[x] == '^' && x + 1 < line.Length && IsColorSymbol(line[x + 1])) || (x + 1 == line.Length))
@@ -757,7 +757,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     x++;
                     if (drawme.Length > 0)
                     {
-                        X += font.MeasureString(drawme);
+                        MeasWidth += font.MeasureString(drawme);
                     }
                     if (x < line.Length)
                     {
@@ -771,10 +771,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 break;
                             case 'S':
                             case 'l':
-                                if (!sub)
-                                {
-                                    font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
-                                }
+                                font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
                                 sub = true;
                                 break;
                             case 'i':
@@ -791,7 +788,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     }
                 }
             }
-            return X;
+            return MeasWidth;
         }
 
         /// <summary>

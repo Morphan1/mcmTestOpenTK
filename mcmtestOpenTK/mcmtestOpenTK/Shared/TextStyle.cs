@@ -23,5 +23,6 @@ namespace mcmtestOpenTK.Shared
         public static string Color_Separate = "^r^5";
         public static string Color_Outgood = "^r^2";
         public static string Color_Outbad = "^r^1";
+        public static string Color_Importantinfo = "^r^3";
     }
 }
