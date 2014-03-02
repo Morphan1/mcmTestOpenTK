@@ -28,8 +28,8 @@ namespace mcmtestOpenTK.Shared
             StringBuilder output = new StringBuilder(input.Length);
             for (int i = 0; i < input.Length; i++)
             {
-                // Remove double slashes
-                if ((input[i] == '/' || input[i] == '\\') && output.Length > 0 && output[output.Length - 1] == '/')
+                // Remove double slashes, or "./"
+                if ((input[i] == '/' || input[i] == '\\') && output.Length > 0 && (output[output.Length - 1] == '/' || output[output.Length - 1] == '.'))
                 {
                     continue;
                 }
@@ -39,8 +39,8 @@ namespace mcmtestOpenTK.Shared
                     output.Append('/');
                     continue;
                 }
-                // Remove ".." (up-a-level) folders
-                if (input[i] == '.' && output.Length > 0 && output[output.Length - 1] == '.')
+                // Remove ".." (up-a-level) folders, or "/."
+                if (input[i] == '.' && output.Length > 0 && (output[output.Length - 1] == '.' || output[output.Length - 1] == '/'))
                 {
                     continue;
                 }

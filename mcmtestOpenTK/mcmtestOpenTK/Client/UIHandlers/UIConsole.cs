@@ -28,6 +28,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static PieceOfText Typing;
 
         /// <summary>
+        /// Holds the "scrolled-up" text.
+        /// </summary>
+        public static PieceOfText ScrollText;
+
+        /// <summary>
         /// How many lines the console should have.
         /// </summary>
         public static int Lines = 100;
@@ -57,6 +62,13 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static string TypingText = "";
 
+        /// <summary>
+        /// What line has been scrolled to:
+        /// 0 = farthest down, -LINES = highest up.
+        /// The selected line will be rendered at the bottom of the screen.
+        /// </summary>
+        public static int ScrolledLine = 0;
+
         static bool ready = false;
 
         static string pre_waiting = "";
@@ -69,6 +81,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             ready = true;
             ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * GLFont.Standard.Internal_Font.Height) - 5));
             Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height) - 5));
+            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 100), new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height * 2) - 5));
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
             Write(pre_waiting);
@@ -171,7 +184,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
             if (KeyHandler.TogglerPressed)
             {
                 Open = !Open;
-                KeyHandler.TogglerPressed = false;
                 if (Open)
                 {
                     ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
@@ -188,19 +200,16 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
             }
-            if (!Open)
+            if (Open)
             {
-                KeyHandler.Clear();
-            }
-            else
-            {
-                // Update the input line
+                // flicker the cursor
                 keymark_delta += MainGame.Delta;
                 if (keymark_delta > 0.5f)
                 {
                     keymark_add = !keymark_add;
                     keymark_delta = 0f;
                 }
+                // handle backspaces
                 if (KeyHandler.InitBS > 0)
                 {
                     if (TypingText.Length > KeyHandler.InitBS)
@@ -211,12 +220,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     {
                         TypingText = "";
                     }
-                    KeyHandler.InitBS = 0;
                 }
+                // handle input text
                 if (KeyHandler.KeyboardString.Length > 0)
                 {
                     TypingText += KeyHandler.KeyboardString;
-                    KeyHandler.KeyboardString = "";
                     while (TypingText.Contains('\n'))
                     {
                         int index = TypingText.IndexOf('\n');
@@ -233,16 +241,39 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         Commands.ExecuteCommands(input);
                     }
                 }
+                // Update the rendered text
                 Typing.Text = ">" + TypingText + (keymark_add ? "|" : "");
+                // Handle copying
                 if (KeyHandler.CopyPressed)
                 {
                     if (TypingText.Length > 0)
                     {
                         System.Windows.Forms.Clipboard.SetText(TypingText);
                     }
-                    KeyHandler.CopyPressed = false;
+                }
+                // handle scrolling
+                if (KeyHandler.Pages < 0)
+                {
+                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) + 3;
+                }
+                if (KeyHandler.Pages > 0)
+                {
+                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) - 3;
+                }
+                if (KeyHandler.Scrolls != 0)
+                {
+                    ScrolledLine -= KeyHandler.Scrolls;
+                }
+                if (ScrolledLine > 0)
+                {
+                    ScrolledLine = 0;
+                }
+                if (ScrolledLine < -Lines + 5)
+                {
+                    ScrolledLine = -Lines + 5;
                 }
             }
+            KeyHandler.Clear();
         }
 
         /// <summary>
@@ -256,6 +287,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // Standard console box
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 Texture.Console.Bind();
+                Shader.Generic.Bind();
                 GL.Begin(PrimitiveType.Quads);
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, 0);
@@ -266,10 +298,40 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.TexCoord2(0, 1);
                 GL.Vertex2(0, MainGame.ScreenHeight / 2);
                 GL.End();
+
+                // Scrollbar
+                Texture.White.Bind();
+                Shader.ColorMultShader.Bind();
+                GL.Begin(PrimitiveType.Quads);
+                GL.Color4(Color.White);
+                GL.TexCoord2(0, 0);
+                GL.Vertex2(0, 0);
+                GL.TexCoord2(1, 0);
+                GL.Vertex2(2, 0);
+                GL.TexCoord2(1, 1);
+                GL.Vertex2(2, MainGame.ScreenHeight / 2);
+                GL.TexCoord2(0, 1);
+                GL.Vertex2(0, MainGame.ScreenHeight / 2);
+                GL.Color4(Color.Red);
+                float Y = MainGame.ScreenHeight / 2;
+                float percentone = -(float)ScrolledLine / (float)Lines;
+                float percenttwo = -((float)ScrolledLine - (float)MainGame.ScreenHeight / GLFont.Standard.Height) / (float)Lines;
+                GL.TexCoord2(0, 0);
+                GL.Vertex2(0, Y - Y * percenttwo);
+                GL.TexCoord2(1, 0);
+                GL.Vertex2(2, Y - Y * percenttwo);
+                GL.TexCoord2(1, 1);
+                GL.Vertex2(2, Y - Y * percentone);
+                GL.TexCoord2(0, 1);
+                GL.Vertex2(0, Y - Y * percentone);
+                GL.End();
+
                 // Bottom line
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 Texture.White.Bind();
+                Shader.ColorMultShader.Bind();
                 GL.Begin(PrimitiveType.Quads);
+                GL.Color4(Color.Cyan);
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, (MainGame.ScreenHeight / 2) - 1);
                 GL.TexCoord2(1, 0);
@@ -285,8 +347,13 @@ namespace mcmtestOpenTK.Client.UIHandlers
             }
 
             // Render the console text
-            // textrender.Draw();
-            GLFont.DrawColoredText(ConsoleText);
+            ConsoleText.Position.Y -= ScrolledLine * (int)GLFont.Standard.Height;
+            GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - GLFont.Standard.Height * 3));
+            ConsoleText.Position.Y += ScrolledLine * (int)GLFont.Standard.Height;
+            if (ScrolledLine != 0)
+            {
+                GLFont.DrawColoredText(ScrollText);
+            }
         }
     }
 }

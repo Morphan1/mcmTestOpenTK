@@ -179,6 +179,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// </summary>
         public Font Internal_Font;
 
+        /// <summary>
+        /// How tall a rendered symbol is.
+        /// </summary>
+        public float Height;
+
         public GLFont(Font font)
         {
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -186,6 +191,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             Size = (int)font.Size;
             Bold = font.Bold;
             Italic = font.Italic;
+            Height = font.Height;
             CharacterLocations = new List<RectangleF>();
             StringFormat sf = new StringFormat(StringFormat.GenericTypographic);
             sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.FitBlackBox | StringFormatFlags.NoWrap;
@@ -214,7 +220,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                 float X = 6;
                 float Y = 0;
-                float Height = font.Height;
                 gfx.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, 5, (int)Height));
                 Brush brush = new SolidBrush(Color.White);
                 for (int i = 0; i < textfile.Length; i++)
@@ -311,7 +316,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             {
                 if (str[i] == '\n')
                 {
-                    Y += Internal_Font.Height;
+                    Y += Height;
                     nX = 0;
                     Console.WriteLine("\n!");
                 }
@@ -423,9 +428,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// Fully renders colorful/fancy text (unless the text is not marked as fancy, or fancy rendering is disabled)
         /// </summary>
         /// <param name="text">The textual information to render</param>
+        /// <param name="MaxY">The maximum Y location to render text at.</param>
         /// <param name="transmod">Transparency modifier (EG, 0.5 = half opacity) (0.0 - 1.0)</param>
         /// <param name="lockshadow">Whether to always have a drop-shadow</param>
-        public static void DrawColoredText(PieceOfText text, float transmod = 1, bool lockshadow = false)
+        public static void DrawColoredText(PieceOfText text, int MaxY = int.MaxValue, float transmod = 1, bool lockshadow = false)
         {
             if (!text.fancy)
             {
@@ -461,7 +467,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int strans = (int)(255 * transmod);
             int utrans = (int)(255 * transmod);
             float X = text.Position.X;
-            int Y = text.Position.Y;
+            float Y = text.Position.Y;
             GLFont font = text.font;
             font.BaseTexture.Bind();
             Shader.ColorMultShader.Bind();
@@ -471,7 +477,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 string line = lines[i];
                 if (line.Length == 0)
                 {
-                    Y += text.font.Internal_Font.Height;
+                    Y += text.font.Height;
                     continue;
                 }
                 int start = 0;
@@ -482,16 +488,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         string drawme = line.Substring(start, (x - start) + ((x + 1 < line.Length) ? 0 : 1));
                         start = x + 2;
                         x++;
-                        if (drawme.Length > 0 && Y >= -font.Internal_Font.Height)
+                        if (drawme.Length > 0 && Y >= -font.Height && Y <= MaxY)
                         {
                             float width = font.MeasureString(drawme);
                             if (highlight)
                             {
-                                DrawRectangle(X, Y, width, font.Internal_Font.Height, ColorFor(hcolor, htrans));
+                                DrawRectangle(X, Y, width, font.Height, ColorFor(hcolor, htrans));
                             }
                             if (underline)
                             {
-                                DrawRectangle(X, Y + (font.Internal_Font.Height * 4 / 5), width, 1, ColorFor(ucolor, utrans));
+                                DrawRectangle(X, Y + (font.Height * 4 / 5), width, 1, ColorFor(ucolor, utrans));
                             }
                             if (overline)
                             {
@@ -514,7 +520,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                             X += RenderBaseText(X, Y, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
                             if (strike)
                             {
-                                DrawRectangle(X, Y + (font.Internal_Font.Height / 2), width, 1, ColorFor(scolor, strans));
+                                DrawRectangle(X, Y + (font.Height / 2), width, 1, ColorFor(scolor, strans));
                             }
                         }
                         if (x < line.Length)
@@ -583,7 +589,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         if (sub)
                                         {
                                             sub = false;
-                                            Y -= text.font.Internal_Font.Height / 2;
+                                            Y -= text.font.Height / 2;
                                         }
                                         GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
                                         if (nfont != font)
@@ -603,7 +609,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         {
                                             super = false;
                                         }
-                                        Y += text.font.Internal_Font.Height / 2;
+                                        Y += text.font.Height / 2;
                                         GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
                                         if (nfont != font)
                                         {
@@ -635,7 +641,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         }
                                         if (sub)
                                         {
-                                            Y -= text.font.Internal_Font.Height / 2;
+                                            Y -= text.font.Height / 2;
                                         }
                                         sub = false;
                                         super = false;
@@ -661,8 +667,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         }
                     }
                 }
-                Y += text.font.Internal_Font.Height;
-                X = 0;
+                Y += text.font.Height;
+                X = text.Position.X;
             }
             GL.End();
             GL.UseProgram(0);
@@ -798,7 +804,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="c">The color to use</param>
         public static void DrawRectangle(float X, float Y, float width, float height, Color c)
         {
-            GL.Color4(c);
+            if (c != null) GL.Color4(c);
             GL.TexCoord2(2f / 1024f, 2 / 1024f);
             GL.Vertex2(X, Y);
             GL.TexCoord2(4f / 1024f, 2f / 1024f);
