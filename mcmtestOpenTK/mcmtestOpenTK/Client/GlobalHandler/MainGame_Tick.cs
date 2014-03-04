@@ -94,15 +94,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
                 // Debug stuff, always near end
                 debug.Text = TextStyle.Color_Readable +
-                    "Delta: " + (Delta) +
-                    "\nGraphics Delta: " + (GraphicsDelta) +
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
-                    "\nPos: " + Player.player.Location.ToString() +
+                    "\nPosition: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
-                    "\nN'Angle: " + Util.VectorToAngles(Util.ForwardVector(Player.player.Angle.X * (float)Math.PI / 180, Player.player.Angle.Y * (float)Math.PI / 180)).ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
-                    "\nMouse Scroll: " + "C: " + MouseHandler.cwheelstate + " P: " + MouseHandler.pwheelstate + " S: " + MouseHandler.MouseScroll;
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
             }
             catch (Exception ex)
             {

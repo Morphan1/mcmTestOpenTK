@@ -305,11 +305,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
                 // handle scrolling up/down in the console
-                if (KeyHandler.Pages < 0)
+                if (KeyHandler.Pages != 0)
                 {
-                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) + 3;
+                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)MainGame.ScreenHeight / 2 / GLFont.Standard.Height - 3));
                 }
-                ScrolledLine += MouseHandler.MouseScroll;
+                ScrolledLine -= MouseHandler.MouseScroll;
                 if (ScrolledLine > 0)
                 {
                     ScrolledLine = 0;
