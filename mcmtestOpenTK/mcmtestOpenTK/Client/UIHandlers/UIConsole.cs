@@ -63,6 +63,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static string TypingText = "";
 
         /// <summary>
+        /// Where in the typing text the cursor is at.
+        /// </summary>
+        public static int TypingCursor = 0;
+
+        /// <summary>
         /// What line has been scrolled to:
         /// 0 = farthest down, -LINES = highest up.
         /// The selected line will be rendered at the bottom of the screen.
@@ -228,19 +233,32 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // handle backspaces
                 if (KeyHandler.InitBS > 0)
                 {
-                    if (TypingText.Length > KeyHandler.InitBS)
+                    string partone = TypingCursor > 0 ? TypingText.Substring(0, TypingCursor): "";
+                    string parttwo = TypingCursor < TypingText.Length ? TypingText.Substring(TypingCursor): "";
+                    if (partone.Length > KeyHandler.InitBS)
                     {
-                        TypingText = TypingText.Substring(0, TypingText.Length - KeyHandler.InitBS);
+                        partone = partone.Substring(0, partone.Length - KeyHandler.InitBS);
+                        TypingCursor -= KeyHandler.InitBS;
                     }
                     else
                     {
-                        TypingText = "";
+                        TypingCursor -= partone.Length;
+                        partone = "";
                     }
+                    TypingText = partone + parttwo;
                 }
                 // handle input text
                 if (KeyHandler.KeyboardString.Length > 0)
                 {
-                    TypingText += KeyHandler.KeyboardString;
+                    if (TypingText.Length == TypingCursor)
+                    {
+                        TypingText += KeyHandler.KeyboardString;
+                    }
+                    else
+                    {
+                        TypingText = TypingText.Insert(TypingCursor, KeyHandler.KeyboardString);
+                    }
+                    TypingCursor += KeyHandler.KeyboardString.Length;
                     while (TypingText.Contains('\n'))
                     {
                         int index = TypingText.IndexOf('\n');
@@ -248,10 +266,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         if (index + 1 < TypingText.Length)
                         {
                             TypingText = TypingText.Substring(index + 1);
+                            TypingCursor = TypingText.Length;
                         }
                         else
                         {
                             TypingText = "";
+                            TypingCursor = 0;
                         }
                         WriteLine("] " + input);
                         RecentCommands.Add(input);
@@ -263,9 +283,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         Commands.ExecuteCommands(input);
                     }
                 }
-                // Update the rendered text
-                Typing.Text = ">" + TypingText + (keymark_add ? "|" : "");
-                // Handle copying
+                // handle copying
                 if (KeyHandler.CopyPressed)
                 {
                     if (TypingText.Length > 0)
@@ -273,7 +291,20 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         System.Windows.Forms.Clipboard.SetText(TypingText);
                     }
                 }
-                // handle scrolling
+                // handle cursor left/right movement
+                if (KeyHandler.LeftRights != 0)
+                {
+                    TypingCursor += KeyHandler.LeftRights;
+                    if (TypingCursor < 0)
+                    {
+                        TypingCursor = 0;
+                    }
+                    if (TypingCursor > TypingText.Length)
+                    {
+                        TypingCursor = TypingText.Length;
+                    }
+                }
+                // handle scrolling up/down in the console
                 if (KeyHandler.Pages < 0)
                 {
                     ScrolledLine -= (int)(KeyHandler.Pages * ((float)(MainGame.ScreenHeight / 2) / GLFont.Standard.Height)) + 3;
@@ -287,7 +318,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 {
                     ScrolledLine = -Lines + 5;
                 }
-                // Scrolling through commands
+                // handle scrolling through commands
                 if (KeyHandler.Scrolls != 0)
                 {
                     RecentSpot -= KeyHandler.Scrolls;
@@ -306,6 +337,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         TypingText = RecentCommands[RecentSpot];
                     }
                 }
+                // update the rendered text
+                Typing.Text = ">" + TypingText;
             }
             KeyHandler.Clear();
         }
@@ -376,8 +409,20 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.Vertex2(0, MainGame.ScreenHeight / 2);
                 GL.End();
 
+                // Typing text
                 //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 GLFont.DrawColoredText(Typing);
+                // Cursor
+                if (keymark_add)
+                {
+                    float XAdd = GLFont.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing) - 1;
+                    if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
+                        && GLFont.IsColorSymbol(Typing.Text[TypingCursor + 1]))
+                    {
+                        XAdd -= Typing.font.MeasureString(Typing.Text[TypingCursor].ToString());
+                    }
+                    Typing.font.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
+                }
             }
 
             // Render the console text

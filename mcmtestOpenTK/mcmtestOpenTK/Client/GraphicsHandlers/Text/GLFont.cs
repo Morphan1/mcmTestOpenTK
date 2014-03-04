@@ -326,6 +326,23 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         }
 
         /// <summary>
+        /// Draws a string, handling all relevant graphics code.
+        /// </summary>
+        /// <param name="str">The string to draw.</param>
+        /// <param name="X">The X location to draw it at</param>
+        /// <param name="Y">The Y location to draw it at</param>
+        /// <param name="c">The color to draw it in</param>
+        public void DrawStringFull(string str, float X, float Y, Color c)
+        {
+            BaseTexture.Bind();
+            Shader.ColorMultShader.Bind();
+            GL.Color4(c);
+            GL.Begin(PrimitiveType.Quads);
+            DrawString(str, X, Y, false);
+            GL.End();
+        }
+
+        /// <summary>
         /// Measures the drawn length of a string.
         /// </summary>
         /// <param name="str">The string to measure</param>
