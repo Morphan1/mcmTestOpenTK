@@ -7,6 +7,7 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers.Common;
 using mcmtestOpenTK.Client.CommandHandlers.Graphics;
+using mcmtestOpenTK.Client.CommandHandlers.Network;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -154,6 +155,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new SavetextureCommand());
             RegisterCommand(new ShaderlistCommand());
             RegisterCommand(new TexturelistCommand());
+
+            // Network
+            RegisterCommand(new TimeCommand());
         }
     }
 }

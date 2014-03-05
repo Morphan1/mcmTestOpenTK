@@ -13,6 +13,7 @@ using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
@@ -34,6 +35,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 // Record delta: always first!
                 Delta = EventArgs.Time;
+                DeltaF = (float)Delta;
                 // Calculate cFPS: always first!
                 cticknumber++;
                 ctickdelta += Delta;
@@ -59,6 +61,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
                 // Update audio
                 SimpleAudioTest.RecalculateChannels();
+
+                // Update networking
+                GlobalNetwork.Tick();
 
                 // Temporary for testing
                 X = PrimaryGameWindow.Mouse.X;

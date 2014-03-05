@@ -38,7 +38,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// </summary>
         public virtual void Update()
         {
-            Location += Velocity * ((float)MainGame.Delta);
+            Location += Velocity * MainGame.DeltaF;
         }
 
         /// <summary>

@@ -127,11 +127,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             int uloc = GL.GetUniformLocation(Shader.Grayscale.Internal_Program, "mult_color");
             Shader.ColorMultShader.Bind();
             //Shader.ColorMultShader.SetColor(Color.FromArgb(255, 10, 10, 128));
-            Hue += (float)MainGame.GraphicsDelta * HueMult;
+            Hue += MainGame.GraphicsDeltaF * HueMult;
             if (Hue > 1 || Hue < 0)
             {
                 HueMult *= -1;
-                Hue += (float)MainGame.GraphicsDelta * HueMult;
+                Hue += MainGame.GraphicsDeltaF * HueMult;
             }
             GL.Color4(Util.HSVtoRGB(Hue, 1, 1, 1));
         }

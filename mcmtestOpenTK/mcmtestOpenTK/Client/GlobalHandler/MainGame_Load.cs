@@ -14,6 +14,7 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
+using mcmtestOpenTK.Client.Networking;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -37,6 +38,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Commands.Init();
                 // Prepare audio-related code
                 SimpleAudioTest.LoadSound();
+                // Prepare networking code
+                GlobalNetwork.Init();
                 // Prepare gameplay-related code
                 Player.player = new Player();
                 SpawnEntity(Player.player);

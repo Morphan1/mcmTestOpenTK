@@ -5,6 +5,7 @@ using System.Text;
 #if !SERVER_ONLY
 using mcmtestOpenTK.Client.GlobalHandler;
 #endif
+using mcmtestOpenTK.ServerSystem.Global;
 
 namespace mcmtestOpenTK.Shared
 {
@@ -19,17 +20,17 @@ namespace mcmtestOpenTK.Shared
         {
             // Prepare utilities before doing anything else!
             Utilities.Init();
+            List<string> system_arguments = args.ToList();
 #if !SERVER_ONLY
             if (args.Length > 0 && args[0].ToLower() == "server")
             {
 #endif
-                // TODO: Server_Main();
-                Console.WriteLine("Server! Hello!");
-                Console.ReadLine();
+                system_arguments.RemoveAt(0);
+                Server.ServerInit(system_arguments);
                 return;
 #if !SERVER_ONLY
             }
-            MainGame.Client_Main(args);
+            MainGame.Client_Main(system_arguments);
             return;
 #endif
         }

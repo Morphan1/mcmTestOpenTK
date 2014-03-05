@@ -12,7 +12,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
-    public class Player : Breakable
+    public class Player : Entity
     {
         /// <summary>
         /// The default player - there's only ever one!

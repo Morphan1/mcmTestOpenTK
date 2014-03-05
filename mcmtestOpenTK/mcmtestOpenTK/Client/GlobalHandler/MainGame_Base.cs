@@ -19,7 +19,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// Global entry point, should never be directly called!
         /// </summary>
         /// <param name="args">Command line input args</param>
-        public static void Client_Main(string[] args)
+        public static void Client_Main(List<string> args)
         {
             // Create the window and establish basic event info / settings
             PrimaryGameWindow = new GameWindow(ScreenWidth, ScreenHeight);
