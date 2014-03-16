@@ -29,6 +29,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             try
             {
+                // Prepare the CVar system
+                CVar.Init();
                 // Prepare graphics-related code
                 ReloadGraphics();
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
@@ -55,10 +57,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         static void ReloadGraphics()
         {
-            // Prepare the shader system
-            Shader.InitShaderSystem();
             // Tell everything to re-calculate with disregard for modified state.
             IsFirstGraphicsDraw = true;
+            // Prepare the shader system
+            Shader.InitShaderSystem();
             // Prepare the texture system
             Texture.InitTextureSystem();
             // Load text font data

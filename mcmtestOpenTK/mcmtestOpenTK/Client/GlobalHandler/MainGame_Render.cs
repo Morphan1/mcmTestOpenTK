@@ -31,6 +31,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 // Record delta: always first!
                 GraphicsDelta = e.Time;
+                GraphicsDeltaF = (float)GraphicsDelta;
                 // Calculate gFPS: always first!
                 gticknumber++;
                 gtickdelta += GraphicsDelta;

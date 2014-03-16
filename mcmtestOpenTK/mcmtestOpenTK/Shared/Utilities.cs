@@ -115,5 +115,31 @@ namespace mcmtestOpenTK.Shared
             }
             return (output.Length > 0 ? output.ToString().Substring(0, output.Length - 1) : "");
         }
+
+        /// <summary>
+        /// Converts a string value to the integer value it represents.
+        /// Returns 0 if the string does not represent an integer.
+        /// </summary>
+        /// <param name="input">The string to get the value from</param>
+        /// <returns>an integer value</returns>
+        public static int StringToInt(string input)
+        {
+            int output = 0;
+            int.TryParse(input, out output);
+            return output;
+        }
+
+        /// <summary>
+        /// Converts a string value to the float value it represents.
+        /// Returns 0 if the string does not represent an float.
+        /// </summary>
+        /// <param name="input">The string to get the value from</param>
+        /// <returns>a float value</returns>
+        public static float StringToFloat(string input)
+        {
+            float output = 0;
+            float.TryParse(input, out output);
+            return output;
+        }
     }
 }

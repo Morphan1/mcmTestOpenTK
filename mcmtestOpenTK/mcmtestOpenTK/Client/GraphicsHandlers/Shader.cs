@@ -34,6 +34,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader ColorMultShader;
 
         /// <summary>
+        /// A common shader that removes black color.
+        /// </summary>
+        public static Shader BlackRemoverShader;
+
+        /// <summary>
         /// The current bound shader program.
         /// </summary>
         public static int Bound_Program = 0;
@@ -59,6 +64,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedShaders.Add(Generic);
             ColorMultShader = CreateMultiplier("colormultiplier");
             LoadedShaders.Add(ColorMultShader);
+            BlackRemoverShader = CreateBlackRemover("blackremover");
+            LoadedShaders.Add(BlackRemoverShader);
             // Preload a few common shaders
             Grayscale = GetShader("common/testcolor");
         }
@@ -152,6 +159,19 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             string FS = "uniform sampler2D tex;void main()" +
             "{vec4 color = texture2D(tex,gl_TexCoord[0].st);gl_FragColor = vec4(color" +
             "[0] * gl_Color[0], color[1] * gl_Color[1], color[2] * gl_Color[2], color[3] * gl_Color[3]);}";
+            return CreateShader(VS, FS, name);
+        }
+
+        /// <summary>
+        /// Creates a generic black-color-remover shader.
+        /// </summary>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A generic color-multiplier shader object</returns>
+        public static Shader CreateBlackRemover(string name)
+        {
+            string VS = "void main(){gl_TexCoord[0] = gl_MultiTexCoord0;gl_Position = ftransform();}";
+            string FS = "uniform sampler2D tex;void main(){vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
+                        "gl_FragColor = vec4(1, 1, 1, (color[0] + color[1] + color[2]) / 3);}";
             return CreateShader(VS, FS, name);
         }
 

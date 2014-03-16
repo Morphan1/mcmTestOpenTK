@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using OpenTK;
 using OpenTK.Graphics;
@@ -196,7 +197,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.FitBlackBox | StringFormatFlags.NoWrap;
             Internal_Font = font;
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (float)TextureEnvMode.Replace);
-            Bitmap bmp = new Bitmap(1024, 1024);
+            int bwidth = 1024;
+            int bheight = 1024;
+            Bitmap bmp = new Bitmap(bwidth, bheight);
             BaseTexture = new Texture();
             BaseTexture.Name = "font/" + FileHandler.CleanFileName(font.Name) + "/" + (font.Bold ? "b" : "") + (font.Italic ? "i" : "") + ((int)font.Size);
             GL.GenTextures(1, out BaseTexture.Internal_Texture);
@@ -205,8 +208,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             BaseTexture.Height = bmp.Height;
             Texture.LoadedTextures.Add(BaseTexture);
             BaseTexture.Bind();
-            BitmapData data = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            BitmapData data = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bwidth, bheight), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bwidth, bheight, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.Finish();
@@ -216,7 +219,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             using (Graphics gfx = Graphics.FromImage(bmp))
             {
                 gfx.Clear(Color.Transparent);
-                gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                //gfx.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                gfx.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
                 float X = 6;
                 float Y = 0;
                 gfx.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, 5, (int)Height));
@@ -235,10 +239,56 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     X += (float)Math.Ceiling(nwidth) + 4;
                 }
             }
-            data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bmp.Width, bmp.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            data = bmp.LockBits(new Rectangle(0, 0, bwidth, bheight), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bwidth, bheight, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
             bmp.UnlockBits(data);
+            // TODO: MAKE ALL THIS BELOW CLEAR / SIMPLE
+            uint texture;
+            GL.GenTextures(1, out texture);
+            GL.BindTexture(TextureTarget.Texture2D, texture);
+            BitmapData datax = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+            ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, datax.Width, datax.Height, 0,
+            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, datax.Scan0);
+            bmp.UnlockBits(datax);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            uint fbo;
+            GL.Ext.GenFramebuffers(1, out fbo);
+            GL.Ext.BindFramebuffer(FramebufferTarget.DrawFramebuffer, fbo);
+            GL.Ext.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, texture, 0);
+            GL.Ext.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, texture, 0);
+            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
             bmp.Dispose();
+            Matrix4 modelview = Matrix4.LookAt(0, 0, 1,
+                                               0, 0, 0,
+                                               0, 1, 0);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref modelview);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, bwidth, bheight, 0, -1, 1);
+            GL.Ext.BindFramebuffer(FramebufferTarget.DrawFramebuffer, fbo);
+            GL.PushAttrib(AttribMask.ViewportBit);
+            GL.Viewport(0, 0, 1024, 1024);
+            BaseTexture.Bind();
+            Shader.BlackRemoverShader.Bind();
+            GL.Color4(Color.Green);
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0f, 0f);
+            GL.Vertex2(0, 1024f);
+            GL.TexCoord2(1f, 0f);
+            GL.Vertex2(1024, 1024f);
+            GL.TexCoord2(1f, 1f);
+            GL.Vertex2(1024, 0f);
+            GL.TexCoord2(0f, 1f);
+            GL.Vertex2(0, 0f);
+            GL.End();
+            GL.PopAttrib();
+            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
+            GL.DeleteTexture(BaseTexture.Internal_Texture);
+            GL.DeleteFramebuffer(fbo);
+            BaseTexture.Internal_Texture = texture;
+            BaseTexture.Original_InternalID = texture;
         }
 
         /// <summary>

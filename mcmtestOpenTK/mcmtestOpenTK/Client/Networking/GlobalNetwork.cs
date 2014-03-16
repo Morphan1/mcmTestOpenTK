@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.Networking
 {
@@ -57,6 +59,7 @@ namespace mcmtestOpenTK.Client.Networking
                 }
                 if (gn.TimeRan > MaxRunTime)
                 {
+                    UIConsole.WriteLine(TextStyle.Color_Error + "Global network connection failed (timeout)!");
                     gn.Kill();
                     NetworkingObjects.RemoveAt(i);
                     i--;
