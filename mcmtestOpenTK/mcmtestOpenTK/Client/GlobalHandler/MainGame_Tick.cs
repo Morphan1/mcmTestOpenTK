@@ -86,7 +86,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
                 if (KeyHandler.IsPressed(Key.Space))
                 {
-                    Console.WriteLine("Playing audio!");
                     //SimpleAudioTest.PlayTestSound();
                 }
 

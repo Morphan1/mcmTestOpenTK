@@ -38,7 +38,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     i--;
                 }
             }
-            // TODO: Dispose existing fonts?
             LoadTextFile();
             Fonts = new List<GLFont>();
             // Choose a default font: Segoe UI, Arial, Calibri, or generic.
@@ -66,6 +65,36 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             Font def = new Font(family, MainGame.FontSize);
             Standard = new GLFont(def);
             Fonts.Add(Standard);
+        }
+
+        /// <summary>
+        /// The text file string to base letters on.
+        /// </summary>
+        public static string textfile;
+
+        /// <summary>
+        /// Loads the character list file.
+        /// </summary>
+        public static void LoadTextFile()
+        {
+            textfile = "";
+            string[] datas = FileHandler.ReadText("info/characters.dat").Replace("\r", "").Split('\n');
+            for (int i = 0; i < datas.Length; i++)
+            {
+                if (datas[i].Length > 0 && !datas[i].StartsWith("//"))
+                {
+                    textfile += datas[i];
+                }
+            }
+            string tempfile = "?";
+            for (int i = 0; i < textfile.Length; i++)
+            {
+                if (!tempfile.Contains(textfile[i]))
+                {
+                    tempfile += textfile[i].ToString();
+                }
+            }
+            textfile = tempfile;
         }
 
         /// <summary>
@@ -107,36 +136,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             Font font = new Font(name, size, (bold ? FontStyle.Bold : 0) | (italic ? FontStyle.Italic : 0));
             return new GLFont(font);
-        }
-
-        /// <summary>
-        /// The text file string to base letters on.
-        /// </summary>
-        public static string textfile;
-
-        /// <summary>
-        /// Loads the character list file.
-        /// </summary>
-        public static void LoadTextFile()
-        {
-            textfile = "";
-            string[] datas = FileHandler.ReadText("info/characters.txt").Replace("\r", "").Split('\n');
-            for (int i = 0; i < datas.Length; i++)
-            {
-                if (datas[i].Length > 0 && !datas[i].StartsWith("//"))
-                {
-                    textfile += datas[i];
-                }
-            }
-            string tempfile = "?";
-            for (int i = 0; i < textfile.Length; i++)
-            {
-                if (!tempfile.Contains(textfile[i]))
-                {
-                    tempfile += textfile[i].ToString();
-                }
-            }
-            textfile = tempfile;
         }
 
         /// <summary>

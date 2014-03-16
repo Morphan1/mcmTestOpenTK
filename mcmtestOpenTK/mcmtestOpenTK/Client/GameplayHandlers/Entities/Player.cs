@@ -20,6 +20,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public static Player player;
 
         /// <summary>
+        /// How much health the player currently has.
+        /// </summary>
+        public float Health = 0;
+
+        /// <summary>
         /// Called to tick the default player.
         /// </summary>
         public override void Update()
@@ -49,12 +54,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 if (MouseHandler.MouseCaptured)
                 {
                     MouseHandler.ReleaseMouse();
-                    Console.WriteLine("Release mouse!");
                 }
                 else
                 {
                     MouseHandler.CaptureMouse();
-                    Console.WriteLine("Capture mouse!");
                 }
             }
             // Keyboard based movement.
@@ -63,6 +66,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             bool right = KeyHandler.IsDown(Key.A);
             bool forward = KeyHandler.IsDown(Key.W);
             bool back = KeyHandler.IsDown(Key.S);
+            bool up = KeyHandler.IsDown(Key.Space);
+            bool down = KeyHandler.IsDown(Key.C);
             if (left && !right)
             {
                 movement.Y = 1;
@@ -98,6 +103,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             if (movement.LengthSquared > 0)
             {
                 movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
+            }
+            if (up)
+            {
+                movement.Z = 1;
+            }
+            if (down)
+            {
+                movement.Z -= 1;
             }
             Velocity = new Vector3(movement * 30);
 
