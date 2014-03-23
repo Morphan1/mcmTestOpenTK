@@ -256,7 +256,15 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                     else
                     {
-                        TypingText = TypingText.Insert(TypingCursor, KeyHandler.KeyboardString);
+                        if (KeyHandler.KeyboardString.Contains('\n'))
+                        {
+                            string[] lines = KeyHandler.KeyboardString.Split(new char[] { '\n' }, 2);
+                            TypingText = TypingText.Insert(TypingCursor, lines[0]) + "\n" + lines[1];
+                        }
+                        else
+                        {
+                            TypingText = TypingText.Insert(TypingCursor, KeyHandler.KeyboardString);
+                        }
                     }
                     TypingCursor += KeyHandler.KeyboardString.Length;
                     while (TypingText.Contains('\n'))
@@ -336,6 +344,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     {
                         TypingText = RecentCommands[RecentSpot];
                     }
+                    TypingCursor = TypingText.Length;
                 }
                 // update the rendered text
                 Typing.Text = ">" + TypingText;

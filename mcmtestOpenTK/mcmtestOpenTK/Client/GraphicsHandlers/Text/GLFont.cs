@@ -11,6 +11,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {
@@ -433,9 +434,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         };
         public static Point[] ShadowPoints = new Point[] {
             new Point(0, 1),
-            new Point(0, 2),
             new Point(1, 0),
             new Point(1, 1),
+        };
+        public static Point[] BetterShadowPoints = new Point[] {
+            new Point(0, 2),
             new Point(1, 2),
             new Point(2, 0),
             new Point(2, 1),
@@ -446,14 +449,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             new Point(0, 1),
             new Point(1, 0),
             new Point(-1, 0),
-            new Point(0, -2),
-            new Point(0, 2),
-            new Point(2, 0),
-            new Point(-2, 0),
+        };
+        public static Point[] BetterEmphasisPoints = new Point[] {
             new Point(-1, -1),
             new Point(-1, 1),
             new Point(1, -1),
             new Point(1, 1),
+            new Point(0, -2),
+            new Point(0, 2),
+            new Point(2, 0),
+            new Point(-2, 0),
         };
 
         /// <summary>
@@ -575,12 +580,26 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 {
                                     RenderBaseText(X + point.X, Y + point.Y, drawme, font, 0, 255, flip);
                                 }
+                                if (CVar.t_bettershadow.ValueB)
+                                {
+                                    foreach (Point point in BetterShadowPoints)
+                                    {
+                                        RenderBaseText(X + point.X, Y + point.Y, drawme, font, 0, 255, flip);
+                                    }
+                                }
                             }
                             if (emphasis)
                             {
                                 foreach (Point point in EmphasisPoints)
                                 {
                                     RenderBaseText(X + point.X, Y + point.Y, drawme, font, ecolor, etrans, flip);
+                                }
+                                if (CVar.t_betteremphasis.ValueB)
+                                {
+                                    foreach (Point point in BetterEmphasisPoints)
+                                    {
+                                        RenderBaseText(X + point.X, Y + point.Y, drawme, font, ecolor, etrans, flip);
+                                    }
                                 }
                             }
                             RenderBaseText(X, Y, drawme, font, color, trans, flip, pseudo, random, jello, obfu);
@@ -689,9 +708,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                     sub = true;
                                     break;
                                 case 'd': shadow = true; break;
-                                case 'j': /*if (!CVar.t_nojello.bvalue)*/ { jello = true; } break;
-                                case 'k': /*if (!CVar.t_noobfu.bvalue)*/ { obfu = true; } break;
-                                case 'R': /*if (!CVar.t_norandom.bvalue)*/ { random = true; } break;
+                                case 'j': if (CVar.t_allowjello.ValueB) { jello = true; } break;
+                                case 'k': if (CVar.t_allowobfu.ValueB) { obfu = true; } break;
+                                case 'R': if (CVar.t_allowrandom.ValueB) { random = true; } break;
                                 case 'p': pseudo = true; break;
                                 case 'f': flip = true; break;
                                 case 'n':

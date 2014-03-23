@@ -32,29 +32,40 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         public static CVar t_sidetextfastrender;
         /// <summary>
         /// Whether to allow '^k' (Obfuscated) text.
-        /// TODO: IMPLEMENT
         /// </summary>
         public static CVar t_allowobfu;
         /// <summary>
         /// Whether to allow '^R' (Random) text.
-        /// TODO: IMPLEMENT
         /// </summary>
         public static CVar t_allowrandom;
         /// <summary>
         /// Whether to allow '^J' (Jello) text.
-        /// TODO: IMPLEMENT
         /// </summary>
         public static CVar t_allowjello;
         /// <summary>
         /// Whether to draw HD text '^e' (Emphasis) (2 pixels out instead of 1)
-        /// TODO: IMPLEMENT
         /// </summary>
         public static CVar t_betteremphasis;
         /// <summary>
         /// Whether to draw HD text '^d' (Drop-Shadow) (2 pixels out instead of 1)
-        /// TODO: IMPLEMENT
         /// </summary>
         public static CVar t_bettershadow;
+
+        //Graphics CVars
+        /// <summary>
+        /// What VSync mode to use. 0 = Off, 1 = On, 2 = Adaptive.
+        /// </summary>
+        public static CVar g_vsync;
+        /// <summary>
+        /// What field-of-vision range to use.
+        /// </summary>
+        public static CVar g_fov;
+
+        // System CVars
+        /// <summary>
+        /// The current system environment filepath (The directory of /data).
+        /// </summary>
+        public static CVar s_filepath;
 
         /// <summary>
         /// A list of all existent CVars.
@@ -75,9 +86,14 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             t_allowjello = Register("t_allowjello", "true", CVarFlag.Boolean);
             t_betteremphasis = Register("t_betteremphasis", "true", CVarFlag.Boolean);
             t_bettershadow = Register("t_bettershadow", "true", CVarFlag.Boolean);
-            // TODO: Other CVars
+            // Graphics CVars
+            g_vsync = Register("g_vsync", "0", CVarFlag.Numeric | CVarFlag.Delayed);
+            g_fov = Register("g_fov", "45", CVarFlag.Numeric);
+            // System CVars
+            s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly);
             // TODO: system file path + OpenGL info + OS name/version + RAM + harddrive space
             // TODO: other system info
+            // TODO: Other CVars
         }
 
         /// <summary>
@@ -190,6 +206,10 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         /// <param name="newvalue">The value to set the CVar to</param>
         public void Set(string newvalue)
         {
+            if (Flags.HasFlag(CVarFlag.ReadOnly))
+            {
+                return;
+            }
             Value = newvalue;
             ValueI = Utilities.StringToInt(newvalue);
             ValueF = Utilities.StringToFloat(newvalue);

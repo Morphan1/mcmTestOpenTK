@@ -29,10 +29,40 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             try
             {
+                // Always at the start
+                Initializing = true;
                 // Prepare the CVar system
                 CVar.Init();
-                // Prepare graphics-related code
-                ReloadGraphics();
+                // TODO: Load default.cfg / etc.
+                // Tell everything to re-calculate with disregard for modified state.
+                IsFirstGraphicsDraw = true;
+                // Prepare the shader system
+                Shader.InitShaderSystem();
+                // Prepare the texture system
+                Texture.InitTextureSystem();
+                // Load text font data
+                GLFont.Init();
+                // Set the title
+                PrimaryGameWindow.Title = WindowTitle;
+                // Setup VSync mode
+                switch (CVar.g_vsync.ValueI)
+                {
+                    case 0:
+                        PrimaryGameWindow.VSync = VSyncMode.Off;
+                        break;
+                    case 1:
+                        PrimaryGameWindow.VSync = VSyncMode.On;
+                        break;
+                    default:
+                        PrimaryGameWindow.VSync = VSyncMode.Adaptive;
+                        break;
+                }
+                // Disable user-induced window resizing. Only do this from the code.
+                PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
+                // Set the background color to clear to
+                GL.ClearColor(Color.Black);
+                // Textures are always enabled and in-use
+                GL.Enable(EnableCap.Texture2D);
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 // Prepare the console
                 UIConsole.InitConsole();
@@ -45,6 +75,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare gameplay-related code
                 Player.player = new Player();
                 SpawnEntity(Player.player);
+                // Always at the end
+                Initializing = false;
             }
             catch (Exception ex)
             {
@@ -53,22 +85,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         }
 
         /// <summary>
-        /// Called when the window is changed, to handle graphics changes.
+        /// Call to recalculate graphics related code.
         /// </summary>
-        static void ReloadGraphics()
+        public static void ReloadGraphics()
         {
             // Tell everything to re-calculate with disregard for modified state.
             IsFirstGraphicsDraw = true;
-            // Prepare the shader system
-            Shader.InitShaderSystem();
-            // Prepare the texture system
-            Texture.InitTextureSystem();
-            // Load text font data
-            GLFont.Init();
-            // Set the title
-            PrimaryGameWindow.Title = WindowTitle;
             // Setup VSync mode
-            switch (VSync)
+            switch (CVar.g_vsync.ValueI)
             {
                 case 0:
                     PrimaryGameWindow.VSync = VSyncMode.Off;
@@ -80,15 +104,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     PrimaryGameWindow.VSync = VSyncMode.Adaptive;
                     break;
             }
-            // Disable user-induced window resizing. Only do this from the code.
-            PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
-            // Set the background color to clear to
-            GL.ClearColor(Color.Black);
-            // Re-create the "Perspective" matrix
-            float FOVradians = MathHelper.DegreesToRadians(45);
-            Perspective = Matrix4.CreatePerspectiveFieldOfView(FOVradians, (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
-            // Textures are always enabled and in-use
-            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

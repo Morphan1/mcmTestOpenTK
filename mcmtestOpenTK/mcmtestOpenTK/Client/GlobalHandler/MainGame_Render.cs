@@ -112,6 +112,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void setup3D()
         {
+            // Update the perspective matrix
+            Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CVar.g_fov.ValueF), (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
             // Initialise the projection view matrix
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();

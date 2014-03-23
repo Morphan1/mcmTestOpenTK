@@ -21,7 +21,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         // Basic settings
         public static int ScreenWidth = 1000;
         public static int ScreenHeight = 600;
-        public static int VSync = 0;
         public static int Target_cFPS = 60;
         public static int Target_gFPS = 60;
         public static int FontSize = 12;
@@ -57,6 +56,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static int gFPS = 0;
         public static Vector3 Forward = Vector3.UnitX;
         public static bool IsFirstGraphicsDraw = true;
+
+        /// <summary>
+        /// Whether the system is currently loading.
+        /// </summary>
+        public static bool Initializing = true;
 
         // Temporary, for testing
         public static int X = 0;

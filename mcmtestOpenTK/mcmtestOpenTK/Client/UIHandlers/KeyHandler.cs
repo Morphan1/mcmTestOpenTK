@@ -122,6 +122,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     case Key.Right:
                         _LeftRights++;
                         break;
+                    case Key.End:
+                        _LeftRights = 9000;
+                        break;
+                    case Key.Home:
+                        _LeftRights = -9000;
+                        break;
                     case Key.ControlLeft:
                     case Key.ControlRight:
                         _ControlDown = true;
