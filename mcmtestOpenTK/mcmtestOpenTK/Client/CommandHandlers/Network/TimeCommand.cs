@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
-using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.Networking.Global;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.Network
 {

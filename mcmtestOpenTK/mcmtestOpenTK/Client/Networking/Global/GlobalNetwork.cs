@@ -9,7 +9,7 @@ using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.Networking
+namespace mcmtestOpenTK.Client.Networking.Global
 {
     public abstract class GlobalNetwork
     {

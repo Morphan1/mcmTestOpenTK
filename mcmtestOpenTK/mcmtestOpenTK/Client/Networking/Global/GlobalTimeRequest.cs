@@ -6,11 +6,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.Networking
+namespace mcmtestOpenTK.Client.Networking.Global
 {
-    public class GlobalTimeRequest: GlobalNetwork
+    public class GlobalTimeRequest : GlobalNetwork
     {
         /// <summary>
         /// Sends a message to the Global Server, requesting the remote time.

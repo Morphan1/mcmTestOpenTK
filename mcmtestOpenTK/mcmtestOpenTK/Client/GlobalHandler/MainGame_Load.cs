@@ -14,7 +14,7 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
-using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.Networking.Global;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
