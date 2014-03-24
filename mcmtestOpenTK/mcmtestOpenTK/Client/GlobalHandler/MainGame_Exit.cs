@@ -8,18 +8,19 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.CommonHandlers;
+using System.Diagnostics;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {
-
         /// <summary>
         /// Closes the game entirely.
         /// </summary>
         public static void Exit()
         {
-            PrimaryGameWindow.Exit();
+            // PrimaryGameWindow.Exit();
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

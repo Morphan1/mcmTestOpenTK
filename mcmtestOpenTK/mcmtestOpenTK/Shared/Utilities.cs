@@ -117,6 +117,19 @@ namespace mcmtestOpenTK.Shared
         }
 
         /// <summary>
+        /// Converts a string value to the long-integer value it represents.
+        /// Returns 0 if the string does not represent a long-integer.
+        /// </summary>
+        /// <param name="input">The string to get the value from</param>
+        /// <returns>a long-integer value</returns>
+        public static long StringToLong(string input)
+        {
+            long output = 0;
+            long.TryParse(input, out output);
+            return output;
+        }
+
+        /// <summary>
         /// Converts a string value to the integer value it represents.
         /// Returns 0 if the string does not represent an integer.
         /// </summary>
@@ -126,6 +139,19 @@ namespace mcmtestOpenTK.Shared
         {
             int output = 0;
             int.TryParse(input, out output);
+            return output;
+        }
+
+        /// <summary>
+        /// Converts a string value to the double value it represents.
+        /// Returns 0 if the string does not represent an double.
+        /// </summary>
+        /// <param name="input">The string to get the value from</param>
+        /// <returns>a double value</returns>
+        public static double StringToDouble(string input)
+        {
+            double output = 0;
+            double.TryParse(input, out output);
             return output;
         }
 

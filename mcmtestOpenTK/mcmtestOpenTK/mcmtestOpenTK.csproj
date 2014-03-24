@@ -56,6 +56,7 @@
     <Compile Include="Client\UIHandlers\UIConsole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -70,6 +71,7 @@
     <Compile Include="Client\CommandHandlers\AbstractCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
     <Compile Include="Client\CommandHandlers\Commands.cs" />
+    <Compile Include="Client\CommandHandlers\Common\QuitCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\SetCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\CvarinfoCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\HelpCommand.cs" />

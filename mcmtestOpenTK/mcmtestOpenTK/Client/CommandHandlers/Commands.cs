@@ -147,6 +147,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new CvarinfoCommand());
             RegisterCommand(new EchoCommand());
             RegisterCommand(new HelpCommand());
+            RegisterCommand(new QuitCommand());
             RegisterCommand(new SetCommand());
 
             // Graphics

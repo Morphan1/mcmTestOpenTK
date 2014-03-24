@@ -19,7 +19,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static GameWindow PrimaryGameWindow;
 
         // Basic settings
-        public static int ScreenWidth = 1000;
+        public static int ScreenWidth = 800;
         public static int ScreenHeight = 600;
         public static int Target_cFPS = 60;
         public static int Target_gFPS = 60;

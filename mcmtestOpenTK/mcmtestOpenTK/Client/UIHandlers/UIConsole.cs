@@ -40,7 +40,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <summary>
         /// How long across (in pixels) console text may be.
         /// </summary>
-        public static int MaxWidth = 600;
+        public static int MaxWidth = MainGame.ScreenWidth - 50;
 
         /// <summary>
         /// Any added text, for logging purposes.
@@ -101,7 +101,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             ready = true;
             ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * GLFont.Standard.Internal_Font.Height) - 5));
             Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height) - 5));
-            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 100), new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height * 2) - 5));
+            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 150), new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height * 2) - 5));
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
             Write(pre_waiting);

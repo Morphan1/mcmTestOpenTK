@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using Microsoft.VisualBasic.Devices;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
 {
@@ -20,52 +22,13 @@ namespace mcmtestOpenTK.Client.CommonHandlers
     public class CVar
     {
         // Text CVars
-        /// <summary>
-        /// Whether to only render text when needed.
-        /// TODO: IMPLEMENT
-        /// </summary>
-        public static CVar t_fastrender;
-        /// <summary>
-        /// Whether to only render side-text when needed.
-        /// TODO: IMPLEMENT
-        /// </summary>
-        public static CVar t_sidetextfastrender;
-        /// <summary>
-        /// Whether to allow '^k' (Obfuscated) text.
-        /// </summary>
-        public static CVar t_allowobfu;
-        /// <summary>
-        /// Whether to allow '^R' (Random) text.
-        /// </summary>
-        public static CVar t_allowrandom;
-        /// <summary>
-        /// Whether to allow '^J' (Jello) text.
-        /// </summary>
-        public static CVar t_allowjello;
-        /// <summary>
-        /// Whether to draw HD text '^e' (Emphasis) (2 pixels out instead of 1)
-        /// </summary>
-        public static CVar t_betteremphasis;
-        /// <summary>
-        /// Whether to draw HD text '^d' (Drop-Shadow) (2 pixels out instead of 1)
-        /// </summary>
-        public static CVar t_bettershadow;
+        public static CVar t_fastrender, t_sidetextfastrender, t_allowobfu, t_allowrandom, t_allowjello, t_betteremphasis, t_bettershadow;
 
         //Graphics CVars
-        /// <summary>
-        /// What VSync mode to use. 0 = Off, 1 = On, 2 = Adaptive.
-        /// </summary>
-        public static CVar g_vsync;
-        /// <summary>
-        /// What field-of-vision range to use.
-        /// </summary>
-        public static CVar g_fov;
+        public static CVar g_vsync, g_fov, g_screenwidth, g_screenheight, g_fullscreen;
 
         // System CVars
-        /// <summary>
-        /// The current system environment filepath (The directory of /data).
-        /// </summary>
-        public static CVar s_filepath;
+        public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
 
         /// <summary>
         /// A list of all existent CVars.
@@ -79,19 +42,34 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         {
             CVars = new List<CVar>();
             // Text CVars
-            t_fastrender = Register("t_fastrender", "false", CVarFlag.Boolean);
-            t_sidetextfastrender = Register("t_sidetextfastrender", "false", CVarFlag.Boolean);
-            t_allowobfu = Register("t_allowobfu", "true", CVarFlag.Boolean);
-            t_allowrandom = Register("t_allowrandom", "true", CVarFlag.Boolean);
-            t_allowjello = Register("t_allowjello", "true", CVarFlag.Boolean);
-            t_betteremphasis = Register("t_betteremphasis", "true", CVarFlag.Boolean);
-            t_bettershadow = Register("t_bettershadow", "true", CVarFlag.Boolean);
+            // TODO: IMPLEMENT BELOW CVAR
+            t_fastrender = Register("t_fastrender", "false", CVarFlag.Boolean); // Whether to only render text when needed.
+            // TODO: IMPLEMENT BELOW CVAR
+            t_sidetextfastrender = Register("t_sidetextfastrender", "false", CVarFlag.Boolean); // Whether to only render side-text when needed.
+            t_allowobfu = Register("t_allowobfu", "true", CVarFlag.Boolean); // Whether to allow '^k' (Obfuscated) text.
+            t_allowrandom = Register("t_allowrandom", "true", CVarFlag.Boolean); // Whether to allow '^R' (Random) text.
+            t_allowjello = Register("t_allowjello", "true", CVarFlag.Boolean); // Whether to allow '^J' (Jello) text.
+            t_betteremphasis = Register("t_betteremphasis", "true", CVarFlag.Boolean); // Whether to draw HD text '^e' (Emphasis) (2 pixels out instead of 1)
+            t_bettershadow = Register("t_bettershadow", "true", CVarFlag.Boolean); // Whether to draw HD text '^d' (Drop-Shadow) (2 pixels out instead of 1)
             // Graphics CVars
-            g_vsync = Register("g_vsync", "0", CVarFlag.Numeric | CVarFlag.Delayed);
-            g_fov = Register("g_fov", "45", CVarFlag.Numeric);
+            g_vsync = Register("g_vsync", "0", CVarFlag.Numeric | CVarFlag.Delayed); // What VSync mode to use. 0 = Off, 1 = On, 2 = Adaptive.
+            g_fov = Register("g_fov", "45", CVarFlag.Numeric); // What field-of-vision range to use.
+            g_screenwidth = Register("g_screenwidth", MainGame.ScreenWidth.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The X-width (size) of the window on-screen.
+            g_screenheight = Register("g_screenheight", MainGame.ScreenHeight.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The Y-height (size) of the window on-screen.
+            // TODO: IMPLEMENT BELOW CVAR
+            g_fullscreen = Register("g_fullscreen", "false", CVarFlag.Boolean | CVarFlag.Delayed); // Whether to make the render window occupy the entire screen.
+            // TODO: More graphics CVars
             // System CVars
-            s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly);
-            // TODO: system file path + OpenGL info + OS name/version + RAM + harddrive space
+            ComputerInfo CI = new ComputerInfo();
+            s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly); // The current system environment filepath (The directory of /data).
+            s_osversion = Register("s_osversion", Environment.OSVersion.VersionString, CVarFlag.Textual | CVarFlag.ReadOnly); // The name and version of the operating system the game is being run on.
+            s_user = Register("s_user", Environment.UserName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name of the system user running the game.
+            s_dotnetversion = Register("s_dotnetversion", Environment.Version.ToString(), CVarFlag.Textual | CVarFlag.ReadOnly); // The system's .NET (CLR) version string.
+            s_totalram = Register("s_totalram", CI.TotalPhysicalMemory.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // How much RAM the system has.
+            s_culture = Register("s_culture", System.Globalization.CultureInfo.CurrentUICulture.EnglishName, CVarFlag.Textual | CVarFlag.ReadOnly); // The system culture (locale).
+            s_processors = Register("s_processors", Environment.ProcessorCount.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // The number of processors the system has.
+            s_machinename = Register("s_machinename", Environment.MachineName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name given to the computer.
+            // TODO: OpenGL info
             // TODO: other system info
             // TODO: Other CVars
         }
@@ -174,9 +152,19 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         public string Value;
 
         /// <summary>
+        /// The value of the CVar, as a long.
+        /// </summary>
+        public long ValueL;
+
+        /// <summary>
         /// The value of the CVar, as an int.
         /// </summary>
         public int ValueI;
+
+        /// <summary>
+        /// The value of the CVar, as a double.
+        /// </summary>
+        public double ValueD;
 
         /// <summary>
         /// The value of the CVar, as a float.
@@ -211,8 +199,10 @@ namespace mcmtestOpenTK.Client.CommonHandlers
                 return;
             }
             Value = newvalue;
-            ValueI = Utilities.StringToInt(newvalue);
-            ValueF = Utilities.StringToFloat(newvalue);
+            ValueL = Utilities.StringToLong(newvalue);
+            ValueI = (int)ValueL;
+            ValueD = Utilities.StringToDouble(newvalue);
+            ValueF = (float)ValueD;
             ValueB = newvalue.ToLower() == "true" || ValueF > 0f;
         }
 
@@ -286,7 +276,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         {
             return TextStyle.Color_Simple + "Name: '" + TextStyle.Color_Separate + Name + TextStyle.Color_Simple + "', value: '" + 
                 TextStyle.Color_Separate + Value + TextStyle.Color_Simple + "', numeric value: " + TextStyle.Color_Separate +
-                ValueF + TextStyle.Color_Simple + ", boolean value: " + TextStyle.Color_Separate + (ValueB ? "true": "false") +
+                ValueD + TextStyle.Color_Simple + ", boolean value: " + TextStyle.Color_Separate + (ValueB ? "true": "false") +
                 TextStyle.Color_Simple + ", flags: " + TextStyle.Color_Separate + FlagInfo();
         }
     }

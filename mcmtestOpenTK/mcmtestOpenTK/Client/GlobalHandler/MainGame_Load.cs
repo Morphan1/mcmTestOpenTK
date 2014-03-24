@@ -34,8 +34,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare the CVar system
                 CVar.Init();
                 // TODO: Load default.cfg / etc.
-                // Tell everything to re-calculate with disregard for modified state.
-                IsFirstGraphicsDraw = true;
+                // Handle some internal CVar-based graphics settings
+                ReloadGraphics();
                 // Prepare the shader system
                 Shader.InitShaderSystem();
                 // Prepare the texture system
@@ -44,19 +44,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GLFont.Init();
                 // Set the title
                 PrimaryGameWindow.Title = WindowTitle;
-                // Setup VSync mode
-                switch (CVar.g_vsync.ValueI)
-                {
-                    case 0:
-                        PrimaryGameWindow.VSync = VSyncMode.Off;
-                        break;
-                    case 1:
-                        PrimaryGameWindow.VSync = VSyncMode.On;
-                        break;
-                    default:
-                        PrimaryGameWindow.VSync = VSyncMode.Adaptive;
-                        break;
-                }
                 // Disable user-induced window resizing. Only do this from the code.
                 PrimaryGameWindow.WindowBorder = WindowBorder.Fixed;
                 // Set the background color to clear to
@@ -104,6 +91,37 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     PrimaryGameWindow.VSync = VSyncMode.Adaptive;
                     break;
             }
+            // Update the screen size
+            if (ScreenWidth != CVar.g_screenwidth.ValueI || ScreenHeight != CVar.g_screenheight.ValueI)
+            {
+                if (CVar.g_screenwidth.ValueI < 300)
+                {
+                    CVar.g_screenwidth.Set("300");
+                }
+                if (CVar.g_screenheight.ValueI < 300)
+                {
+                    CVar.g_screenheight.Set("300");
+                }
+                int XAdjust = CVar.g_screenwidth.ValueI - ScreenWidth;
+                int YAdjust = CVar.g_screenheight.ValueI - ScreenHeight;
+                ScreenWidth = CVar.g_screenwidth.ValueI;
+                ScreenHeight = CVar.g_screenheight.ValueI;
+                PrimaryGameWindow.Size = new Size(ScreenWidth, ScreenHeight);
+                UIConsole.Typing.Position.Y += YAdjust / 2;
+                UIConsole.ScrollText.Position.Y += YAdjust / 2;
+                UIConsole.MaxWidth += XAdjust;
+            }
+            // Handle fullscreen state
+            if (CVar.g_fullscreen.ValueB)
+            {
+                PrimaryGameWindow.WindowState = WindowState.Fullscreen;
+            }
+            else
+            {
+                PrimaryGameWindow.WindowState = WindowState.Normal;
+            }
+            // Correct the viewport (screen size, fullscreen, etc. might affect)
+            GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
         }
     }
 }
