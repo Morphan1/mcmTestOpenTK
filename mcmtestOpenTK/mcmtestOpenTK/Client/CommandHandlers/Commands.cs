@@ -161,6 +161,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new TexturelistCommand());
 
             // Network
+            RegisterCommand(new LoginCommand());
             RegisterCommand(new TimeCommand());
         }
     }

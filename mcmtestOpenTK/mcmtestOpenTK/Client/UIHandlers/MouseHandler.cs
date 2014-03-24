@@ -95,6 +95,11 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 cwheelstate = Mouse.GetState().WheelPrecise;
                 MouseScroll = (int)(cwheelstate - pwheelstate);
             }
+            if (!MainGame.PrimaryGameWindow.Focused)
+            {
+                cwheelstate = Mouse.GetState().WheelPrecise;
+                pwheelstate = cwheelstate;
+            }
         }
     }
 }

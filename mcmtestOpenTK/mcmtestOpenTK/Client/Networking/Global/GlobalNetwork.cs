@@ -59,7 +59,10 @@ namespace mcmtestOpenTK.Client.Networking.Global
                 }
                 if (gn.TimeRan > MaxRunTime)
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Error + "Global network connection failed (timeout)!");
+                    if (!gn.KillQuietly)
+                    {
+                        UIConsole.WriteLine(TextStyle.Color_Error + "Global network connection failed (timeout)!");
+                    }
                     gn.Kill();
                     NetworkingObjects.RemoveAt(i);
                     i--;
@@ -77,6 +80,11 @@ namespace mcmtestOpenTK.Client.Networking.Global
         /// How long the Global Network operation took to run, in seconds.
         /// </summary>
         public float TimeRan = 0f;
+
+        /// <summary>
+        /// If true, nothing will be announced when the object is timed-out.
+        /// </summary>
+        public bool KillQuietly = false;
 
         /// <summary>
         /// Tick the Global Network operation appropriately.

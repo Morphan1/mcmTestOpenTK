@@ -16,11 +16,12 @@ namespace mcmtestOpenTK.Client.Networking.Global
         /// <summary>
         /// Sends a message to the Global Server, requesting the remote time.
         /// </summary>
-        /// <param name="Announce">Whether to announce the result in the console.</param>
+        /// <param name="Announce">Whether to announce the result in the console</param>
         /// <returns>The GlobalNetwork object created for this time request</returns>
         public static GlobalTimeRequest RequestTime(bool Announce)
         {
             GlobalTimeRequest gtr = new GlobalTimeRequest();
+            gtr.ShouldAnnounce = Announce;
             NetworkingObjects.Add(gtr);
             gtr.Send();
             return gtr;
@@ -45,7 +46,6 @@ namespace mcmtestOpenTK.Client.Networking.Global
         public override void Send()
         {
             socket = NetworkUtil.CreateSocket();
-            SocketAsyncEventArgs saea = new SocketAsyncEventArgs();
             Thread thr = new Thread(new ThreadStart(ConnectMe));
             thr.Start();
         }
@@ -74,6 +74,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
                 if (Error != null)
                 {
                     TimeRan = GlobalNetwork.MaxRunTime;
+                    KillQuietly = true;
                     UIConsole.WriteLine(TextStyle.Color_Error + "Global Time Request failed with message: " + TextStyle.Color_Separate + Error);
                     return;
                 }
@@ -85,8 +86,11 @@ namespace mcmtestOpenTK.Client.Networking.Global
                 {
                     byte[] bytes = new byte[avail];
                     socket.Receive(bytes, avail, SocketFlags.None);
-                    string time = FileHandler.encoding.GetString(bytes);
-                    UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Response from Global Server: " + TextStyle.Color_Separate + time);
+                    Time = FileHandler.encoding.GetString(bytes);
+                    if (ShouldAnnounce)
+                    {
+                        UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Response from Global Server: " + TextStyle.Color_Separate + Time);
+                    }
                     ready = true;
                 }
             }

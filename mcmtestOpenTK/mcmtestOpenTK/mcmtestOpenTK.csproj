@@ -84,9 +84,11 @@
     <Compile Include="Client\CommandHandlers\Graphics\LoadtextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\RemaptextureCommand.cs" />
     <Compile Include="Client\CommandHandlers\Graphics\TexturelistCommand.cs" />
+    <Compile Include="Client\CommandHandlers\Network\LoginCommand.cs" />
     <Compile Include="Client\CommandHandlers\Network\TimeCommand.cs" />
     <Compile Include="Client\GraphicsHandlers\Shader.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
+    <Compile Include="Client\Networking\Global\GlobalLoginRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalNetwork.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
