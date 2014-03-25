@@ -5,40 +5,48 @@ using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
+using System.Threading;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
 {
     class ErrorHandler
     {
         /// <summary>
-        /// Handles and reports an Exception.
+        /// Handles and reports an exception.
         /// </summary>
-        /// <param name="ex">The exception to handle.</param>
+        /// <param name="ex">The exception to handle</param>
         public static void HandleError(Exception ex)
         {
+            if (ex is ThreadAbortException)
+            {
+                throw ex;
+            }
             HandleError("Internal unidentified error at " + Utilities.DateTimeToString(DateTime.Now) + ": " + ex.ToString());
         }
 
+        /// <summary>
+        /// Handles and reports an exception with a specified cause.
+        /// </summary>
+        /// <param name="cause">The cause of the exception</param>
+        /// <param name="ex">The exception to handle</param>
         public static void HandleError(string cause, Exception ex)
         {
+            if (ex is ThreadAbortException)
+            {
+                throw ex;
+            }
             HandleError("Error at " + Utilities.DateTimeToString(DateTime.Now) + ": " + cause + ": " + ex.ToString());
         }
 
         /// <summary>
         /// Reports an error message.
         /// </summary>
-        /// <param name="error">The message to report.</param>
+        /// <param name="error">The message to report</param>
         public static void HandleError(string error)
         {
             FileHandler.AppendText("errors.log", error + "\n\n\n");
             Console.WriteLine(TextStyle.Color_Error + error);
             UIConsole.WriteLine(TextStyle.Color_Error + error);
-        }
-
-        // Temporary, for testing.
-        public static void HandleOutput(string outp)
-        {
-            FileHandler.AppendText("output.log", outp + "\n");
         }
     }
 }

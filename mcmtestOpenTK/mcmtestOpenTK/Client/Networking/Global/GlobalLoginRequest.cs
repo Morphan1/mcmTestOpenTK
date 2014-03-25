@@ -60,11 +60,14 @@ namespace mcmtestOpenTK.Client.Networking.Global
         void ConnectMe()
         {
             string result = SecureConnectBase("LOGIN\n" + Username + "\n" + Password);
-            if (Error != null)
+            lock (Locker)
             {
-                return;
+                if (Error != null)
+                {
+                    return;
+                }
+                Error = result;
             }
-            Error = result;
         }
 
         public override void TickMe()
@@ -75,7 +78,20 @@ namespace mcmtestOpenTK.Client.Networking.Global
                 {
                     TimeRan = GlobalNetwork.MaxRunTime;
                     KillQuietly = true;
-                    UIConsole.WriteLine(TextStyle.Color_Error + "Login failed with message: " + TextStyle.Color_Separate + Error);
+                    if (Error.StartsWith("REFUSED:"))
+                    {
+                        UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " +
+                            LanguageHandler.GetMessage("login.refused." + Error.Split(new char[] { ':' }, 2)[1], TextStyle.Color_Error, new string[] { "potato" }));
+                    }
+                    else if (Error.StartsWith("ACCEPT:"))
+                    {
+                        UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
+                            LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo, new string[] { "potato" }));
+                    }
+                    else
+                    {
+                        UIConsole.WriteLine(TextStyle.Color_Error + "Login failed with message: " + TextStyle.Color_Separate + Error);
+                    }
                     return;
                 }
             }

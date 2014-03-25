@@ -34,6 +34,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare the CVar system
                 CVar.Init();
                 // TODO: Load default.cfg / etc.
+                // Prepare text output / language related info
+                LanguageHandler.Init();
                 // Handle some internal CVar-based graphics settings
                 ReloadGraphics();
                 // Prepare the shader system

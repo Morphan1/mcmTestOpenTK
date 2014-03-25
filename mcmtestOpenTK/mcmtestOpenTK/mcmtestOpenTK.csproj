@@ -93,6 +93,8 @@
     <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
+    <Compile Include="Client\UIHandlers\Categorizer.cs" />
+    <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSystem\Global\Server.cs" />
