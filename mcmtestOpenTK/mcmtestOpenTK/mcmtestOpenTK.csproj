@@ -90,6 +90,7 @@
     <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
     <Compile Include="Client\Networking\Global\GlobalLoginRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalNetwork.cs" />
+    <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
