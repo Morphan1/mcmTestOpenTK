@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.TagHandlers;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
@@ -108,9 +109,10 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         /// <param name="name">The name of the message</param>
         /// <param name="base_color">The wrapping color, for messages that modify color</param>
-        /// <param name="objects">An objects to add as {1}, {2}, etc.</param>
+        /// <param name="var_names">The names of any variables to add</param>
+        /// <param name="vars">The values of any variables to add</param>
         /// <returns>The message</returns>
-        public static string GetMessage(string name, string base_color, string[] objects = null)
+        public static string GetMessage(string name, string base_color, List<string> var_names = null, List<string> vars = null)
         {
             string toret = Base.Get(name.ToLower());
             if (toret == null)
@@ -118,12 +120,17 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 toret = Base.Get("general.nomessage");
                 if (toret == null)
                 {
-                    toret = "(MISSING MESSAGE '<{COLOR_EMPHASIS}><{1}><{COLOR_BASE}>' + MISSING GENERAL)";
+                    toret = "(MISSING MESSAGE '<{COLOR_EMPHASIS}><{var[message]}><{COLOR_BASE}>' + MISSING GENERAL)";
+                    if (var_names == null)
+                    {
+                        var_names = new List<string>();
+                        vars = new List<string>();
+                    }
+                    var_names.Add("message");
+                    vars.Add(name.ToLower());
                 }
             }
-            // TODO: Handle less terribly
-            toret = toret.Replace("<{COLOR_EMPHASIS}>", "^r^5").Replace("<{COLOR_BASE}>", base_color);
-            return toret;
+            return TagParser.ParseTags(toret, base_color, var_names, vars);
         }
     }
 }

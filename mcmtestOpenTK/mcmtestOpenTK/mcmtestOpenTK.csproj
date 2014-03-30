@@ -93,6 +93,14 @@
     <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
+    <Compile Include="Client\TagHandlers\Common\ColorTags.cs" />
+    <Compile Include="Client\TagHandlers\Common\TextTags.cs" />
+    <Compile Include="Client\TagHandlers\Common\VarTags.cs" />
+    <Compile Include="Client\TagHandlers\Objects\TextTag.cs" />
+    <Compile Include="Client\TagHandlers\TemplateObject.cs" />
+    <Compile Include="Client\TagHandlers\TemplateTags.cs" />
+    <Compile Include="Client\TagHandlers\TagData.cs" />
+    <Compile Include="Client\TagHandlers\TagParser.cs" />
     <Compile Include="Client\UIHandlers\Categorizer.cs" />
     <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
@@ -125,6 +133,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -80,13 +80,17 @@ namespace mcmtestOpenTK.Client.Networking.Global
                     KillQuietly = true;
                     if (Error.StartsWith("REFUSED:"))
                     {
+                        string[] errorsplit = Error.Split(new char[] { ':' }, 2);
+                        string[] subdata = errorsplit[1].Split(new char[] { '/' }, 2);
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " +
-                            LanguageHandler.GetMessage("login.refused." + Error.Split(new char[] { ':' }, 2)[1], TextStyle.Color_Error, new string[] { "potato" }));
+                            LanguageHandler.GetMessage("login.refused." + subdata[0],
+                            TextStyle.Color_Error, new List<string> { "error_data" }, new List<string> { subdata[1] } ));
                     }
                     else if (Error.StartsWith("ACCEPT:"))
                     {
                         UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
-                            LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo, new string[] { "potato" }));
+                            LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo,
+                            new List<string> { "username" }, new List<string> { Username }));
                     }
                     else
                     {

@@ -15,6 +15,7 @@ using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
+using mcmtestOpenTK.Client.TagHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -33,6 +34,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Initializing = true;
                 // Prepare the CVar system
                 CVar.Init();
+                // Prepare the tag system
+                TagParser.Init();
                 // TODO: Load default.cfg / etc.
                 // Prepare text output / language related info
                 LanguageHandler.Init();

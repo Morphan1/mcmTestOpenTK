@@ -24,7 +24,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                UIConsole.WriteLine(Utilities.Concat(info.Arguments));
+                UIConsole.WriteLine(info.AllArguments());
             }
         }
     }
