@@ -27,8 +27,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             }
             else
             {
-                Texture start = Texture.GetTexture(info.Arguments[0]);
-                string fname = info.Arguments[1];
+                Texture start = Texture.GetTexture(info.GetArgument(0));
+                string fname = info.GetArgument(1);
                 try
                 {
                     start.SaveToFile(fname);

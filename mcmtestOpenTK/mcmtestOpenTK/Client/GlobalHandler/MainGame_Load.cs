@@ -47,6 +47,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Texture.InitTextureSystem();
                 // Load text font data
                 GLFont.Init();
+                FontSet.Init();
                 // Set the title
                 PrimaryGameWindow.Title = WindowTitle;
                 // Disable user-induced window resizing. Only do this from the code.

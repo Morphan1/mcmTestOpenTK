@@ -99,9 +99,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void InitConsole()
         {
             ready = true;
-            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, (-(Lines + 2) * GLFont.Standard.Internal_Font.Height) - 5));
-            Typing = new PieceOfText("", new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height) - 5));
-            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 150), new Point(5, ((MainGame.ScreenHeight / 2) - GLFont.Standard.Internal_Font.Height * 2) - 5));
+            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, 0));
+            Typing = new PieceOfText("", new Point(5, 0));
+            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 150), new Point(5, 0));
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
             Write(pre_waiting);
@@ -206,14 +206,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 Open = !Open;
                 if (Open)
                 {
-                    ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
                     mouse_was_captured = MouseHandler.MouseCaptured;
                     MouseHandler.ReleaseMouse();
                     RecentSpot = RecentCommands.Count - 1;
                 }
                 else
                 {
-                    ConsoleText.Position.Y -= MainGame.ScreenHeight / 2;
                     Typing.Text = "";
                     if (mouse_was_captured)
                     {
@@ -315,7 +313,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // handle scrolling up/down in the console
                 if (KeyHandler.Pages != 0)
                 {
-                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)MainGame.ScreenHeight / 2 / GLFont.Standard.Height - 3));
+                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)MainGame.ScreenHeight / 2 / ConsoleText.set.font.Height - 3));
                 }
                 ScrolledLine -= MouseHandler.MouseScroll;
                 if (ScrolledLine > 0)
@@ -358,8 +356,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void Draw()
         {
             // Render the console texture
+            Typing.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font.Internal_Font.Height) - 5;
+            ConsoleText.Position.Y = (-(Lines + 2) * ConsoleText.set.font.Internal_Font.Height) - 5 - ScrolledLine * (int)ConsoleText.set.font.Height;
+            ScrollText.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font.Internal_Font.Height * 2) - 5;
             if (Open)
             {
+                ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
                 // Standard console box
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 Texture.Console.Bind();
@@ -391,7 +393,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.Color4(Color.Red);
                 float Y = MainGame.ScreenHeight / 2;
                 float percentone = -(float)ScrolledLine / (float)Lines;
-                float percenttwo = -((float)ScrolledLine - (float)MainGame.ScreenHeight / GLFont.Standard.Height) / (float)Lines;
+                float percenttwo = -((float)ScrolledLine - (float)MainGame.ScreenHeight / ConsoleText.set.font.Height) / (float)Lines;
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, Y - Y * percenttwo);
                 GL.TexCoord2(1, 0);
@@ -428,16 +430,14 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
                         && GLFont.IsColorSymbol(Typing.Text[TypingCursor + 1]))
                     {
-                        XAdd -= Typing.font.MeasureString(Typing.Text[TypingCursor].ToString());
+                        XAdd -= Typing.set.font.MeasureString(Typing.Text[TypingCursor].ToString());
                     }
-                    Typing.font.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
+                    Typing.set.font.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
                 }
             }
 
             // Render the console text
-            ConsoleText.Position.Y -= ScrolledLine * (int)GLFont.Standard.Height;
-            GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - GLFont.Standard.Height * 3));
-            ConsoleText.Position.Y += ScrolledLine * (int)GLFont.Standard.Height;
+            GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
             if (ScrolledLine != 0)
             {
                 GLFont.DrawColoredText(ScrollText);

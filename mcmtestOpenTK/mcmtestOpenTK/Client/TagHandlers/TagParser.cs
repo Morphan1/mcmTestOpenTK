@@ -38,12 +38,15 @@ namespace mcmtestOpenTK.Client.TagHandlers
         /// Reads and parses all tags inside a string.
         /// </summary>
         /// <param name="base_color">The base color for tags to use</param>
-        /// <param name="var_names">The names of any variables in this tag's context</param>
-        /// <param name="vars">The value of any variables in this tag's context</param>
+        /// <param name="vars">Any variables in this tag's context</param>
         /// <param name="input">The tagged string</param>
         /// <returns>The string with tags parsed</returns>
-        public static string ParseTags(string input, string base_color, List<string> var_names, List<string> vars)
+        public static string ParseTags(string input, string base_color, List<Variable> vars)
         {
+            if (input.IndexOf("<{") < 0)
+            {
+                return input;
+            }
             int len = input.Length;
             int blocks = 0;
             StringBuilder blockbuilder = new StringBuilder();
@@ -53,21 +56,20 @@ namespace mcmtestOpenTK.Client.TagHandlers
                 if (i + 1 < len && input[i] == '<' && input[i + 1] == '{')
                 {
                     blocks++;
-                    i++;
                     if (blocks == 1)
                     {
+                        i++;
                         continue;
                     }
                 }
                 else if (i + 1 < len && input[i] == '}' && input[i + 1] == '>')
                 {
                     blocks--;
-                    i++;
                     if (blocks == 0)
                     {
                         string value = blockbuilder.ToString().ToLower();
                         List<string> split = split = value.Split(new char[] { '.' }).ToList();
-                        TagData data = new TagData(split, base_color, var_names, vars);
+                        TagData data = new TagData(split, base_color, vars);
                         bool handled = false;
                         for (int x = 0; x < Handlers.Count; x++)
                         {
@@ -83,6 +85,7 @@ namespace mcmtestOpenTK.Client.TagHandlers
                             final.Append("{UNKNOWN_TAG:" + data.Input[0] + "}");
                         }
                         blockbuilder = new StringBuilder();
+                        i++;
                         continue;
                     }
                 }

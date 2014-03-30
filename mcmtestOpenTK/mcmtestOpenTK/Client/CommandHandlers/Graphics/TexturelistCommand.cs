@@ -16,6 +16,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             Arguments = "";
             Description = "Shows a list of all loaded textures.";
             IsDebug = true;
+            // TODO: Search argument.
         }
 
         public override void Execute(CommandInfo info)

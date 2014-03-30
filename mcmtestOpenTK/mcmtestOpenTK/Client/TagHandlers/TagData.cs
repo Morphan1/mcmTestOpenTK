@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.TagHandlers
 {
@@ -18,25 +19,19 @@ namespace mcmtestOpenTK.Client.TagHandlers
         public List<string> Modifiers = null;
 
         /// <summary>
-        /// The names of all the variables waiting in this tag's context.
-        /// </summary>
-        public List<string> Variable_Names = null;
-
-        /// <summary>
         /// All variables waiting in this tag's context.
         /// </summary>
-        public List<string> Variables = null;
+        public List<Variable> Variables = null;
 
         /// <summary>
         /// The 'base color' set by the tag requesting code.
         /// </summary>
         public string BaseColor = null;
 
-        public TagData(List<string> _input, string _basecolor, List<string> _names, List<string> _vars)
+        public TagData(List<string> _input, string _basecolor, List<Variable> _vars)
         {
             Input = _input;
             BaseColor = _basecolor;
-            Variable_Names = _names;
             Variables = _vars;
             Modifiers = new List<string>();
             for (int x = 0; x < Input.Count; x++)
@@ -70,6 +65,20 @@ namespace mcmtestOpenTK.Client.TagHandlers
                 Modifiers.RemoveAt(0);
             }
             return this;
+        }
+
+        /// <summary>
+        /// Gets the modifier at a specified place, handling any tags within.
+        /// </summary>
+        /// <param name="place">What place to get a modifier from</param>
+        /// <returns>The tag-parsed modifier</returns>
+        public string GetModifier(int place)
+        {
+            if (place < 0 || place >= Modifiers.Count)
+            {
+                return "";
+            }
+            return TagParser.ParseTags(Modifiers[place], TextStyle.Color_Simple, Variables);
         }
     }
 }

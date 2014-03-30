@@ -33,7 +33,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                string target = info.Arguments[0];
+                string target = info.GetArgument(0);
                 CVar cvar = CVar.Get(target);
                 if (cvar == null)
                 {

@@ -26,8 +26,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             }
             else
             {
-                Texture start = Texture.GetTexture(info.Arguments[0]);
-                Texture target = Texture.GetTexture(info.Arguments[1]);
+                Texture start = Texture.GetTexture(info.GetArgument(0));
+                Texture target = Texture.GetTexture(info.GetArgument(1));
                 start.Internal_Texture = target.Original_InternalID;
                 start.RemappedTo = target;
                 UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped texture '" + TextStyle.Color_Separate + start.Name +

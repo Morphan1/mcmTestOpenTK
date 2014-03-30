@@ -27,8 +27,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                string target = info.Arguments[0];
-                string newvalue = info.Arguments[1];
+                string target = info.GetArgument(0);
+                string newvalue = info.GetArgument(1);
                 CVar cvar = CVar.AbsoluteSet(target, newvalue);
                 if (cvar.Flags.HasFlag(CVarFlag.ReadOnly))
                 {

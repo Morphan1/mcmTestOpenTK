@@ -26,8 +26,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             }
             else
             {
-                Shader start = Shader.GetShader(info.Arguments[0]);
-                Shader target = Shader.GetShader(info.Arguments[1]);
+                Shader start = Shader.GetShader(info.GetArgument(0));
+                Shader target = Shader.GetShader(info.GetArgument(1));
                 start.Internal_Program = target.Original_Program;
                 start.RemappedTo = target;
                 UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped shader '" + TextStyle.Color_Separate + start.Name +

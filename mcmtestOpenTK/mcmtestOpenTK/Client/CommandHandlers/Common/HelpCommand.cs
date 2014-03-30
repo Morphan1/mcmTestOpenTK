@@ -31,7 +31,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                string input = info.Arguments[0].ToLower();
+                string input = info.GetArgument(0).ToLower();
                 switch (input)
                 {
                     case "textstyle":

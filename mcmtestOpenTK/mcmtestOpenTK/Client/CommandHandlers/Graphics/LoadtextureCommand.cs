@@ -26,7 +26,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             }
             else
             {
-                Texture texture = Texture.GetTexture(info.Arguments[0]);
+                Texture texture = Texture.GetTexture(info.GetArgument(0));
                 if (texture.LoadedProperly)
                 {
                     UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded texture '" + TextStyle.Color_Separate +

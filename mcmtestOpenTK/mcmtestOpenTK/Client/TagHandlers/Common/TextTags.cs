@@ -15,7 +15,7 @@ namespace mcmtestOpenTK.Client.TagHandlers.Common
 
         public override string Handle(TagData data)
         {
-            string modif = data.Modifiers[0];
+            string modif = data.GetModifier(0);
             return new TextTag(modif).Handle(data.Shrink());
         }
     }

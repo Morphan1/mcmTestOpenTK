@@ -506,7 +506,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             if (!text.fancy)
             {
-                text.font.DrawString(text.Text, text.Position.X, text.Position.Y);
+                text.set.font.DrawString(text.Text, text.Position.X, text.Position.Y);
                 return;
             }
             string[] lines = text.Text.Replace('\r', ' ').Replace(' ', (char)0x00A0).Replace("^q", "\"").Split('\n');
@@ -539,7 +539,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int utrans = (int)(255 * transmod);
             float X = text.Position.X;
             float Y = text.Position.Y;
-            GLFont font = text.font;
+            GLFont font = text.set.font;
             font.BaseTexture.Bind();
             Shader.ColorMultShader.Bind();
             GL.Begin(PrimitiveType.Quads);
@@ -548,7 +548,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 string line = lines[i];
                 if (line.Length == 0)
                 {
-                    Y += text.font.Height;
+                    Y += text.set.font.Height;
                     continue;
                 }
                 int start = 0;
@@ -638,7 +638,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'i':
                                     {
                                         italic = true;
-                                        GLFont nfont = (super || sub) ? (bold ? text.font_bolditalichalf : text.font_italichalf) : (bold ? text.font_bolditalic : text.font_italic);
+                                        GLFont nfont = (super || sub) ? (bold ? text.set.font_bolditalichalf : text.set.font_italichalf) :
+                                            (bold ? text.set.font_bolditalic : text.set.font_italic);
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -651,7 +652,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'b':
                                     {
                                         bold = true;
-                                        GLFont nfont = (super || sub) ? (italic ? text.font_bolditalichalf : text.font_boldhalf) : (italic ? text.font_bolditalic : text.font_bold);
+                                        GLFont nfont = (super || sub) ? (italic ? text.set.font_bolditalichalf : text.set.font_boldhalf) :
+                                            (italic ? text.set.font_bolditalic : text.set.font_bold);
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -675,9 +677,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         if (sub)
                                         {
                                             sub = false;
-                                            Y -= text.font.Height / 2;
+                                            Y -= text.set.font.Height / 2;
                                         }
-                                        GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        GLFont nfont = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
+                                            italic ? text.set.font_italichalf : text.set.font_half;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -695,8 +698,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         {
                                             super = false;
                                         }
-                                        Y += text.font.Height / 2;
-                                        GLFont nfont = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                        Y += text.set.font.Height / 2;
+                                        GLFont nfont = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
+                                            italic ? text.set.font_italichalf : text.set.font_half;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -717,7 +721,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                     break;
                                 case 'r':
                                     {
-                                        GLFont nfont = text.font;
+                                        GLFont nfont = text.set.font;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -727,7 +731,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         }
                                         if (sub)
                                         {
-                                            Y -= text.font.Height / 2;
+                                            Y -= text.set.font.Height / 2;
                                         }
                                         sub = false;
                                         super = false;
@@ -753,7 +757,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         }
                     }
                 }
-                Y += text.font.Height;
+                Y += text.set.font.Height;
                 X = text.Position.X;
             }
             GL.End();
@@ -830,7 +834,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             bool italic = false;
             bool sub = false;
             float MeasWidth = 0;
-            GLFont font = text.font;
+            GLFont font = text.set.font;
             int start = 0;
             line = line.Replace("^q", "\"");
             for (int x = 0; x < line.Length; x++)
@@ -849,23 +853,26 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         switch (line[x])
                         {
                             case 'r':
-                                font = text.font;
+                                font = text.set.font;
                                 bold = false;
                                 sub = false;
                                 italic = false;
                                 break;
                             case 'S':
                             case 'l':
-                                font = bold && italic ? text.font_bolditalichalf : bold ? text.font_boldhalf : italic ? text.font_italichalf : text.font_half;
+                                font = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
+                                    italic ? text.set.font_italichalf : text.set.font_half;
                                 sub = true;
                                 break;
                             case 'i':
                                 italic = true;
-                                font = (sub) ? (bold ? text.font_bolditalichalf : text.font_italichalf) : (bold ? text.font_bolditalic : text.font_italic);
+                                font = (sub) ? (bold ? text.set.font_bolditalichalf : text.set.font_italichalf) :
+                                    (bold ? text.set.font_bolditalic : text.set.font_italic);
                                 break;
                             case 'b':
                                 bold = true;
-                                font = (sub) ? (italic ? text.font_bolditalichalf : text.font_boldhalf) : (italic ? text.font_bolditalic : text.font_bold);
+                                font = (sub) ? (italic ? text.set.font_bolditalichalf : text.set.font_boldhalf) :
+                                    (italic ? text.set.font_bolditalic : text.set.font_bold);
                                 break;
                             default:
                                 break;

@@ -15,16 +15,19 @@ namespace mcmtestOpenTK.Client.TagHandlers.Common
 
         public override string Handle(TagData data)
         {
-            string modif = data.Modifiers[0].ToLower();
+            string modif = data.GetModifier(0).ToLower();
             if (String.IsNullOrEmpty(modif))
             {
                 return "{TAG_ERROR:NEED_MODIFIER}";
             }
-            for (int i = 0; i < data.Variable_Names.Count; i++)
+            if (data.Variables != null)
             {
-                if (data.Variable_Names[i] == modif)
+                for (int i = 0; i < data.Variables.Count; i++)
                 {
-                    return new TextTag(data.Variables[i]).Handle(data.Shrink());
+                    if (data.Variables[i].Name == modif)
+                    {
+                        return new TextTag(data.Variables[i].Value).Handle(data.Shrink());
+                    }
                 }
             }
             return "{UNKNOWN_VARIABLE:" + modif + "}";

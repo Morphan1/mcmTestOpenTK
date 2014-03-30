@@ -26,7 +26,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
             }
             else
             {
-                Shader shader = Shader.GetShader(info.Arguments[0]);
+                Shader shader = Shader.GetShader(info.GetArgument(0));
                 if (shader.LoadedProperly)
                 {
                     UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded shader '" + TextStyle.Color_Separate +

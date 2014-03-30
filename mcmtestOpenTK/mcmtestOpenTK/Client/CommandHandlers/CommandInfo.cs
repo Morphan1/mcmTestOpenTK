@@ -42,7 +42,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             {
                 throw new ArgumentOutOfRangeException("Value must be greater than 0 and less than command input argument count");
             }
-            return TagParser.ParseTags(Arguments[place], TextStyle.Color_Simple, null, null);
+            return TagParser.ParseTags(Arguments[place], TextStyle.Color_Simple, null);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         /// <returns>The combined string</returns>
         public string AllArguments()
         {
-            return TagParser.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, null, null);
+            return TagParser.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, null);
         }
     }
 }
