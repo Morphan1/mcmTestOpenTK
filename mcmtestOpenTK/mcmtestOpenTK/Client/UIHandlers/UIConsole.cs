@@ -428,7 +428,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 {
                     float XAdd = GLFont.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing) - 1;
                     if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
-                        && GLFont.IsColorSymbol(Typing.Text[TypingCursor + 1]))
+                        && TextStyle.IsColorSymbol(Typing.Text[TypingCursor + 1]))
                     {
                         XAdd -= Typing.set.font.MeasureString(Typing.Text[TypingCursor].ToString());
                     }

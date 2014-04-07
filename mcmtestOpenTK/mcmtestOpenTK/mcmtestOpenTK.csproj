@@ -71,6 +71,8 @@
     <Compile Include="Client\CommandHandlers\AbstractCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
     <Compile Include="Client\CommandHandlers\Commands.cs" />
+    <Compile Include="Client\CommandHandlers\Common\HideconsoleCommand.cs" />
+    <Compile Include="Client\CommandHandlers\Common\ShowconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\QuitCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\SetCommand.cs" />
     <Compile Include="Client\CommandHandlers\Common\CvarinfoCommand.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Shared\DataStream.cs" />
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
+    <Compile Include="Shared\SysConsole.cs" />
     <Compile Include="Shared\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

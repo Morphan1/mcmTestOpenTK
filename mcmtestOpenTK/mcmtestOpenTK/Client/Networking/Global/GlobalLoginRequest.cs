@@ -85,7 +85,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
                         string[] subdata = errorsplit[1].Split(new char[] { '/' }, 2);
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " +
                             LanguageHandler.GetMessage("login.refused." + subdata[0],
-                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata[1]) }));
+                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ?subdata[1]: "") }));
                     }
                     else if (Error.StartsWith("ACCEPT:"))
                     {

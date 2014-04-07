@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.ServerSystem.Global
 {
@@ -13,7 +14,7 @@ namespace mcmtestOpenTK.ServerSystem.Global
         /// <param name="args">Command line input args</param>
         public static void ServerInit(List<string> arguments)
         {
-            Console.WriteLine("Server!");
+            SysConsole.Output(OutputType.INIT, "SERVER!");
             Console.ReadLine();
         }
     }

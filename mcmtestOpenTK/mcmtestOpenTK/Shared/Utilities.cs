@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Shared
         public static void Init()
         {
             random = new Random();
+            SysConsole.Init();
         }
 
         /// <summary>

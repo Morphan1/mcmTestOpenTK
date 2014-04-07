@@ -10,6 +10,7 @@ using OpenTK.Input;
 using mcmtestOpenTK.Client.CommonHandlers;
 using System.IO;
 using System.Diagnostics;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -21,6 +22,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="args">Command line input args</param>
         public static void Client_Main(List<string> args)
         {
+            // Fix the system console.
+            SysConsole.FixTitle();
             // Create the window and establish basic event info / settings
             PrimaryGameWindow = new GameWindow(ScreenWidth, ScreenHeight);
             PrimaryGameWindow.Title = WindowTitle;
@@ -31,7 +34,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             PrimaryGameWindow.KeyDown += new EventHandler<KeyboardKeyEventArgs>(KeyHandler.PrimaryGameWindow_KeyDown);
             PrimaryGameWindow.KeyUp += new EventHandler<KeyboardKeyEventArgs>(KeyHandler.PrimaryGameWindow_KeyUp);
             // Begin running the game.
+            SysConsole.Output(OutputType.INIT, "Starting up main game window...");
             PrimaryGameWindow.Run(Target_cFPS, Target_gFPS);
+            SysConsole.Output(OutputType.CLIENTINFO, "Game done running!");
         }
     }
 }

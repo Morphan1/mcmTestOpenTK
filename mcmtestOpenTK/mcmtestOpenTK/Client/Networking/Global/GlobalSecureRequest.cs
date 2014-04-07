@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 
 namespace mcmtestOpenTK.Client.Networking.Global
 {
-    public class GlobalSecureRequest: GlobalNetwork
+    public abstract class GlobalSecureRequest: GlobalNetwork
     {
         /// <summary>
         /// The networking socket.
@@ -52,14 +52,6 @@ namespace mcmtestOpenTK.Client.Networking.Global
         }
 
         /// <summary>
-        /// Implement me!
-        /// </summary>
-        public override void TickMe()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Should be sufficiently implemented.
         /// </summary>
         public override void Kill()
@@ -75,11 +67,93 @@ namespace mcmtestOpenTK.Client.Networking.Global
         }
 
         /// <summary>
-        /// Implement me!
+        /// Sends a block of bytes, formatted as the secure request system expects, optionally adding an ID number to the start.
         /// </summary>
-        public override void Send()
+        /// <param name="block">The bytes to send</param>
+        public void SendByteBlock(byte[] block, int preid = -1)
         {
-            throw new NotImplementedException();
+            byte[] SendMe = new byte[(preid >= 0 ? 5: 4) + block.Length];
+            if (preid >= 0)
+            {
+                SendMe[0] = (byte)preid;
+            }
+            BitConverter.GetBytes(block.Length).CopyTo(SendMe, (preid >= 0 ? 1 : 0));
+            block.CopyTo(SendMe, (preid >= 0 ? 5 : 4));
+            socket.Send(SendMe);
+        }
+
+        /// <summary>
+        /// Receives the next block from the server.
+        /// </summary>
+        /// <returns>The bytes received</returns>
+        public byte[] ReceiveBlock()
+        {
+            int len = 0;
+            byte[] GotBack = new byte[4];
+            while (len < 4)
+            {
+                byte[] tbyte = new byte[4 - len];
+                int blen = socket.Receive(tbyte, 4 - len, SocketFlags.None);
+                tbyte.CopyTo(GotBack, len);
+                len += blen;
+            }
+            int FullDataLength = BitConverter.ToInt32(GotBack, 0);
+            if (FullDataLength > 10 * 1024 || FullDataLength < 1)
+            {
+                throw new Exception("Received invalid data length '" + FullDataLength + "'");
+            }
+            len = 0;
+            GotBack = new byte[FullDataLength];
+            while (len < FullDataLength)
+            {
+                byte[] tbyte = new byte[FullDataLength - len];
+                int blen = socket.Receive(tbyte, FullDataLength - len, SocketFlags.None);
+                tbyte.CopyTo(GotBack, len);
+                len += blen;
+            }
+            return GotBack;
+        }
+
+        /// <summary>
+        /// Encrypts a byte set for transmission.
+        /// </summary>
+        /// <param name="AES">The AES object to use for encryption</param>
+        /// <param name="Key">The key to encrypt with</param>
+        /// <param name="data">The data to encrypt</param>
+        /// <returns>The encrypted data</returns>
+        public byte[] Encrypt(Aes AES, byte[] Key, byte[] data)
+        {
+            byte[] IV = correctblocksize(Key, 16);
+            ICryptoTransform ICT = AES.CreateEncryptor(Key, IV);
+            DataStream DS = new DataStream();
+            CryptoStream CS = new CryptoStream(DS, ICT, CryptoStreamMode.Write);
+            CS.Write(data, 0, data.Length);
+            CS.Close();
+            byte[] toret = DS.ToArray();
+            DS.Close();
+            return toret;
+        }
+
+        /// <summary>
+        /// Decrypts a transmitted byte set.
+        /// </summary>
+        /// <param name="AES">The AES object to use for decryption</param>
+        /// <param name="Key">The key to decrypt with</param>
+        /// <param name="data">The data to decrypt</param>
+        /// <returns>The decrypted data</returns>
+        public byte[] Decrypt(Aes AES, byte[] Key, byte[] data)
+        {
+            byte[] IV = correctblocksize(Key, 16);
+            ICryptoTransform ICT = AES.CreateDecryptor(Key, IV);
+            DataStream DS = new DataStream(data);
+            CryptoStream CS = new CryptoStream(DS, ICT, CryptoStreamMode.Read);
+            DataStream DS2 = new DataStream();
+            CS.CopyTo(DS2);
+            CS.Close();
+            DS.Close();
+            byte[] toret = DS2.ToArray();
+            DS2.Close();
+            return toret;
         }
 
         /// <summary>
@@ -96,84 +170,14 @@ namespace mcmtestOpenTK.Client.Networking.Global
                 DHC.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
                 DHC.HashAlgorithm = CngAlgorithm.Sha256;
                 byte[] PubKey = DHC.PublicKey.ToByteArray();
-                byte[] SendMe = new byte[5 + PubKey.Length];
-                SendMe[0] = 42;
-                BitConverter.GetBytes(PubKey.Length).CopyTo(SendMe, 1);
-                PubKey.CopyTo(SendMe, 5);
-                socket.Send(SendMe); // PACKET SEND 1: client public key -> server
-                int len = 0;
-                byte[] GotBack = new byte[4];
-                while (len < 4)
-                {
-                    byte[] tbyte = new byte[4 - len];
-                    int blen = socket.Receive(tbyte, 4 - len, SocketFlags.None);
-                    tbyte.CopyTo(GotBack, len);
-                    len += blen;
-                }
-                int FullDataLength = BitConverter.ToInt32(GotBack, 0);
-                if (FullDataLength > 10 * 1024 || FullDataLength < 1)
-                {
-                    Error = "Received invalid data length '" + FullDataLength + "'";
-                    return "";
-                }
-                len = 0;
-                GotBack = new byte[FullDataLength];
-                while (len < FullDataLength)
-                {
-                    byte[] tbyte = new byte[FullDataLength - len];
-                    int blen = socket.Receive(tbyte, FullDataLength - len, SocketFlags.None);
-                    tbyte.CopyTo(GotBack, len);
-                    len += blen;
-                } // PACKET RECEIVE 1: server public key -> client
+                SendByteBlock(PubKey, 42); // PACKET SEND 1: client public key -> server
+                byte[] GotBack = ReceiveBlock(); // PACKET RECEIVE 1: server public key -> client
                 byte[] Derived = DHC.DeriveKeyMaterial(CngKey.Import(GotBack, CngKeyBlobFormat.EccPublicBlob));
                 Aes AES = Aes.Create();
                 AES.Mode = CipherMode.CBC;
-                byte[] IV = correctblocksize(Derived, 16);
-                ICryptoTransform ICT = AES.CreateEncryptor(Derived, IV);
-                byte[] LoginInfo = FileHandler.encoding.GetBytes(datatosend);
-                DataStream DS = new DataStream();
-                CryptoStream CS = new CryptoStream(DS, ICT, CryptoStreamMode.Write);
-                CS.Write(LoginInfo, 0, LoginInfo.Length);
-                CS.Close();
-                LoginInfo = DS.ToArray();
-                DS.Close();
-                SendMe = new byte[4 + LoginInfo.Length];
-                BitConverter.GetBytes(LoginInfo.Length).CopyTo(SendMe, 0);
-                LoginInfo.CopyTo(SendMe, 4);
-                socket.Send(SendMe); // PACKET SEND 2: login request data -> server
-                len = 0;
-                GotBack = new byte[4];
-                while (len < 4)
-                {
-                    byte[] tbyte = new byte[4 - len];
-                    int blen = socket.Receive(tbyte, 4 - len, SocketFlags.None);
-                    tbyte.CopyTo(GotBack, len);
-                    len += blen;
-                }
-                FullDataLength = BitConverter.ToInt32(GotBack, 0);
-                if (FullDataLength > 10 * 1024 || FullDataLength < 1)
-                {
-                    Error = "Received invalid data length '" + FullDataLength + "'";
-                    return "";
-                }
-                len = 0;
-                GotBack = new byte[FullDataLength];
-                while (len < FullDataLength)
-                {
-                    byte[] tbyte = new byte[FullDataLength - len];
-                    int blen = socket.Receive(tbyte, FullDataLength - len, SocketFlags.None);
-                    tbyte.CopyTo(GotBack, len);
-                    len += blen;
-                } // PACKET RECEIVE 2: result -> client
-                ICT = AES.CreateDecryptor(Derived, IV);
-                DS = new DataStream(GotBack);
-                CS = new CryptoStream(DS, ICT, CryptoStreamMode.Read);
-                DataStream DS2 = new DataStream();
-                CS.CopyTo(DS2);
-                CS.Close();
-                DS.Close();
-                GotBack = DS2.ToArray();
-                DS2.Close();
+                byte[] LoginInfo = Encrypt(AES, Derived, FileHandler.encoding.GetBytes(datatosend));
+                SendByteBlock(LoginInfo); // PACKET SEND 2: login request data -> server
+                GotBack = Decrypt(AES, Derived, ReceiveBlock()); // PACKET RECEIVE 2: result -> client
                 return FileHandler.encoding.GetString(GotBack);
             }
             catch (Exception ex)

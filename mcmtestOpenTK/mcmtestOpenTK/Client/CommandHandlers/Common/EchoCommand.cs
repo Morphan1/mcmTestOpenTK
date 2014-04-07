@@ -24,7 +24,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             }
             else
             {
-                UIConsole.WriteLine(info.AllArguments());
+                string args = info.AllArguments();
+                SysConsole.Output(OutputType.CLIENTINFO, "Echoing " + args);
+                UIConsole.WriteLine(args);
             }
         }
     }
