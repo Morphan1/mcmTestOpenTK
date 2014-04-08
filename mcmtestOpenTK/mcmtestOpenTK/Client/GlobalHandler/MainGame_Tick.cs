@@ -15,6 +15,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.CommandHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -65,7 +66,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Update networking
                 GlobalNetwork.Tick();
 
-                // Temporary for testing
+                // Update running commands
+                Commands.Tick();
+
+                // Update gameplay
                 X = PrimaryGameWindow.Mouse.X;
                 Y = PrimaryGameWindow.Mouse.Y;
                 if (KeyHandler.IsDown(Key.Left))

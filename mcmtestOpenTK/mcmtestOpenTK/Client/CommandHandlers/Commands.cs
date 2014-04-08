@@ -19,38 +19,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public static List<AbstractCommand> RegisteredCommands;
 
         /// <summary>
-        /// Seperates a string list of command inputs (separated by newlines, semicolons, ...)
-        /// and returns a list of the individual commands.
+        /// All command queues currently running.
         /// </summary>
-        /// <param name="commands">The command string to parse</param>
-        /// <returns>A list of command strings</returns>
-        public static List<string> SeparateCommands(string commands)
-        {
-            if (!commands.EndsWith("\n"))
-            {
-                commands = commands + "\n";
-            }
-            List<string> CommandList = new List<string>();
-            int start = 0;
-            bool quoted = false;
-            for (int i = 0; i < commands.Length; i++)
-            {
-                if (commands[i] == '"')
-                {
-                    quoted = !quoted;
-                }
-                else if ((commands[i] == '\n') || (!quoted && commands[i] == ';'))
-                {
-                    if (i - start > 0)
-                    {
-                        CommandList.Add(commands.Substring(start, i - start).Trim());
-                    }
-                    start = i + 1;
-                    quoted = false;
-                }
-            }
-            return CommandList;
-        }
+        public static List<CommandQueue> Queues;
 
         /// <summary>
         /// Executes an arbitrary list of command inputs (separated by newlines, semicolons, ...)
@@ -58,18 +29,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         /// <param name="commands">The command string to parse</param>
         public static void ExecuteCommands(string commands)
         {
-            List<string> ParsedCmds = SeparateCommands(commands);
-            for (int i = 0; i < ParsedCmds.Count; i++)
-            {
-                ExecuteCommand(ParsedCmds[i]);
-            }
+            CommandQueue.SeparateCommands(commands).Execute();
         }
 
         /// <summary>
         /// Executes a single command.
         /// </summary>
         /// <param name="command">The command string to execute</param>
-        public static void ExecuteCommand(string command)
+        public static void ExecuteCommand(string command, CommandQueue queue)
         {
             try
             {
@@ -113,7 +80,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 {
                     if (BaseCommandLow == RegisteredCommands[i].Name)
                     {
-                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args);
+                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args, queue);
                         RegisteredCommands[i].Execute(info);
                         return;
                     }
@@ -142,6 +109,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public static void Init()
         {
             RegisteredCommands = new List<AbstractCommand>();
+            Queues = new List<CommandQueue>();
 
             // Common
             RegisterCommand(new CvarinfoCommand());
@@ -151,6 +119,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new QuitCommand());
             RegisterCommand(new SetCommand());
             RegisterCommand(new ShowconsoleCommand());
+            RegisterCommand(new WaitCommand());
 
             // Graphics
             RegisterCommand(new LoadshaderCommand());
@@ -166,6 +135,22 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             // Network
             RegisterCommand(new LoginCommand());
             RegisterCommand(new TimeCommand());
+        }
+
+        /// <summary>
+        /// Advances any running command queues.
+        /// </summary>
+        public static void Tick()
+        {
+            for (int i = 0; i < Queues.Count; i++)
+            {
+                Queues[i].Tick();
+                if (!Queues[i].Running)
+                {
+                    Queues.RemoveAt(i);
+                    i--;
+                }
+            }
         }
     }
 }

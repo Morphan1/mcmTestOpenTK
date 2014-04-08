@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             Name = "showconsole";
             Arguments = "";
             Description = "Shows the internal system console for debugging purposes.";
+            IsDebug = true;
         }
 
         public override void Execute(CommandInfo info)

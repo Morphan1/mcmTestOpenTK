@@ -67,7 +67,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
                                 AbstractCommand c = Commands.RegisteredCommands[i];
                                 if (c.Name == cmd)
                                 {
-                                    AbstractCommand.ShowUsage(new CommandInfo(cmd, c, new List<string>()));
+                                    AbstractCommand.ShowUsage(new CommandInfo(cmd, c, null, null));
                                     found = true;
                                 }
                             }

@@ -44,11 +44,12 @@ namespace mcmtestOpenTK.Shared
             if (args.Length > 0 && args[0].ToLower() == "server")
             {
                 SysConsole.Output(OutputType.INIT, "Preparing server (requested from client launch pattern)...");
+                system_arguments.RemoveAt(0);
 #else
             SysConsole.Output(OutputType.INIT, "Preparing server...");
 #endif
-                system_arguments.RemoveAt(0);
-                Server.ServerInit(system_arguments);
+            Server.ServerInit(system_arguments);
+            SysConsole.Output(OutputType.SERVERINFO, "Server ended!");
                 return;
 #if !SERVER_ONLY
             }

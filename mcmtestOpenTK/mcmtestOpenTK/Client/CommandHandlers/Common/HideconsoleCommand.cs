@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.Common
             Name = "hideconsole";
             Arguments = "";
             Description = "Hides the internal system console, for after debugging is done.";
+            IsDebug = true;
         }
 
         public override void Execute(CommandInfo info)
