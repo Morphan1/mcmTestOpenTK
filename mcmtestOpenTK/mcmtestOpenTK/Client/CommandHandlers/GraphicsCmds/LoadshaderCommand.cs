@@ -6,7 +6,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
+namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
     public class LoadshaderCommand : AbstractCommand
     {

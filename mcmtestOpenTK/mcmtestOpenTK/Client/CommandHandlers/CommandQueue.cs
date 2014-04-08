@@ -110,5 +110,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             }
             Running = false;
         }
+
+        /// <summary>
+        /// Indicates whether a block { braced } commands are next in the queue.
+        /// </summary>
+        /// <returns></returns>
+        public bool BlockNext()
+        {
+            return Running && Spot + 1 < CommandList.Count && CommandList[Spot + 1] == "{";
+        }
     }
 }

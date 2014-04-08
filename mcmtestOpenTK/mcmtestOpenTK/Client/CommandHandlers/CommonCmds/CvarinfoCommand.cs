@@ -6,7 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Common
+namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
     class CvarinfoCommand: AbstractCommand
     {

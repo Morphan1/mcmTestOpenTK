@@ -6,7 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Network
+namespace mcmtestOpenTK.Client.CommandHandlers.NetworkCmds
 {
     class TimeCommand : AbstractCommand
     {

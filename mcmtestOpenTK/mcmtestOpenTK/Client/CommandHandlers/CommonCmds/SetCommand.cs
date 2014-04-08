@@ -7,7 +7,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Common
+namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
     class SetCommand: AbstractCommand
     {

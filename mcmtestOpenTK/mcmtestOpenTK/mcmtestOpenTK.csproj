@@ -56,24 +56,24 @@
     <Compile Include="Client\CommandHandlers\AbstractCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
     <Compile Include="Client\CommandHandlers\Commands.cs" />
-    <Compile Include="Client\CommandHandlers\Common\HideconsoleCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\ShowconsoleCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\QuitCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\SetCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\CvarinfoCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\HelpCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Common\EchoCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\ReplacefontCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\ReloadCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\SavetextureCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\RemapshaderCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\LoadshaderCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\ShaderlistCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\LoadtextureCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\RemaptextureCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Graphics\TexturelistCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Network\LoginCommand.cs" />
-    <Compile Include="Client\CommandHandlers\Network\TimeCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\HideconsoleCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\ShowconsoleCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\QuitCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\SetCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\CvarinfoCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\HelpCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\EchoCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\ReplacefontCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\ReloadCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\SavetextureCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\RemapshaderCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\LoadshaderCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\ShaderlistCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\LoadtextureCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\RemaptextureCommand.cs" />
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\TexturelistCommand.cs" />
+    <Compile Include="Client\CommandHandlers\NetworkCmds\LoginCommand.cs" />
+    <Compile Include="Client\CommandHandlers\NetworkCmds\TimeCommand.cs" />
     <Compile Include="Client\GraphicsHandlers\Shader.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\FontSet.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\CommandHandlers\CommandQueue.cs" />
-    <Compile Include="Client\CommandHandlers\Common\WaitCommand.cs" />
+    <Compile Include="Client\CommandHandlers\CommonCmds\WaitCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSystem\Global\Server.cs" />
     <Compile Include="Shared\DataStream.cs" />
@@ -141,7 +141,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Client\CommandHandlers\QueueCmds\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

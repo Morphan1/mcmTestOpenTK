@@ -6,7 +6,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
+namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
     public class TexturelistCommand: AbstractCommand
     {

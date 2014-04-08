@@ -5,9 +5,9 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
-using mcmtestOpenTK.Client.CommandHandlers.Common;
-using mcmtestOpenTK.Client.CommandHandlers.Graphics;
-using mcmtestOpenTK.Client.CommandHandlers.Network;
+using mcmtestOpenTK.Client.CommandHandlers.CommonCmds;
+using mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds;
+using mcmtestOpenTK.Client.CommandHandlers.NetworkCmds;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {

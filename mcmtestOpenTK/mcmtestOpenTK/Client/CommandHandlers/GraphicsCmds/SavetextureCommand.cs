@@ -7,7 +7,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Graphics
+namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
     public class SavetextureCommand: AbstractCommand
     {

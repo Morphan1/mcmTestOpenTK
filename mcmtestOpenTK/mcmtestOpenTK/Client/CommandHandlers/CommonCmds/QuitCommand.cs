@@ -6,7 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.Common
+namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
     class QuitCommand: AbstractCommand
     {
