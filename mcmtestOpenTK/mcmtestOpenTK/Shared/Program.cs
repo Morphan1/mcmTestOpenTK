@@ -6,7 +6,7 @@ using System.Diagnostics;
 #if !SERVER_ONLY
 using mcmtestOpenTK.Client.GlobalHandler;
 #endif
-using mcmtestOpenTK.ServerSystem.Global;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 
 namespace mcmtestOpenTK.Shared
 {
