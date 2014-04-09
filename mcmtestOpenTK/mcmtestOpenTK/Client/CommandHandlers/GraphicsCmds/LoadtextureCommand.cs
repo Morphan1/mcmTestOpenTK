@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {

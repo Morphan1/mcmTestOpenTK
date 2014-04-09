@@ -67,7 +67,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GlobalNetwork.Tick();
 
                 // Update running commands
-                Commands.Tick();
+                ClientCommands.Tick();
 
                 // Update gameplay
                 X = PrimaryGameWindow.Mouse.X;

@@ -54,7 +54,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             {
                 for (int i = 0; i < commandsinput.Count; i++)
                 {
-                    Commands.ExecuteCommands(commandsinput[i]);
+                    ServerCommands.ExecuteCommands(commandsinput[i]);
                 }
             }
         }

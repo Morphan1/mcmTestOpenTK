@@ -11,6 +11,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

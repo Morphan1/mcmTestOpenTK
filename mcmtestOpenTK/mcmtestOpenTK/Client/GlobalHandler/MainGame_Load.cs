@@ -15,7 +15,7 @@ using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
-using mcmtestOpenTK.Client.TagHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
@@ -36,9 +36,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare the CVar system
                 SysConsole.Output(OutputType.INIT, "Preparing CVars...");
                 CVar.Init();
-                // Prepare the tag system
-                SysConsole.Output(OutputType.INIT, "Preparing tags...");
-                TagParser.Init();
+                // Prepares the command system
+                SysConsole.Output(OutputType.INIT, "Preparing command system...");
+                ClientCommands.Init();
                 // TODO: Load default.cfg / etc.
                 // Prepare text output / language related info
                 SysConsole.Output(OutputType.INIT, "Preparing text/languaging...");
@@ -68,11 +68,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // TEMPORARY?
                 debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 // Prepare the console
-                UIConsole.InitConsole();
                 SysConsole.Output(OutputType.INIT, "Preparing game console...");
-                // Prepares the command system
-                SysConsole.Output(OutputType.INIT, "Preparing command system...");
-                Commands.Init();
+                UIConsole.InitConsole();
                 // Prepare audio-related code
                 SysConsole.Output(OutputType.INIT, "Preparing sound system...");
                 SimpleAudioTest.LoadSound();

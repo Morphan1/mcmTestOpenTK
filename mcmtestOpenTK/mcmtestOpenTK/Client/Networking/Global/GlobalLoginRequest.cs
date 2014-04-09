@@ -9,7 +9,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 using System.Security.Cryptography;
-using mcmtestOpenTK.Client.TagHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.Networking.Global
 {

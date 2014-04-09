@@ -286,7 +286,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                             RecentCommands.RemoveAt(0);
                         }
                         RecentSpot = RecentCommands.Count;
-                        Commands.ExecuteCommands(input);
+                        ClientCommands.ExecuteCommands(input);
                     }
                 }
                 // handle copying

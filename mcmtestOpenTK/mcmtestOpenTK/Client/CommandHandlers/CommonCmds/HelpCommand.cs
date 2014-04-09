@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
@@ -44,13 +45,13 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         break;
                     case "commands":
                         StringBuilder commandlist = new StringBuilder();
-                        for (int i = 0; i < Commands.RegisteredCommands.Count; i++)
+                        for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
                         {
-                            AbstractCommand c = Commands.RegisteredCommands[i];
+                            AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
                             commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
-                                (i + 1 < Commands.RegisteredCommands.Count? "\n": ""));
+                                (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
                         }
-                        UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate + Commands.RegisteredCommands.Count +
+                        UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate + ClientCommands.CommandSystem.RegisteredCommands.Count +
                             TextStyle.Color_Outgood + " clientside commands loaded.\n" + commandlist.ToString());
                         break;
                     case "command":
@@ -62,12 +63,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         {
                             string cmd = info.Arguments[1].ToLower();
                             bool found = false;
-                            for (int i = 0; i < Commands.RegisteredCommands.Count; i++)
+                            for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
                             {
-                                AbstractCommand c = Commands.RegisteredCommands[i];
+                                AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
                                 if (c.Name == cmd)
                                 {
-                                    AbstractCommand.ShowUsage(new CommandInfo(cmd, c, null, null, null));
+                                    AbstractCommand.ShowUsage(new CommandInfo(cmd, c, null, null, null, ClientCommands.CommandSystem.Output));
                                     found = true;
                                 }
                             }

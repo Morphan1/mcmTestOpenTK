@@ -37,7 +37,7 @@
     <Compile Include="Client\AudioHandlers\FMod\fmod_memoryinfo.cs" />
     <Compile Include="Client\AudioHandlers\SimpleAudioTest.cs" />
     <Compile Include="Client\CommonHandlers\CVar.cs" />
-    <Compile Include="Client\CommonHandlers\ErrorHandler.cs" />
+    <Compile Include="Shared\ErrorHandler.cs" />
     <Compile Include="Client\CommonHandlers\Util.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
@@ -53,9 +53,9 @@
     <Compile Include="Client\GraphicsHandlers\Texture.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\PieceOfText.cs" />
     <Compile Include="Client\UIHandlers\UIConsole.cs" />
-    <Compile Include="Client\CommandHandlers\AbstractCommand.cs" />
-    <Compile Include="Client\CommandHandlers\CommandInfo.cs" />
-    <Compile Include="Client\CommandHandlers\Commands.cs" />
+    <Compile Include="Shared\CommandSystem\AbstractCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommandInfo.cs" />
+    <Compile Include="Shared\CommandSystem\Commands.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HideconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\ShowconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\QuitCommand.cs" />
@@ -82,15 +82,15 @@
     <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
-    <Compile Include="Client\TagHandlers\Common\ColorTags.cs" />
-    <Compile Include="Client\TagHandlers\Common\TextTags.cs" />
-    <Compile Include="Client\TagHandlers\Common\VarTags.cs" />
-    <Compile Include="Client\TagHandlers\Objects\TextTag.cs" />
-    <Compile Include="Client\TagHandlers\TemplateObject.cs" />
-    <Compile Include="Client\TagHandlers\TemplateTags.cs" />
-    <Compile Include="Client\TagHandlers\TagData.cs" />
-    <Compile Include="Client\TagHandlers\TagParser.cs" />
-    <Compile Include="Client\TagHandlers\Variable.cs" />
+    <Compile Include="Shared\TagHandlers\Common\ColorTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\TextTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\VarTags.cs" />
+    <Compile Include="Shared\TagHandlers\Objects\TextTag.cs" />
+    <Compile Include="Shared\TagHandlers\TemplateObject.cs" />
+    <Compile Include="Shared\TagHandlers\TemplateTags.cs" />
+    <Compile Include="Shared\TagHandlers\TagData.cs" />
+    <Compile Include="Shared\TagHandlers\TagParser.cs" />
+    <Compile Include="Shared\TagHandlers\Variable.cs" />
     <Compile Include="Client\UIHandlers\Categorizer.cs" />
     <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
@@ -108,25 +108,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\CommandHandlers\CommandEntry.cs" />
-    <Compile Include="Client\CommandHandlers\CommandQueue.cs" />
-    <Compile Include="Client\CommandHandlers\QueueCmds\StopCommand.cs" />
-    <Compile Include="Client\CommandHandlers\QueueCmds\RunCommand.cs" />
-    <Compile Include="Client\CommandHandlers\QueueCmds\ElseCommand.cs" />
-    <Compile Include="Client\CommandHandlers\QueueCmds\IfCommand.cs" />
-    <Compile Include="Client\CommandHandlers\QueueCmds\WaitCommand.cs" />
+    <Compile Include="Client\CommandHandlers\ClientCommands.cs" />
+    <Compile Include="Client\CommandHandlers\ClientOutputter.cs" />
+    <Compile Include="ServerSystem\CommandHandlers\ServerCommands.cs" />
+    <Compile Include="ServerSystem\CommandHandlers\ServerOutputter.cs" />
+    <Compile Include="Shared\CommandSystem\CommandEntry.cs" />
+    <Compile Include="Shared\CommandSystem\CommandQueue.cs" />
+    <Compile Include="Shared\CommandSystem\Outputter.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\StopCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\RunCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\ElseCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\IfCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\WaitCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\AbstractCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\CommandEntry.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\CommandInfo.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\CommandQueue.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\Commands.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\QuitCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\QueueCmds\ElseCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\QueueCmds\IfCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\QueueCmds\RunCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\QueueCmds\StopCommand.cs" />
-    <Compile Include="ServerSystem\CommandHandlers\QueueCmds\WaitCommand.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\ConsoleHandler.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server.cs" />
     <Compile Include="Shared\DataStream.cs" />
@@ -158,7 +153,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Client\CommandHandlers\TagObjects\Common\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

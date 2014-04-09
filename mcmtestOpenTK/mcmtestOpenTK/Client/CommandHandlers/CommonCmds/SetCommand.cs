@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {

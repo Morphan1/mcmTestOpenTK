@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.TagHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Client.CommandHandlers;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
@@ -127,7 +128,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     vars.Add(new Variable("message", name.ToLower()));
                 }
             }
-            return TagParser.ParseTags(toret, base_color, vars);
+            return ClientCommands.CommandSystem.TagSystem.ParseTags(toret, base_color, vars);
         }
     }
 }

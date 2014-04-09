@@ -29,7 +29,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         {
             SysConsole.Output(OutputType.INIT, "Server starting...");
             SysConsole.Output(OutputType.INIT, "Preparing command system...");
-            Commands.Init();
+            ServerCommands.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
             int TARGETFPS = 20; // TODO: CVar?
@@ -62,7 +62,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             Delta = ticktime;
             DeltaF = (float)Delta;
             ConsoleHandler.CheckInput();
-            Commands.Tick();
+            ServerCommands.Tick();
         }
     }
 }

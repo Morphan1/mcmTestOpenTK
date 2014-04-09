@@ -13,6 +13,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
