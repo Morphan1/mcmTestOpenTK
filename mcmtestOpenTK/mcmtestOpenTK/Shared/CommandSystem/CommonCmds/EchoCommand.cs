@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds

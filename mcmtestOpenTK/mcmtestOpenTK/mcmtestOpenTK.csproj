@@ -37,7 +37,6 @@
     <Compile Include="Client\AudioHandlers\FMod\fmod_memoryinfo.cs" />
     <Compile Include="Client\AudioHandlers\SimpleAudioTest.cs" />
     <Compile Include="Client\CommonHandlers\CVar.cs" />
-    <Compile Include="Shared\ErrorHandler.cs" />
     <Compile Include="Client\CommonHandlers\Util.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
@@ -53,16 +52,12 @@
     <Compile Include="Client\GraphicsHandlers\Texture.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\PieceOfText.cs" />
     <Compile Include="Client\UIHandlers\UIConsole.cs" />
-    <Compile Include="Shared\CommandSystem\AbstractCommand.cs" />
-    <Compile Include="Shared\CommandSystem\CommandInfo.cs" />
-    <Compile Include="Shared\CommandSystem\Commands.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HideconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\ShowconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\QuitCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\SetCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\CvarinfoCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HelpCommand.cs" />
-    <Compile Include="Shared\CommandSystem\CommonCmds\EchoCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReplacefontCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReloadCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\SavetextureCommand.cs" />
@@ -82,18 +77,11 @@
     <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
     <Compile Include="Client\Networking\NetworkUtil.cs" />
-    <Compile Include="Shared\TagHandlers\Common\ColorTags.cs" />
-    <Compile Include="Shared\TagHandlers\Common\TextTags.cs" />
-    <Compile Include="Shared\TagHandlers\Common\VarTags.cs" />
-    <Compile Include="Shared\TagHandlers\Objects\TextTag.cs" />
-    <Compile Include="Shared\TagHandlers\TemplateObject.cs" />
-    <Compile Include="Shared\TagHandlers\TemplateTags.cs" />
-    <Compile Include="Shared\TagHandlers\TagData.cs" />
-    <Compile Include="Shared\TagHandlers\TagParser.cs" />
-    <Compile Include="Shared\TagHandlers\Variable.cs" />
     <Compile Include="Client\UIHandlers\Categorizer.cs" />
     <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
+    <Compile Include="Client\CommandHandlers\ClientCommands.cs" />
+    <Compile Include="Client\CommandHandlers\ClientOutputter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -108,8 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\CommandHandlers\ClientCommands.cs" />
-    <Compile Include="Client\CommandHandlers\ClientOutputter.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\EchoCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerCommands.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerOutputter.cs" />
     <Compile Include="ServerSystem\CommandHandlers\TagObjects\Common\ServerTags.cs" />
@@ -118,6 +105,7 @@
     <Compile Include="Shared\CommandSystem\CommandEntry.cs" />
     <Compile Include="Shared\CommandSystem\CommandQueue.cs" />
     <Compile Include="Shared\CommandSystem\Outputter.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\StopallCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\StopCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\RunCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ElseCommand.cs" />
@@ -133,6 +121,19 @@
     <Compile Include="Shared\SysConsole.cs" />
     <Compile Include="Shared\Utilities.cs" />
     <Compile Include="Shared\TextStyle.cs" />
+    <Compile Include="Shared\ErrorHandler.cs" />
+    <Compile Include="Shared\CommandSystem\AbstractCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommandInfo.cs" />
+    <Compile Include="Shared\CommandSystem\Commands.cs" />
+    <Compile Include="Shared\TagHandlers\Common\ColorTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\TextTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\VarTags.cs" />
+    <Compile Include="Shared\TagHandlers\Objects\TextTag.cs" />
+    <Compile Include="Shared\TagHandlers\TemplateObject.cs" />
+    <Compile Include="Shared\TagHandlers\TemplateTags.cs" />
+    <Compile Include="Shared\TagHandlers\TagData.cs" />
+    <Compile Include="Shared\TagHandlers\TagParser.cs" />
+    <Compile Include="Shared\TagHandlers\Variable.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

@@ -133,6 +133,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new ElseCommand());
             RegisterCommand(new IfCommand());
             RegisterCommand(new RunCommand());
+            RegisterCommand(new StopallCommand());
             RegisterCommand(new StopCommand());
             RegisterCommand(new WaitCommand());
         }
