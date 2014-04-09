@@ -60,6 +60,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public int Result = 0;
 
         /// <summary>
+        /// An index set by the command, if any.
+        /// </summary>
+        public int Index = 0;
+
+        /// <summary>
         /// Gets an argument at a specified place, handling any tags.
         /// </summary>
         /// <param name="place">The argument place number</param>
@@ -70,7 +75,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 throw new ArgumentOutOfRangeException("Value must be greater than 0 and less than command input argument count");
             }
-            return Queue.CommandSystem.TagSystem.ParseTags(Arguments[place], TextStyle.Color_Simple, null);
+            return Queue.CommandSystem.TagSystem.ParseTags(Arguments[place], TextStyle.Color_Simple, Queue.Variables);
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <returns>The combined string</returns>
         public string AllArguments()
         {
-            return Queue.CommandSystem.TagSystem.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, null);
+            return Queue.CommandSystem.TagSystem.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, Queue.Variables);
         }
     }
 }

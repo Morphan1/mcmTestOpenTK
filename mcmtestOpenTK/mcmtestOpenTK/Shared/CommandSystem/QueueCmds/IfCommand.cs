@@ -8,18 +8,16 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
     class IfCommand: AbstractCommand
     {
-        public static IfCommand MainObject = null;
-
         public IfCommand()
         {
             Name = "if";
             Arguments = "<true/false>";
             Description = "Executes the following block of commands only if the input is true.";
-            MainObject = this;
         }
 
         public override void Execute(CommandEntry entry)
         {
+            entry.Result = 0;
             if (entry.Arguments.Count < 1)
             {
                 ShowUsage(entry);
@@ -43,7 +41,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else
                 {
-                    entry.Output.Bad("IF invalid: No block follows!");
+                    entry.Output.Bad("If invalid: No block follows!");
                 }
             }
         }

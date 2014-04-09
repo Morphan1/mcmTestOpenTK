@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem
 {
     public class CommandQueue
     {
         /// <summary>
-        /// Seperates a string list of command inputs (separated by newlines, semicolons, ...)
-        /// and returns a list of the individual commands.
+        /// Separates a string list of command inputs (separated by newlines, semicolons, ...)
+        /// and returns a queue object containing all the input commands
         /// </summary>
         /// <param name="commands">The command string to parse</param>
+        /// <param name="system">The command system to put the queue in</param>
         /// <returns>A list of command strings</returns>
         public static CommandQueue SeparateCommands(string commands, Commands system)
         {
@@ -40,6 +42,40 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 CommandList.Add(commands.Substring(start).Trim());
             }
             return new CommandQueue(CreateBlock(CommandList, null), system);
+        }
+
+        /// <summary>
+        /// Seperates a string list of command inputs (separated by newlines, semicolons, ...)
+        /// and returns a list of the individual commands.
+        /// </summary>
+        /// <param name="commands">The command string to parse</param>
+        /// <returns>A list of command strings</returns>
+        public static List<CommandEntry> SeparateCommands(string commands)
+        {
+            List<string> CommandList = new List<string>();
+            int start = 0;
+            bool quoted = false;
+            for (int i = 0; i < commands.Length; i++)
+            {
+                if (commands[i] == '"')
+                {
+                    quoted = !quoted;
+                }
+                else if ((commands[i] == '\n') || (!quoted && commands[i] == ';'))
+                {
+                    if (start < i)
+                    {
+                        CommandList.Add(commands.Substring(start, i - start).Trim());
+                    }
+                    start = i + 1;
+                    quoted = false;
+                }
+            }
+            if (start < commands.Length)
+            {
+                CommandList.Add(commands.Substring(start).Trim());
+            }
+            return CreateBlock(CommandList, null);
         }
 
         /// <summary>
@@ -111,6 +147,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public List<CommandEntry> CommandList;
 
         /// <summary>
+        /// A list of all variables saved in this queue.
+        /// </summary>
+        public List<Variable> Variables;
+
+        /// <summary>
         /// Whether the queue can be delayed (EG, via a WAIT command).
         /// </summary>
         public bool Delayable = true;
@@ -139,6 +180,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         {
             CommandList = _commands;
             CommandSystem = _system;
+            Variables = new List<Variable>();
         }
 
         /// <summary>
@@ -202,6 +244,25 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public void Stop()
         {
             CommandList.Clear();
+        }
+
+        /// <summary>
+        /// Adds or sets a variable for tags in this queue to use.
+        /// </summary>
+        /// <param name="name">The name of the variable</param>
+        /// <param name="value">The value to set on the variable</param>
+        public void SetVariable(string name, string value)
+        {
+            string namelow = name.ToLower();
+            for (int i = 0; i < Variables.Count; i++)
+            {
+                if (Variables[i].Name == namelow)
+                {
+                    Variables[i].Value = value;
+                    return;
+                }
+            }
+            Variables.Add(new Variable(namelow, value));
         }
     }
 }

@@ -105,6 +105,8 @@
     <Compile Include="Shared\CommandSystem\CommandEntry.cs" />
     <Compile Include="Shared\CommandSystem\CommandQueue.cs" />
     <Compile Include="Shared\CommandSystem\Outputter.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\RepeatCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\InsertCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\StopallCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\StopCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\RunCommand.cs" />

@@ -8,25 +8,23 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
     class ElseCommand: AbstractCommand
     {
-        public ElseCommand MainObject = null;
-
         public ElseCommand()
         {
             Name = "else";
             Arguments = "[if <true/false>]";
             Description = "Executes the following block of commands only if the previous if failed, and optionally if additional requirements are met.";
-            MainObject = this;
         }
 
         public override void Execute(CommandEntry entry)
         {
+            entry.Result = 0;
             CommandEntry IfEntry = null;
             CommandEntry Holder = entry.Queue.LastCommand;
             while (IfEntry == null && Holder != null)
             {
                 if (Holder.BlockOwner == entry.BlockOwner)
                 {
-                    if (Holder.Command == IfCommand.MainObject || Holder.Command == MainObject)
+                    if (Holder.Command.Name == "if" || Holder.Command.Name == "else")
                     {
                         IfEntry = Holder;
                     }
@@ -36,12 +34,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             if (IfEntry == null)
             {
-                entry.Output.Bad("ELSE invalid: IF command did not preceed!");
+                entry.Output.Bad("Else invalid: IF command did not preceed!");
                 return;
             }
             if (IfEntry.Result == 1)
             {
-                entry.Output.Good("ELSE continuing, IF passed.");
+                entry.Output.Good("Else continuing, IF passed.");
                 return;
             }
             if (entry.Arguments.Count >= 1)
@@ -81,7 +79,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else
                 {
-                    entry.Output.Bad("ELSE invalid: No block follows!");
+                    entry.Output.Bad("Else invalid: No block follows!");
                 }
             }
         }
