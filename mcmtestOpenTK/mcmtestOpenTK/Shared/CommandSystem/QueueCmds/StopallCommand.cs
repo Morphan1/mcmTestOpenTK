@@ -15,15 +15,15 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Description = "Stops all currently running command queues.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            int qCount = info.Queue.CommandSystem.Queues.Count;
-            info.Output.Good("Stopping <{color.emphasis}>" + qCount + "<{color.base}> queue" + (qCount == 1 ? ".": "s."));
-            foreach (CommandQueue queue in info.Queue.CommandSystem.Queues)
+            int qCount = entry.Queue.CommandSystem.Queues.Count;
+            entry.Output.Good("Stopping <{color.emphasis}>" + qCount + "<{color.base}> queue" + (qCount == 1 ? "." : "s."));
+            foreach (CommandQueue queue in entry.Queue.CommandSystem.Queues)
             {
                 queue.Stop();
             }
-            info.Queue.Stop();
+            entry.Queue.Stop();
         }
     }
 }

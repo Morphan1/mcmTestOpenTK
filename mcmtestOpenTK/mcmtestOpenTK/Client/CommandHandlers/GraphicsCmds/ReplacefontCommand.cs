@@ -20,18 +20,18 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 4)
+            if (entry.Arguments.Count < 4)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string oldfont = info.GetArgument(0);
-                int oldfontsize = Utilities.StringToInt(info.GetArgument(1));
-                string newfont = info.GetArgument(2);
-                int newfontsize = Utilities.StringToInt(info.GetArgument(3));
+                string oldfont = entry.GetArgument(0);
+                int oldfontsize = Utilities.StringToInt(entry.GetArgument(1));
+                string newfont = entry.GetArgument(2);
+                int newfontsize = Utilities.StringToInt(entry.GetArgument(3));
                 if (oldfontsize < 1 || oldfontsize > 100 || newfontsize < 1 || newfontsize > 100)
                 {
                     UIConsole.WriteLine(TextStyle.Color_Outbad + "Font sizes must be between 1 and 100!");

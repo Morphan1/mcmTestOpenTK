@@ -177,7 +177,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 CommandEntry CurrentCommand = CommandList[0];
                 CommandList.RemoveAt(0);
-                CommandInfo info = CommandSystem.ExecuteCommand(CurrentCommand, this);
+                CommandSystem.ExecuteCommand(CurrentCommand, this);
                 LastCommand = CurrentCommand;
                 if (Delayable && Wait > 0f)
                 {

@@ -16,7 +16,7 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers.CommonCmds
             Description = "Immediately closes the server.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             SysConsole.Output(OutputType.SERVERINFO, TextStyle.Color_Outgood + "Server shutting down...");
             Program.CurrentProcess.Kill();

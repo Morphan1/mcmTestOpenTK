@@ -18,32 +18,32 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             MainObject = this;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string comparison = info.GetArgument(0);
+                string comparison = entry.GetArgument(0);
                 bool success = comparison.ToLower() == "true";
-                if (info.Entry.Block != null)
+                if (entry.Block != null)
                 {
                     if (success)
                     {
-                        info.Output.Good("If is true, executing...");
-                        info.Result = 1;
-                        info.Queue.AddCommandsNow(info.Entry.Block);
+                        entry.Output.Good("If is true, executing...");
+                        entry.Result = 1;
+                        entry.Queue.AddCommandsNow(entry.Block);
                     }
                     else
                     {
-                        info.Output.Good("If is false, doing nothing!");
+                        entry.Output.Good("If is false, doing nothing!");
                     }
                 }
                 else
                 {
-                    info.Output.Bad("IF invalid: No block follows!");
+                    entry.Output.Bad("IF invalid: No block follows!");
                 }
             }
         }

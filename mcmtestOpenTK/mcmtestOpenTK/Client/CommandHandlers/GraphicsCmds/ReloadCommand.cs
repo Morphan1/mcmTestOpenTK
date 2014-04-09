@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             Description = "Reloads data from disk and applies delayed CVar changes.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             UIConsole.WriteLine(TextStyle.Color_Separate + "Reloading...");
             MainGame.ReloadGraphics();

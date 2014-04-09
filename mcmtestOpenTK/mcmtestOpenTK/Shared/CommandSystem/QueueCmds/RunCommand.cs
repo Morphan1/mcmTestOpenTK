@@ -16,24 +16,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Description = "Runs a script file.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string fname = (info.Output is ServerOutputter ? "serverscripts/": "scripts/") + info.GetArgument(0) + ".cfg";
+                string fname = (entry.Output is ServerOutputter ? "serverscripts/" : "scripts/") + entry.GetArgument(0) + ".cfg";
                 if (FileHandler.Exists(fname))
                 {
                     string text = FileHandler.ReadText(fname);
-                    info.Output.WriteLine(TextStyle.Color_Outgood + "Running '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outgood + "'...");
-                    info.Queue.CommandSystem.ExecuteCommands(text);
+                    entry.Output.WriteLine(TextStyle.Color_Outgood + "Running '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outgood + "'...");
+                    entry.Queue.CommandSystem.ExecuteCommands(text);
                 }
                 else
                 {
-                    info.Output.WriteLine(TextStyle.Color_Outbad + "Cannot run script '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outbad + "': file does not exist!");
+                    entry.Output.WriteLine(TextStyle.Color_Outbad + "Cannot run script '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outbad + "': file does not exist!");
                 }
             }
         }

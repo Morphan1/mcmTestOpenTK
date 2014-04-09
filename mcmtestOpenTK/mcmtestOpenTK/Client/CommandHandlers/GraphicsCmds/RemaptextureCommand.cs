@@ -19,16 +19,16 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 2)
+            if (entry.Arguments.Count < 2)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                Texture start = Texture.GetTexture(info.GetArgument(0));
-                Texture target = Texture.GetTexture(info.GetArgument(1));
+                Texture start = Texture.GetTexture(entry.GetArgument(0));
+                Texture target = Texture.GetTexture(entry.GetArgument(1));
                 start.Internal_Texture = target.Original_InternalID;
                 start.RemappedTo = target;
                 UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped texture '" + TextStyle.Color_Separate + start.Name +

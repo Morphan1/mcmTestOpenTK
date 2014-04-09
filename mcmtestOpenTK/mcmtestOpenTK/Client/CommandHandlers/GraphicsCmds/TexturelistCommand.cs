@@ -20,7 +20,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             // TODO: Search argument.
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate +
                 Texture.LoadedTextures.Count + TextStyle.Color_Outgood + " loaded textures.");

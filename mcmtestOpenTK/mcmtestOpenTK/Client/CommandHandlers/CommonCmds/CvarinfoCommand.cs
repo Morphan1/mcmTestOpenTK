@@ -19,9 +19,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
                 UIConsole.WriteLine(TextStyle.Color_Outgood + "Listing " + TextStyle.Color_Separate + CVar.CVars.Count +
                     TextStyle.Color_Outgood + " CVars...");
@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             }
             else
             {
-                string target = info.GetArgument(0);
+                string target = entry.GetArgument(0);
                 CVar cvar = CVar.Get(target);
                 if (cvar == null)
                 {

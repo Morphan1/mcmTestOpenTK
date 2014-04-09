@@ -19,15 +19,15 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                Texture texture = Texture.GetTexture(info.GetArgument(0));
+                Texture texture = Texture.GetTexture(entry.GetArgument(0));
                 if (texture.LoadedProperly)
                 {
                     UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded texture '" + TextStyle.Color_Separate +

@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             SysConsole.ShowConsole();
             SysConsole.Output(OutputType.CLIENTINFO, "SysConsole showing [client command]");

@@ -123,7 +123,6 @@
     <Compile Include="Shared\TextStyle.cs" />
     <Compile Include="Shared\ErrorHandler.cs" />
     <Compile Include="Shared\CommandSystem\AbstractCommand.cs" />
-    <Compile Include="Shared\CommandSystem\CommandInfo.cs" />
     <Compile Include="Shared\CommandSystem\Commands.cs" />
     <Compile Include="Shared\TagHandlers\Common\ColorTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\TextTags.cs" />

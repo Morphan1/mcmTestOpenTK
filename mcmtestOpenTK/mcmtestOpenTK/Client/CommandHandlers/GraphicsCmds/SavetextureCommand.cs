@@ -20,16 +20,16 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 2)
+            if (entry.Arguments.Count < 2)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                Texture start = Texture.GetTexture(info.GetArgument(0));
-                string fname = info.GetArgument(1);
+                Texture start = Texture.GetTexture(entry.GetArgument(0));
+                string fname = entry.GetArgument(1);
                 try
                 {
                     start.SaveToFile(fname);

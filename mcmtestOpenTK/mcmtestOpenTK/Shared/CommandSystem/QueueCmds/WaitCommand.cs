@@ -15,24 +15,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Description = "Delays the current command queue a specified amount of time.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string delay = info.GetArgument(0);
+                string delay = entry.GetArgument(0);
                 float seconds = Utilities.StringToFloat(delay);
-                if (info.Queue.Delayable)
+                if (entry.Queue.Delayable)
                 {
-                    info.Output.Good("Delaying for <{color.emphasis}>" + delay + "<{color.base}> seconds.");
-                    info.Queue.Wait = seconds;
+                    entry.Output.Good("Delaying for <{color.emphasis}>" + delay + "<{color.base}> seconds.");
+                    entry.Queue.Wait = seconds;
                 }
                 else
                 {
-                    info.Output.Bad("Cannot delay, inside an instant queue!");
+                    entry.Output.Bad("Cannot delay, inside an instant queue!");
                 }
             }
         }

@@ -20,16 +20,16 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 2)
+            if (entry.Arguments.Count < 2)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string target = info.GetArgument(0);
-                string newvalue = info.GetArgument(1);
+                string target = entry.GetArgument(0);
+                string newvalue = entry.GetArgument(1);
                 CVar cvar = CVar.AbsoluteSet(target, newvalue);
                 if (cvar.Flags.HasFlag(CVarFlag.ReadOnly))
                 {

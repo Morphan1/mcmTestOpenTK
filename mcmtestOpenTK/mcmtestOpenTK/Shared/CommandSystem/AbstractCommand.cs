@@ -31,20 +31,20 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <summary>
         /// Executes the command.
         /// </summary>
-        /// <param name="info">Information on command execution</param>
-        public abstract void Execute(CommandInfo info);
+        /// <param name="entry">Entry to be executed</param>
+        public abstract void Execute(CommandEntry entry);
 
         /// <summary>
         /// Displays the usage information on a command to the console.
         /// </summary>
-        /// <param name="info">The CommandInfo data to get usage help from.</param>
-        public static void ShowUsage(CommandInfo info)
+        /// <param name="entry">The CommandEntry data to get usage help from.</param>
+        public static void ShowUsage(CommandEntry entry)
         {
-            info.Output.Good("<{color.emphasis}>" + info.Command.Name + "<{color.base}>: " + info.Command.Description);
-            info.Output.Good("<{color.cmdhelp}>Usage: /" + info.Name + " " + info.Command.Arguments);
-            if (info.Command.IsDebug)
+            entry.Output.Good("<{color.emphasis}>" + entry.Command.Name + "<{color.base}>: " + entry.Command.Description);
+            entry.Output.Good("<{color.cmdhelp}>Usage: /" + entry.Name + " " + entry.Command.Arguments);
+            if (entry.Command.IsDebug)
             {
-                info.Output.Good("Note: This command is intended for debugging purposes.");
+                entry.Output.Good("Note: This command is intended for debugging purposes.");
             }
         }
     }

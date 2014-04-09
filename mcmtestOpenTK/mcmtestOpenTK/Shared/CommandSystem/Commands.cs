@@ -45,15 +45,14 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         /// <param name="entry">The command entry to execute</param>
         /// <param name="queue">The queue that is executing it</param>
-        /// <returns>The CommandInfo object made, if any</returns>
-        public CommandInfo ExecuteCommand(CommandEntry entry, CommandQueue queue)
+        public void ExecuteCommand(CommandEntry entry, CommandQueue queue)
         {
-            string command = entry.Command;
+            string command = entry.CommandLine;
             try
             {
                 if (command.StartsWith("//"))
                 {
-                    return null;
+                    return;
                 }
                 if (command.StartsWith("/"))
                 {
@@ -82,7 +81,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 }
                 if (args.Count == 0)
                 {
-                    return null;
+                    return;
                 }
                 string BaseCommand = args[0];
                 string BaseCommandLow = args[0].ToLower();
@@ -91,10 +90,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 {
                     if (BaseCommandLow == RegisteredCommands[i].Name)
                     {
-                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args, queue, entry, Output);
-                        entry.Info = info;
-                        RegisteredCommands[i].Execute(info);
-                        return info;
+                        entry.Name = BaseCommand;
+                        entry.Command = RegisteredCommands[i];
+                        entry.Arguments = args;
+                        entry.Queue = queue;
+                        entry.Output = Output;
+                        RegisteredCommands[i].Execute(entry);
+                        return;
                     }
                 }
                 Output.WriteLine(TextStyle.Color_Error + "Unknown command '" +
@@ -104,7 +106,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 ErrorHandler.HandleError("Command '" + TextStyle.Color_Standout + command + TextStyle.Color_Error + "' threw an error", ex);
             }
-            return null;
         }
 
         /// <summary>

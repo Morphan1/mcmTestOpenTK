@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             Description = "Closes the game immediately.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             MainGame.Exit();
         }

@@ -19,7 +19,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.NetworkCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             GlobalTimeRequest.RequestTime(true);
             UIConsole.WriteLine(TextStyle.Color_Outgood + "Requesting Global time...");

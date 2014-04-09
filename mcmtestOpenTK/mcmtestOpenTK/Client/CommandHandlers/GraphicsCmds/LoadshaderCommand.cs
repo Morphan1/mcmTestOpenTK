@@ -19,15 +19,15 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                Shader shader = Shader.GetShader(info.GetArgument(0));
+                Shader shader = Shader.GetShader(entry.GetArgument(0));
                 if (shader.LoadedProperly)
                 {
                     UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded shader '" + TextStyle.Color_Separate +

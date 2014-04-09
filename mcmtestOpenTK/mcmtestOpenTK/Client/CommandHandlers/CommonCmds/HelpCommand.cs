@@ -17,9 +17,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             Description = "Shows helpful information.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
                 UIConsole.WriteLine(TextStyle.Color_Commandhelp + "/help [help type]\n" +
                     TextStyle.Color_Outgood + "Help Types:\n" +
@@ -32,7 +32,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             }
             else
             {
-                string input = info.GetArgument(0).ToLower();
+                string input = entry.GetArgument(0).ToLower();
                 switch (input)
                 {
                     case "textstyle":
@@ -55,20 +55,20 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                             TextStyle.Color_Outgood + " clientside commands loaded.\n" + commandlist.ToString());
                         break;
                     case "command":
-                        if (info.Arguments.Count < 2)
+                        if (entry.Arguments.Count < 2)
                         {
                             UIConsole.WriteLine(TextStyle.Color_Commandhelp + "/help command [command name]");
                         }
                         else
                         {
-                            string cmd = info.Arguments[1].ToLower();
+                            string cmd = entry.Arguments[1].ToLower();
                             bool found = false;
                             for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
                             {
                                 AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
                                 if (c.Name == cmd)
                                 {
-                                    AbstractCommand.ShowUsage(new CommandInfo(cmd, c, null, null, null, ClientCommands.CommandSystem.Output));
+                                    AbstractCommand.ShowUsage(new CommandEntry(cmd, null, null) { Name = cmd, Command = c, Output = ClientCommands.CommandSystem.Output });
                                     found = true;
                                 }
                             }

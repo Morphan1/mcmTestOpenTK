@@ -19,16 +19,16 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
             IsDebug = true;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 2)
+            if (entry.Arguments.Count < 2)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                Shader start = Shader.GetShader(info.GetArgument(0));
-                Shader target = Shader.GetShader(info.GetArgument(1));
+                Shader start = Shader.GetShader(entry.GetArgument(0));
+                Shader target = Shader.GetShader(entry.GetArgument(1));
                 start.Internal_Program = target.Original_Program;
                 start.RemappedTo = target;
                 UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped shader '" + TextStyle.Color_Separate + start.Name +

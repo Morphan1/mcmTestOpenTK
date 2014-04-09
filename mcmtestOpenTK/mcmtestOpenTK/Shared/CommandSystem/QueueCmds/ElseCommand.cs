@@ -18,15 +18,15 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             MainObject = this;
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
             CommandEntry IfEntry = null;
-            CommandEntry Holder = info.Queue.LastCommand;
+            CommandEntry Holder = entry.Queue.LastCommand;
             while (IfEntry == null && Holder != null)
             {
-                if (Holder.BlockOwner == info.Entry.BlockOwner)
+                if (Holder.BlockOwner == entry.BlockOwner)
                 {
-                    if (Holder.Info.Command == IfCommand.MainObject || Holder.Info.Command == MainObject)
+                    if (Holder.Command == IfCommand.MainObject || Holder.Command == MainObject)
                     {
                         IfEntry = Holder;
                     }
@@ -36,52 +36,52 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             if (IfEntry == null)
             {
-                info.Output.Bad("ELSE invalid: IF command did not preceed!");
+                entry.Output.Bad("ELSE invalid: IF command did not preceed!");
                 return;
             }
-            if (IfEntry.Info.Result == 1)
+            if (IfEntry.Result == 1)
             {
-                info.Output.Good("ELSE continuing, IF passed.");
+                entry.Output.Good("ELSE continuing, IF passed.");
                 return;
             }
-            if (info.Arguments.Count >= 1)
+            if (entry.Arguments.Count >= 1)
             {
-                string ifbit = info.GetArgument(0);
+                string ifbit = entry.GetArgument(0);
                 if (ifbit.ToLower() != "if")
                 {
-                    ShowUsage(info);
+                    ShowUsage(entry);
                     return;
                 }
                 else
                 {
-                    string comparison = info.GetArgument(1);
+                    string comparison = entry.GetArgument(1);
                     bool success = comparison.ToLower() == "true";
-                    if (info.Entry.Block != null)
+                    if (entry.Block != null)
                     {
                         if (success)
                         {
-                            info.Output.Good("Else if is true, executing...");
-                            info.Result = 1;
-                            info.Queue.AddCommandsNow(info.Entry.Block);
+                            entry.Output.Good("Else if is true, executing...");
+                            entry.Result = 1;
+                            entry.Queue.AddCommandsNow(entry.Block);
                         }
                         else
                         {
-                            info.Output.Good("Else If is false, doing nothing!");
+                            entry.Output.Good("Else If is false, doing nothing!");
                         }
                     }
                 }
             }
             else
             {
-                if (info.Entry.Block != null)
+                if (entry.Block != null)
                 {
-                    info.Output.Good("Else is valid, executing...");
-                    info.Result = 1;
-                    info.Queue.AddCommandsNow(info.Entry.Block);
+                    entry.Output.Good("Else is valid, executing...");
+                    entry.Result = 1;
+                    entry.Queue.AddCommandsNow(entry.Block);
                 }
                 else
                 {
-                    info.Output.Bad("ELSE invalid: No block follows!");
+                    entry.Output.Bad("ELSE invalid: No block follows!");
                 }
             }
         }

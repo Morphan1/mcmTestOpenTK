@@ -16,16 +16,16 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             Description = "Echoes any input text back to the console.";
         }
 
-        public override void Execute(CommandInfo info)
+        public override void Execute(CommandEntry entry)
         {
-            if (info.Arguments.Count < 1)
+            if (entry.Arguments.Count < 1)
             {
-                ShowUsage(info);
+                ShowUsage(entry);
             }
             else
             {
-                string args = info.AllArguments();
-                info.Output.Good(args);
+                string args = entry.AllArguments();
+                entry.Output.Good(args);
             }
         }
     }
