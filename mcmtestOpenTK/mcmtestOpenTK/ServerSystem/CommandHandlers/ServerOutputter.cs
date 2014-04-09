@@ -21,13 +21,13 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         public override void Good(string tagged_text)
         {
             string text = ServerCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outgood, null);
-            SysConsole.Output(OutputType.SERVERINFO, text);
+            SysConsole.Output(OutputType.SERVERINFO, TextStyle.Color_Outgood + text);
         }
 
         public override void Bad(string tagged_text)
         {
             string text = ServerCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
-            SysConsole.Output(OutputType.SERVERINFO, text);
+            SysConsole.Output(OutputType.SERVERINFO, TextStyle.Color_Outbad + text);
         }
     }
 }

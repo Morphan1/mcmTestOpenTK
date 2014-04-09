@@ -6,7 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
+namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
 {
     class EchoCommand: AbstractCommand
     {
@@ -26,8 +26,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             else
             {
                 string args = info.AllArguments();
-                SysConsole.Output(OutputType.CLIENTINFO, "Echoing " + args);
-                UIConsole.WriteLine(args);
+                info.Output.Good(args);
             }
         }
     }

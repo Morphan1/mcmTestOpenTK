@@ -151,7 +151,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 return;
             }
             Running = true;
-            SysConsole.Output(OutputType.CLIENTINFO, "Command queue starting, " + CommandList.Count + " commands...");
             Tick(0f);
             if (Running)
             {
@@ -186,7 +185,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 }
             }
             Running = false;
-            SysConsole.Output(OutputType.CLIENTINFO, "Command queue stopping.");
         }
 
         /// <summary>

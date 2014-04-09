@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
@@ -23,7 +24,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             else
             {
-                string fname = "scripts/" + info.GetArgument(0) + ".cfg";
+                string fname = (info.Output is ServerOutputter ? "serverscripts/": "scripts/") + info.GetArgument(0) + ".cfg";
                 if (FileHandler.Exists(fname))
                 {
                     string text = FileHandler.ReadText(fname);

@@ -5,6 +5,8 @@ using System.Text;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.ServerSystem.CommandHandlers.CommonCmds;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.ServerSystem.CommandHandlers.TagObjects.Common;
 
 namespace mcmtestOpenTK.ServerSystem.CommandHandlers
 {
@@ -24,8 +26,11 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
             CommandSystem.Output = new ServerOutputter();
             CommandSystem.Init();
 
-            // Common
+            // Common Commands
             CommandSystem.RegisterCommand(new QuitCommand());
+
+            // Common Tags
+            CommandSystem.TagSystem.Register(new ServerTags());
         }
 
         /// <summary>

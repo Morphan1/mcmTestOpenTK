@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.CommandSystem.QueueCmds;
+using mcmtestOpenTK.Shared.CommandSystem.CommonCmds;
 using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem
@@ -125,7 +126,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             TagSystem = new TagParser();
             TagSystem.Init();
 
-            // Queue-related
+            // Common Commands
+            RegisterCommand(new EchoCommand());
+
+            // Queue-related Commands
             RegisterCommand(new ElseCommand());
             RegisterCommand(new IfCommand());
             RegisterCommand(new RunCommand());

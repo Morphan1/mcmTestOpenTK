@@ -26,16 +26,15 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.Output = new ClientOutputter();
             CommandSystem.Init();
 
-            // Common
+            // Common Commands
             CommandSystem.RegisterCommand(new CvarinfoCommand());
-            CommandSystem.RegisterCommand(new EchoCommand());
             CommandSystem.RegisterCommand(new HelpCommand());
             CommandSystem.RegisterCommand(new HideconsoleCommand());
             CommandSystem.RegisterCommand(new QuitCommand());
             CommandSystem.RegisterCommand(new SetCommand());
             CommandSystem.RegisterCommand(new ShowconsoleCommand());
 
-            // Graphics
+            // Graphics Commands
             CommandSystem.RegisterCommand(new LoadshaderCommand());
             CommandSystem.RegisterCommand(new LoadtextureCommand());
             CommandSystem.RegisterCommand(new ReloadCommand());
@@ -46,7 +45,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new ShaderlistCommand());
             CommandSystem.RegisterCommand(new TexturelistCommand());
 
-            // Network
+            // Network Commands
             CommandSystem.RegisterCommand(new LoginCommand());
             CommandSystem.RegisterCommand(new TimeCommand());
         }

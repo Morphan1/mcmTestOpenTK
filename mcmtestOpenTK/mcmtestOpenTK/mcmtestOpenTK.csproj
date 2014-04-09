@@ -62,7 +62,7 @@
     <Compile Include="Client\CommandHandlers\CommonCmds\SetCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\CvarinfoCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HelpCommand.cs" />
-    <Compile Include="Client\CommandHandlers\CommonCmds\EchoCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\EchoCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReplacefontCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReloadCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\SavetextureCommand.cs" />
@@ -112,6 +112,9 @@
     <Compile Include="Client\CommandHandlers\ClientOutputter.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerCommands.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerOutputter.cs" />
+    <Compile Include="ServerSystem\CommandHandlers\TagObjects\Common\ServerTags.cs" />
+    <Compile Include="ServerSystem\GlobalHandlers\Server_Tick.cs" />
+    <Compile Include="ServerSystem\GlobalHandlers\Server_Defs.cs" />
     <Compile Include="Shared\CommandSystem\CommandEntry.cs" />
     <Compile Include="Shared\CommandSystem\CommandQueue.cs" />
     <Compile Include="Shared\CommandSystem\Outputter.cs" />
@@ -123,7 +126,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\QuitCommand.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\ConsoleHandler.cs" />
-    <Compile Include="ServerSystem\GlobalHandlers\Server.cs" />
+    <Compile Include="ServerSystem\GlobalHandlers\Server_Base.cs" />
     <Compile Include="Shared\DataStream.cs" />
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
