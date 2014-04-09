@@ -32,18 +32,18 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 {
                     if (success)
                     {
-                        info.Output.WriteLine(TextStyle.Color_Outgood + "If is true, executing...");
+                        info.Output.Good("If is true, executing...");
                         info.Result = 1;
                         info.Queue.AddCommandsNow(info.Entry.Block);
                     }
                     else
                     {
-                        info.Output.WriteLine(TextStyle.Color_Outgood + "If is false, doing nothing!");
+                        info.Output.Good("If is false, doing nothing!");
                     }
                 }
                 else
                 {
-                    info.Output.WriteLine(TextStyle.Color_Outbad + "IF invalid: No block follows!");
+                    info.Output.Bad("IF invalid: No block follows!");
                 }
             }
         }

@@ -23,7 +23,9 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
             switch (data.Input[0])
             {
                 case "emphasis":
-                    return new TextTag("^r^5").Handle(data.Shrink());
+                    return new TextTag(TextStyle.Color_Separate).Handle(data.Shrink());
+                case "cmdhelp":
+                    return new TextTag(TextStyle.Color_Commandhelp).Handle(data.Shrink());
                 case "base":
                     return new TextTag(data.BaseColor).Handle(data.Shrink());
                 default:

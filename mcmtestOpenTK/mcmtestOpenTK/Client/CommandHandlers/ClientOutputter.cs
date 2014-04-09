@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -17,6 +18,18 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public override void Write(string text)
         {
             UIConsole.Write(text);
+        }
+
+        public override void Good(string tagged_text)
+        {
+            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outgood, null);
+            UIConsole.WriteLine(text);
+        }
+
+        public override void Bad(string tagged_text)
+        {
+            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
+            UIConsole.WriteLine(text);
         }
     }
 }

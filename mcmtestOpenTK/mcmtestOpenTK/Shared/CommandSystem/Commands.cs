@@ -123,6 +123,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisteredCommands = new List<AbstractCommand>();
             Queues = new List<CommandQueue>();
             TagSystem = new TagParser();
+            TagSystem.Init();
 
             // Queue-related
             RegisterCommand(new ElseCommand());

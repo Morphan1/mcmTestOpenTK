@@ -36,12 +36,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             if (IfEntry == null)
             {
-                info.Output.WriteLine(TextStyle.Color_Outbad + "ELSE invalid: IF command did not preceed!");
+                info.Output.Bad("ELSE invalid: IF command did not preceed!");
                 return;
             }
             if (IfEntry.Info.Result == 1)
             {
-                info.Output.WriteLine(TextStyle.Color_Outbad + "ELSE continuing, IF passed.");
+                info.Output.Good("ELSE continuing, IF passed.");
                 return;
             }
             if (info.Arguments.Count >= 1)
@@ -60,13 +60,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     {
                         if (success)
                         {
-                            info.Output.WriteLine(TextStyle.Color_Outgood + "Else if is true, executing...");
+                            info.Output.Good("Else if is true, executing...");
                             info.Result = 1;
                             info.Queue.AddCommandsNow(info.Entry.Block);
                         }
                         else
                         {
-                            info.Output.WriteLine(TextStyle.Color_Outgood + "Else If is false, doing nothing!");
+                            info.Output.Good("Else If is false, doing nothing!");
                         }
                     }
                 }
@@ -75,13 +75,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             {
                 if (info.Entry.Block != null)
                 {
-                    info.Output.WriteLine(TextStyle.Color_Outgood + "Else is valid, executing...");
+                    info.Output.Good("Else is valid, executing...");
                     info.Result = 1;
                     info.Queue.AddCommandsNow(info.Entry.Block);
                 }
                 else
                 {
-                    info.Output.WriteLine(TextStyle.Color_Outbad + "ELSE invalid: No block follows!");
+                    info.Output.Bad("ELSE invalid: No block follows!");
                 }
             }
         }

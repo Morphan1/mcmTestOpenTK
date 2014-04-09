@@ -40,11 +40,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="info">The CommandInfo data to get usage help from.</param>
         public static void ShowUsage(CommandInfo info)
         {
-            info.Output.WriteLine(TextStyle.Color_Separate + info.Command.Name + TextStyle.Color_Outgood + ": " + info.Command.Description);
-            info.Output.WriteLine(TextStyle.Color_Commandhelp + "Usage: /" + info.Name + " " + info.Command.Arguments);
+            info.Output.Good("<{color.emphasis}>" + info.Command.Name + "<{color.base}>: " + info.Command.Description);
+            info.Output.Good("<{color.cmdhelp}>Usage: /" + info.Name + " " + info.Command.Arguments);
             if (info.Command.IsDebug)
             {
-                info.Output.WriteLine("Note: This command is intended for debugging purposes.");
+                info.Output.Good("Note: This command is intended for debugging purposes.");
             }
         }
     }
