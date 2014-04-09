@@ -5,7 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
+namespace mcmtestOpenTK.Client.CommandHandlers.QueueCmds
 {
     class WaitCommand: AbstractCommand
     {

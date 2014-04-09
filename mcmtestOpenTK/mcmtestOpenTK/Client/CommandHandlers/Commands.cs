@@ -8,6 +8,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers.CommonCmds;
 using mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds;
 using mcmtestOpenTK.Client.CommandHandlers.NetworkCmds;
+using mcmtestOpenTK.Client.CommandHandlers.QueueCmds;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -35,14 +36,17 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         /// <summary>
         /// Executes a single command.
         /// </summary>
-        /// <param name="command">The command string to execute</param>
-        public static void ExecuteCommand(string command, CommandQueue queue)
+        /// <param name="entry">The command entry to execute</param>
+        /// <param name="queue">The queue that is executing it</param>
+        /// <returns>The CommandInfo object made, if any</returns>
+        public static CommandInfo ExecuteCommand(CommandEntry entry, CommandQueue queue)
         {
+            string command = entry.Command;
             try
             {
                 if (command.StartsWith("//"))
                 {
-                    return;
+                    return null;
                 }
                 if (command.StartsWith("/"))
                 {
@@ -71,7 +75,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 }
                 if (args.Count == 0)
                 {
-                    return;
+                    return null;
                 }
                 string BaseCommand = args[0];
                 string BaseCommandLow = args[0].ToLower();
@@ -80,9 +84,10 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 {
                     if (BaseCommandLow == RegisteredCommands[i].Name)
                     {
-                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args, queue);
+                        CommandInfo info = new CommandInfo(BaseCommand, RegisteredCommands[i], args, queue, entry);
+                        entry.Info = info;
                         RegisteredCommands[i].Execute(info);
-                        return;
+                        return info;
                     }
                 }
                 UIConsole.WriteLine(TextStyle.Color_Error + "Unknown command '" +
@@ -92,6 +97,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             {
                 ErrorHandler.HandleError("Command '" + TextStyle.Color_Standout + command + TextStyle.Color_Error + "' threw an error", ex);
             }
+            return null;
         }
 
         /// <summary>
@@ -119,6 +125,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             RegisterCommand(new QuitCommand());
             RegisterCommand(new SetCommand());
             RegisterCommand(new ShowconsoleCommand());
+
+            // Queue-related
+            RegisterCommand(new ElseCommand());
+            RegisterCommand(new IfCommand());
+            RegisterCommand(new RunCommand());
+            RegisterCommand(new StopCommand());
             RegisterCommand(new WaitCommand());
 
             // Graphics

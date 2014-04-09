@@ -25,16 +25,27 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public List<string> Arguments;
 
         /// <summary>
+        /// The entry used to fire this command.
+        /// </summary>
+        public CommandEntry Entry;
+
+        /// <summary>
         /// The command queue this command is running inside.
         /// </summary>
         public CommandQueue Queue;
 
-        public CommandInfo(string _name, AbstractCommand _command, List<string> _arguments, CommandQueue _queue)
+        /// <summary>
+        /// A result set by the command, if any.
+        /// </summary>
+        public int Result = 0;
+
+        public CommandInfo(string _name, AbstractCommand _command, List<string> _arguments, CommandQueue _queue, CommandEntry _entry)
         {
             Name = _name;
             Command = _command;
             Arguments = _arguments;
             Queue = _queue;
+            Entry = _entry;
         }
 
         /// <summary>

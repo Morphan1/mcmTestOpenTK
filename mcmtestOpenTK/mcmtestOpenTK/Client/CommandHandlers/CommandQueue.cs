@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -39,23 +40,81 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             {
                 CommandList.Add(commands.Substring(start).Trim());
             }
-            return new CommandQueue(CommandList);
+            return new CommandQueue(CreateBlock(CommandList, null));
+        }
+
+        /// <summary>
+        /// Converts a list of command strings to a CommandEntry list, handling any { braced } blocks inside.
+        /// </summary>
+        /// <param name="from">The command strings</param>
+        /// <param name="entry">The entry that owns this block</param>
+        /// <returns>A list of entries with blocks separated</returns>
+        public static List<CommandEntry> CreateBlock(List<string> from, CommandEntry entry)
+        {
+            List<CommandEntry> toret = new List<CommandEntry>();
+            List<string> Temp = null;
+            int blocks = 0;
+            for (int i = 0; i < from.Count; i++)
+            {
+                if (from[i] == "{")
+                {
+                    blocks++;
+                    if (blocks == 1)
+                    {
+                        Temp = new List<string>();
+                    }
+                    else
+                    {
+                        Temp.Add("{");
+                    }
+                }
+                else if (from[i] == "}")
+                {
+                    blocks--;
+                    if (blocks == 0)
+                    {
+                        if (toret.Count == 0)
+                        {
+                            List<CommandEntry> block = CreateBlock(Temp, entry);
+                            toret.AddRange(block);
+                        }
+                        else
+                        {
+                            List<CommandEntry> block = CreateBlock(Temp, toret[toret.Count - 1]);
+                            toret[toret.Count - 1].Block = block;
+                        }
+                    }
+                    else if (blocks < 0)
+                    {
+                        blocks = 0;
+                        Temp.Add("echo \"" + TextStyle.Color_Error + "SCRIPT ERROR: EXTRA } SYMBOL!\"");
+                    }
+                    else
+                    {
+                        Temp.Add("}");
+                    }
+                }
+                else if (blocks > 0)
+                {
+                    Temp.Add(from[i]);
+                }
+                else
+                {
+                    toret.Add(new CommandEntry(from[i], null, entry));
+                }
+            }
+            return toret;
         }
 
         /// <summary>
         /// All commands in this queue, as strings.
         /// </summary>
-        public List<string> CommandList;
+        public List<CommandEntry> CommandList;
 
         /// <summary>
         /// Whether the queue can be delayed (EG, via a WAIT command).
         /// </summary>
         public bool Delayable = true;
-
-        /// <summary>
-        /// Where in the command list the queue is currently executing at.
-        /// </summary>
-        public int Spot = 0;
 
         /// <summary>
         /// How long until the queue may continue.
@@ -67,7 +126,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         /// </summary>
         public bool Running = false;
 
-        public CommandQueue(List<string> _commands)
+        /// <summary>
+        /// The last command to be run.
+        /// </summary>
+        public CommandEntry LastCommand;
+
+        public CommandQueue(List<CommandEntry> _commands)
         {
             CommandList = _commands;
         }
@@ -82,8 +146,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 return;
             }
             Running = true;
-            Commands.Queues.Add(this);
+            SysConsole.Output(OutputType.CLIENTINFO, "Command queue starting, " + CommandList.Count + " commands...");
             Tick();
+            if (Running)
+            {
+                Commands.Queues.Add(this);
+            }
         }
 
         /// <summary>
@@ -100,24 +168,36 @@ namespace mcmtestOpenTK.Client.CommandHandlers
                 }
                 Wait = 0;
             }
-            for (; Spot < CommandList.Count; Spot++)
+            while (CommandList.Count > 0)
             {
+                CommandEntry CurrentCommand = CommandList[0];
+                CommandList.RemoveAt(0);
+                CommandInfo info = Commands.ExecuteCommand(CurrentCommand, this);
+                LastCommand = CurrentCommand;
                 if (Delayable && Wait > 0f)
                 {
                     return;
                 }
-                Commands.ExecuteCommand(CommandList[Spot], this);
             }
             Running = false;
+            SysConsole.Output(OutputType.CLIENTINFO, "Command queue stopping.");
         }
 
         /// <summary>
-        /// Indicates whether a block { braced } commands are next in the queue.
+        /// Adds a list of entries to be executed next in line.
         /// </summary>
-        /// <returns></returns>
-        public bool BlockNext()
+        /// <param name="entries">Commands to be run</param>
+        public void AddCommandsNow(List<CommandEntry> entries)
         {
-            return Running && Spot + 1 < CommandList.Count && CommandList[Spot + 1] == "{";
+            CommandList.InsertRange(0, entries);
+        }
+
+        /// <summary>
+        /// Immediately stops the Command Queue.
+        /// </summary>
+        public void Stop()
+        {
+            CommandList.Clear();
         }
     }
 }
