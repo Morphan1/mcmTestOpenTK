@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -31,8 +32,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 Shader target = Shader.GetShader(entry.GetArgument(1));
                 start.Internal_Program = target.Original_Program;
                 start.RemappedTo = target;
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped shader '" + TextStyle.Color_Separate + start.Name +
-                    TextStyle.Color_Outgood + "' to shader '" + TextStyle.Color_Separate + target.Name + TextStyle.Color_Outgood + "'.");
+                entry.Good("Remapped shader '<{color.emphasis}>" + TagParser.Escape(start.Name) +
+                    "<{color.base}>' to shader '<{color.emphasis}>" + TagParser.Escape(target.Name) + "<{color.base}>'.");
             }
         }
     }

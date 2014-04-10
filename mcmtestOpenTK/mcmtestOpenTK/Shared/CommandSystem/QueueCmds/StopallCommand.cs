@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public override void Execute(CommandEntry entry)
         {
             int qCount = entry.Queue.CommandSystem.Queues.Count;
-            entry.Output.Good("Stopping <{color.emphasis}>" + qCount + "<{color.base}> queue" + (qCount == 1 ? "." : "s."));
+            entry.Good("Stopping <{color.emphasis}>" + qCount + "<{color.base}> queue" + (qCount == 1 ? "." : "s."));
             foreach (CommandQueue queue in entry.Queue.CommandSystem.Queues)
             {
                 queue.Stop();

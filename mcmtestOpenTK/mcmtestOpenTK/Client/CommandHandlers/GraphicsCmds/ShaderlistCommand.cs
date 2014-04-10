@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -22,20 +23,17 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 
         public override void Execute(CommandEntry entry)
         {
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate +
-                Shader.LoadedShaders.Count + TextStyle.Color_Outgood + " loaded shaders.");
-            UIConsole.WriteLine(TextStyle.Color_Separate + "OriginalID" + TextStyle.Color_Simple + ") [" + 
-                TextStyle.Color_Separate + "CurrentID" + TextStyle.Color_Simple + "] " + TextStyle.Color_Separate + "Name"
-                + TextStyle.Color_Simple + " -> " + TextStyle.Color_Separate + "RemappedName");
+            entry.Output.Good("There are <{color.emphasis}>" + Shader.LoadedShaders.Count + "<{color.base}> loaded shaders.");
+            entry.Output.Good("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] " +
+                "<{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName");
             for (int i = 0; i < Shader.LoadedShaders.Count; i++)
             {
-                UIConsole.WriteLine("- " + TextStyle.Color_Separate + Shader.LoadedShaders[i].Original_Program +
-                    TextStyle.Color_Simple + ") [" + TextStyle.Color_Separate + Shader.LoadedShaders[i].Internal_Program +
-                    TextStyle.Color_Simple + "] " + TextStyle.Color_Separate + Shader.LoadedShaders[i].Name +
+                entry.Output.Good("- <{color.emphasis}>" + Shader.LoadedShaders[i].Original_Program + "<{color.simple}>) [<{color.emphasis}>" +
+                    Shader.LoadedShaders[i].Internal_Program + "<{color.simple}>] <{color.emphasis}>" + TagParser.Escape(Shader.LoadedShaders[i].Name) +
                     (Shader.LoadedShaders[i].Internal_Program != Shader.LoadedShaders[i].Original_Program ?
-                    TextStyle.Color_Simple + " -> " + TextStyle.Color_Separate + Shader.LoadedShaders[i].RemappedTo.Name : ""));
+                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Shader.LoadedShaders[i].RemappedTo.Name): ""));
             }
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "-------");
+            entry.Output.Good("-------");
         }
     }
 }

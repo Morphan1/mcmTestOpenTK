@@ -30,6 +30,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             double CurrentDelta = 0d;
             double TargetDelta = 0d;
             int targettime = 0;
+            SysConsole.Output(OutputType.INIT, "Loaded! Ticking...");
             while (true)
             {
                 // Update the tick time usage counter

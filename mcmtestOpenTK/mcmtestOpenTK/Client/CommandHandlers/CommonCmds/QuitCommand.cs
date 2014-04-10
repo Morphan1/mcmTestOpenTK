@@ -20,6 +20,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 
         public override void Execute(CommandEntry entry)
         {
+            entry.Good("Exiting game!");
             MainGame.Exit();
         }
     }

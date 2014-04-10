@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
         {
             SysConsole.HideConsole();
             SysConsole.Output(OutputType.CLIENTINFO, "SysConsole hiding [client command]");
-            UIConsole.WriteLine(TextStyle.Color_Outbad + "Hid the system console.");
+            entry.Good("Hid the system console.");
         }
     }
 }

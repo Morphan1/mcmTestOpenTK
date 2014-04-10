@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
@@ -28,12 +29,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 if (FileHandler.Exists(fname))
                 {
                     string text = FileHandler.ReadText(fname);
-                    entry.Output.WriteLine(TextStyle.Color_Outgood + "Running '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outgood + "'...");
+                    entry.Good("Running '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'...");
                     entry.Queue.CommandSystem.ExecuteCommands(text);
                 }
                 else
                 {
-                    entry.Output.WriteLine(TextStyle.Color_Outbad + "Cannot run script '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outbad + "': file does not exist!");
+                    entry.Bad("Cannot run script '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>': file does not exist!");
                 }
             }
         }

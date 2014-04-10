@@ -33,11 +33,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                         entry.BlockOwner.Index++;
                         if (entry.BlockOwner.Index > entry.BlockOwner.Result)
                         {
-                            entry.Output.Good("Repeating ending, reached target.");
+                            entry.Good("Repeating ending, reached target.");
                         }
                         else
                         {
-                            entry.Output.Good("Repeating at index <{color.emphasis}>" + entry.BlockOwner.Index + "/" + entry.BlockOwner.Result + "<{color.base}>...");
+                            entry.Good("Repeating at index <{color.emphasis}>" + entry.BlockOwner.Index + "/" + entry.BlockOwner.Result + "<{color.base}>...");
                             entry.Queue.SetVariable("repeat_index", entry.BlockOwner.Index.ToString());
                             entry.Queue.SetVariable("repeat_total", entry.BlockOwner.Result.ToString());
                             entry.Queue.AddCommandsNow(entry.BlockOwner.Block);
@@ -45,7 +45,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     }
                     else
                     {
-                        entry.Output.Bad("Repeat CALLBACK invalid: not a real callback!");
+                        entry.Bad("Repeat CALLBACK invalid: not a real callback!");
                     }
                 }
                 else
@@ -59,7 +59,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     entry.Index = 1;
                     if (entry.Block != null)
                     {
-                        entry.Output.Good("Repeating <{color.emphasis}>" + target + "<{color.base}> times...");
+                        entry.Good("Repeating <{color.emphasis}>" + target + "<{color.base}> times...");
                         CommandEntry callback = new CommandEntry("repeat CALLBACK", null, entry);
                         entry.Block.Add(callback);
                         entry.Queue.SetVariable("repeat_index", "1");
@@ -68,7 +68,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     }
                     else
                     {
-                        entry.Output.Bad("Repeat invalid: No block follows!");
+                        entry.Bad("Repeat invalid: No block follows!");
                     }
                 }
             }

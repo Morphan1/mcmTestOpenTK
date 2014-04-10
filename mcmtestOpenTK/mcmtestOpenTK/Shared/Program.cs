@@ -49,7 +49,7 @@ namespace mcmtestOpenTK.Shared
             SysConsole.Output(OutputType.INIT, "Preparing server...");
 #endif
             Server.ServerInit(system_arguments);
-            SysConsole.Output(OutputType.SERVERINFO, "Server ended!");
+            SysConsole.Output(OutputType.INFO, "Server ended!");
                 return;
 #if !SERVER_ONLY
             }

@@ -27,12 +27,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 float seconds = Utilities.StringToFloat(delay);
                 if (entry.Queue.Delayable)
                 {
-                    entry.Output.Good("Delaying for <{color.emphasis}>" + delay + "<{color.base}> seconds.");
+                    entry.Good("Delaying for <{color.emphasis}>" + seconds + "<{color.base}> seconds.");
                     entry.Queue.Wait = seconds;
                 }
                 else
                 {
-                    entry.Output.Bad("Cannot delay, inside an instant queue!");
+                    entry.Bad("Cannot delay, inside an instant queue!");
                 }
             }
         }

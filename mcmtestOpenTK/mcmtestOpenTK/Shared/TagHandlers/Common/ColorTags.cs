@@ -26,6 +26,12 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
                     return new TextTag(TextStyle.Color_Separate).Handle(data.Shrink());
                 case "cmdhelp":
                     return new TextTag(TextStyle.Color_Commandhelp).Handle(data.Shrink());
+                case "simple":
+                    return new TextTag(TextStyle.Color_Simple).Handle(data.Shrink());
+                case "info":
+                    return new TextTag(TextStyle.Color_Importantinfo).Handle(data.Shrink());
+                case "standout":
+                    return new TextTag(TextStyle.Color_Standout).Handle(data.Shrink());
                 case "base":
                     return new TextTag(data.BaseColor).Handle(data.Shrink());
                 default:

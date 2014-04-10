@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -30,13 +31,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 Shader shader = Shader.GetShader(entry.GetArgument(0));
                 if (shader.LoadedProperly)
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded shader '" + TextStyle.Color_Separate +
-                        shader.Name + TextStyle.Color_Outgood + "'.");
+                    entry.Good("Successfully loaded shader '<{color.emphasis}>" + TagParser.Escape(shader.Name) + "<{color.base}>'.");
                 }
                 else
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outbad + "Failed to load shader '" + TextStyle.Color_Separate +
-                        shader.Name + TextStyle.Color_Outbad + "'.");
+                    entry.Bad("Failed to load shader '<{color.emphasis}>" + TagParser.Escape(shader.Name) + "<{color.base}>'.");
                 }
             }
         }

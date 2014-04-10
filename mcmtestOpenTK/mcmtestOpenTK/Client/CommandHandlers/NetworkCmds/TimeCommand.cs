@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.NetworkCmds
         public override void Execute(CommandEntry entry)
         {
             GlobalTimeRequest.RequestTime(true);
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "Requesting Global time...");
+            entry.Good("<{color.info}>Requesting Global time...");
         }
     }
 }

@@ -34,12 +34,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             if (IfEntry == null)
             {
-                entry.Output.Bad("Else invalid: IF command did not preceed!");
+                entry.Bad("Else invalid: IF command did not preceed!");
                 return;
             }
             if (IfEntry.Result == 1)
             {
-                entry.Output.Good("Else continuing, IF passed.");
+                entry.Good("Else continuing, IF passed.");
                 return;
             }
             if (entry.Arguments.Count >= 1)
@@ -58,13 +58,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     {
                         if (success)
                         {
-                            entry.Output.Good("Else if is true, executing...");
+                            entry.Good("Else if is true, executing...");
                             entry.Result = 1;
                             entry.Queue.AddCommandsNow(entry.Block);
                         }
                         else
                         {
-                            entry.Output.Good("Else If is false, doing nothing!");
+                            entry.Good("Else If is false, doing nothing!");
                         }
                     }
                 }
@@ -73,13 +73,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             {
                 if (entry.Block != null)
                 {
-                    entry.Output.Good("Else is valid, executing...");
+                    entry.Good("Else is valid, executing...");
                     entry.Result = 1;
                     entry.Queue.AddCommandsNow(entry.Block);
                 }
                 else
                 {
-                    entry.Output.Bad("Else invalid: No block follows!");
+                    entry.Bad("Else invalid: No block follows!");
                 }
             }
         }

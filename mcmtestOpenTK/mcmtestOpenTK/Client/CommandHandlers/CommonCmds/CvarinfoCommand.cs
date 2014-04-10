@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
@@ -23,13 +24,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
         {
             if (entry.Arguments.Count < 1)
             {
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Listing " + TextStyle.Color_Separate + CVar.CVars.Count +
-                    TextStyle.Color_Outgood + " CVars...");
+                entry.Output.Good("Listing <{color.emphasis}>" + CVar.CVars.Count + "<{color.base}> CVars...");
                 for (int i = 0; i < CVar.CVars.Count; i++)
                 {
                     CVar cvar = CVar.CVars[i];
-                    UIConsole.WriteLine(TextStyle.Color_Separate + (i + 1).ToString() + TextStyle.Color_Simple + ") " +
-                        TextStyle.Color_Separate + cvar.Info());
+                    entry.Output.Good("<{color.emphasis}>" + (i + 1).ToString() + "<{color.simple}>)<{color.emphasis}> " + TagParser.Escape(cvar.Info()));
                 }
             }
             else
@@ -38,12 +37,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                 CVar cvar = CVar.Get(target);
                 if (cvar == null)
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outbad + "Cvar '" + TextStyle.Color_Standout + target +
-                        TextStyle.Color_Outbad + "' does not exist!");
+                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' does not exist!");
                 }
                 else
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outgood + cvar.Info());
+                    entry.Output.Good("<{color.emphasis}>" + TagParser.Escape(cvar.Info()));
                 }
             }
         }

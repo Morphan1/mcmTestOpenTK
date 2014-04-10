@@ -20,9 +20,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 
         public override void Execute(CommandEntry entry)
         {
-            UIConsole.WriteLine(TextStyle.Color_Separate + "Reloading...");
+            entry.Good("<{color.info}>Reloading...");
             MainGame.ReloadGraphics();
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "Reloaded successfully!");
+            entry.Good("Reloaded successfully!");
         }
     }
 }

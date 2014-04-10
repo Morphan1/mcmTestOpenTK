@@ -24,7 +24,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
 
         public CommandEntry(string _command, List<CommandEntry> _block, CommandEntry _owner)
         {
-            CommandLine = _command;
+            CommandLine = Utilities.CleanStringInput(_command);
             Block = _block;
             BlockOwner = _owner;
         }
@@ -85,6 +85,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public string AllArguments()
         {
             return Queue.CommandSystem.TagSystem.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, Queue.Variables);
+        }
+
+        /// <summary>
+        /// Used to output a success message.
+        /// </summary>
+        /// <param name="tagged_text">The text to output, with tags included</param>
+        public void Good(string text)
+        {
+            Output.Good(text);
+        }
+
+        /// <summary>
+        /// Used to output a failure message.
+        /// </summary>
+        /// <param name="tagged_text">The text to output, with tags included</param>
+        public void Bad(string text)
+        {
+            Output.Bad(text);
         }
     }
 }

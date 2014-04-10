@@ -5,6 +5,8 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
@@ -21,14 +23,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
         {
             if (entry.Arguments.Count < 1)
             {
-                UIConsole.WriteLine(TextStyle.Color_Commandhelp + "/help [help type]\n" +
-                    TextStyle.Color_Outgood + "Help Types:\n" +
-                    TextStyle.Color_Outgood + "    textstyle - view help with the text styling (color, bold, etc.)\n" +
-                    TextStyle.Color_Outgood + "    characters - view a list of what text characters are currently supported.\n" +
-                    TextStyle.Color_Outgood + "    commands - lists the commands available\n" +
-                    TextStyle.Color_Outgood + "    command [command name] - view information on a specific command\n" +
-                    TextStyle.Color_Importantinfo + "Press CTRL-C to copy console text. Press CTRL-V to paste into the console.\n" +
-                    TextStyle.Color_Importantinfo + "Press the PageUp (PGUP) key to scroll the console text up, or the PageDown (PGDN) key to scroll down.");
+                entry.Bad("<{color.cmdhelp}>/help [help type]\n" +
+                    "<{color.base}>Help Types:\n" +
+                    "<{color.base}>    textstyle - view help with the text styling (color, bold, etc.)\n" +
+                    "<{color.base}>    characters - view a list of what text characters are currently supported.\n" +
+                    "<{color.base}>    commands - lists the commands available\n" +
+                    "<{color.base}>    command [command name] - view information on a specific command\n" +
+                    "<{color.info}>Press CTRL-C to copy console text. Press CTRL-V to paste into the console.\n" +
+                    "<{color.info}>Press the PageUp (PGUP) key to scroll the console text up, or the PageDown (PGDN) key to scroll down.");
             }
             else
             {
@@ -38,7 +40,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                     case "textstyle":
                     case "text":
                     case "style":
-                        UIConsole.WriteLine("^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
+                        entry.Output.Good("^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
                             "^r^7Text styles: ^b^^nb is bold,^r ^i^^ni is italic,^r ^u^^nu is underline,^r ^s^^ns is strike-through,^r ^O^^nO is overline,^r ^7^h^0^^nh is highlight,^r^7 ^j^^nj is jello (AKA jiggle),^r " +
                             "^2^e^0^^ne is emphasis,^r^7 ^t^^nt is transparent,^r ^T^^nT is more transparent,^r ^o^^no is opaque,^r ^R^^nR is random,^r ^p^^np is pseudo-random,^r ^^nk is obfuscated (^kobfu^r),^r " +
                             "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).");
@@ -51,13 +53,13 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                             commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
                                 (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
                         }
-                        UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate + ClientCommands.CommandSystem.RegisteredCommands.Count +
-                            TextStyle.Color_Outgood + " clientside commands loaded.\n" + commandlist.ToString());
+                        entry.Output.Good("There are <{color.emphasis}>" + ClientCommands.CommandSystem.RegisteredCommands.Count
+                            + "<{color.base}> clientside commands loaded.\n" + TagParser.Escape(commandlist.ToString()));
                         break;
                     case "command":
                         if (entry.Arguments.Count < 2)
                         {
-                            UIConsole.WriteLine(TextStyle.Color_Commandhelp + "/help command [command name]");
+                            entry.Bad("<{color.cmdhelp}>/help command [command name]");
                         }
                         else
                         {
@@ -68,24 +70,21 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                                 AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
                                 if (c.Name == cmd)
                                 {
-                                    AbstractCommand.ShowUsage(new CommandEntry(cmd, null, null) { Name = cmd, Command = c, Output = ClientCommands.CommandSystem.Output });
+                                    AbstractCommand.ShowUsage(new CommandEntry(cmd, null, null) { Name = cmd, Command = c, Output = entry.Output });
                                     found = true;
                                 }
                             }
                             if (!found)
                             {
-                                UIConsole.WriteLine(TextStyle.Color_Outbad + "Unknown command '" + TextStyle.Color_Separate + cmd +
-                                    TextStyle.Color_Outbad + "'.");
+                                entry.Bad("Unknown command '<{color.emphasis}>" + TagParser.Escape(cmd) + "<{color.base}>'.");
                             }
                         }
                         break;
                     case "characters":
-                        UIConsole.WriteLine(TextStyle.Color_Outgood + "The following characters are recognized by the system: " +
-                            TextStyle.Color_Standout + mcmtestOpenTK.Client.GraphicsHandlers.Text.GLFont.textfile);
+                        entry.Output.Good("The following characters are recognized by the system: <{color.standout}>" + TagParser.Escape(GLFont.textfile));
                         break;
                     default:
-                        UIConsole.WriteLine(TextStyle.Color_Outbad + "Invalid help type! Type '" + TextStyle.Color_Separate + "/help" +
-                            TextStyle.Color_Outbad + "' to see a list of available help types.");
+                        entry.Bad("Invalid help type! Type '<{color.emphasis}>/help<{color.base}>' to see a list of available help types.");
                         break;
                 }
             }

@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
@@ -29,7 +30,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                 string username = entry.Arguments[0];
                 string password = entry.Arguments[1];
                 GlobalLoginRequest.RequestLogin(true, username, password);
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Trying to log in...");
+                entry.Good("<{color.info}>Trying to log in as '<{color.emphasis}>" + TagParser.Escape(username) + "<{color.base}>'...");
             }
         }
     }

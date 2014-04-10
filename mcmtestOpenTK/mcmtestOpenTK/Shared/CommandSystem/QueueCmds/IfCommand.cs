@@ -30,18 +30,18 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 {
                     if (success)
                     {
-                        entry.Output.Good("If is true, executing...");
+                        entry.Good("If is true, executing...");
                         entry.Result = 1;
                         entry.Queue.AddCommandsNow(entry.Block);
                     }
                     else
                     {
-                        entry.Output.Good("If is false, doing nothing!");
+                        entry.Good("If is false, doing nothing!");
                     }
                 }
                 else
                 {
-                    entry.Output.Bad("If invalid: No block follows!");
+                    entry.Bad("If invalid: No block follows!");
                 }
             }
         }

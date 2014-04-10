@@ -168,5 +168,16 @@ namespace mcmtestOpenTK.Shared
             float.TryParse(input, out output);
             return output;
         }
+
+        /// <summary>
+        /// If raw string data is input by a user, call this function to clean it for tag-safety.
+        /// </summary>
+        /// <param name="input">The raw string</param>
+        /// <returns>A cleaned string</returns>
+        public static string CleanStringInput(string input)
+        {
+            // No nulls!
+            return input.Replace('\0', ' ');
+        }
     }
 }

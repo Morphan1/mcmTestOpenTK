@@ -17,7 +17,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Output.WriteLine(TextStyle.Color_Outgood + "Stopping current queue.");
+            entry.Good("Stopping current queue.");
             entry.Queue.Stop();
         }
     }

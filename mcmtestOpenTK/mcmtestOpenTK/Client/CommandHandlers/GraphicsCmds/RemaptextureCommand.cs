@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -31,8 +32,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 Texture target = Texture.GetTexture(entry.GetArgument(1));
                 start.Internal_Texture = target.Original_InternalID;
                 start.RemappedTo = target;
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Remapped texture '" + TextStyle.Color_Separate + start.Name +
-                    TextStyle.Color_Outgood + "' to texture '" + TextStyle.Color_Separate + target.Name + TextStyle.Color_Outgood + "'.");
+                entry.Good("Remapped texture '<{color.emphasis}>" + TagParser.Escape(start.Name) +
+                    "<{color.base}>' to texture '<{color.emphasis}>" + TagParser.Escape(target.Name) + "<{color.base}>'.");
             }
         }
     }

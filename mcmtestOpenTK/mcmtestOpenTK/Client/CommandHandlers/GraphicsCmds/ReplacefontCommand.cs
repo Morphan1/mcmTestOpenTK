@@ -34,12 +34,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 int newfontsize = Utilities.StringToInt(entry.GetArgument(3));
                 if (oldfontsize < 1 || oldfontsize > 100 || newfontsize < 1 || newfontsize > 100)
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outbad + "Font sizes must be between 1 and 100!");
+                    entry.Bad("Font sizes must be between 1 and 100!");
                     return;
                 }
                 FontSet set = FontSet.GetFont(oldfont, oldfontsize);
                 set.Load(newfont, newfontsize);
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully replaced font!");
+                entry.Good("Successfully replaced font!"); // TODO: font names and such in output?
             }
         }
     }

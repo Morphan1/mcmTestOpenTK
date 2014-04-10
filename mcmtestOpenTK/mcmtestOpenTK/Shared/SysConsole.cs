@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Shared
 {
@@ -71,6 +72,7 @@ namespace mcmtestOpenTK.Shared
         public static void Write(string text)
         {
             StringBuilder outme = new StringBuilder();
+            text = TagParser.Unescape(text);
             for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] == '^' && i + 1 < text.Length && TextStyle.IsColorSymbol(text[i + 1]))
@@ -175,7 +177,7 @@ namespace mcmtestOpenTK.Shared
             "INIT",
             "WARNING",
             "ERROR",
-            "INFO/SERVER",
+            "INFO",
         };
     }
 
@@ -186,7 +188,7 @@ namespace mcmtestOpenTK.Shared
         INIT = 2,
         WARNING = 3,
         ERROR = 4,
-        SERVERINFO = 5,
+        INFO = 5,
         // TODO: More?
     }
 }

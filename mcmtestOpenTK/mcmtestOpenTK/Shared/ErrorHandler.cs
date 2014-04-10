@@ -42,7 +42,6 @@ namespace mcmtestOpenTK.Shared
         /// <param name="error">The message to report</param>
         public static void HandleError(string error)
         {
-            FileHandler.AppendText("errors.log", error + "\n\n\n");
             SysConsole.Output(OutputType.ERROR, error);
         }
     }

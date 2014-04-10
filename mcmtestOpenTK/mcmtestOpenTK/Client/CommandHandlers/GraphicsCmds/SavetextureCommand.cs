@@ -7,6 +7,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -33,14 +34,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 try
                 {
                     start.SaveToFile(fname);
-                    UIConsole.WriteLine(TextStyle.Color_Outgood + "Saved texture '" + TextStyle.Color_Separate + start.Name +
-                        TextStyle.Color_Outgood + "' to file '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outgood + "'.");
+                    entry.Good("Saved texture '<{color.emphasis}>" + TagParser.Escape(start.Name) +
+                        "<{color.base}>' to file '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>");
                 }
                 catch (Exception ex)
                 {
                     ErrorHandler.HandleError(ex);
-                    UIConsole.WriteLine(TextStyle.Color_Outbad + "Error saving texture '" + TextStyle.Color_Separate + start.Name +
-                        TextStyle.Color_Outbad + "' to file '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outbad + "'.");
+                    entry.Bad("Error saving texture '<{color.emphasis}>" + TagParser.Escape(start.Name) +
+                        "<{color.base}>' to file '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'.");
                 }
             }
         }

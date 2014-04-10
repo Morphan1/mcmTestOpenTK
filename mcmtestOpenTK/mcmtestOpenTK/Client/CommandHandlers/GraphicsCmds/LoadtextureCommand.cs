@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -30,13 +31,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 Texture texture = Texture.GetTexture(entry.GetArgument(0));
                 if (texture.LoadedProperly)
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outgood + "Successfully loaded texture '" + TextStyle.Color_Separate +
-                        texture.Name + TextStyle.Color_Outgood + "'.");
+                    entry.Good("Successfully loaded texture '<{color.emphasis}>" + TagParser.Escape(texture.Name) + "<{color.base}>'.");
                 }
                 else
                 {
-                    UIConsole.WriteLine(TextStyle.Color_Outbad + "Failed to load texture '" + TextStyle.Color_Separate +
-                        texture.Name + TextStyle.Color_Outbad + "'.");
+                    entry.Bad("Failed to load texture '<{color.emphasis}>" + TagParser.Escape(texture.Name) + "<{color.base}>'.");
                 }
             }
         }

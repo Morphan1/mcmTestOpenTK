@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
@@ -28,12 +29,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 if (FileHandler.Exists(fname))
                 {
                     string text = FileHandler.ReadText(fname);
-                    entry.Output.WriteLine(TextStyle.Color_Outgood + "Inserting '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outgood + "'...");
+                    entry.Good("Inserting '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'...");
                     entry.Queue.AddCommandsNow(CommandQueue.SeparateCommands(text));
                 }
                 else
                 {
-                    entry.Output.WriteLine(TextStyle.Color_Outbad + "Cannot insert script '" + TextStyle.Color_Separate + fname + TextStyle.Color_Outbad + "': file does not exist!");
+                    entry.Bad("Cannot insert script '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>': file does not exist!");
                 }
             }
         }

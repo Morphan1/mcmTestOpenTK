@@ -10,6 +10,26 @@ namespace mcmtestOpenTK.Shared.TagHandlers
     public class TagParser
     {
         /// <summary>
+        /// Escapes any tags inside a string.
+        /// </summary>
+        /// <param name="input">The string that may have tags</param>
+        /// <returns>An escaped string</returns>
+        public static string Escape(string input)
+        {
+            return input.Replace("<{", "\0TAGSTART").Replace("}>", "\0TAGEND");
+        }
+
+        /// <summary>
+        /// Reverses any tag escaping inside a string.
+        /// </summary>
+        /// <param name="input">The string that was escaped</param>
+        /// <returns>An unescaped string that may have tags</returns>
+        public static string Unescape(string input)
+        {
+            return input.Replace("\0TAGSTART", "<{").Replace("\0TAGEND", "}>");
+        }
+
+        /// <summary>
         /// All tag handler objects currently registered.
         /// </summary>
         public List<TemplateTags> Handlers = new List<TemplateTags>();

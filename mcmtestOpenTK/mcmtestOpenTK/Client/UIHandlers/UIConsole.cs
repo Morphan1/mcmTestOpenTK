@@ -12,6 +12,7 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
@@ -140,7 +141,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
             }
-            text = text.Replace('\r', ' ');
+            text = TagParser.Unescape(text.Replace('\r', ' '));
             lock (NewTextLock)
             {
                 NewText += text;
@@ -250,18 +251,18 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 {
                     if (TypingText.Length == TypingCursor)
                     {
-                        TypingText += KeyHandler.KeyboardString;
+                        TypingText += Utilities.CleanStringInput(KeyHandler.KeyboardString);
                     }
                     else
                     {
                         if (KeyHandler.KeyboardString.Contains('\n'))
                         {
                             string[] lines = KeyHandler.KeyboardString.Split(new char[] { '\n' }, 2);
-                            TypingText = TypingText.Insert(TypingCursor, lines[0]) + "\n" + lines[1];
+                            TypingText = TypingText.Insert(TypingCursor, Utilities.CleanStringInput(lines[0])) + "\n" + Utilities.CleanStringInput(lines[1]);
                         }
                         else
                         {
-                            TypingText = TypingText.Insert(TypingCursor, KeyHandler.KeyboardString);
+                            TypingText = TypingText.Insert(TypingCursor, Utilities.CleanStringInput(KeyHandler.KeyboardString));
                         }
                     }
                     TypingCursor += KeyHandler.KeyboardString.Length;

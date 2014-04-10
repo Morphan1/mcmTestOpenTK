@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -22,24 +23,18 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 
         public override void Execute(CommandEntry entry)
         {
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "There are " + TextStyle.Color_Separate +
-                Texture.LoadedTextures.Count + TextStyle.Color_Outgood + " loaded textures.");
-            UIConsole.WriteLine(TextStyle.Color_Separate + "OriginalID" + TextStyle.Color_Simple + ") [" + 
-                TextStyle.Color_Separate + "CurrentID" + TextStyle.Color_Simple + "] " + TextStyle.Color_Separate +
-                "Width" + TextStyle.Color_Simple + "*" + TextStyle.Color_Separate + "Height" + TextStyle.Color_Simple +
-                ": " + TextStyle.Color_Separate + "Name"
-                + TextStyle.Color_Simple + " -> " + TextStyle.Color_Separate + "RemappedName");
+            entry.Output.Good("There are <{color.emphasis}>" + Texture.LoadedTextures.Count + "<{color.base}> loaded textures.");
+            entry.Output.Good("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] <{color.emphasis}>" +
+                "Width<{color.simple}>*<{color.emphasis}>Height<{color.simple}>: <{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName");
             for (int i = 0; i < Texture.LoadedTextures.Count; i++)
             {
-                UIConsole.WriteLine("- " + TextStyle.Color_Separate + Texture.LoadedTextures[i].Original_InternalID +
-                    TextStyle.Color_Simple + ") [" + TextStyle.Color_Separate + Texture.LoadedTextures[i].Internal_Texture +
-                    TextStyle.Color_Simple + "] " + TextStyle.Color_Separate + Texture.LoadedTextures[i].Width + TextStyle.Color_Simple +
-                    "*" + TextStyle.Color_Separate + Texture.LoadedTextures[i].Height + TextStyle.Color_Simple + ": " +
-                    TextStyle.Color_Separate + Texture.LoadedTextures[i].Name +
-                    (Texture.LoadedTextures[i].Internal_Texture != Texture.LoadedTextures[i].Original_InternalID ?
-                    TextStyle.Color_Simple + " -> " + TextStyle.Color_Separate + Texture.LoadedTextures[i].RemappedTo.Name : ""));
+                entry.Output.Good("- <{color.emphasis}>" + Texture.LoadedTextures[i].Original_InternalID + "<{color.simple}>) [<{color.emphasis}>" +
+                    Texture.LoadedTextures[i].Internal_Texture + "<{color.simple}>] <{color.emphasis}>" + Texture.LoadedTextures[i].Width +
+                    "<{color.simple}>*<{color.emphasis}>" + Texture.LoadedTextures[i].Height + "<{color.simple}>: <{color.emphasis}>" +
+                    TagParser.Escape(Texture.LoadedTextures[i].Name) + (Texture.LoadedTextures[i].Internal_Texture != Texture.LoadedTextures[i].Original_InternalID ?
+                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Texture.LoadedTextures[i].RemappedTo.Name): ""));
             }
-            UIConsole.WriteLine(TextStyle.Color_Outgood + "-------");
+            entry.Output.Good("-------");
         }
     }
 }
