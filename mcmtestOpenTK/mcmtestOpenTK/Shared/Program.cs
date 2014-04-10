@@ -42,17 +42,19 @@ namespace mcmtestOpenTK.Shared
             List<string> system_arguments = args.ToList();
 #if !SERVER_ONLY
             if (args.Length > 0 && args[0].ToLower() == "server")
+#endif
             {
+#if !SERVER_ONLY
                 SysConsole.Output(OutputType.INIT, "Preparing server (requested from client launch pattern)...");
                 system_arguments.RemoveAt(0);
 #else
-            SysConsole.Output(OutputType.INIT, "Preparing server...");
+                SysConsole.Output(OutputType.INIT, "Preparing server...");
 #endif
-            Server.ServerInit(system_arguments);
-            SysConsole.Output(OutputType.INFO, "Server ended!");
+                Server.ServerInit(system_arguments);
+                SysConsole.Output(OutputType.INFO, "Server ended!");
                 return;
-#if !SERVER_ONLY
             }
+#if !SERVER_ONLY
             SysConsole.Output(OutputType.INIT, "Preparing client...");
             MainGame.Client_Main(system_arguments);
             return;

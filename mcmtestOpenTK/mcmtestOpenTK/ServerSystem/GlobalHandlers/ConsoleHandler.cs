@@ -21,6 +21,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         {
             CommandInput = new List<string>();
             Thread thread = new Thread(new ThreadStart(ListenLoop));
+            thread.Name = "Server_ConsoleListener";
             thread.Start();
         }
 

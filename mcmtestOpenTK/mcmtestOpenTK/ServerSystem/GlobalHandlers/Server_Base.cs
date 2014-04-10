@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using System.Threading;
 using System.Diagnostics;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -22,6 +23,12 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             ServerCommands.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
+            SysConsole.Output(OutputType.INIT, "Preparing network system...");
+            if (!NetworkBase.Init())
+            {
+                return;
+            }
+            SysConsole.Output(OutputType.INIT, "Loaded! Ticking...");
             int TARGETFPS = 20; // TODO: CVar?
             Stopwatch Counter = new Stopwatch();
             Stopwatch DeltaCounter = new Stopwatch();
@@ -30,7 +37,6 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             double CurrentDelta = 0d;
             double TargetDelta = 0d;
             int targettime = 0;
-            SysConsole.Output(OutputType.INIT, "Loaded! Ticking...");
             while (true)
             {
                 // Update the tick time usage counter

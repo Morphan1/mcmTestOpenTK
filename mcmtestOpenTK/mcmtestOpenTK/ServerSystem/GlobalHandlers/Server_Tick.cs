@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using System.Threading;
 using System.Diagnostics;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -31,6 +32,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 ticknumber = 0;
                 tickdelta = 0.0f;
             }
+            NetworkBase.Tick();
             ConsoleHandler.CheckInput();
             ServerCommands.Tick();
         }
