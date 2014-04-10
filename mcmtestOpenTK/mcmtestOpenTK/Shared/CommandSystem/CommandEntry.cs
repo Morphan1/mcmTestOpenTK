@@ -93,7 +93,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="tagged_text">The text to output, with tags included</param>
         public void Good(string text)
         {
-            Output.Good(text);
+            if (Queue.Debug == DebugMode.FULL)
+            {
+                Output.Good(text);
+            }
         }
 
         /// <summary>
@@ -102,7 +105,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="tagged_text">The text to output, with tags included</param>
         public void Bad(string text)
         {
-            Output.Bad(text);
+            if (Queue.Debug <= DebugMode.MINIMAL)
+            {
+                Output.Bad(text);
+            }
         }
     }
 }

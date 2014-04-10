@@ -17,7 +17,6 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             Name = "cvarinfo";
             Arguments = "[CVar to get info on]";
             Description = "Shows information on a specified CVar, or all of them if one isn't specified.";
-            IsDebug = true;
         }
 
         public override void Execute(CommandEntry entry)

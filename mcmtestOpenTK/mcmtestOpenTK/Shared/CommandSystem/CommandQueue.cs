@@ -176,11 +176,17 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public Commands CommandSystem;
 
+        /// <summary>
+        /// How much debug information this queue should show.
+        /// </summary>
+        public DebugMode Debug;
+
         public CommandQueue(List<CommandEntry> _commands, Commands _system)
         {
             CommandList = _commands;
             CommandSystem = _system;
             Variables = new List<Variable>();
+            Debug = DebugMode.FULL;
         }
 
         /// <summary>
@@ -264,5 +270,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             }
             Variables.Add(new Variable(namelow, value));
         }
+    }
+
+    public enum DebugMode : byte
+    {
+        FULL = 1,
+        MINIMAL = 2,
+        NONE = 3
     }
 }

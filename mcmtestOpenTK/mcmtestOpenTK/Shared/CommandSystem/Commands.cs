@@ -131,6 +131,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new EchoCommand());
 
             // Queue-related Commands
+            RegisterCommand(new DebugCommand());
             RegisterCommand(new ElseCommand());
             RegisterCommand(new IfCommand());
             RegisterCommand(new InsertCommand());

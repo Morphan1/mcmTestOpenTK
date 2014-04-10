@@ -18,7 +18,6 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             Name = "set";
             Arguments = "<CVar to set> <new value>";
             Description = "Modifies the value of a specified CVar, or creates a new one.";
-            IsDebug = true;
         }
 
         public override void Execute(CommandEntry entry)
