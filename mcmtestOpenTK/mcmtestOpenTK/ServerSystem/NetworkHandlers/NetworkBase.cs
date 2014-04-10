@@ -45,7 +45,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex);
+                ErrorHandler.HandleError("NetworkBase/Init", ex);
                 SysConsole.Output(OutputType.ERROR, "Could not create socket and bind to port " + Server.Port + ", shutting down...");
                 return false;
             }
@@ -56,6 +56,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             while (true)
             {
                 Socket Gotten = MainSocket.Accept();
+                // TODO: Limit active connections
                 lock (ConnectionLock)
                 {
                     WaitingConnections.Add(new NewConnection(Gotten));

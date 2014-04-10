@@ -39,7 +39,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 }
                 catch (Exception ex)
                 {
-                    ErrorHandler.HandleError(ex);
+                    ErrorHandler.HandleError("Commands/Savetexture", ex);
                     entry.Bad("Error saving texture '<{color.emphasis}>" + TagParser.Escape(start.Name) +
                         "<{color.base}>' to file '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'.");
                 }

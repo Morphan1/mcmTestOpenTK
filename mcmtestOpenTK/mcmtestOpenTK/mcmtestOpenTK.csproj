@@ -96,6 +96,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\CommandHandlers\NetworkCmds\ConnectCommand.cs" />
+    <Compile Include="Client\Networking\NetworkBase.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetworkBase.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NewConnection.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\WebHandler.cs" />

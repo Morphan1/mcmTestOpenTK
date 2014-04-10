@@ -88,7 +88,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex);
+                ErrorHandler.HandleError("MainGame/Load", ex);
             }
         }
 

@@ -33,6 +33,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 // Not an HTTP request
                 return;
             }
+            BaseRequest = Request[0] + " " + Request[1];
             for (int i = 1; i < Request.Length - 1; i++)
             {
                 string[] split = Request[i].Split(new char[] { ':' }, 2);
@@ -73,9 +74,14 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             if (page == "/" || page == "/index")
             {
+                // TODO
                 Page = btos("TODO");
                 Status = 200;
                 return;
+            }
+            else
+            {
+                // TODO
             }
             Status = 404;
             Page = btos("TODO: 404 page!");
@@ -85,6 +91,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         {
             return FileHandler.encoding.GetBytes(input);
         }
+
+        /// <summary>
+        /// The request sent to get this webpage.
+        /// </summary>
+        public string BaseRequest;
 
         /// <summary>
         /// The status code for this web page.

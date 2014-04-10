@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Net;
 using mcmtestOpenTK.Shared;
 using System.Threading;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -43,20 +44,44 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         }
 
         /// <summary>
+        /// How long this connection has been running.
+        /// </summary>
+        public float TimeAlive = 0;
+
+        /// <summary>
         /// Ticks the connection.
         /// </summary>
         public void Tick()
         {
             try
             {
+                if (Type != ConnectionType.GAME)
+                {
+                    TimeAlive += Server.DeltaF;
+                    if (TimeAlive > 10f)
+                    {
+                        SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: time out");
+                        IsAlive = false;
+                        Sock.Close();
+                        return;
+                    }
+                }
+                if (!Sock.Connected)
+                {
+                    SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: disconnected");
+                    IsAlive = false;
+                    Sock.Close();
+                    return;
+                }
                 int avail = Sock.Available;
                 if (avail <= 0)
                 {
                     return;
                 }
-                if (avail + ReceivedSoFar.Length > MAX_PACKET_SIZE)
+                if (avail + ReceivedSoFar.Length >= MAX_PACKET_SIZE)
                 {
                     // NOPE NOPE NOPE.
+                    SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: massive packet");
                     Sock.Close();
                     IsAlive = false;
                     return;
@@ -87,9 +112,9 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 }
                 else if (Type == ConnectionType.INVALID)
                 {
-                    Sock.Close();
+                    SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: invalid packet");
                     IsAlive = false;
-                    return;
+                    Sock.Close();
                 }
             }
             catch (Exception ex)
@@ -98,45 +123,48 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 {
                     throw ex;
                 }
-                SysConsole.Output(OutputType.INFO, "Connection for " + IP + " failed: internal error: " + ex.Message);
+                SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: internal error: " + ex.Message);
+                IsAlive = false;
                 Sock.Close();
             }
         }
 
         ConnectionType RecognizeType()
         {
-            if (ReceivedSoFar.Length < 4)
+            if (ReceivedSoFar.Length < 5)
             {
                 return ConnectionType.UNKNOWN;
             }
             if (ReceivedSoFar[0] == (byte)'G')
             {
-                if (ReceivedSoFar[1] == (byte)'E' && ReceivedSoFar[2] == (byte)'T' && ReceivedSoFar[3] == (byte)' ')
+                if (ReceivedSoFar[1] == (byte)'E' && ReceivedSoFar[2] == (byte)'T'
+                    && ReceivedSoFar[3] == (byte)' ' && ReceivedSoFar[4] == (byte)'/')
                 {
                     return ConnectionType.HTTP;
                 }
-            }
-            else if (ReceivedSoFar[0] == (byte)'P')
-            {
-                if (ReceivedSoFar[1] == (byte)'I' && ReceivedSoFar[2] == (byte)'N' && ReceivedSoFar[3] == (byte)'G')
-                {
-                    return ConnectionType.PING;
-                }
-                if (ReceivedSoFar[1] == (byte)'O' && ReceivedSoFar[2] == (byte)'S' && ReceivedSoFar[3] == (byte)'T')
-                {
-                    return ConnectionType.HTTP;
-                }
-            }
-            else if (ReceivedSoFar[0] == (byte)'G')
-            {
-                if (ReceivedSoFar[1] == (byte)'A' && ReceivedSoFar[2] == (byte)'M' && ReceivedSoFar[3] == (byte)'E')
+                if (ReceivedSoFar[1] == (byte)'A' && ReceivedSoFar[2] == (byte)'M'
+                    && ReceivedSoFar[3] == (byte)'E' && ReceivedSoFar[4] == (byte)0)
                 {
                     return ConnectionType.GAME;
                 }
             }
+            else if (ReceivedSoFar[0] == (byte)'P')
+            {
+                if (ReceivedSoFar[1] == (byte)'I' && ReceivedSoFar[2] == (byte)'N'
+                    && ReceivedSoFar[3] == (byte)'G' && ReceivedSoFar[4] == (byte)0)
+                {
+                    return ConnectionType.PING;
+                }
+                if (ReceivedSoFar[1] == (byte)'O' && ReceivedSoFar[2] == (byte)'S'
+                    && ReceivedSoFar[3] == (byte)'T' && ReceivedSoFar[4] == (byte)' ')
+                {
+                    return ConnectionType.HTTP;
+                }
+            }
             else if (ReceivedSoFar[0] == (byte)'H')
             {
-                if (ReceivedSoFar[1] == (byte)'E' && ReceivedSoFar[2] == (byte)'A' && ReceivedSoFar[3] == (byte)'D')
+                if (ReceivedSoFar[1] == (byte)'E' && ReceivedSoFar[2] == (byte)'A'
+                    && ReceivedSoFar[3] == (byte)'D' && ReceivedSoFar[4] == (byte)' ')
                 {
                     return ConnectionType.HTTP;
                 }
@@ -152,10 +180,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 {
                     if (ReceivedSoFar[i + 1] == (byte)'\n' || ReceivedSoFar[i + 1] == (byte)'\r')
                     {
-                        byte[] output = WebHandler.GetWebpage(Encoding.UTF8.GetString(ReceivedSoFar)).ToBytes();
-                        Sock.Send(output);
-                        Sock.Close(5);
+                        WebHandler output = WebHandler.GetWebpage(Encoding.UTF8.GetString(ReceivedSoFar));
+                        Sock.Send(output.ToBytes());
+                        SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent HTTP " + output.BaseRequest + ", response: " + output.Status);
                         IsAlive = false;
+                        Sock.Close(5);
                     }
                 }
             }
@@ -163,10 +192,18 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 
         void HandlePing()
         {
+            // TODO
+            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent ping, doing nothing...");
+            IsAlive = false;
+            Sock.Close();
         }
 
         void HandleGame()
         {
+            // TODO
+            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent GAME CONNECT, doing nothing...");
+            IsAlive = false;
+            Sock.Close();
         }
     }
 

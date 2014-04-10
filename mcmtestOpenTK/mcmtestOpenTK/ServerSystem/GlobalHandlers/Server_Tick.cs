@@ -23,6 +23,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             // Record delta: always first!
             Delta = ticktime;
             DeltaF = (float)Delta;
+
             // Calculate FPS: always first!
             ticknumber++;
             tickdelta += Delta;
@@ -32,8 +33,14 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 ticknumber = 0;
                 tickdelta = 0.0f;
             }
+
+            // Update networking
             NetworkBase.Tick();
+
+            // Update console input
             ConsoleHandler.CheckInput();
+
+            // Update command system
             ServerCommands.Tick();
         }
     }

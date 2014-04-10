@@ -16,6 +16,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommandHandlers;
+using mcmtestOpenTK.Client.Networking;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -64,6 +65,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SimpleAudioTest.RecalculateChannels();
 
                 // Update networking
+                NetworkBase.Tick();
                 GlobalNetwork.Tick();
 
                 // Update running commands
@@ -110,7 +112,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex);
+                ErrorHandler.HandleError("MainGame/Tick", ex);
             }
         }
     }

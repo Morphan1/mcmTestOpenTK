@@ -73,7 +73,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex);
+                ErrorHandler.HandleError("MainGame/Render-1", ex);
             }
             try
             {
@@ -82,7 +82,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex);
+                ErrorHandler.HandleError("MainGame/Render-2", ex);
             }
         }
 

@@ -27,8 +27,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             }
             else
             {
-                string username = entry.Arguments[0];
-                string password = entry.Arguments[1];
+                string username = entry.GetArgument(0);
+                string password = entry.GetArgument(1);
                 GlobalLoginRequest.RequestLogin(true, username, password);
                 entry.Good("<{color.info}>Trying to log in as '<{color.emphasis}>" + TagParser.Escape(username) + "<{color.base}>'...");
             }
