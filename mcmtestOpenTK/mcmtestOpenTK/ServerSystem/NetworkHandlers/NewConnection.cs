@@ -5,6 +5,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Net;
 using mcmtestOpenTK.Shared;
+using System.Threading;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -30,12 +31,15 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         /// </summary>
         public bool IsAlive = true;
 
+        public string IP;
+
         public NewConnection(Socket _sock)
         {
             Sock = _sock;
             Sock.Blocking = false;
             Sock.ReceiveBufferSize = MAX_PACKET_SIZE;
             Sock.SendBufferSize = MAX_PACKET_SIZE;
+            IP = Sock.RemoteEndPoint.ToString();
         }
 
         /// <summary>
@@ -43,47 +47,59 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         /// </summary>
         public void Tick()
         {
-            int avail = Sock.Available;
-            if (avail <= 0)
+            try
             {
-                return;
+                int avail = Sock.Available;
+                if (avail <= 0)
+                {
+                    return;
+                }
+                if (avail + ReceivedSoFar.Length > MAX_PACKET_SIZE)
+                {
+                    // NOPE NOPE NOPE.
+                    Sock.Close();
+                    IsAlive = false;
+                    return;
+                }
+                byte[] packet = new byte[avail];
+                Sock.Receive(packet, avail, SocketFlags.None);
+                byte[] temp = new byte[ReceivedSoFar.Length + packet.Length];
+                ReceivedSoFar.CopyTo(temp, 0);
+                packet.CopyTo(temp, ReceivedSoFar.Length);
+                ReceivedSoFar = temp;
+                packet = null;
+                temp = null;
+                if (Type == ConnectionType.UNKNOWN)
+                {
+                    Type = RecognizeType();
+                }
+                if (Type == ConnectionType.HTTP)
+                {
+                    HandleHTTP();
+                }
+                else if (Type == ConnectionType.PING)
+                {
+                    HandlePing();
+                }
+                else if (Type == ConnectionType.GAME)
+                {
+                    HandleGame();
+                }
+                else if (Type == ConnectionType.INVALID)
+                {
+                    Sock.Close();
+                    IsAlive = false;
+                    return;
+                }
             }
-            if (avail + ReceivedSoFar.Length > MAX_PACKET_SIZE)
+            catch (Exception ex)
             {
-                // NOPE NOPE NOPE.
+                if (ex is ThreadAbortException)
+                {
+                    throw ex;
+                }
+                SysConsole.Output(OutputType.INFO, "Connection for " + IP + " failed: internal error: " + ex.Message);
                 Sock.Close();
-                IsAlive = false;
-                return;
-            }
-            byte[] packet = new byte[avail];
-            Sock.Receive(packet, avail, SocketFlags.None);
-            byte[] temp = new byte[ReceivedSoFar.Length + packet.Length];
-            ReceivedSoFar.CopyTo(temp, 0);
-            packet.CopyTo(temp, ReceivedSoFar.Length);
-            ReceivedSoFar = temp;
-            packet = null;
-            temp = null;
-            if (Type == ConnectionType.UNKNOWN)
-            {
-                Type = RecognizeType();
-            }
-            if (Type == ConnectionType.HTTP)
-            {
-                HandleHTTP();
-            }
-            else if (Type == ConnectionType.PING)
-            {
-                HandlePing();
-            }
-            else if (Type == ConnectionType.GAME)
-            {
-                HandleGame();
-            }
-            else if (Type == ConnectionType.INVALID)
-            {
-                Sock.Close();
-                IsAlive = false;
-                return;
             }
         }
 
@@ -130,9 +146,19 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 
         void HandleHTTP()
         {
-            Sock.Send(FileHandler.encoding.GetBytes("HTTP/1.1 200 OK\r\n\r\n<!DOCTYPE HTML>\n<html>\n<head>\n<title>TODO</title>\n<body>\nThis is <b>TODO</b>!\n</body>\n</html>"));
-            Sock.Close(5);
-            IsAlive = false;
+            for (int i = 0; i < ReceivedSoFar.Length - 1; i++)
+            {
+                if (ReceivedSoFar[i] == (byte)'\n')
+                {
+                    if (ReceivedSoFar[i + 1] == (byte)'\n' || ReceivedSoFar[i + 1] == (byte)'\r')
+                    {
+                        byte[] output = WebHandler.GetWebpage(Encoding.UTF8.GetString(ReceivedSoFar)).ToBytes();
+                        Sock.Send(output);
+                        Sock.Close(5);
+                        IsAlive = false;
+                    }
+                }
+            }
         }
 
         void HandlePing()

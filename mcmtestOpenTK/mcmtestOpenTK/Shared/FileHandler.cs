@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.IO.Compression;
 
 namespace mcmtestOpenTK.Shared
 {
@@ -151,6 +152,22 @@ namespace mcmtestOpenTK.Shared
                 Directory.CreateDirectory(dir);
             }
             File.AppendAllText(BaseDirectory + fname, text.Replace('\r', ' '), encoding);
+        }
+
+        /// <summary>
+        /// Compresses a byte array using the GZip algorithm.
+        /// </summary>
+        /// <param name="input">Uncompressed data</param>
+        /// <returns>Compressed data</returns>
+        public static byte[] GZip(byte[] input)
+        {
+            MemoryStream memstream = new MemoryStream();
+            var GZStream = new GZipStream(memstream, CompressionMode.Compress);
+            GZStream.Write(input, 0, input.Length);
+            GZStream.Close();
+            byte[] finaldata = memstream.ToArray();
+            memstream.Close();
+            return finaldata;
         }
     }
 }
