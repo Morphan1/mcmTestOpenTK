@@ -6,12 +6,16 @@ using System.Net;
 using System.Net.Sockets;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.Networking.PacketsIn;
+using mcmtestOpenTK.Client.CommandHandlers;
 
 namespace mcmtestOpenTK.Client.Networking
 {
     public class NetworkBase
     {
         const int MAX_PACKET_SIZE = 1024 * 100;
+
+        static byte[] ReceivedSoFar = new byte[0];
 
         /// <summary>
         /// The IP currently connected/connecting to.
@@ -75,20 +79,128 @@ namespace mcmtestOpenTK.Client.Networking
             if (Sock.Connected && !Connected)
             {
                 Connected = true;
-                UIConsole.WriteLine(TextStyle.Color_Outgood + "Connected to server!");
+                ClientCommands.CommandSystem.Output.Good("Connected to server! Communicating...");
                 Sock.Send(new byte[] { (byte)'G', (byte)'A', (byte)'M', (byte)'E', (byte)0 });
+                return;
             }
             else if (Connected && !Sock.Connected)
             {
-                Connected = false;
-                UIConsole.WriteLine(TextStyle.Color_Outbad + "Server disconnected!");
+                Disconnect();
+                return;
+            }
+            int avail = Sock.Available;
+            if (avail <= 0)
+            {
+                return;
+            }
+            SysConsole.Output(OutputType.CLIENTINFO, "Got " + avail + " bytes");
+            if (avail + ReceivedSoFar.Length >= MAX_PACKET_SIZE)
+            {
+                // NOPE NOPE NOPE.
+                Disconnect();
+                return;
+            }
+            byte[] packet = new byte[avail];
+            Sock.Receive(packet, avail, SocketFlags.None);
+            byte[] temp = new byte[ReceivedSoFar.Length + packet.Length];
+            ReceivedSoFar.CopyTo(temp, 0);
+            packet.CopyTo(temp, ReceivedSoFar.Length);
+            ReceivedSoFar = temp;
+        CheckAgain:
+            packet = null;
+            temp = null;
+            if (ReceivedSoFar.Length < 4)
+            {
+                return;
+            }
+            int len = BitConverter.ToInt32(ReceivedSoFar, 0);
+            SysConsole.Output(OutputType.CLIENTINFO, "Got " + avail + " bytes, length indicated is " + len);
+            if (len > MAX_PACKET_SIZE || len <= 0)
+            {
+                // Corrupted data?
+                Disconnect();
+                return;
+            }
+            if (ReceivedSoFar.Length < 4 + len)
+            {
+                return;
+            }
+            packet = new byte[len];
+            Array.Copy(ReceivedSoFar, 4, packet, 0, len);
+            if (ReceivedSoFar.Length > len + 4)
+            {
+                temp = new byte[ReceivedSoFar.Length - (len + 4)];
+                Array.Copy(ReceivedSoFar, len + 4, temp, 0, ReceivedSoFar.Length - (len + 4));
+                ReceivedSoFar = temp;
+                HandlePacket(packet);
+                goto CheckAgain;
+            }
+            else
+            {
+                ReceivedSoFar = new byte[0];
+                HandlePacket(packet);
+            }
+        }
+
+        static void HandlePacket(byte[] Packet)
+        {
+            SysConsole.Output(OutputType.CLIENTINFO, "Handling " + Packet.Length + " bytes: " + Encoding.ASCII.GetString(Packet));
+            if (Packet.Length == 0)
+            {
+                return;
+            }
+            if (Packet.Length > MAX_PACKET_SIZE)
+            {
+                return;
+            }
+            byte ID = Packet[0];
+            AbstractPacketIn Handler;
+            switch (ID)
+            {
+                case 1:
+                    Handler = new HelloPacketIn();
+                    break;
+                default:
+                    ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
+                    return;
+            }
+            byte[] Holder = new byte[Packet.Length - 1];
+            Array.Copy(Packet, 1, Holder, 0, Packet.Length - 1);
+            Handler.FromBytes(Holder);
+            if (Handler.IsValid)
+            {
+                Handler.Execute();
+            }
+            else
+            {
+                ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Imperfect packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
             }
         }
 
         /// <summary>
-        /// Disconnects from the server.
+        /// Sends a packet to the server.
         /// </summary>
-        public static void Disconnect()
+        /// <param name="Packet">The packet to send</param>
+        public static void Send(AbstractPacketOut Packet)
+        {
+            Send(Packet.ID, Packet.ToBytes());
+        }
+
+        /// <summary>
+        /// Sends a packet to the server.
+        /// </summary>
+        /// <param name="ID">The packet type ID</param>
+        /// <param name="Packet">The packet to send</param>
+        static void Send(byte ID, byte[] Packet)
+        {
+            byte[] holder = new byte[Packet.Length + 5];
+            holder[0] = ID;
+            BitConverter.GetBytes(Packet.Length + 1).CopyTo(holder, 1);
+            Packet.CopyTo(holder, 5);
+            Send(holder);
+        }
+
+        static void Send(byte[] Packet)
         {
             if (!Connected)
             {
@@ -98,8 +210,27 @@ namespace mcmtestOpenTK.Client.Networking
             {
                 return;
             }
+            Sock.Send(Packet);
+        }
+
+        /// <summary>
+        /// Disconnects from the server.
+        /// </summary>
+        public static void Disconnect()
+        {
+            ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server!");
+            if (!Connected)
+            {
+                return;
+            }
+            ReceivedSoFar = new byte[0];
+            if (Sock == null || !Sock.Connected)
+            {
+                return;
+            }
+            Connected = false;
+            // TODO: send 'disconnect'
             Sock.Close(5);
-            UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Disconnected from server!");
         }
     }
 }

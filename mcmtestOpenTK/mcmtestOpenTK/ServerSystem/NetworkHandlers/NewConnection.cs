@@ -7,15 +7,22 @@ using System.Net;
 using mcmtestOpenTK.Shared;
 using System.Threading;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
     public class NewConnection
     {
-        // Cap off at 100 KB for sanity.
-        const int MAX_PACKET_SIZE = 1024 * 100;
+        /// <summary>
+        /// Cap off at 100 KB for sanity.
+        /// </summary>
+        public const int MAX_PACKET_SIZE = 1024 * 100;
 
-        byte[] ReceivedSoFar = new byte[0];
+        /// <summary>
+        /// Bytes of data waiting from this connection.
+        /// </summary>
+        public byte[] ReceivedSoFar = new byte[0];
 
         /// <summary>
         /// What type of connection this is.
@@ -32,6 +39,14 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         /// </summary>
         public bool IsAlive = true;
 
+        /// <summary>
+        /// The relevant player object, if any.
+        /// </summary>
+        Player player = null;
+
+        /// <summary>
+        /// A textual representation of the IP address that started this connection.
+        /// </summary>
         public string IP;
 
         public NewConnection(Socket _sock)
@@ -55,9 +70,9 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         {
             try
             {
+                TimeAlive += Server.DeltaF;
                 if (Type != ConnectionType.GAME)
                 {
-                    TimeAlive += Server.DeltaF;
                     if (TimeAlive > 10f)
                     {
                         SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: time out");
@@ -200,10 +215,38 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 
         void HandleGame()
         {
-            // TODO
-            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent GAME CONNECT, doing nothing...");
+            if (player == null)
+            {
+                if (ReceivedSoFar.Length == 5)
+                {
+                    ReceivedSoFar = new byte[0];
+                }
+                else
+                {
+                    byte[] temp = new byte[ReceivedSoFar.Length - 5];
+                    Array.Copy(ReceivedSoFar, 5, temp, 0, ReceivedSoFar.Length - 5);
+                }
+                player = new Player();
+                player.Network = this;
+                SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent GAME CONNECT! Starting connection system...");
+                PlayerHandler.Send(player, new HelloPacketOut(player));
+            }
+            PlayerHandler.UpdateTick(player);
+        }
+
+        /// <summary>
+        /// Immediately closes the connection.
+        /// </summary>
+        public void Disconnect()
+        {
+            if (!IsAlive)
+            {
+                return;
+            }
+            // TODO: Send disco packet if Type==GAME
+            Sock.Close(5);
             IsAlive = false;
-            Sock.Close();
+            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " disconnected.");
         }
     }
 
