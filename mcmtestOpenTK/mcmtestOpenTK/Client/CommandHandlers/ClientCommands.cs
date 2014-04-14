@@ -18,12 +18,18 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         public static Commands CommandSystem;
 
         /// <summary>
+        /// The output system.
+        /// </summary>
+        public static Outputter Output;
+
+        /// <summary>
         /// Prepares the command system, registering all base commands.
         /// </summary>
         public static void Init()
         {
             CommandSystem = new Commands();
-            CommandSystem.Output = new ClientOutputter();
+            Output = new ClientOutputter();
+            CommandSystem.Output = Output;
             CommandSystem.Init();
 
             // Common Commands

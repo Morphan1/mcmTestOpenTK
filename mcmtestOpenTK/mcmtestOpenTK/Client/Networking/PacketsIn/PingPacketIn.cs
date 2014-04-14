@@ -4,16 +4,21 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.Networking.PacketsOut;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
-    class HelloPacketIn: AbstractPacketIn
+    class PingPacketIn: AbstractPacketIn
     {
+        byte ID;
+
         public override void FromBytes(byte[] input)
         {
-            if (input.Length == 5 && input[0] == (byte)'H' &&
-                input[1] == (byte)'E' && input[2] == (byte)'L' && input[3] == (byte)'L' && input[4] == (byte)'O')
+            if (input.Length == 5 && input[0] == (byte)'P' &&
+                input[1] == (byte)'I' && input[2] == (byte)'N' && input[3] == (byte)'G')
             {
+                ID = input[4];
                 IsValid = true;
             }
             else
@@ -28,8 +33,9 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            ClientCommands.Output.Bad("Server sent HELLO!");
-            // TODO
+            MainGame.Ping = MainGame.pingbump;
+            MainGame.pingbump = 0;
+            NetworkBase.Send(new PingPacketOut(ID));
         }
     }
 }

@@ -100,12 +100,16 @@
     <Compile Include="Client\Networking\AbstractPacketIn.cs" />
     <Compile Include="Client\Networking\AbstractPacketOut.cs" />
     <Compile Include="Client\Networking\NetworkBase.cs" />
+    <Compile Include="Client\Networking\PacketsIn\PingPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\HelloPacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsOut\PingPacketOut.cs" />
     <Compile Include="ServerSystem\GameHandlers\Player.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetworkBase.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NewConnection.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\PingPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PingPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\HelloPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PlayerHandler.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\WebHandler.cs" />
@@ -174,8 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\CommandHandlers\TagObjects\Common\" />
-    <Folder Include="Client\Networking\PacketsOut\" />
-    <Folder Include="ServerSystem\NetworkHandlers\PacketsIn\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

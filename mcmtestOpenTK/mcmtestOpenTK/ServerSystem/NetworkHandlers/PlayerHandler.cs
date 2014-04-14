@@ -5,6 +5,8 @@ using System.Text;
 using mcmtestOpenTK.ServerSystem.GameHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -17,11 +19,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         public static void UpdateTick(Player player)
         {
             NewConnection conn = player.Network;
+        CheckAgain:
             if (!conn.IsAlive)
             {
                 return;
             }
-        CheckAgain:
             if (conn.ReceivedSoFar.Length < 4)
             {
                 return;
@@ -69,14 +71,22 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             switch (ID)
             {
                     // TODO!
+                case 2:
+                    Handler = new PingPacketIn(); break;
                 default:
-                    ServerCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
+                    ServerCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from client (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
                     return;
             }
-            Handler.FromBytes(player, Packet);
+            byte[] Holder = new byte[Packet.Length - 1];
+            Array.Copy(Packet, 1, Holder, 0, Packet.Length - 1);
+            Handler.FromBytes(player, Holder);
             if (Handler.IsValid)
             {
                 Handler.Execute(player);
+            }
+            else
+            {
+                SysConsole.Output(OutputType.INFO, "Invalid player packet from " + player.Network.IP + " (ID: " + ID + ")");
             }
         }
 

@@ -229,7 +229,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 player = new Player();
                 player.Network = this;
                 SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent GAME CONNECT! Starting connection system...");
-                PlayerHandler.Send(player, new HelloPacketOut(player));
+                player.Init();
             }
             PlayerHandler.UpdateTick(player);
         }
@@ -243,7 +243,6 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             {
                 return;
             }
-            // TODO: Send disco packet if Type==GAME
             Sock.Close(5);
             IsAlive = false;
             SysConsole.Output(OutputType.INFO, "[Net] " + IP + " disconnected.");

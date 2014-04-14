@@ -26,6 +26,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         static double ctickdelta = 0;
         static float movetestX;
         static float movetestY;
+        public static float pingbump = 0;
+
         /// <summary>
         /// Called every update tick - should handle all logic!
         /// </summary>
@@ -47,6 +49,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     cticknumber = 0;
                     ctickdelta = 0.0f;
                 }
+
+                // Calculate ping
+                pingbump += DeltaF;
 
                 // Record current input
                 MouseHandler.Tick();
@@ -108,7 +113,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\ngFPS: " + gFPS +
                     "\nPosition: " + Player.player.Location.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now);
+                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
+                    "\nPing: " + (int)(Ping * 1000);
             }
             catch (Exception ex)
             {

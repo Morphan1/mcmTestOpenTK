@@ -107,6 +107,10 @@ namespace mcmtestOpenTK.Client.Networking
             packet.CopyTo(temp, ReceivedSoFar.Length);
             ReceivedSoFar = temp;
         CheckAgain:
+            if (!Connected)
+            {
+                return;
+            }
             packet = null;
             temp = null;
             if (ReceivedSoFar.Length < 4)
@@ -114,7 +118,6 @@ namespace mcmtestOpenTK.Client.Networking
                 return;
             }
             int len = BitConverter.ToInt32(ReceivedSoFar, 0);
-            SysConsole.Output(OutputType.CLIENTINFO, "Got " + avail + " bytes, length indicated is " + len);
             if (len > MAX_PACKET_SIZE || len <= 0)
             {
                 // Corrupted data?
@@ -144,7 +147,6 @@ namespace mcmtestOpenTK.Client.Networking
 
         static void HandlePacket(byte[] Packet)
         {
-            SysConsole.Output(OutputType.CLIENTINFO, "Handling " + Packet.Length + " bytes: " + Encoding.ASCII.GetString(Packet));
             if (Packet.Length == 0)
             {
                 return;
@@ -158,8 +160,9 @@ namespace mcmtestOpenTK.Client.Networking
             switch (ID)
             {
                 case 1:
-                    Handler = new HelloPacketIn();
-                    break;
+                    Handler = new HelloPacketIn(); break;
+                case 2:
+                    Handler = new PingPacketIn(); break;
                 default:
                     ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
                     return;
@@ -194,8 +197,8 @@ namespace mcmtestOpenTK.Client.Networking
         static void Send(byte ID, byte[] Packet)
         {
             byte[] holder = new byte[Packet.Length + 5];
-            holder[0] = ID;
-            BitConverter.GetBytes(Packet.Length + 1).CopyTo(holder, 1);
+            BitConverter.GetBytes(Packet.Length + 1).CopyTo(holder, 0);
+            holder[4] = ID;
             Packet.CopyTo(holder, 5);
             Send(holder);
         }
