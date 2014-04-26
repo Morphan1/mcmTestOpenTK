@@ -7,6 +7,7 @@ using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using System.Threading;
 using System.Diagnostics;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -23,6 +24,8 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             ServerCommands.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
+            SysConsole.Output(OutputType.INIT, "Preparing global network system...");
+            GlobalNetwork.Init();
             SysConsole.Output(OutputType.INIT, "Preparing network system...");
             if (!NetworkBase.Init())
             {

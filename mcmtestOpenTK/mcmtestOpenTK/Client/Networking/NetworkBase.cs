@@ -8,6 +8,8 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.PacketsIn;
 using mcmtestOpenTK.Client.CommandHandlers;
+using mcmtestOpenTK.Client.Networking.PacketsOut;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.Networking
 {
@@ -25,6 +27,11 @@ namespace mcmtestOpenTK.Client.Networking
         static Socket Sock = null;
 
         static bool Connected = false;
+
+        /// <summary>
+        /// Whether we need to login to continue networking.
+        /// </summary>
+        public static bool WaitingToIdentify = false;
 
         /// <summary>
         /// Connects to a specified IP.
@@ -163,6 +170,8 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new HelloPacketIn(); break;
                 case 2:
                     Handler = new PingPacketIn(); break;
+                case 255:
+                    Handler = new DisconnectPacketIn(); break;
                 default:
                     ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
                     return;
@@ -226,14 +235,28 @@ namespace mcmtestOpenTK.Client.Networking
             {
                 return;
             }
+            WaitingToIdentify = false;
             ReceivedSoFar = new byte[0];
             if (Sock == null || !Sock.Connected)
             {
                 return;
             }
             Connected = false;
-            // TODO: send 'disconnect'
+            Send(new DisconnectPacketOut());
             Sock.Close(5);
+        }
+
+        /// <summary>
+        /// Call when a proper session key is acquired.
+        /// </summary>
+        public static void Identify()
+        {
+            if (WaitingToIdentify)
+            {
+                WaitingToIdentify = false;
+                Send(new IdentityPacketOut(MainGame.Username, MainGame.Session));
+                MainGame.Session = "";
+            }
         }
     }
 }

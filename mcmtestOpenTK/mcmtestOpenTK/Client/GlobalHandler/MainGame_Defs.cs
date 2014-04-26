@@ -68,6 +68,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static PieceOfText debug;
         public static float Ping = 0f;
 
+        // Account Data
+        public static string Username = "";
+        public static string Password = "";
+        public static string Session = "";
+
         // Public gameplay data
         public static List<Entity> entities = new List<Entity>();
     }

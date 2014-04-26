@@ -7,6 +7,7 @@ using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using System.Threading;
 using System.Diagnostics;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -33,6 +34,9 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 ticknumber = 0;
                 tickdelta = 0.0f;
             }
+
+            // Update global networking
+            GlobalNetwork.Tick();
 
             // Update networking
             NetworkBase.Tick();

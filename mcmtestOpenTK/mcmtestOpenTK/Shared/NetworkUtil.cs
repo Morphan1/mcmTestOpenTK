@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.Networking
+namespace mcmtestOpenTK.Shared
 {
     public class NetworkUtil
     {

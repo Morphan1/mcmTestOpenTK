@@ -73,6 +73,10 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                     // TODO!
                 case 2:
                     Handler = new PingPacketIn(); break;
+                case 3:
+                    Handler = new IdentityPacketIn(); break;
+                case 255:
+                    Handler = new DisconnectPacketIn(); break;
                 default:
                     ServerCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from client (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
                     return;

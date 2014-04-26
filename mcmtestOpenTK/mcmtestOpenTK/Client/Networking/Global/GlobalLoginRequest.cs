@@ -10,6 +10,7 @@ using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 using System.Security.Cryptography;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.Networking.Global
 {
@@ -21,24 +22,20 @@ namespace mcmtestOpenTK.Client.Networking.Global
         /// <param name="Announce">Whether to announce the result in the console</param>
         /// <param name="username">The username to login with</param>
         /// <param name="password">The password to login with</param>
-        /// <returns>The GlobalNetwork object created for this time request</returns>
+        /// <returns>The GlobalNetwork object created for this login request</returns>
         public static GlobalLoginRequest RequestLogin(bool Announce, string username, string password)
         {
             GlobalLoginRequest glr = new GlobalLoginRequest();
             glr.Username = username;
             glr.Password = password;
+            glr.ShouldAnnounce = Announce;
             NetworkingObjects.Add(glr);
             glr.Send();
             return glr;
         }
 
         /// <summary>
-        /// Whether the login succeeded.
-        /// </summary>
-        public bool Success = false;
-
-        /// <summary>
-        /// Whether the success/failure state of the login should be announced.
+        /// Whether the success of the login should be announced.
         /// </summary>
         public bool ShouldAnnounce = false;
 
@@ -85,29 +82,36 @@ namespace mcmtestOpenTK.Client.Networking.Global
                         string[] subdata = errorsplit[1].Split(new char[] { '/' }, 2);
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " +
                             LanguageHandler.GetMessage("login.refused." + subdata[0],
-                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ?subdata[1]: "") }));
+                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ? subdata[1] : "") }));
+                        MainGame.Username = Username;
+                        MainGame.Password = "";
+                        MainGame.Session = "";
                     }
                     else if (Error.StartsWith("ACCEPT:"))
                     {
-                        UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
-                            LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo,
-                            new List<Variable> { new Variable("username", Username) }));
+                        string[] sessplit = Error.Split(new char[] { ':' }, 2);
+                        string[] subdata = sessplit[1].Split(new char[] { '/' }, 2);
+                        if (ShouldAnnounce)
+                        {
+                            UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
+                                LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo,
+                                new List<Variable> { new Variable("username", Username) }));
+                        }
+                        MainGame.Username = subdata[0];
+                        MainGame.Password = Password;
+                        MainGame.Session = subdata[1];
+                        NetworkBase.Identify();
                     }
                     else
                     {
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login failed with message: " + TextStyle.Color_Separate + Error);
+                        MainGame.Username = Username;
+                        MainGame.Password = "";
+                        MainGame.Session = "";
                     }
+                    ready = true;
                     return;
                 }
-            }
-            if (Success)
-            {
-                if (ShouldAnnounce)
-                {
-                    UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Successfully logged in as " +
-                        TextStyle.Color_Separate + Username + TextStyle.Color_Importantinfo + "!");
-                }
-                ready = true;
             }
         }
     }

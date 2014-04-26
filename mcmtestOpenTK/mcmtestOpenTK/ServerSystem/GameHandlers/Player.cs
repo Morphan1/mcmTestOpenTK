@@ -26,6 +26,35 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         public bool IsAlive = true;
 
         /// <summary>
+        /// The name of this player.
+        /// </summary>
+        public string Username = "";
+
+        /// <summary>
+        /// The session this player used to log in.
+        /// </summary>
+        public string Session = "";
+
+        /// <summary>
+        /// Whether the user has successfully logged in.
+        /// </summary>
+        public bool IsIdentified = false;
+
+        /// <summary>
+        /// Call when the user has fully identified, to let them into the server.
+        /// </summary>
+        public void Identified()
+        {
+            if (IsIdentified)
+            {
+                return;
+            }
+            SysConsole.Output(OutputType.INFO, "Client '" + Username + "' is now identified!");
+            IsIdentified = true;
+            Send(new PingPacketOut(this));
+        }
+
+        /// <summary>
         /// Immediately kicks the player for the specified reason.
         /// </summary>
         /// <param name="reason">Why the player was kicked.</param>
@@ -33,8 +62,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         {
             if (IsAlive)
             {
-                // SEND KICK REASON
-                SysConsole.Output(OutputType.INFO, "Player <Name>/" + Network.IP + " was kicked: " + reason);
+                Send(new DisconnectPacketOut(this, reason));
+                SysConsole.Output(OutputType.INFO, "Player " + Username + "/" + Network.IP + " was kicked: " + reason);
                 IsAlive = false;
                 Network.Disconnect();
             }
@@ -55,7 +84,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         public void Init()
         {
             Send(new HelloPacketOut(this));
-            Send(new PingPacketOut(this));
         }
     }
 }
