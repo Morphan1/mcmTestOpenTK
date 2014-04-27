@@ -12,6 +12,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 
@@ -121,7 +122,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
             // Setup a perspective view
             GL.MultMatrix(ref Perspective);
-            View = Matrix4.LookAt(Player.player.Location, Player.player.Location + Forward, new Vector3(0, 0, 1));
+            View = Matrix4.LookAt(Player.player.Position, Player.player.Position + Forward, new Vector3(0, 0, 1));
             GL.MultMatrix(ref View);
 
             // Enable depth and culling
@@ -179,6 +180,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             DrawCube(0, 100, 0);
             DrawCube(0, -50, 0);
             DrawCube(0, -100, 0);
+
+            // Draw everything in the world
+            DrawWorld();
         }
 
         /// <summary>
@@ -188,7 +192,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="y"></param>
         /// <param name="z"></param>
         /// <param name="ori"></param>
-        static void DrawCube(float x, float y, float z)
+        public static void DrawCube(float x, float y, float z)
         {
             GL.PushMatrix();
 

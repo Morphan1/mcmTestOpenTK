@@ -46,6 +46,9 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 
             // Update command system
             ServerCommands.Tick();
+
+            // Update the world
+            MainWorld.Tick();
         }
     }
 }

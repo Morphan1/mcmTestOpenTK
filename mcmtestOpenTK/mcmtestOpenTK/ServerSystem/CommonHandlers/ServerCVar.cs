@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.ServerSystem.CommonHandlers
             g_fps = Register("g_fps", "20", CVarFlag.Numeric); // The target frames-per-second the server will run at.
             g_online = Register("g_online", "true", CVarFlag.Boolean); // Whether the server should require all users log in through the global server.
             // Network CVars
-            n_port = Register("n_port", "28065", CVarFlag.Numeric | CVarFlag.InitOnly); // What port the network should listen on
+            n_port = Register("n_port", "26805", CVarFlag.Numeric | CVarFlag.InitOnly); // What port the network should listen on.
             // System CVars
             ComputerInfo CI = new ComputerInfo();
             s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly); // The current system environment filepath (The directory of /data).

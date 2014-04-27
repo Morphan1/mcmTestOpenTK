@@ -6,46 +6,51 @@ using OpenTK;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
-    public class Entity: Renderable
+    public abstract class Entity: Renderable
     {
         /// <summary>
         /// The precise X/Y/Z location of the entity.
         /// </summary>
-        public Vector3 Location = Vector3.Zero;
-        /// <summary>
-        /// The precise X/Y/Z worldly movement speed.
-        /// </summary>
-        public Vector3 Velocity = Vector3.Zero;
-        /// <summary>
-        /// The precise Yaw/Pitch/Roll direction of the entity.
-        /// </summary>
-        public Vector3 Angle = Vector3.Zero;
+        public Vector3 Position = Vector3.Zero;
+
         /// <summary>
         /// A fairly unique ID stored as long as the entity is alive.
         /// </summary>
-        public long ID;
+        public ulong UniqueID;
 
-        public Entity()
+        public Entity(bool _TickMe)
         {
-            ID = MainGame.NewEntityID();
+            TickMe = _TickMe;
         }
 
         /// <summary>
         /// Ticks the entity, including running of basic movement and related handlers.
         /// </summary>
-        public virtual void Update()
-        {
-            Location += Velocity * MainGame.DeltaF;
-        }
+        public abstract void Tick();
 
         /// <summary>
-        /// Fully renders the entity.
+        /// Whether the entity should tick regularly.
         /// </summary>
-        public override void Draw()
+        public readonly bool TickMe;
+
+        /// <summary>
+        /// What type of entity this is.
+        /// </summary>
+        public EntityType Type = EntityType.NUL;
+
+        public static Entity FromType(EntityType type)
         {
+            switch (type)
+            {
+                case EntityType.PLAYER:
+                    return new OtherPlayer();
+                default:
+                    return null;
+            }
         }
     }
 }

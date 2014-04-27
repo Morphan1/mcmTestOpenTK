@@ -30,16 +30,23 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 CVar cvar = entry.Output.CVarSys.AbsoluteSet(target, newvalue);
                 if (cvar.Flags.HasFlag(CVarFlag.ReadOnly))
                 {
-                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' cannot be modified, it is a read-only system variable!");
+                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name)
+                        + "<{color.base}>' cannot be modified, it is a read-only system variable!");
                 }
                 else if (cvar.Flags.HasFlag(CVarFlag.InitOnly) && !entry.Output.Initializing)
                 {
-                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' cannot be modified after game initialization.");
+                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name)
+                        + "<{color.base}>' cannot be modified after game initialization.");
                 }
                 else if (cvar.Flags.HasFlag(CVarFlag.Delayed) && !entry.Output.Initializing)
                 {
-                    entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(target) +
+                    entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name) +
                         "<{color.info}>' is delayed, and its value will be calculated after the game is reloaded.");
+                }
+                else
+                {
+                    entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name) +
+                        "<{color.info}>' set to '<{color.emphasis}>" + TagParser.Escape(cvar.Value) + "<{color.info}>'.");
                 }
             }
         }

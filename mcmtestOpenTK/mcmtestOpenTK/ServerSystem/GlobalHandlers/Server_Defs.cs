@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using System.Threading;
 using System.Diagnostics;
+using mcmtestOpenTK.ServerSystem.GameHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -25,5 +26,10 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         /// How many ticks pass in one second.
         /// </summary>
         public static int FPS;
+
+        /// <summary>
+        /// The primary server world.
+        /// </summary>
+        public static World MainWorld;
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.ServerSystem.CommonHandlers;
 

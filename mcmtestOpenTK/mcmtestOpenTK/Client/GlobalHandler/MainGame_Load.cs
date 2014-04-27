@@ -12,6 +12,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.Global;
@@ -81,7 +82,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare gameplay-related code
                 SysConsole.Output(OutputType.INIT, "Preparing gameplay system...");
                 Player.player = new Player();
-                SpawnEntity(Player.player);
+                LoadWorld();
                 // Everything's loaded now... scrap the system console
                 SysConsole.Output(OutputType.INIT, "System prepared, hiding console and playing the game!");
                 SysConsole.HideConsole();

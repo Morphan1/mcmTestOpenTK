@@ -39,7 +39,7 @@
     <Compile Include="Client\CommonHandlers\ClientCVar.cs" />
     <Compile Include="Client\CommonHandlers\Util.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
-    <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
+    <Compile Include="Client\GameplayHandlers\Player.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Exit.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_World.cs" />
     <Compile Include="Client\GraphicsHandlers\Renderable.cs" />
@@ -97,18 +97,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\CommandHandlers\NetworkCmds\ConnectCommand.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\MovingEntity.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\OtherPlayer.cs" />
     <Compile Include="Client\Networking\AbstractPacketIn.cs" />
     <Compile Include="Client\Networking\AbstractPacketOut.cs" />
     <Compile Include="Client\Networking\NetworkBase.cs" />
+    <Compile Include="Client\Networking\PacketsIn\DespawnPacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsIn\PositionPacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsIn\SpawnPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\DisconnectPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\PingPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\HelloPacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsOut\PositionPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\DisconnectPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\IdentityPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\PingPacketOut.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
-    <Compile Include="ServerSystem\GameHandlers\Player.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />
+    <Compile Include="ServerSystem\GameHandlers\GameHelpers\Location.cs" />
+    <Compile Include="ServerSystem\GameHandlers\World.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server_Load.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketOut.cs" />
@@ -118,9 +128,13 @@
     <Compile Include="ServerSystem\NetworkHandlers\Global\GlobalTimeRequest.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetworkBase.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NewConnection.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\PositionPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\DisconnectPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\IdentityPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\PingPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\DespawnPacketOut.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PositionPacketOut.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\SpawnPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\DisconnectPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PingPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\HelloPacketOut.cs" />
@@ -151,6 +165,7 @@
     <Compile Include="Shared\CVar.cs" />
     <Compile Include="Shared\CVarSystem.cs" />
     <Compile Include="Shared\DataStream.cs" />
+    <Compile Include="Shared\EntityType.cs" />
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />

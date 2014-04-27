@@ -5,11 +5,17 @@ using System.Text;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 
-namespace mcmtestOpenTK.ServerSystem.GameHandlers
+namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
-    public class Player
+    public class Player: MovingEntity
     {
+        public Player(): base(EntityType.PLAYER)
+        {
+        }
+
         /// <summary>
         /// The network Connection object for this player.
         /// </summary>
@@ -52,6 +58,17 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             SysConsole.Output(OutputType.INFO, "Client '" + Username + "' is now identified!");
             IsIdentified = true;
             Send(new PingPacketOut(this));
+            Spawn(Server.MainWorld);
+        }
+
+        void Spawn(World world)
+        {
+            for (int i = 0; i < world.Entities.Count; i++)
+            {
+                Send(new SpawnPacketOut(world.Entities[i]));
+            }
+            world.Players.Add(this);
+            world.Spawn(this);
         }
 
         /// <summary>
@@ -75,6 +92,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <param name="Packet">The packet to send</param>
         public void Send(AbstractPacketOut Packet)
         {
+            if (!IsAlive)
+            {
+                return;
+            }
             PlayerHandler.Send(this, Packet);
         }
 
@@ -84,6 +105,22 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         public void Init()
         {
             Send(new HelloPacketOut(this));
+        }
+
+        public override void Tick()
+        {
+            if (!IsAlive || !Network.IsAlive)
+            {
+                IsAlive = false;
+                Network.IsAlive = false;
+                world.Players.Remove(this);
+                world.Destroy(this);
+            }
+            base.Tick();
+        }
+
+        public override void Kill()
+        {
         }
     }
 }

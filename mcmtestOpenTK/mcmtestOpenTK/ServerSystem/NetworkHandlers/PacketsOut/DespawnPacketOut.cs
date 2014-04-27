@@ -4,25 +4,23 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
 {
-    public class DisconnectPacketOut: AbstractPacketOut
+    public class DespawnPacketOut: AbstractPacketOut
     {
-        Player player;
+        ulong eID;
 
-        string Reason;
-
-        public DisconnectPacketOut(Player _player, string _reason)
+        public DespawnPacketOut(ulong _eID)
         {
-            ID = 255;
-            player = _player;
-            Reason = _reason;
+            ID = 5;
+            eID = _eID;
         }
 
         public override byte[] ToBytes()
         {
-            return FileHandler.encoding.GetBytes(Reason);
+            return BitConverter.GetBytes(eID);
         }
     }
 }

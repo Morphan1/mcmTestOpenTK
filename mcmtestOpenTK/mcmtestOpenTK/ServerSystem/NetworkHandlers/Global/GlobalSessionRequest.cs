@@ -8,7 +8,7 @@ using System.Threading;
 using mcmtestOpenTK.Shared;
 using System.Security.Cryptography;
 using mcmtestOpenTK.Shared.TagHandlers;
-using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.Global
 {

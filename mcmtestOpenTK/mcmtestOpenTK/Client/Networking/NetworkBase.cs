@@ -29,6 +29,11 @@ namespace mcmtestOpenTK.Client.Networking
         static bool Connected = false;
 
         /// <summary>
+        /// Whether networking is active (packets should be sent).
+        /// </summary>
+        public static bool IsActive = false;
+
+        /// <summary>
         /// Whether we need to login to continue networking.
         /// </summary>
         public static bool WaitingToIdentify = false;
@@ -170,6 +175,12 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new HelloPacketIn(); break;
                 case 2:
                     Handler = new PingPacketIn(); break;
+                case 3:
+                    Handler = new SpawnPacketIn(); break;
+                case 4:
+                    Handler = new PositionPacketIn(); break;
+                case 5:
+                    Handler = new DespawnPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
@@ -230,6 +241,8 @@ namespace mcmtestOpenTK.Client.Networking
         /// </summary>
         public static void Disconnect()
         {
+            IsActive = false;
+            MainGame.DestroyWorld();
             ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server!");
             if (!Connected)
             {

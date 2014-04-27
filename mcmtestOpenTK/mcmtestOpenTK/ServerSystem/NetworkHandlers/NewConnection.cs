@@ -7,7 +7,7 @@ using System.Net;
 using mcmtestOpenTK.Shared;
 using System.Threading;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
-using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
@@ -138,9 +138,23 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 {
                     throw ex;
                 }
+                if (Type == ConnectionType.GAME)
+                {
+                    if (player != null)
+                    {
+                        player.IsAlive = false;
+                    }
+                }
                 SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: internal error: " + ex.Message);
                 IsAlive = false;
-                Sock.Close();
+                try
+                {
+                    Sock.Close();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
             }
         }
 

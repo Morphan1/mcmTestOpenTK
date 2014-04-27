@@ -8,7 +8,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
     public abstract class Renderable
     {
         /// <summary>
-        /// Override this method will Graphics drawing code.
+        /// Override this method with Graphics drawing code.
         /// </summary>
         public abstract void Draw();
     }

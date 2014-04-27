@@ -11,38 +11,112 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {
+        public static List<Entity> Entities;
+
+        public static List<Entity> Tickers;
+
+        static void LoadWorld()
+        {
+            Entities = new List<Entity>();
+            Tickers = new List<Entity>();
+        }
+
         /// <summary>
         /// Spawns a new entity into the world.
         /// </summary>
-        /// <param name="e">The entity to spawn.</param>
+        /// <param name="e">The entity to spawn</param>
         public static void SpawnEntity(Entity e)
         {
-            if (!entities.Contains(e))
+            if (!Entities.Contains(e))
             {
-                entities.Add(e);
+                Entities.Add(e);
+                if (e.TickMe)
+                {
+                    Tickers.Add(e);
+                }
             }
         }
 
-        static long cID = 0;
         /// <summary>
-        /// Selects a new semi-unique Entity ID.
+        /// Spawns a new entity of the given type.
         /// </summary>
-        /// <returns>A new semi-unique Entity ID.</returns>
-        public static long NewEntityID()
+        /// <param name="e">The type of entity to spawn</param>
+        /// <param name="ID">The entity ID to use</param>
+        /// <param name="Position">Where to spawn it</param>
+        public static void SpawnEntity(EntityType e, ulong ID, Vector3 Position)
         {
-            if (cID == long.MaxValue)
+            Entity ent = Entity.FromType(e);
+            if (ent == null)
             {
-                cID = long.MinValue;
-                ErrorHandler.HandleError("Current Entity ID maxed out and looped!");
+                UIConsole.WriteLine("Tried to spawn unknown entity type: " + (int)((byte)e)); // ... Yup.
+                return;
             }
-            cID++;
-            return cID;
+            ent.UniqueID = ID;
+            ent.Position = Position;
+            SpawnEntity(ent);
+        }
+
+        /// <summary>
+        /// Gets the entity that has the given ID.
+        /// </summary>
+        /// <param name="ID">The ID to find an entity for</param>
+        /// <returns>An entity, or null</returns>
+        public static Entity GetEntity(ulong ID)
+        {
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                if (Entities[i].UniqueID == ID)
+                {
+                    return Entities[i];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Removes an entity from the world.
+        /// </summary>
+        /// <param name="e">The entity to remove</param>
+        public static void Destroy(Entity e)
+        {
+            Entities.Remove(e);
+            if (e.TickMe)
+            {
+                Tickers.Remove(e);
+            }
+        }
+
+        /// <summary>
+        /// Clears the entire world.
+        /// </summary>
+        public static void DestroyWorld()
+        {
+            Entities = new List<Entity>();
+            Tickers = new List<Entity>();
+        }
+
+        static void TickWorld()
+        {
+            // Update all entities
+            for (int i = 0; i < Tickers.Count; i++)
+            {
+                Tickers[i].Tick();
+            }
+        }
+
+        static void DrawWorld()
+        {
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                Entities[i].Draw();
+            }
         }
     }
 }

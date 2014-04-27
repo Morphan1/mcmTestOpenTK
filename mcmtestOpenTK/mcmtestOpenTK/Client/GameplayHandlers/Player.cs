@@ -9,10 +9,12 @@ using OpenTK.Graphics;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.Networking.PacketsOut;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
+namespace mcmtestOpenTK.Client.GameplayHandlers
 {
-    public class Player : Entity
+    public class Player
     {
         /// <summary>
         /// The default player - there's only ever one!
@@ -20,14 +22,31 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public static Player player;
 
         /// <summary>
+        /// The precise X/Y/Z location of the entity.
+        /// </summary>
+        public Vector3 Position = Vector3.Zero;
+
+        /// <summary>
         /// How much health the player currently has.
         /// </summary>
         public float Health = 0;
 
         /// <summary>
+        /// The precise X/Y/Z worldly movement speed.
+        /// </summary>
+        public Vector3 Velocity = Vector3.Zero;
+
+        /// <summary>
+        /// The precise Yaw/Pitch/Roll direction of the entity.
+        /// </summary>
+        public Vector3 Angle = Vector3.Zero;
+
+        float ticker = 0;
+
+        /// <summary>
         /// Called to tick the default player.
         /// </summary>
-        public override void Update()
+        public void Update()
         {
             // Mouse based rotation
             Angle.X += MouseHandler.MouseDelta.X;
@@ -113,17 +132,20 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 movement.Z -= 1;
             }
             Velocity = new Vector3(movement * 30);
-
-            // Standard entity updating
-            base.Update();
+            Position += Velocity * MainGame.DeltaF;
+            ticker += MainGame.DeltaF;
+            // TODO: Have server identify proper TPS
+            if (ticker > (1 / 20) && NetworkBase.IsActive)
+            {
+                ticker = 0;
+                if (Position != LastLoc)
+                {
+                    NetworkBase.Send(new PositionPacketOut(Position));
+                    LastLoc = Position;
+                }
+            }
         }
 
-        /// <summary>
-        /// Does nothing (empty override).
-        /// </summary>
-        public override void Draw()
-        {
-            // No player drawing, global drawing will handle this!
-        }
+        Vector3 LastLoc = Vector3.Zero;
     }
 }

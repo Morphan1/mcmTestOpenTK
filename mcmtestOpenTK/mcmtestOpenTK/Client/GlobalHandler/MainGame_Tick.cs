@@ -10,6 +10,7 @@ using OpenTK.Input;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.UIHandlers;
@@ -100,18 +101,17 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     //SimpleAudioTest.PlayTestSound();
                 }
 
-                // Update all entities
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    Entity e = entities[i];
-                    e.Update();
-                }
+                // Update player
+                Player.player.Update();
+
+                // Update world
+                TickWorld();
 
                 // Debug stuff, always near end
                 debug.Text = TextStyle.Color_Readable +
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
-                    "\nPosition: " + Player.player.Location.ToString() +
+                    "\nPosition: " + Player.player.Position.ToString() +
                     "\nAngle: " + Player.player.Angle.ToString() +
                     "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
                     "\nPing: " + (int)(Ping * 1000);

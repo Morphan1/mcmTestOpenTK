@@ -14,12 +14,15 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
     public partial class Server
     {
+        static List<string> CMDArgs;
+
         /// <summary>
         /// Global entry point, should never be directly called!
         /// </summary>
         /// <param name="args">Command line input args</param>
         public static void ServerInit(List<string> arguments)
         {
+            CMDArgs = arguments;
             SysConsole.Output(OutputType.INIT, "Server starting...");
             if (!ServerLoad())
             {

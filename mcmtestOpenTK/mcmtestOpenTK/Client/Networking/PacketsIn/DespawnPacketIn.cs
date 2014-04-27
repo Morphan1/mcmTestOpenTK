@@ -6,25 +6,25 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using OpenTK;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
-    class PingPacketIn: AbstractPacketIn
+    class DespawnPacketIn: AbstractPacketIn
     {
-        byte ID;
+        ulong id;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length == 5 && input[0] == (byte)'P' &&
-                input[1] == (byte)'I' && input[2] == (byte)'N' && input[3] == (byte)'G')
-            {
-                ID = input[4];
-                IsValid = true;
-            }
-            else
+            if (input.Length != 8)
             {
                 IsValid = false;
+                return;
             }
+            id = BitConverter.ToUInt64(input, 0);
+            IsValid = true;
         }
 
         public override void Execute()
@@ -33,10 +33,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            NetworkBase.IsActive = true;
-            MainGame.Ping = MainGame.pingbump;
-            MainGame.pingbump = 0;
-            NetworkBase.Send(new PingPacketOut(ID));
+            Entity e = MainGame.GetEntity(id);
+            if (e == null)
+            {
+                UIConsole.WriteLine("Tried and failed to remove entity " + id);
+            }
+            MainGame.Destroy(e);
         }
     }
 }

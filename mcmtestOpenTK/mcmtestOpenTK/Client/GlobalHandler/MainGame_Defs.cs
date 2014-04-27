@@ -72,8 +72,5 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static string Username = "";
         public static string Password = "";
         public static string Session = "";
-
-        // Public gameplay data
-        public static List<Entity> entities = new List<Entity>();
     }
 }

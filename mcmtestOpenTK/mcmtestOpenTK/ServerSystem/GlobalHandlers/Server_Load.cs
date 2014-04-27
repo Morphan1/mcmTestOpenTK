@@ -9,6 +9,7 @@ using System.Diagnostics;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
 using mcmtestOpenTK.ServerSystem.CommonHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -28,6 +29,18 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             ServerCommands.Init(sout);
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
+            SysConsole.Output(OutputType.INIT, "Running command line arguments...");
+            string args = Utilities.Concat(CMDArgs);
+            if (args.StartsWith("+"))
+            {
+                args = args.Substring(1);
+            }
+            if (args.Length > 0)
+            {
+                ServerCommands.ExecuteCommands(args);
+            }
+            SysConsole.Output(OutputType.INIT, "Preparing world...");
+            MainWorld = new World("default");
             SysConsole.Output(OutputType.INIT, "Preparing global network system...");
             GlobalNetwork.Init();
             SysConsole.Output(OutputType.INIT, "Preparing network system...");

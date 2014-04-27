@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn;
+using System.Threading;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -68,6 +69,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             byte ID = Packet[0];
             AbstractPacketIn Handler;
+            if (!player.IsIdentified && ID != 2 && ID != 3)
+            {
+                SysConsole.Output(OutputType.WARNING, "Invalid player packet from " + player.Network.IP + " (ID: " + ID + ") (not identified!)");
+                return;
+            }
             switch (ID)
             {
                     // TODO!
@@ -75,6 +81,8 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                     Handler = new PingPacketIn(); break;
                 case 3:
                     Handler = new IdentityPacketIn(); break;
+                case 4:
+                    Handler = new PositionPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
@@ -90,7 +98,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             else
             {
-                SysConsole.Output(OutputType.INFO, "Invalid player packet from " + player.Network.IP + " (ID: " + ID + ")");
+                SysConsole.Output(OutputType.WARNING, "Invalid player packet from " + player.Network.IP + " (ID: " + ID + ")");
             }
         }
 
@@ -127,7 +135,29 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             {
                 return;
             }
-            player.Network.Sock.Send(Packet);
+            try
+            {
+                player.Network.Sock.Send(Packet);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ThreadAbortException)
+                {
+                    throw ex;
+                }
+                player.IsAlive = false;
+                SysConsole.Output(OutputType.INFO, "[Net] " + player.Username + "/" + player.Network.IP +
+                    " failed connection: internal error: " + ex.Message);
+                player.Network.IsAlive = false;
+                try
+                {
+                    player.Network.Sock.Close();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
         }
 
     }

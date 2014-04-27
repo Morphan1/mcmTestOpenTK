@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
-using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
 {
