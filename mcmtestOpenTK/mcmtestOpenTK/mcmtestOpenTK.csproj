@@ -55,8 +55,6 @@
     <Compile Include="Client\CommandHandlers\CommonCmds\HideconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\ShowconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\QuitCommand.cs" />
-    <Compile Include="Shared\CommandSystem\CommonCmds\SetCommand.cs" />
-    <Compile Include="Shared\CommandSystem\CommonCmds\CvarinfoCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HelpCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReplacefontCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReloadCommand.cs" />
@@ -76,26 +74,11 @@
     <Compile Include="Client\Networking\Global\GlobalNetwork.cs" />
     <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
     <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
-    <Compile Include="Shared\NetworkUtil.cs" />
     <Compile Include="Client\UIHandlers\Categorizer.cs" />
     <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
     <Compile Include="Client\CommandHandlers\ClientCommands.cs" />
     <Compile Include="Client\CommandHandlers\ClientOutputter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Client\CommandHandlers\NetworkCmds\ConnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\MovingEntity.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\OtherPlayer.cs" />
@@ -112,6 +95,20 @@
     <Compile Include="Client\Networking\PacketsOut\DisconnectPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\IdentityPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\PingPacketOut.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
@@ -158,6 +155,9 @@
     <Compile Include="Shared\CommandSystem\QueueCmds\ElseCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\IfCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\WaitCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\SetCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\CvarinfoCommand.cs" />
+    <Compile Include="Shared\NetworkUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\QuitCommand.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\ConsoleHandler.cs" />

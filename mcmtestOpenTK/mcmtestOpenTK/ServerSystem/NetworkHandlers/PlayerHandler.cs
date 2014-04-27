@@ -57,6 +57,42 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
         }
 
+        public static void TickSend(Player player)
+        {
+            NewConnection conn = player.Network;
+            if (!conn.IsAlive)
+            {
+                return;
+            }
+            if (player.ToSend.Count > 0)
+            {
+                int Count = 0;
+                int TotalLen = 0;
+                for (int i = 0; i < player.ToSend.Count; i++)
+                {
+                    if (TotalLen + player.ToSend[i].Length > conn.Sock.SendBufferSize)
+                    {
+                        if (TotalLen == 0)
+                        {
+                            conn.Disconnect();
+                        }
+                        break;
+                    }
+                    Count++;
+                    TotalLen += player.ToSend[i].Length;
+                }
+                byte[] created = new byte[TotalLen];
+                int pos = 0;
+                for (int i = 0; i < Count; i++)
+                {
+                    player.ToSend[i].CopyTo(created, pos);
+                    pos += player.ToSend[i].Length;
+                }
+                player.ToSend.RemoveRange(0, Count);
+                Send(player, created);
+            }
+        }
+
         static void HandlePacket(Player player, byte[] Packet)
         {
             if (Packet.Length == 0)
@@ -122,7 +158,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             BitConverter.GetBytes(Packet.Length + 1).CopyTo(holder, 0);
             holder[4] = ID;
             Packet.CopyTo(holder, 5);
-            Send(player, holder);
+            player.ToSend.Add(holder);
         }
 
         static void Send(Player player, byte[] Packet)
@@ -148,7 +184,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 player.IsAlive = false;
                 SysConsole.Output(OutputType.INFO, "[Net] " + player.Username + "/" + player.Network.IP +
                     " failed connection: internal error: " + ex.Message);
-                player.Network.IsAlive = false;
+                player.Network.Disconnect();
                 try
                 {
                     player.Network.Sock.Close();

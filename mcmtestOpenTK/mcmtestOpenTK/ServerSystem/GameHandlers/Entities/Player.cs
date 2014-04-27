@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
     {
         public Player(): base(EntityType.PLAYER)
         {
+            ToSend = new List<byte[]>();
         }
 
         /// <summary>
@@ -45,6 +46,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// Whether the user has successfully logged in.
         /// </summary>
         public bool IsIdentified = false;
+
+        /// <summary>
+        /// A list of all packets waiting to be sent.
+        /// </summary>
+        public List<byte[]> ToSend;
 
         /// <summary>
         /// Call when the user has fully identified, to let them into the server.
@@ -112,9 +118,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             if (!IsAlive || !Network.IsAlive)
             {
                 IsAlive = false;
-                Network.IsAlive = false;
+                Network.Disconnect();
                 world.Players.Remove(this);
                 world.Destroy(this);
+                return;
             }
             base.Tick();
         }

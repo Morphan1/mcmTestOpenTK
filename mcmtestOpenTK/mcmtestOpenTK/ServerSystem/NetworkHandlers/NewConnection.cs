@@ -81,6 +81,10 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                         return;
                     }
                 }
+                else
+                {
+                    PlayerHandler.TickSend(player);
+                }
                 if (!Sock.Connected)
                 {
                     SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: disconnected");
@@ -259,6 +263,13 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             Sock.Close(5);
             IsAlive = false;
+            if (Type == ConnectionType.GAME)
+            {
+                if (player != null)
+                {
+                    player.IsAlive = false;
+                }
+            }
             SysConsole.Output(OutputType.INFO, "[Net] " + IP + " disconnected.");
         }
     }

@@ -49,6 +49,10 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 
             // Update the world
             MainWorld.Tick();
+
+            // Update networking again for speed's sake
+            NetworkBase.Tick();
+
         }
     }
 }
