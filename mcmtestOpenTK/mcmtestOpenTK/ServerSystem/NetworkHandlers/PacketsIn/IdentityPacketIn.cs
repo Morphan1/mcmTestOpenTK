@@ -47,7 +47,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             player.Session = Session;
             if (Util.IsAcceptableName(Username))
             {
-                if (Server.Online)
+                if (ServerCVar.g_online.ValueB)
                 {
                     GlobalSessionRequest.RequestSession(player, Username, Session);
                 }

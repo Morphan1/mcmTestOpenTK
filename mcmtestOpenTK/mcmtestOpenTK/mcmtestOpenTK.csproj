@@ -36,7 +36,7 @@
     <Compile Include="Client\AudioHandlers\FMod\fmod_errors.cs" />
     <Compile Include="Client\AudioHandlers\FMod\fmod_memoryinfo.cs" />
     <Compile Include="Client\AudioHandlers\SimpleAudioTest.cs" />
-    <Compile Include="Client\CommonHandlers\CVar.cs" />
+    <Compile Include="Client\CommonHandlers\ClientCVar.cs" />
     <Compile Include="Client\CommonHandlers\Util.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
@@ -55,8 +55,8 @@
     <Compile Include="Client\CommandHandlers\CommonCmds\HideconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\ShowconsoleCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\QuitCommand.cs" />
-    <Compile Include="Client\CommandHandlers\CommonCmds\SetCommand.cs" />
-    <Compile Include="Client\CommandHandlers\CommonCmds\CvarinfoCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\SetCommand.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\CvarinfoCommand.cs" />
     <Compile Include="Client\CommandHandlers\CommonCmds\HelpCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReplacefontCommand.cs" />
     <Compile Include="Client\CommandHandlers\GraphicsCmds\ReloadCommand.cs" />
@@ -106,8 +106,10 @@
     <Compile Include="Client\Networking\PacketsOut\DisconnectPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\IdentityPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\PingPacketOut.cs" />
+    <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Player.cs" />
+    <Compile Include="ServerSystem\GlobalHandlers\Server_Load.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\Global\GlobalSessionRequest.cs" />
@@ -146,6 +148,8 @@
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\QuitCommand.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\ConsoleHandler.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server_Base.cs" />
+    <Compile Include="Shared\CVar.cs" />
+    <Compile Include="Shared\CVarSystem.cs" />
     <Compile Include="Shared\DataStream.cs" />
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />

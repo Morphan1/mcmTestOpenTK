@@ -557,7 +557,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 {
                                     RenderBaseText(X + point.X, Y + point.Y, drawme, font, 0, 255, flip);
                                 }
-                                if (CVar.t_bettershadow.ValueB)
+                                if (ClientCVar.t_bettershadow.ValueB)
                                 {
                                     foreach (Point point in BetterShadowPoints)
                                     {
@@ -571,7 +571,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 {
                                     RenderBaseText(X + point.X, Y + point.Y, drawme, font, ecolor, etrans, flip);
                                 }
-                                if (CVar.t_betteremphasis.ValueB)
+                                if (ClientCVar.t_betteremphasis.ValueB)
                                 {
                                     foreach (Point point in BetterEmphasisPoints)
                                     {
@@ -689,9 +689,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                     sub = true;
                                     break;
                                 case 'd': shadow = true; break;
-                                case 'j': if (CVar.t_allowjello.ValueB) { jello = true; } break;
-                                case 'k': if (CVar.t_allowobfu.ValueB) { obfu = true; } break;
-                                case 'R': if (CVar.t_allowrandom.ValueB) { random = true; } break;
+                                case 'j': if (ClientCVar.t_allowjello.ValueB) { jello = true; } break;
+                                case 'k': if (ClientCVar.t_allowobfu.ValueB) { obfu = true; } break;
+                                case 'R': if (ClientCVar.t_allowrandom.ValueB) { random = true; } break;
                                 case 'p': pseudo = true; break;
                                 case 'f': flip = true; break;
                                 case 'n':

@@ -24,6 +24,7 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         {
             CommandSystem = new Commands();
             CommandSystem.Output = new ServerOutputter();
+            CommandSystem.Output.Initializing = true;
             CommandSystem.Init();
 
             // Common Commands

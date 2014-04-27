@@ -29,15 +29,14 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         {
             CommandSystem = new Commands();
             Output = new ClientOutputter();
+            Output.Initializing = true;
             CommandSystem.Output = Output;
             CommandSystem.Init();
 
             // Common Commands
-            CommandSystem.RegisterCommand(new CvarinfoCommand());
             CommandSystem.RegisterCommand(new HelpCommand());
             CommandSystem.RegisterCommand(new HideconsoleCommand());
             CommandSystem.RegisterCommand(new QuitCommand());
-            CommandSystem.RegisterCommand(new SetCommand());
             CommandSystem.RegisterCommand(new ShowconsoleCommand());
 
             // Graphics Commands

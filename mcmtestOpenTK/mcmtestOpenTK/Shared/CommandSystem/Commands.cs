@@ -128,7 +128,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             TagSystem.Init();
 
             // Common Commands
+            RegisterCommand(new CvarinfoCommand());
             RegisterCommand(new EchoCommand());
+            RegisterCommand(new SetCommand());
 
             // Queue-related Commands
             RegisterCommand(new DebugCommand());

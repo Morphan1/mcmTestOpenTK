@@ -27,10 +27,5 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         public static int FPS;
 
         public static int Port = 26805; // TODO: CVar
-
-        /// <summary>
-        /// Whether the server requires users log in through the global server.
-        /// </summary>
-        public static bool Online = true;
     }
 }

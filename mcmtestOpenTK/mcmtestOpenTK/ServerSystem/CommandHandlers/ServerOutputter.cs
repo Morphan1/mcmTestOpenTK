@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.CommandHandlers
 {
@@ -28,6 +29,11 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         {
             string text = ServerCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
             SysConsole.Output(OutputType.INFO, TextStyle.Color_Outbad + text);
+        }
+
+        public ServerOutputter()
+        {
+            CVarSys = ServerCVar.system;
         }
     }
 }

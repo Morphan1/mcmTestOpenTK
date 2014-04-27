@@ -30,5 +30,15 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         /// <param name="tagged_text">The text to output, with tags included</param>
         public abstract void Good(string tagged_text);
+
+        /// <summary>
+        /// The CVar System used by this command engine.
+        /// </summary>
+        public CVarSystem CVarSys;
+
+        /// <summary>
+        /// Whether the game is still setting up currently.
+        /// </summary>
+        public bool Initializing = false;
     }
 }

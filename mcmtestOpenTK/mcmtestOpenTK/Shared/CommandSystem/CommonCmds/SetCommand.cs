@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.UIHandlers;
-using mcmtestOpenTK.Client.CommonHandlers;
-using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared.TagHandlers;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
+namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
 {
     class SetCommand: AbstractCommand
     {
@@ -30,12 +27,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
             {
                 string target = entry.GetArgument(0);
                 string newvalue = entry.GetArgument(1);
-                CVar cvar = CVar.AbsoluteSet(target, newvalue);
+                CVar cvar = entry.Output.CVarSys.AbsoluteSet(target, newvalue);
                 if (cvar.Flags.HasFlag(CVarFlag.ReadOnly))
                 {
                     entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' cannot be modified, it is a read-only system variable!");
                 }
-                else if (cvar.Flags.HasFlag(CVarFlag.Delayed) && !MainGame.Initializing)
+                else if (cvar.Flags.HasFlag(CVarFlag.Delayed) && !entry.Output.Initializing)
                 {
                     entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(target) +
                         "<{color.info}>' is delayed, and its value will be calculated after the game is reloaded.");

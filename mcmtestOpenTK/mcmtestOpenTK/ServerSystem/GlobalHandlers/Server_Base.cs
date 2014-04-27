@@ -8,6 +8,7 @@ using System.Threading;
 using System.Diagnostics;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
+using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -20,19 +21,12 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         public static void ServerInit(List<string> arguments)
         {
             SysConsole.Output(OutputType.INIT, "Server starting...");
-            SysConsole.Output(OutputType.INIT, "Preparing command system...");
-            ServerCommands.Init();
-            SysConsole.Output(OutputType.INIT, "Preparing console listener...");
-            ConsoleHandler.Init();
-            SysConsole.Output(OutputType.INIT, "Preparing global network system...");
-            GlobalNetwork.Init();
-            SysConsole.Output(OutputType.INIT, "Preparing network system...");
-            if (!NetworkBase.Init())
+            if (!ServerLoad())
             {
                 return;
             }
             SysConsole.Output(OutputType.INIT, "Loaded! Ticking...");
-            int TARGETFPS = 20; // TODO: CVar?
+            double TARGETFPS = 20d; // TODO: CVar?
             Stopwatch Counter = new Stopwatch();
             Stopwatch DeltaCounter = new Stopwatch();
             DeltaCounter.Start();
@@ -50,7 +44,13 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 // Delta time = Elapsed ticks * (ticks/second)
                 CurrentDelta = ((double)DeltaCounter.ElapsedTicks) / ((double)Stopwatch.Frequency);
                 // How much time should pass between each tick ideally
-                TargetDelta = (1d / (double)TARGETFPS);
+                TARGETFPS = ServerCVar.g_fps.ValueD;
+                if (TARGETFPS < 1 || TARGETFPS > 10000)
+                {
+                    ServerCVar.g_fps.Set("20");
+                    TARGETFPS = 20;
+                }
+                TargetDelta = (1d / TARGETFPS);
                 // How much delta has been built up
                 TotalDelta += CurrentDelta;
                 if (TotalDelta > TargetDelta * 10)
@@ -75,7 +75,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 // The tick is done, stop measuring it
                 Counter.Stop();
                 // Only sleep for target milliseconds/tick minus how long the tick took... this is imprecise but that's okay
-                targettime = (1000 / TARGETFPS) - (int)Counter.ElapsedMilliseconds;
+                targettime = (int)((1000d / TARGETFPS) - Counter.ElapsedMilliseconds);
                 // Only sleep at all if we're not lagging
                 if (targettime > 0)
                 {
