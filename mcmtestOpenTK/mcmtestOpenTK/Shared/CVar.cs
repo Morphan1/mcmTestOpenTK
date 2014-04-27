@@ -17,6 +17,7 @@ namespace mcmtestOpenTK.Shared
         Boolean = 0x8,
         Delayed = 0x10,
         UserMade = 0x20,
+        InitOnly = 0x40,
     }
     public class CVar
     {
@@ -60,11 +61,17 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         public CVarFlag Flags;
 
-        public CVar(string newname, string newvalue, CVarFlag newflags)
+        /// <summary>
+        /// The system that generated this CVar.
+        /// </summary>
+        CVarSystem system;
+
+        public CVar(string newname, string newvalue, CVarFlag newflags, CVarSystem _system)
         {
             Name = newname;
             Set(newvalue);
             Flags = newflags;
+            system = _system;
         }
 
         /// <summary>
@@ -74,6 +81,10 @@ namespace mcmtestOpenTK.Shared
         public void Set(string newvalue)
         {
             if (Flags.HasFlag(CVarFlag.ReadOnly))
+            {
+                return;
+            }
+            if (Flags.HasFlag(CVarFlag.InitOnly) && !system.Output.Initializing)
             {
                 return;
             }

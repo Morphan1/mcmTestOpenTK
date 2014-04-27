@@ -20,10 +20,12 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         /// </summary>
         static bool ServerLoad()
         {
+            ServerOutputter sout = new ServerOutputter();
+            sout.Initializing = true;
             SysConsole.Output(OutputType.INIT, "Preparing CVar system...");
-            ServerCVar.Init();
+            ServerCVar.Init(sout);
             SysConsole.Output(OutputType.INIT, "Preparing command system...");
-            ServerCommands.Init();
+            ServerCommands.Init(sout);
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
             SysConsole.Output(OutputType.INIT, "Preparing global network system...");
@@ -33,7 +35,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             {
                 return false;
             }
-            ServerCommands.CommandSystem.Output.Initializing = false;
+            sout.Initializing = false;
             return true;
         }
     }

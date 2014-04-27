@@ -25,7 +25,5 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         /// How many ticks pass in one second.
         /// </summary>
         public static int FPS;
-
-        public static int Port = 26805; // TODO: CVar
     }
 }

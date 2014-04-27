@@ -32,10 +32,5 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
             UIConsole.WriteLine(TextStyle.Color_Outbad + text);
         }
-
-        public ClientOutputter()
-        {
-            CVarSys = ClientCVar.system;
-        }
     }
 }

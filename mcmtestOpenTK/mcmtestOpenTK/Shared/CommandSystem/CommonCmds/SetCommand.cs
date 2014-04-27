@@ -32,6 +32,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 {
                     entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' cannot be modified, it is a read-only system variable!");
                 }
+                else if (cvar.Flags.HasFlag(CVarFlag.InitOnly) && !entry.Output.Initializing)
+                {
+                    entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' cannot be modified after game initialization.");
+                }
                 else if (cvar.Flags.HasFlag(CVarFlag.Delayed) && !entry.Output.Initializing)
                 {
                     entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(target) +

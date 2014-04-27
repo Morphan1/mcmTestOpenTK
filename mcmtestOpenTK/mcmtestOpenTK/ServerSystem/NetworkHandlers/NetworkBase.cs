@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -34,9 +35,9 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 SysConsole.Output(OutputType.INIT, "Creating socket...");
                 MainSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
                 MainSocket.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
-                MainSocket.Bind(new IPEndPoint(IPAddress.IPv6Any, Server.Port));
+                MainSocket.Bind(new IPEndPoint(IPAddress.IPv6Any, ServerCVar.n_port.ValueI));
                 MainSocket.Listen(100);
-                SysConsole.Output(OutputType.INIT, "Socket created successfully, listening on port " + Server.Port + "...");
+                SysConsole.Output(OutputType.INIT, "Socket created successfully, listening on port " + ServerCVar.n_port.ValueI + "...");
                 WaitingConnections = new List<NewConnection>();
                 Thread thread = new Thread(new ThreadStart(NetworkMain));
                 thread.Name = "Server_NetworkListener";
@@ -46,7 +47,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             catch (Exception ex)
             {
                 ErrorHandler.HandleError("NetworkBase/Init", ex);
-                SysConsole.Output(OutputType.ERROR, "Could not create socket and bind to port " + Server.Port + ", shutting down...");
+                SysConsole.Output(OutputType.ERROR, "Could not create socket and bind to port " + ServerCVar.n_port.ValueI + ", shutting down...");
                 return false;
             }
         }

@@ -20,11 +20,10 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         /// <summary>
         /// Prepares the command system, registering all base commands.
         /// </summary>
-        public static void Init()
+        public static void Init(Outputter output)
         {
             CommandSystem = new Commands();
-            CommandSystem.Output = new ServerOutputter();
-            CommandSystem.Output.Initializing = true;
+            CommandSystem.Output = output;
             CommandSystem.Init();
 
             // Common Commands

@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using Microsoft.VisualBasic.Devices;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
 {
@@ -27,9 +28,9 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         /// <summary>
         /// Prepares the CVar system, generating default CVars.
         /// </summary>
-        public static void Init()
+        public static void Init(Outputter output)
         {
-            system = new CVarSystem();
+            system = new CVarSystem(output);
 
             // Text CVars
             // TODO: IMPLEMENT BELOW CVAR

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Shared
 {
@@ -12,9 +13,16 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         public List<CVar> CVars;
 
-        public CVarSystem()
+        /// <summary>
+        /// The client/server outputter to use.
+        /// </summary>
+        public Outputter Output;
+
+        public CVarSystem(Outputter _output)
         {
             CVars = new List<CVar>();
+            Output = _output;
+            Output.CVarSys = this;
         }
 
         /// <summary>
@@ -25,7 +33,7 @@ namespace mcmtestOpenTK.Shared
         /// <returns>The registered CVar</returns>
         public CVar Register(string CVar, string value, CVarFlag flags)
         {
-            CVar cvar = new CVar(CVar.ToLower(), value, flags);
+            CVar cvar = new CVar(CVar.ToLower(), value, flags, this);
             CVars.Add(cvar);
             return cvar;
         }

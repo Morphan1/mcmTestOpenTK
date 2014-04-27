@@ -33,12 +33,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 // Always at the start
                 Initializing = true;
+                ClientOutputter cout = new ClientOutputter();
+                cout.Initializing = true;
                 // Prepare the CVar system
                 SysConsole.Output(OutputType.INIT, "Preparing CVars...");
-                ClientCVar.Init();
+                ClientCVar.Init(cout);
                 // Prepares the command system
                 SysConsole.Output(OutputType.INIT, "Preparing command system...");
-                ClientCommands.Init();
+                ClientCommands.Init(cout);
                 // TODO: Load default.cfg / etc.
                 // Prepare text output / language related info
                 SysConsole.Output(OutputType.INIT, "Preparing text/languaging...");
@@ -85,7 +87,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.HideConsole();
                 // Always at the end
                 Initializing = false;
-                ClientCommands.Output.Initializing = false;
+                cout.Initializing = false;
             }
             catch (Exception ex)
             {
