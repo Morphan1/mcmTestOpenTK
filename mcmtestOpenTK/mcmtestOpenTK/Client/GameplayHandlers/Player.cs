@@ -39,7 +39,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <summary>
         /// The precise Yaw/Pitch/Roll direction of the entity.
         /// </summary>
-        public Vector3 Angle = Vector3.Zero;
+        public Vector3 Direction = Vector3.Zero;
 
         float ticker = 0;
 
@@ -49,25 +49,25 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public void Update()
         {
             // Mouse based rotation
-            Angle.X += MouseHandler.MouseDelta.X;
-            Angle.Y += MouseHandler.MouseDelta.Y;
-            while (Angle.X < 0)
+            Direction.X += MouseHandler.MouseDelta.X;
+            Direction.Y += MouseHandler.MouseDelta.Y;
+            while (Direction.X < 0)
             {
-                Angle.X += 360;
+                Direction.X += 360;
             }
-            while (Angle.X > 360)
+            while (Direction.X > 360)
             {
-                Angle.X -= 360;
+                Direction.X -= 360;
             }
-            if (Angle.Y > 80)
+            if (Direction.Y > 80)
             {
-                Angle.Y = 80;
+                Direction.Y = 80;
             }
-            if (Angle.Y < -80)
+            if (Direction.Y < -80)
             {
-                Angle.Y = -80;
+                Direction.Y = -80;
             }
-            MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
+            MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Direction.X), MathHelper.DegreesToRadians(Direction.Y));
             if (KeyHandler.IsPressed(Key.LShift))
             {
                 if (MouseHandler.MouseCaptured)
@@ -121,7 +121,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (movement.LengthSquared > 0)
             {
-                movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Angle.X), MathHelper.DegreesToRadians(Angle.Y));
+                movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Direction.X), MathHelper.DegreesToRadians(Direction.Y));
             }
             if (up)
             {
@@ -138,14 +138,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             if (ticker > (1 / 20) && NetworkBase.IsActive)
             {
                 ticker = 0;
-                if (Position != LastLoc)
+                if (Velocity != LastVel || LastDir != Direction)
                 {
-                    NetworkBase.Send(new PositionPacketOut(Position));
-                    LastLoc = Position;
+                    NetworkBase.Send(new PositionPacketOut(Position, Velocity, Direction));
+                    LastVel = Velocity;
+                    LastDir = Direction;
                 }
             }
         }
 
-        Vector3 LastLoc = Vector3.Zero;
+        Vector3 LastVel = Vector3.Zero;
+        Vector3 LastDir = Vector3.Zero;
     }
 }

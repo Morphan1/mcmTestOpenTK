@@ -16,10 +16,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
     {
         ulong eID;
         Vector3 position;
+        Vector3 velocity;
+        Vector3 direction;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length != 20)
+            if (input.Length != 44)
             {
                 IsValid = false;
                 return;
@@ -29,6 +31,14 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             float Y = BitConverter.ToSingle(input, 12);
             float Z = BitConverter.ToSingle(input, 16);
             position = new Vector3(X, Y, Z);
+            X = BitConverter.ToSingle(input, 20);
+            Y = BitConverter.ToSingle(input, 24);
+            Z = BitConverter.ToSingle(input, 28);
+            velocity = new Vector3(X, Y, Z);
+            X = BitConverter.ToSingle(input, 32);
+            Y = BitConverter.ToSingle(input, 36);
+            Z = BitConverter.ToSingle(input, 40);
+            direction = new Vector3(X, Y, Z);
             IsValid = true;
         }
 
@@ -46,6 +56,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             else
             {
                 ent.Position = position;
+                // TODO: Separate packet for position / movement
+                if (ent is MovingEntity)
+                {
+                    ((MovingEntity)ent).Velocity = velocity;
+                    ((MovingEntity)ent).Direction = direction;
+                }
             }
         }
     }

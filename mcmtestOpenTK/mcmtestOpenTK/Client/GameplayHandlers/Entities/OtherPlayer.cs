@@ -15,7 +15,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            MainGame.DrawCube(Position.X, Position.Y, Position.Z);
+            MainGame.DrawCube(Position.X, Position.Y, Position.Z, Direction.X);
         }
     }
 }

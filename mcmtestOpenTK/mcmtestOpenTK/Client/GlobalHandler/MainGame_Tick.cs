@@ -112,7 +112,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     "\ncFPS: " + cFPS +
                     "\ngFPS: " + gFPS +
                     "\nPosition: " + Player.player.Position.ToString() +
-                    "\nAngle: " + Player.player.Angle.ToString() +
+                    "\nDirection: " + Player.player.Direction.ToString() +
                     "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
                     "\nPing: " + (int)(Ping * 1000);
             }

@@ -21,7 +21,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <summary>
         /// The precise Yaw/Pitch/Roll direction of the entity.
         /// </summary>
-        public Vector3 Angle = Vector3.Zero;
+        public Vector3 Direction = Vector3.Zero;
 
         public override void Tick()
         {

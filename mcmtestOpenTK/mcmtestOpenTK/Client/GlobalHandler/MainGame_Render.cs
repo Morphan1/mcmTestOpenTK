@@ -188,15 +188,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <summary>
         /// Temporary for testing: Draw a cube model
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <param name="ori"></param>
-        public static void DrawCube(float x, float y, float z)
+        public static void DrawCube(float x, float y, float z, float angle = 0)
         {
             GL.PushMatrix();
-
             GL.Translate(x, y, z);
+            GL.Rotate(angle, 0, 0, 1);
 
             Texture.Test.Bind();
             GL.Begin(PrimitiveType.Quads);

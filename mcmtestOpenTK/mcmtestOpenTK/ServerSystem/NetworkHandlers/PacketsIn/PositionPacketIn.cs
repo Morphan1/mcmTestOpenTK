@@ -15,10 +15,12 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
     class PositionPacketIn: AbstractPacketIn
     {
         Location Position;
+        Location Velocity;
+        Location Direction;
 
         public override void FromBytes(Player player, byte[] input)
         {
-            if (input.Length != 12)
+            if (input.Length != 36)
             {
                 IsValid = false;
                 return;
@@ -27,6 +29,14 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             float Y = BitConverter.ToSingle(input, 4);
             float Z = BitConverter.ToSingle(input, 8);
             Position = new Location(X, Y, Z);
+            X = BitConverter.ToSingle(input, 12);
+            Y = BitConverter.ToSingle(input, 16);
+            Z = BitConverter.ToSingle(input, 20);
+            Velocity = new Location(X, Y, Z);
+            X = BitConverter.ToSingle(input, 24);
+            Y = BitConverter.ToSingle(input, 28);
+            Z = BitConverter.ToSingle(input, 32);
+            Direction = new Location(X, Y, Z);
             IsValid = true;
         }
 
@@ -38,6 +48,8 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             }
             // TODO: Confirm validity, etc.
             player.Position = Position;
+            player.Velocity = Velocity;
+            player.Direction = Direction;
         }
     }
 }

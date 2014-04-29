@@ -28,17 +28,19 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public override void Tick()
         {
             Position += Velocity * Server.DeltaF;
-            if (lastloc != Position)
+            if (lastvel != Velocity || lastdir != Direction)
             {
-                PositionPacketOut pack = new PositionPacketOut(this, Position);
+                PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
                 for (int i = 0; i < world.Players.Count; i++)
                 {
                     world.Players[i].Send(pack);
                 }
-                lastloc = Position;
+                lastvel = Velocity;
+                lastdir = Direction;
             }
         }
 
-        Location lastloc;
+        Location lastvel;
+        Location lastdir;
     }
 }
