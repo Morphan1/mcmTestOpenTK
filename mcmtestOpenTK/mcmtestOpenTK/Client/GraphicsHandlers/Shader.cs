@@ -39,6 +39,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader BlackRemoverShader;
 
         /// <summary>
+        /// The 'sky test' shader
+        /// </summary>
+        public static Shader Skyt;
+
+        /// <summary>
         /// The current bound shader program.
         /// </summary>
         public static int Bound_Program = 0;
@@ -68,6 +73,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedShaders.Add(BlackRemoverShader);
             // Preload a few common shaders
             Grayscale = GetShader("common/testcolor");
+            Skyt = GetShader("common/skyt");
         }
 
         /// <summary>

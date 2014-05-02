@@ -33,6 +33,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         // This set: general preloaded common-use textures.
         public static Texture Test = null;
         public static Texture Console = null;
+        public static Texture Sky = null;
 
         public static Bitmap EmptyBitmap = null;
         public static Graphics GenericGraphicsObject = null;
@@ -70,6 +71,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             // Preload a few common textures
             Test = GetTexture("common/test");
             Console = GetTexture("common/console");
+            Sky = GetTexture("common/sky");
         }
 
         /// <summary>
