@@ -17,5 +17,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             MainGame.DrawCube(Position.X, Position.Y, Position.Z, Direction.X);
         }
+
+        public override void ReadBytes(byte[] data)
+        {
+            if (data.Length > 0)
+            {
+                throw new ArgumentException("Binary network data was unexpected!");
+            }
+        }
     }
 }

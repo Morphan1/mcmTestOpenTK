@@ -20,6 +20,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public abstract void Kill();
 
         /// <summary>
+        /// Return binary network data specifying this entity's custom settings.
+        /// </summary>
+        public abstract byte[] GetData();
+
+        /// <summary>
         /// Whether this entity needs to be ticked.
         /// </summary>
         public readonly bool TickMe;

@@ -44,9 +44,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="e">The entity to spawn</param>
         public static void SpawnEntity(Entity e)
         {
+            if (e.IsCorrupt)
+            {
+                return;
+            }
             if (!Entities.Contains(e))
             {
                 Entities.Add(e);
+                e.IsValid = true;
                 if (e.TickMe)
                 {
                     Tickers.Add(e);
@@ -60,7 +65,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="e">The type of entity to spawn</param>
         /// <param name="ID">The entity ID to use</param>
         /// <param name="Position">Where to spawn it</param>
-        public static void SpawnEntity(EntityType e, ulong ID, Vector3 Position)
+        /// <param name="Data">Optional - network binary data describing the entity</param>
+        public static void SpawnEntity(EntityType e, ulong ID, Vector3 Position, byte[] Data = null)
         {
             Entity ent = Entity.FromType(e);
             if (ent == null)
@@ -70,6 +76,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             ent.UniqueID = ID;
             ent.Position = Position;
+            ent.ReadBytes(Data);
             SpawnEntity(ent);
         }
 
@@ -97,6 +104,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void Destroy(Entity e)
         {
             Entities.Remove(e);
+            e.IsValid = false;
             if (e.TickMe)
             {
                 Tickers.Remove(e);
@@ -108,6 +116,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void DestroyWorld()
         {
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                Entities[i].IsValid = false;
+            }
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
         }
@@ -124,6 +136,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         static void DrawWorld()
         {
             skybox.Draw();
+            Shader.ColorMultShader.Bind();
             for (int i = 0; i < Entities.Count; i++)
             {
                 Entities[i].Draw();

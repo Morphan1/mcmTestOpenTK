@@ -129,5 +129,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public override void Kill()
         {
         }
+
+        public override byte[] GetData()
+        {
+            return new byte[0];
+        }
     }
 }

@@ -41,6 +41,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             }
             SysConsole.Output(OutputType.INIT, "Preparing world...");
             MainWorld = new World("default");
+            MainWorld.Init();
             SysConsole.Output(OutputType.INIT, "Preparing global network system...");
             GlobalNetwork.Init();
             SysConsole.Output(OutputType.INIT, "Preparing network system...");

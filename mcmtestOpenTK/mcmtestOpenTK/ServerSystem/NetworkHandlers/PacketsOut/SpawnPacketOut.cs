@@ -20,10 +20,15 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
 
         public override byte[] ToBytes()
         {
-            byte[] toret = new byte[21];
+            byte[] entdata = ent.GetData();
+            byte[] toret = new byte[21 + entdata.Length];
             toret[0] = (byte)ent.Type;
             BitConverter.GetBytes(ent.UniqueID).CopyTo(toret, 1);
             ent.Position.ToBytes().CopyTo(toret, 9);
+            if (entdata.Length > 0)
+            {
+                entdata.CopyTo(toret, 21);
+            }
             return toret;
         }
     }

@@ -33,9 +33,25 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public abstract void Tick();
 
         /// <summary>
+        /// Reads binary packet data for the entity.
+        /// </summary>
+        /// <param name="data">Data from the network</param>
+        public abstract void ReadBytes(byte[] data);
+
+        /// <summary>
         /// Whether the entity should tick regularly.
         /// </summary>
         public readonly bool TickMe;
+
+        /// <summary>
+        /// Whether the entity is still in the world.
+        /// </summary>
+        public bool IsValid = false;
+
+        /// <summary>
+        /// Whether the entity should be prevented from spawning.
+        /// </summary>
+        public bool IsCorrupt = false;
 
         /// <summary>
         /// What type of entity this is.
@@ -48,6 +64,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 case EntityType.PLAYER:
                     return new OtherPlayer();
+                case EntityType.CUBE:
+                    return new CubeEntity();
                 default:
                     return null;
             }

@@ -109,10 +109,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\GameplayHandlers\Entities\CubeEntity.cs" />
     <Compile Include="Client\GraphicsHandlers\CubeModel.cs" />
     <Compile Include="Client\GraphicsHandlers\Skybox.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />

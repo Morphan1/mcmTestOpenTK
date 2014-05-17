@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {
@@ -36,6 +37,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             Players = new List<Player>();
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+        }
+
+        /// <summary>
+        /// Loads up the world properly.
+        /// </summary>
+        public void Init()
+        {
+            Spawn(new CubeEntity() { Position = new Location(0, 0, 0), Scale = new Location(10), texture = "common/test" });
+            Spawn(new CubeEntity() { Position = new Location(15, 0, 0), Scale = new Location(10), texture = "common/console" });
+            Spawn(new CubeEntity() { Position = new Location(50, 0, 0), Scale = new Location(10), texture = "common/sky" });
+            Spawn(new CubeEntity() { Position = new Location(100, 0, 0), Scale = new Location(10), texture = "common/test" });
+            Spawn(new CubeEntity() { Position = new Location(150, 0, 0), Scale = new Location(10), texture = "common/test" });
         }
 
         /// <summary>

@@ -16,10 +16,11 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
         EntityType type;
         Vector3 position;
         ulong id;
+        byte[] LeftOver;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length != 21)
+            if (input.Length < 21)
             {
                 IsValid = false;
                 return;
@@ -30,6 +31,11 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             float Y = BitConverter.ToSingle(input, 13);
             float Z = BitConverter.ToSingle(input, 17);
             position = new Vector3(X, Y, Z);
+            LeftOver = new byte[input.Length - 21];
+            if (LeftOver.Length > 0)
+            {
+                Array.Copy(input, 21, LeftOver, 0, input.Length - 21);
+            }
             IsValid = true;
         }
 
@@ -39,7 +45,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            MainGame.SpawnEntity(type, id, position);
+            MainGame.SpawnEntity(type, id, position, LeftOver);
         }
     }
 }
