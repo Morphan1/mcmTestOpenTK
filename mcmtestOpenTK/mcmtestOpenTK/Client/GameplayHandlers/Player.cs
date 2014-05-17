@@ -11,6 +11,7 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
+using mcmtestOpenTK.Client.GraphicsHandlers;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {

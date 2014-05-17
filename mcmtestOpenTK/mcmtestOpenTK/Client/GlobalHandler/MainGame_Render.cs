@@ -183,11 +183,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void Standard3D()
         {
             // Temporary for testing
-            GL.CullFace(CullFaceMode.Front);
-            Shader.Skyt.Bind();
-            Texture.Sky.Bind();
-            DrawCube_int(Player.player.Position.X - 500, Player.player.Position.Y - 500, Player.player.Position.Z + 1500, 0, 1000);
-            GL.CullFace(CullFaceMode.Back);
+            Shader.ColorMultShader.Bind();
+
+            // Draw everything in the world
+            DrawWorld();
+
+            // Temporary for testing
             Shader.ColorMultShader.Bind();
             DrawCube(50, 0, 0);
             DrawCube(100, 0, 0);
@@ -197,9 +198,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             DrawCube(0, 100, 0);
             DrawCube(0, -50, 0);
             DrawCube(0, -100, 0);
-
-            // Draw everything in the world
-            DrawWorld();
         }
 
         /// <summary>
@@ -207,75 +205,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void DrawCube(float x, float y, float z, float angle = 0, float scale = 10)
         {
-            Texture.Test.Bind();
-            DrawCube_int(x, y, z, angle, scale);
-        }
-        public static void DrawCube_int(float x, float y, float z, float angle = 0, float scale = 10)
-        {
-            GL.PushMatrix();
-            GL.Translate(x, y, z);
-            GL.Rotate(angle, 0, 0, 1);
-            GL.Scale(scale == 10 ? 20 : scale, scale, scale);
-
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(1, 1, 0);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(0, 1, 0);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(1, 0, -1);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(1, 1, -1);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(1, 1, 0);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(0, 0, -1);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(1, 0, -1);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(1, 0, 0);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(0, 0, -1);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(0, 1, 0);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(0, 1, -1);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(0, 1, 0);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(1, 1, 0);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(1, 1, -1);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(0, 1, -1);
-
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(1, 0, -1);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(0, 0, -1);
-            GL.TexCoord2(1, 1);
-            GL.Vertex3(0, 1, -1);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(1, 1, -1);
-
-            GL.End();
-
-            GL.PopMatrix();
+            CubeModel model = new CubeModel(new Vector3(x, y, z), new Vector3(scale), Texture.Test);
+            model.Draw();
         }
     }
 }

@@ -18,14 +18,24 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public partial class MainGame
     {
+        /// <summary>
+        /// A list of all entities in the world.
+        /// </summary>
         public static List<Entity> Entities;
 
+        /// <summary>
+        /// A list of all Ticking entities in the world.
+        /// </summary>
         public static List<Entity> Tickers;
+
+        static Skybox skybox = null;
 
         static void LoadWorld()
         {
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+            skybox = new Skybox();
+            skybox.Init();
         }
 
         /// <summary>
@@ -113,6 +123,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         static void DrawWorld()
         {
+            skybox.Draw();
             for (int i = 0; i < Entities.Count; i++)
             {
                 Entities[i].Draw();
