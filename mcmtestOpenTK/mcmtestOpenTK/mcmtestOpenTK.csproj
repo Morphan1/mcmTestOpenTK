@@ -119,6 +119,7 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />
     <Compile Include="ServerSystem\GameHandlers\GameHelpers\Location.cs" />
+    <Compile Include="ServerSystem\GameHandlers\MapLoader.cs" />
     <Compile Include="ServerSystem\GameHandlers\World.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server_Load.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\AbstractPacketIn.cs" />

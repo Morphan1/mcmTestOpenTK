@@ -25,6 +25,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public abstract byte[] GetData();
 
         /// <summary>
+        /// Handle variable strings from the map file.
+        /// </summary>
+        /// <param name="varname">The variable name</param>
+        /// <param name="vardata">The variable's data</param>
+        /// <returns>Whether the variable was valid</returns>
+        public abstract bool HandleVariable(string varname, string vardata);
+
+        /// <summary>
         /// Whether this entity needs to be ticked.
         /// </summary>
         public readonly bool TickMe;

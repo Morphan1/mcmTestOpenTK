@@ -40,8 +40,9 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 ServerCommands.ExecuteCommands(args);
             }
             SysConsole.Output(OutputType.INIT, "Preparing world...");
-            MainWorld = new World("default");
+            MainWorld = new World("mainworld");
             MainWorld.Init();
+            MapLoader.LoadMap(MainWorld, "skylands");
             SysConsole.Output(OutputType.INIT, "Preparing global network system...");
             GlobalNetwork.Init();
             SysConsole.Output(OutputType.INIT, "Preparing network system...");

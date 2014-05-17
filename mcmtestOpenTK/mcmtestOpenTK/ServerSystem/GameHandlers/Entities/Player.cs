@@ -73,7 +73,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 Send(new SpawnPacketOut(world.Entities[i]));
             }
-            world.Players.Add(this);
             world.Spawn(this);
         }
 
@@ -119,7 +118,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 IsAlive = false;
                 Network.Disconnect();
-                world.Players.Remove(this);
                 world.Destroy(this);
                 return;
             }
@@ -132,7 +130,13 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override byte[] GetData()
         {
+            // TODO: Name, etc.
             return new byte[0];
+        }
+
+        public override bool HandleVariable(string varname, string vardata)
+        {
+            return false;
         }
     }
 }

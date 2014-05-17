@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
 {
@@ -146,6 +147,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
         public static Location operator /(Location v, float scale)
         {
             return new Location(v.X / scale, v.Y / scale, v.Z / scale);
+        }
+
+        public static Location FromString(string input)
+        {
+            string[] data = input.Replace(" ", "").Split(',');
+            if (data.Length != 3)
+            {
+                return new Location(0);
+            }
+            return new Location(Utilities.StringToFloat(data[0]), Utilities.StringToFloat(data[1]), Utilities.StringToFloat(data[2]));
         }
     }
 }

@@ -43,5 +43,22 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             texturebytes.CopyTo(toret, scalebytes.Length);
             return toret;
         }
+
+        public override bool HandleVariable(string varname, string vardata)
+        {
+            if (varname == "scale")
+            {
+                Scale = Location.FromString(vardata);
+            }
+            else if (varname == "texture")
+            {
+                texture = vardata;
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

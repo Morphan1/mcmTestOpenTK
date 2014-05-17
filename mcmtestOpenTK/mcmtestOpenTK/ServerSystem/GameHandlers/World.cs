@@ -44,11 +44,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// </summary>
         public void Init()
         {
-            Spawn(new CubeEntity() { Position = new Location(0, 0, 0), Scale = new Location(10), texture = "common/test" });
+            /*Spawn(new CubeEntity() { Position = new Location(0, 0, 0), Scale = new Location(10), texture = "common/test" });
             Spawn(new CubeEntity() { Position = new Location(15, 0, 0), Scale = new Location(10), texture = "common/console" });
             Spawn(new CubeEntity() { Position = new Location(50, 0, 0), Scale = new Location(10), texture = "common/sky" });
             Spawn(new CubeEntity() { Position = new Location(100, 0, 0), Scale = new Location(10), texture = "common/test" });
             Spawn(new CubeEntity() { Position = new Location(150, 0, 0), Scale = new Location(10), texture = "common/test" });
+             * */
         }
 
         /// <summary>
@@ -85,6 +86,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 Tickers.Add(entity);
             }
+            if (entity is Player)
+            {
+                Players.Add((Player)entity);
+            }
             for (int i = 0; i < Players.Count; i++)
             {
                 Players[i].Send(new SpawnPacketOut(entity));
@@ -99,6 +104,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         {
             ent.Kill();
             Entities.Remove(ent);
+            if (ent is Player)
+            {
+                Players.Remove((Player)ent);
+            }
             if (ent.TickMe)
             {
                 Tickers.Remove(ent);
@@ -183,17 +192,28 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             }
         }
 
+        public bool HasMap = false;
+
         /// <summary>
         /// Destroys the world, releasing all memory.
         /// </summary>
-        public void DestroyWorld()
+        public void DestroyWorld(bool quiet = false)
         {
-            SysConsole.Output(OutputType.INFO, "[" + Name + "] Destructing...");
+            if (!quiet)
+            {
+                SysConsole.Output(OutputType.INFO, "[" + Name + "] Destructing...");
+            }
             while (Entities.Count > 0)
             {
                 Destroy(Entities[0]);
             }
-            SysConsole.Output(OutputType.INFO, "[" + Name + "] Gone!");
+            Entities.Clear();
+            Tickers.Clear();
+            Players.Clear();
+            if (!quiet)
+            {
+                SysConsole.Output(OutputType.INFO, "[" + Name + "] Gone!");
+            }
         }
     }
 }

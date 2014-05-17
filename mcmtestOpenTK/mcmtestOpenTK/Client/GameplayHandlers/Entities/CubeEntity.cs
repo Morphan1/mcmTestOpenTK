@@ -46,7 +46,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             float Z = BitConverter.ToSingle(data, 8);
             model.Scale = new Vector3(X, Y, Z);
             string texture = FileHandler.encoding.GetString(data, 12, data.Length - 12);
-            UIConsole.WriteLine("TEXTURE: " + texture);
             model.texture = Texture.GetTexture(texture);
         }
     }
