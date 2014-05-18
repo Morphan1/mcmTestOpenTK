@@ -94,6 +94,15 @@
     <Compile Include="Client\Networking\PacketsOut\DisconnectPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\IdentityPacketOut.cs" />
     <Compile Include="Client\Networking\PacketsOut\PingPacketOut.cs" />
+    <Compile Include="Client\AudioHandlers\Sound.cs" />
+    <Compile Include="Client\CommandHandlers\AudioCmds\PlaysoundCommand.cs" />
+    <Compile Include="Client\CommandHandlers\AudioCmds\RemapsoundCommand.cs" />
+    <Compile Include="Client\CommandHandlers\AudioCmds\SoundlistCommand.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\CubeEntity.cs" />
+    <Compile Include="Client\GraphicsHandlers\CubeModel.cs" />
+    <Compile Include="Client\GraphicsHandlers\Skybox.cs" />
+    <Compile Include="Client\Networking\PacketsIn\MessagePacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsOut\CommandPacketOut.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -108,15 +117,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\AudioHandlers\Sound.cs" />
-    <Compile Include="Client\CommandHandlers\AudioCmds\PlaysoundCommand.cs" />
-    <Compile Include="Client\CommandHandlers\AudioCmds\RemapsoundCommand.cs" />
-    <Compile Include="Client\CommandHandlers\AudioCmds\SoundlistCommand.cs" />
-    <Compile Include="Client\GameplayHandlers\Entities\CubeEntity.cs" />
-    <Compile Include="Client\GraphicsHandlers\CubeModel.cs" />
-    <Compile Include="Client\GraphicsHandlers\Skybox.cs" />
-    <Compile Include="Client\Networking\PacketsIn\MessagePacketIn.cs" />
-    <Compile Include="Client\Networking\PacketsOut\CommandPacketOut.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
