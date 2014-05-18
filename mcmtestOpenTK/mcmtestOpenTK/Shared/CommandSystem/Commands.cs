@@ -99,8 +99,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                         return;
                     }
                 }
-                Output.WriteLine(TextStyle.Color_Error + "Unknown command '" +
-                    TextStyle.Color_Standout + BaseCommand + TextStyle.Color_Error + "'.");
+                Output.UnknownCommand(BaseCommandLow, args.ToArray());
             }
             catch (Exception ex)
             {

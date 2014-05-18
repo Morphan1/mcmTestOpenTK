@@ -112,13 +112,14 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             switch (ID)
             {
-                    // TODO!
                 case 2:
                     Handler = new PingPacketIn(); break;
                 case 3:
                     Handler = new IdentityPacketIn(); break;
                 case 4:
                     Handler = new PositionPacketIn(); break;
+                case 5:
+                    Handler = new CommandPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:

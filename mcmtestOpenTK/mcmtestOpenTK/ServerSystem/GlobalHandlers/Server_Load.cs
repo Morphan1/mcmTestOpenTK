@@ -10,6 +10,7 @@ using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
 using mcmtestOpenTK.ServerSystem.CommonHandlers;
 using mcmtestOpenTK.ServerSystem.GameHandlers;
+using mcmtestOpenTK.ServerSystem.PlayerCommands;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -27,6 +28,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             ServerCVar.Init(sout);
             SysConsole.Output(OutputType.INIT, "Preparing command system...");
             ServerCommands.Init(sout);
+            PlayerCommandEngine.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
             SysConsole.Output(OutputType.INIT, "Running command line arguments...");

@@ -71,7 +71,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Entity ent = Entity.FromType(e);
             if (ent == null)
             {
-                UIConsole.WriteLine("Tried to spawn unknown entity type: " + (int)((byte)e)); // ... Yup.
+                UIConsole.WriteLine("Tried to spawn unknown entity type: " + (int)e);
                 return;
             }
             ent.UniqueID = ID;

@@ -30,5 +30,11 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
             string text = ServerCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
             SysConsole.Output(OutputType.INFO, TextStyle.Color_Outbad + text);
         }
+
+        public override void UnknownCommand(string basecommand, string[] arguments)
+        {
+            WriteLine(TextStyle.Color_Error + "Unknown command '" +
+                TextStyle.Color_Standout + basecommand + TextStyle.Color_Error + "'.");
+        }
     }
 }

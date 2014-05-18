@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Shared.TagHandlers;
 
-namespace mcmtestOpenTK.Shared.CommandSystem
+namespace mcmtestOpenTK.ServerSystem.PlayerCommands
 {
-    public abstract class AbstractCommand
+    public abstract class PlayerAbstractCommand
     {
         /// <summary>
         /// The name of the command.
@@ -33,20 +32,16 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// Executes the command.
         /// </summary>
         /// <param name="entry">Entry to be executed</param>
-        public abstract void Execute(CommandEntry entry);
+        public abstract void Execute(PlayerCommandEntry entry);
 
         /// <summary>
         /// Displays the usage information on a command to the console.
         /// </summary>
         /// <param name="entry">The CommandEntry data to get usage help from.</param>
-        public static void ShowUsage(CommandEntry entry)
+        public static void ShowUsage(PlayerCommandEntry entry)
         {
-            entry.Bad("<{color.emphasis}>" + TagParser.Escape(entry.Command.Name) + "<{color.base}>: " + TagParser.Escape(entry.Command.Description));
-            entry.Bad("<{color.cmdhelp}>Usage: /" + TagParser.Escape(entry.Name) + " " + TagParser.Escape(entry.Command.Arguments));
-            if (entry.Command.IsDebug)
-            {
-                entry.Bad("Note: This command is intended for debugging purposes.");
-            }
+            entry.player.SendMessage(TextStyle.Color_Separate + entry.Command.Name + TextStyle.Color_Outbad + ": " + entry.Command.Description);
+            entry.player.SendMessage(TextStyle.Color_Commandhelp + "Usage: /" + entry.Name + " " + entry.Command.Arguments);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace mcmtestOpenTK.Client.Networking
                 {
                     return false;
                 }
-                Disconnect();
+                Disconnect("Connect / reset");
                 RemoteTarget = target;
                 if (target.AddressFamily == AddressFamily.InterNetworkV6)
                 {
@@ -97,7 +97,11 @@ namespace mcmtestOpenTK.Client.Networking
             }
             else if (Connected && !Sock.Connected)
             {
-                Disconnect();
+                Disconnect("Connected=true but Socket not connected");
+                return;
+            }
+            if (!Connected)
+            {
                 return;
             }
             int avail = Sock.Available;
@@ -109,7 +113,7 @@ namespace mcmtestOpenTK.Client.Networking
             if (avail + ReceivedSoFar.Length >= MAX_PACKET_SIZE)
             {
                 // NOPE NOPE NOPE.
-                Disconnect();
+                Disconnect("Too much data");
                 return;
             }
             byte[] packet = new byte[avail];
@@ -133,7 +137,7 @@ namespace mcmtestOpenTK.Client.Networking
             if (len > MAX_PACKET_SIZE || len <= 0)
             {
                 // Corrupted data?
-                Disconnect();
+                Disconnect("Corrupted packet");
                 return;
             }
             if (ReceivedSoFar.Length < 4 + len)
@@ -181,6 +185,8 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new PositionPacketIn(); break;
                 case 5:
                     Handler = new DespawnPacketIn(); break;
+                case 6:
+                    Handler = new MessagePacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
@@ -239,22 +245,22 @@ namespace mcmtestOpenTK.Client.Networking
         /// <summary>
         /// Disconnects from the server.
         /// </summary>
-        public static void Disconnect()
+        public static void Disconnect(string reason)
         {
             IsActive = false;
             MainGame.DestroyWorld();
-            ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server!");
+            ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + reason);
             if (!Connected)
             {
                 return;
             }
             WaitingToIdentify = false;
             ReceivedSoFar = new byte[0];
+            Connected = false;
             if (Sock == null || !Sock.Connected)
             {
                 return;
             }
-            Connected = false;
             Send(new DisconnectPacketOut());
             Sock.Close(5);
         }

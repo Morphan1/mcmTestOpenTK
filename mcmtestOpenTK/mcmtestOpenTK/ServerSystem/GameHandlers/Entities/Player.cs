@@ -105,6 +105,15 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         }
 
         /// <summary>
+        /// Shows a simple textual message in the player's console.
+        /// </summary>
+        /// <param name="message">The message to show</param>
+        public void SendMessage(string message)
+        {
+            Send(new MessagePacketOut(this, message));
+        }
+
+        /// <summary>
         /// Prepares the player.
         /// </summary>
         public void Init()

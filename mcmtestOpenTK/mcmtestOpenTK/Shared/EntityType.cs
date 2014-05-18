@@ -5,7 +5,7 @@ using System.Text;
 
 namespace mcmtestOpenTK.Shared
 {
-    public enum EntityType: byte
+    public enum EntityType: int
     {
         NUL = 0,
         PLAYER = 1,

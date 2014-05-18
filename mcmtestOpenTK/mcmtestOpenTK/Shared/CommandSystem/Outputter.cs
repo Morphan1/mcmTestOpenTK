@@ -32,6 +32,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public abstract void Good(string tagged_text);
 
         /// <summary>
+        /// Used to properly handle an unknown command.
+        /// </summary>
+        /// <param name="basecommand">The command that wasn't recognized</param>
+        /// <param name="arguments">The commands arguments</param>
+        public abstract void UnknownCommand(string basecommand, string[] arguments);
+
+        /// <summary>
         /// The CVar System used by this command engine.
         /// </summary>
         public CVarSystem CVarSys;

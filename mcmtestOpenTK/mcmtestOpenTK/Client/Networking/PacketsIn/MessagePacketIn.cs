@@ -6,17 +6,18 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.Networking.Global;
 using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
-    class DisconnectPacketIn: AbstractPacketIn
+    class MessagePacketIn: AbstractPacketIn
     {
-        string reason;
+        public string Message;
 
         public override void FromBytes(byte[] input)
         {
-            reason = FileHandler.encoding.GetString(input);
+            Message = FileHandler.encoding.GetString(input);
             IsValid = true;
         }
 
@@ -26,8 +27,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            UIConsole.WriteLine("Kicked from server: " + reason);
-            NetworkBase.Disconnect("kicked");
+            UIConsole.WriteLine(Message);
         }
     }
 }

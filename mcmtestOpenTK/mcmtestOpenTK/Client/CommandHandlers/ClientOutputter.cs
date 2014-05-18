@@ -6,6 +6,8 @@ using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.Networking.PacketsOut;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -31,6 +33,25 @@ namespace mcmtestOpenTK.Client.CommandHandlers
         {
             string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
             UIConsole.WriteLine(TextStyle.Color_Outbad + text);
+        }
+
+        public override void UnknownCommand(string basecommand, string[] arguments)
+        {
+            if (NetworkBase.IsActive)
+            {
+                StringBuilder argstr = new StringBuilder();
+                argstr.Append(basecommand);
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    argstr.Append("\n" + arguments[i]);
+                }
+                NetworkBase.Send(new CommandPacketOut(argstr.ToString()));
+            }
+            else
+            {
+                WriteLine(TextStyle.Color_Error + "Unknown command '" +
+                    TextStyle.Color_Standout + basecommand + TextStyle.Color_Error + "'.");
+            }
         }
     }
 }

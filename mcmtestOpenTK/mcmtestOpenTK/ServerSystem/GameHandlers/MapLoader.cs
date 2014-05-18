@@ -68,7 +68,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             bool quoted = false;
             bool invar = false;
             StringBuilder vardata = new StringBuilder();
-            SysConsole.Output(OutputType.INFO, "Type:" + type + "/");
             Entity ent;
             switch (type)
             {
@@ -96,8 +95,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 }
                 else if (data[i] == ';' && invar && !quoted)
                 {
-                    SysConsole.Output(OutputType.INFO, "Var:" + varname + "/" + vardata.ToString() + "/");
-                    ApplyVar(ent, varname.ToLower(), vardata.ToString());
+                    ApplyVar(ent, map, type, varname.ToLower(), vardata.ToString());
                     varname = "";
                     invar = false;
                     vardata = new StringBuilder();
@@ -111,7 +109,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             world.Spawn(ent);
         }
 
-        static void ApplyVar(Entity ent, string name, string value)
+        static void ApplyVar(Entity ent, string map, string type, string name, string value)
         {
             if (name == "position")
             {
@@ -119,7 +117,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             }
             else
             {
-                ent.HandleVariable(name, value);
+                if (!ent.HandleVariable(name, value))
+                {
+                    ErrorHandler.HandleError("Error loading map '" + map + "': invalid variable '" + name + "' for entity type '" + type + "'.");
+                }
             }
         }
     }

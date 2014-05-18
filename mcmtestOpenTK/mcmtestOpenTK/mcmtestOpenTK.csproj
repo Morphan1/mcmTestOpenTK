@@ -112,6 +112,8 @@
     <Compile Include="Client\GameplayHandlers\Entities\CubeEntity.cs" />
     <Compile Include="Client\GraphicsHandlers\CubeModel.cs" />
     <Compile Include="Client\GraphicsHandlers\Skybox.cs" />
+    <Compile Include="Client\Networking\PacketsIn\MessagePacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsOut\CommandPacketOut.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
@@ -130,10 +132,12 @@
     <Compile Include="ServerSystem\NetworkHandlers\Global\GlobalTimeRequest.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetworkBase.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NewConnection.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\CommandPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\PositionPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\DisconnectPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\IdentityPacketIn.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\PingPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\MessagePacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\DespawnPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PositionPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\SpawnPacketOut.cs" />
@@ -142,6 +146,10 @@
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\HelloPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PlayerHandler.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\WebHandler.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\CommonCmds\SayCommand.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\PlayerAbstractCommand.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\PlayerCommandEngine.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\PlayerCommandEntry.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\EchoCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerCommands.cs" />
     <Compile Include="ServerSystem\CommandHandlers\ServerOutputter.cs" />

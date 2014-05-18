@@ -142,15 +142,20 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 {
                     throw ex;
                 }
+                IsAlive = false;
                 if (Type == ConnectionType.GAME)
                 {
                     if (player != null)
                     {
+                        player.Kick("INTERNAL NETWORK ERROR");
                         player.IsAlive = false;
                     }
                 }
                 SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: internal error: " + ex.Message);
-                IsAlive = false;
+                if (!(ex is SocketException))
+                {
+                    ErrorHandler.HandleError("Player disconnect", ex);
+                }
                 try
                 {
                     Sock.Close();
