@@ -75,7 +75,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 UIConsole.InitConsole();
                 // Prepare audio-related code
                 SysConsole.Output(OutputType.INIT, "Preparing sound system...");
-                SimpleAudioTest.LoadSound();
+                Sound.InitSoundSystem();
                 // Prepare networking code
                 SysConsole.Output(OutputType.INIT, "Preparing networking...");
                 GlobalNetwork.Init();

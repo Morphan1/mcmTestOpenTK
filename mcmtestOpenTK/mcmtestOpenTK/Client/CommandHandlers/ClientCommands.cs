@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Client.CommandHandlers.CommonCmds;
 using mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds;
 using mcmtestOpenTK.Client.CommandHandlers.NetworkCmds;
+using mcmtestOpenTK.Client.CommandHandlers.AudioCmds;
 using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
@@ -38,6 +39,16 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new QuitCommand());
             CommandSystem.RegisterCommand(new ShowconsoleCommand());
 
+            // Network Commands
+            CommandSystem.RegisterCommand(new ConnectCommand());
+            CommandSystem.RegisterCommand(new LoginCommand());
+            CommandSystem.RegisterCommand(new TimeCommand());
+
+            // Audio Commands
+            CommandSystem.RegisterCommand(new PlaysoundCommand());
+            CommandSystem.RegisterCommand(new RemapsoundCommand());
+            CommandSystem.RegisterCommand(new SoundlistCommand());
+
             // Graphics Commands
             CommandSystem.RegisterCommand(new LoadshaderCommand());
             CommandSystem.RegisterCommand(new LoadtextureCommand());
@@ -48,11 +59,6 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new SavetextureCommand());
             CommandSystem.RegisterCommand(new ShaderlistCommand());
             CommandSystem.RegisterCommand(new TexturelistCommand());
-
-            // Network Commands
-            CommandSystem.RegisterCommand(new ConnectCommand());
-            CommandSystem.RegisterCommand(new LoginCommand());
-            CommandSystem.RegisterCommand(new TimeCommand());
         }
 
         /// <summary>

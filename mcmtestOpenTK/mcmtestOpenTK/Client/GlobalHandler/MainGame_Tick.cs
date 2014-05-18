@@ -68,7 +68,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 UIConsole.Tick();
 
                 // Update audio
-                SimpleAudioTest.RecalculateChannels();
+                Sound.RecalculateChannels();
 
                 // Update networking
                 NetworkBase.Tick();
@@ -95,10 +95,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 else if (KeyHandler.IsDown(Key.Down))
                 {
                     movetestY += (float)(Delta * 100f);
-                }
-                if (KeyHandler.IsPressed(Key.Space))
-                {
-                    //SimpleAudioTest.PlayTestSound();
                 }
 
                 // Update player

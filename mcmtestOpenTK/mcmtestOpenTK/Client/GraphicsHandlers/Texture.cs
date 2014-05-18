@@ -106,7 +106,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// Loads a texture from file.
         /// </summary>
         /// <param name="filename">The name of the file to use</param>
-        /// <returns>The loaded texture, or null if it does not exist.</returns>
+        /// <returns>The loaded texture, or null if it does not exist</returns>
         public static Texture LoadTexture(string filename)
         {
             try
