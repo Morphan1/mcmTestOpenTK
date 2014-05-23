@@ -56,7 +56,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.PushMatrix();
             GL.Translate(Position);
             GL.Rotate(Angle, 0, 0, 1);
-            GL.Scale(Scale);
+            GL.Scale(Scale.X, Scale.Y, -Scale.Z); // TODO: WHY IS Z NEGATIVE?!
 
             GL.Begin(PrimitiveType.Quads);
 
@@ -66,29 +66,29 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 0);
 
             GL.TexCoord2(0, 0); GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(1, 0); GL.Vertex3(1, 0, -1);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, -1);
+            GL.TexCoord2(1, 0); GL.Vertex3(1, 0, 1);
+            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, 1);
             GL.TexCoord2(0, 1); GL.Vertex3(1, 1, 0);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, -1);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 0, -1);
+            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 1);
+            GL.TexCoord2(1, 1); GL.Vertex3(1, 0, 1);
             GL.TexCoord2(0, 1); GL.Vertex3(1, 0, 0);
+            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 0);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, -1);
+            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 1);
             GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 0);
             GL.TexCoord2(1, 1); GL.Vertex3(0, 1, 0);
-            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, -1);
+            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 1);
 
             GL.TexCoord2(0, 0); GL.Vertex3(0, 1, 0);
             GL.TexCoord2(1, 0); GL.Vertex3(1, 1, 0);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, -1);
-            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, -1);
+            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, 1);
+            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 1);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(1, 0, -1);
-            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, -1);
-            GL.TexCoord2(1, 1); GL.Vertex3(0, 1, -1);
-            GL.TexCoord2(0, 1); GL.Vertex3(1, 1, -1);
+            GL.TexCoord2(0, 0); GL.Vertex3(1, 0, 1);
+            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 1);
+            GL.TexCoord2(1, 1); GL.Vertex3(0, 1, 1);
+            GL.TexCoord2(0, 1); GL.Vertex3(1, 1, 1);
 
             GL.End();
 

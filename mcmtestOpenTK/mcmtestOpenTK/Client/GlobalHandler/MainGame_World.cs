@@ -136,7 +136,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         static void DrawWorld()
         {
             skybox.Draw();
-            Shader.ColorMultShader.Bind();
+            Shader.Generic.Bind();
             for (int i = 0; i < Entities.Count; i++)
             {
                 Entities[i].Draw();

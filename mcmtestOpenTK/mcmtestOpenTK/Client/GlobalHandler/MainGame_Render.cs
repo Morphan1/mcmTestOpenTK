@@ -122,16 +122,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
             // Setup a perspective view
             GL.MultMatrix(ref Perspective);
-            View = Matrix4.LookAt(Player.player.Position, Player.player.Position + Forward, new Vector3(0, 0, 1));
+            View = Matrix4.LookAt(Player.player.Position + new Vector3(0, 0, 6), Player.player.Position + new Vector3(0, 0, 6) + Forward, new Vector3(0, 0, 1));
             GL.MultMatrix(ref View);
 
             // Enable depth and culling
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
             GL.UseProgram(Shader.Grayscale.Internal_Program);
-            int uloc = GL.GetUniformLocation(Shader.Grayscale.Internal_Program, "mult_color");
             Shader.ColorMultShader.Bind();
-            //Shader.ColorMultShader.SetColor(Color.FromArgb(255, 10, 10, 128));
             Hue += MainGame.GraphicsDeltaF * HueMult;
             if (Hue > 1 || Hue < 0)
             {
@@ -139,7 +137,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Hue += MainGame.GraphicsDeltaF * HueMult;
             }
             GL.Color4(Util.HSVtoRGB(Hue, 1, 1, 1));
-
+            /*
             GL.Enable(EnableCap.ColorMaterial);
             GL.LightModel(LightModelParameter.LightModelAmbient, new[] { 0.2f, 0.2f, 0.2f, 1f });
             GL.LightModel(LightModelParameter.LightModelLocalViewer, 1);
@@ -150,6 +148,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Emission, Color.Green);
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, Color.Blue);
             GL.ShadeModel(ShadingModel.Smooth);
+             * */
         }
 
         public static float Hue = 0;
@@ -187,17 +186,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
             // Draw everything in the world
             DrawWorld();
-
-            // Temporary for testing
-            Shader.ColorMultShader.Bind();
-            DrawCube(50, 0, 0);
-            DrawCube(100, 0, 0);
-            DrawCube(-50, 0, 0);
-            DrawCube(-100, 0, 0);
-            DrawCube(0, 50, 0);
-            DrawCube(0, 100, 0);
-            DrawCube(0, -50, 0);
-            DrawCube(0, -100, 0);
         }
 
         /// <summary>

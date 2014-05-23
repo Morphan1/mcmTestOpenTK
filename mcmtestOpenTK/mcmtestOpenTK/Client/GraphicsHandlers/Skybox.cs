@@ -23,7 +23,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public override void Draw()
         {
             GL.CullFace(CullFaceMode.Front);
-            model.Position = new Vector3(Player.player.Position.X - 500, Player.player.Position.Y - 500, Player.player.Position.Z + 1500);
+            model.Position = new Vector3(Player.player.Position.X - 500, Player.player.Position.Y - 500, Player.player.Position.Z - 500);
             model.Draw();
             GL.CullFace(CullFaceMode.Back);
         }
