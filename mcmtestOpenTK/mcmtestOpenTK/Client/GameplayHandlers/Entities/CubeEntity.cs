@@ -19,6 +19,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public CubeEntity(): base(false)
         {
             model = new CubeModel(Position, Vector3.One, null);
+            Mins = new Vector3(0, 0, 0);
         }
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             float Y = BitConverter.ToSingle(data, 4);
             float Z = BitConverter.ToSingle(data, 8);
             model.Scale = new Vector3(X, Y, Z);
+            Maxs = model.Scale;
             UIConsole.WriteLine("Cube at " + Position.ToString() + ", scale: " + model.Scale.ToString());
             string texture = FileHandler.encoding.GetString(data, 12, data.Length - 12);
             model.texture = Texture.GetTexture(texture);

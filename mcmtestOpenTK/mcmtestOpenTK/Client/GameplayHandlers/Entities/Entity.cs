@@ -18,6 +18,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public Vector3 Position = Vector3.Zero;
 
         /// <summary>
+        /// Whether this entity is solid (for collision).
+        /// </summary>
+        public bool Solid = true;
+
+        /// <summary>
+        /// How far below the origin location the collision box goes.
+        /// </summary>
+        public Vector3 Mins = new Vector3(-1);
+
+        /// <summary>
+        /// How far past the origin location the collision box goes.
+        /// </summary>
+        public Vector3 Maxs = Vector3.One;
+
+        /// <summary>
         /// A fairly unique ID stored as long as the entity is alive.
         /// </summary>
         public ulong UniqueID;

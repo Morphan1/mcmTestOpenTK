@@ -17,6 +17,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             model = new CubeModel(Vector3.Zero, new Vector3(3, 3, 8), Texture.Test);
             Mins = new Vector3(-1.5f, -1.5f, 0);
             Maxs = new Vector3(1.5f, 1.5f, 8);
+            Solid = false;
         }
 
         public override void Tick()

@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
