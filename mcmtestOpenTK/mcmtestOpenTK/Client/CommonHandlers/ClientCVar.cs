@@ -16,6 +16,9 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         /// </summary>
         public static CVarSystem system;
 
+        // Game CVars
+        public static CVar g_noclip;
+
         // Text CVars
         public static CVar t_fastrender, t_sidetextfastrender, t_allowobfu, t_allowrandom, t_allowjello, t_betteremphasis, t_bettershadow;
 
@@ -32,6 +35,9 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         {
             system = new CVarSystem(output);
 
+            // Game CVars
+            // TODO: Make below CVar only settable by server packet
+            g_noclip = Register("g_noclip", "true", CVarFlag.Boolean); // Whether the player is in 'noclip' mode.
             // Text CVars
             // TODO: IMPLEMENT BELOW CVAR
             t_fastrender = Register("t_fastrender", "false", CVarFlag.Boolean); // Whether to only render text when needed.

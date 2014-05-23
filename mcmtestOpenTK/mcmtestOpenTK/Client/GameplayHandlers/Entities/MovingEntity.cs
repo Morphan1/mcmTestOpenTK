@@ -23,10 +23,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// </summary>
         public Vector3 Direction = Vector3.Zero;
 
+        /// <summary>
+        /// How fast gravity should pull the entity downward.
+        /// </summary>
+        public float Gravity = 0;
+
+        /// <summary>
+        /// Whether this entity should check for collision while moving.
+        /// </summary>
+        public bool CheckCollision = false;
+
         public override void Tick()
         {
+            Velocity.Z -= Gravity * MainGame.DeltaF;
             Vector3 target = Position + Velocity * MainGame.DeltaF;
-            if (Solid)
+            if (CheckCollision)
             {
                 Position = Collision.MoveForward(Position, target, Mins, Maxs);
             }

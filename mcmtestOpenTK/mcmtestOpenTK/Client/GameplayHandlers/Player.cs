@@ -124,17 +124,43 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Direction.X), MathHelper.DegreesToRadians(Direction.Y));
             }
-            if (up)
+            if (ClientCVar.g_noclip.ValueB)
             {
-                movement.Z = 1;
+                Velocity = movement * 30;
+                if (up)
+                {
+                    movement.Z = 1;
+                }
+                if (down)
+                {
+                    movement.Z -= 1;
+                }
             }
-            if (down)
+            else
             {
-                movement.Z -= 1;
+                if (down)
+                {
+                    Velocity.Z = 0;
+                    Position.Z = 20;
+                }
+                if (up)
+                {
+                    if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
+                        && Collision.Box(Position, new Vector3(-1.5f, -1.5f, -0.5f), new Vector3(1.5f, 1.5f, 2)))
+                    {
+                        Velocity.Z = 20;
+                    }
+                }
+                Velocity = new Vector3(movement.X * 30, movement.Y * 30, Velocity.Z);
+                Velocity.Z -= 100 * MainGame.DeltaF;
             }
-            Velocity = new Vector3(movement * 30);
             Vector3 target = Position + Velocity * MainGame.DeltaF;
+            float pZ = Position.Z;
             Position = Collision.MoveForward(Position, target, new Vector3(-1.5f, -1.5f, 0), new Vector3(1.5f, 1.5f, 8));
+            if (!ClientCVar.g_noclip.ValueB)
+            {
+                Velocity.Z = (Position.Z - pZ) / MainGame.DeltaF;
+            }
             ticker += MainGame.DeltaF;
             // TODO: Have server identify proper TPS
             if (ticker > (1 / 20) && NetworkBase.IsActive)

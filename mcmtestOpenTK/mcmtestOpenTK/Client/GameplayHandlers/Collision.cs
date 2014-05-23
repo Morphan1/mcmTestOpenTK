@@ -61,9 +61,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     if (Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
                         High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z)
                     {
-                        Console.WriteLine(spot + " with colbox " + Mins + ", " + Maxs + " hits the entity at "
-                            + ent.Position + " with colbox " + ent.Mins + ", " + ent.Maxs + " -- " + Low +
-                            ", " + High + " is inside " + elow + ", " + ehigh);
                         return true;
                     }
                 }
@@ -237,11 +234,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <returns>Where the entity should end up</returns>
         public static Vector3 MoveForward(Vector3 Position, Vector3 target, Vector3 mins, Vector3 maxs)
         {
-            /*if (!Box(target, mins, maxs))
-            {
-                return target;
-            }
-            return Position;*/
             return Collision.SlideBox(Position, target, mins, maxs);
         }
     }

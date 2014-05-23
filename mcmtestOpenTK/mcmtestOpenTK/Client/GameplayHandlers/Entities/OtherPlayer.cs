@@ -18,6 +18,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Mins = new Vector3(-1.5f, -1.5f, 0);
             Maxs = new Vector3(1.5f, 1.5f, 8);
             Solid = false;
+            CheckCollision = true;
+            Gravity = 100;
         }
 
         public override void Tick()
