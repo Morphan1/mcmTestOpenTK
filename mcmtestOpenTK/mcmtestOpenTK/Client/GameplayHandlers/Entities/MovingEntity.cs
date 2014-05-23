@@ -28,7 +28,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Vector3 target = Position + Velocity * MainGame.DeltaF;
             if (Solid)
             {
-                Position = Collision.MoveForward(Position, target);
+                Position = Collision.MoveForward(Position, target, Mins, Maxs);
             }
             else
             {

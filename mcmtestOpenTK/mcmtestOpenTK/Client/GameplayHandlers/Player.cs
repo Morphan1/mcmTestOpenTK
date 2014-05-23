@@ -134,7 +134,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             Velocity = new Vector3(movement * 30);
             Vector3 target = Position + Velocity * MainGame.DeltaF;
-            Position = Collision.MoveForward(Position, target);
+            Position = Collision.MoveForward(Position, target, new Vector3(-1.5f, -1.5f, 0), new Vector3(1.5f, 1.5f, 8));
             ticker += MainGame.DeltaF;
             // TODO: Have server identify proper TPS
             if (ticker > (1 / 20) && NetworkBase.IsActive)
