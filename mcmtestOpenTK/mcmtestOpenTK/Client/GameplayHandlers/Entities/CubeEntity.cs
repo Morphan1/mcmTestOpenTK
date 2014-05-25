@@ -47,7 +47,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             float Z = BitConverter.ToSingle(data, 8);
             model.Scale = new Vector3(X, Y, Z);
             Maxs = model.Scale;
-            UIConsole.WriteLine("Cube at " + Position.ToString() + ", scale: " + model.Scale.ToString());
             string texture = FileHandler.encoding.GetString(data, 12, data.Length - 12);
             model.texture = Texture.GetTexture(texture);
         }

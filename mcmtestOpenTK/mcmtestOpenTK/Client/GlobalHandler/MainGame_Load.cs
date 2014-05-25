@@ -104,8 +104,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Tell everything to re-calculate with disregard for modified state.
             IsFirstGraphicsDraw = true;
             // Setup VSync mode
-            SysConsole.Output(OutputType.INIT, "Setting VSYNC to " + TextStyle.Color_Separate + ClientCVar.g_vsync.ValueI);
-            switch (ClientCVar.g_vsync.ValueI)
+            SysConsole.Output(OutputType.INIT, "Setting VSYNC to " + TextStyle.Color_Separate + ClientCVar.r_vsync.ValueI);
+            switch (ClientCVar.r_vsync.ValueI)
             {
                 case 0:
                     PrimaryGameWindow.VSync = VSyncMode.Off;
@@ -118,28 +118,28 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     break;
             }
             // Update the screen size
-            if (ScreenWidth != ClientCVar.g_screenwidth.ValueI || ScreenHeight != ClientCVar.g_screenheight.ValueI)
+            if (ScreenWidth != ClientCVar.r_screenwidth.ValueI || ScreenHeight != ClientCVar.r_screenheight.ValueI)
             {
                 SysConsole.Output(OutputType.INIT, "Setting SCREEN SIZE to " + TextStyle.Color_Separate + ScreenWidth + ", " + ScreenHeight);
-                if (ClientCVar.g_screenwidth.ValueI < 300)
+                if (ClientCVar.r_screenwidth.ValueI < 300)
                 {
-                    ClientCVar.g_screenwidth.Set("300");
+                    ClientCVar.r_screenwidth.Set("300");
                 }
-                if (ClientCVar.g_screenheight.ValueI < 300)
+                if (ClientCVar.r_screenheight.ValueI < 300)
                 {
-                    ClientCVar.g_screenheight.Set("300");
+                    ClientCVar.r_screenheight.Set("300");
                 }
-                int XAdjust = ClientCVar.g_screenwidth.ValueI - ScreenWidth;
-                int YAdjust = ClientCVar.g_screenheight.ValueI - ScreenHeight;
-                ScreenWidth = ClientCVar.g_screenwidth.ValueI;
-                ScreenHeight = ClientCVar.g_screenheight.ValueI;
+                int XAdjust = ClientCVar.r_screenwidth.ValueI - ScreenWidth;
+                int YAdjust = ClientCVar.r_screenheight.ValueI - ScreenHeight;
+                ScreenWidth = ClientCVar.r_screenwidth.ValueI;
+                ScreenHeight = ClientCVar.r_screenheight.ValueI;
                 PrimaryGameWindow.Size = new Size(ScreenWidth, ScreenHeight);
                 UIConsole.Typing.Position.Y += YAdjust / 2;
                 UIConsole.ScrollText.Position.Y += YAdjust / 2;
                 UIConsole.MaxWidth += XAdjust;
             }
             // Handle fullscreen state
-            if (ClientCVar.g_fullscreen.ValueB)
+            if (ClientCVar.r_fullscreen.ValueB)
             {
                 SysConsole.Output(OutputType.INIT, "Enabling FULLSCREEN");
                 PrimaryGameWindow.WindowState = WindowState.Fullscreen;

@@ -22,8 +22,8 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         // Text CVars
         public static CVar t_fastrender, t_sidetextfastrender, t_allowobfu, t_allowrandom, t_allowjello, t_betteremphasis, t_bettershadow;
 
-        //Graphics CVars
-        public static CVar g_vsync, g_fov, g_screenwidth, g_screenheight, g_fullscreen;
+        //Graphics/Renderer CVars
+        public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson;
 
         // System CVars
         public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
@@ -48,12 +48,13 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             t_allowjello = Register("t_allowjello", "true", CVarFlag.Boolean); // Whether to allow '^J' (Jello) text.
             t_betteremphasis = Register("t_betteremphasis", "true", CVarFlag.Boolean); // Whether to draw HD text '^e' (Emphasis) (2 pixels out instead of 1)
             t_bettershadow = Register("t_bettershadow", "true", CVarFlag.Boolean); // Whether to draw HD text '^d' (Drop-Shadow) (2 pixels out instead of 1)
-            // Graphics CVars
-            g_vsync = Register("g_vsync", "0", CVarFlag.Numeric | CVarFlag.Delayed); // What VSync mode to use. 0 = Off, 1 = On, 2 = Adaptive.
-            g_fov = Register("g_fov", "45", CVarFlag.Numeric); // What field-of-vision range to use.
-            g_screenwidth = Register("g_screenwidth", MainGame.ScreenWidth.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The X-width (size) of the window on-screen.
-            g_screenheight = Register("g_screenheight", MainGame.ScreenHeight.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The Y-height (size) of the window on-screen.
-            g_fullscreen = Register("g_fullscreen", "false", CVarFlag.Boolean | CVarFlag.Delayed); // Whether to make the render window occupy the entire screen.
+            // Graphics/Renderer CVars
+            r_vsync = Register("r_vsync", "0", CVarFlag.Numeric | CVarFlag.Delayed); // What VSync mode to use. 0 = Off, 1 = On, 2 = Adaptive.
+            r_fov = Register("r_fov", "45", CVarFlag.Numeric); // What field-of-vision range to use.
+            r_screenwidth = Register("r_screenwidth", MainGame.ScreenWidth.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The X-width (size) of the window on-screen.
+            r_screenheight = Register("r_screenheight", MainGame.ScreenHeight.ToString(), CVarFlag.Numeric | CVarFlag.Delayed); // The Y-height (size) of the window on-screen.
+            r_fullscreen = Register("r_fullscreen", "false", CVarFlag.Boolean | CVarFlag.Delayed); // Whether to make the render window occupy the entire screen.
+            r_thirdperson = Register("r_thirdperson", "false", CVarFlag.Boolean); // Whether to use a third-person perspective.
             // TODO: More graphics CVars
             // System CVars
             ComputerInfo CI = new ComputerInfo();

@@ -197,13 +197,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 SysConsole.Output(OutputType.INFO, "[" + Name + "] Destructing...");
             }
-            while (Entities.Count > 0)
+            int ignore = 0;
+            while (Entities.Count > ignore)
             {
+                if (Entities[0] is Player)
+                {
+                    ignore++;
+                    continue;
+                }
                 Destroy(Entities[0]);
             }
-            Entities.Clear();
-            Tickers.Clear();
-            Players.Clear();
             if (!quiet)
             {
                 SysConsole.Output(OutputType.INFO, "[" + Name + "] Gone!");

@@ -24,6 +24,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 mapdata = FileHandler.ReadText("maps/" + map + ".map");
             }
+            catch (UnknownFileException)
+            {
+                return false;
+            }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError(ex);

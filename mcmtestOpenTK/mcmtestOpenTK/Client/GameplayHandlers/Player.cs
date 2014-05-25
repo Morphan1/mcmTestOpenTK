@@ -126,7 +126,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (ClientCVar.g_noclip.ValueB)
             {
-                Velocity = movement * 30;
                 if (up)
                 {
                     movement.Z = 1;
@@ -135,6 +134,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement.Z -= 1;
                 }
+                Velocity = movement * 30;
             }
             else
             {

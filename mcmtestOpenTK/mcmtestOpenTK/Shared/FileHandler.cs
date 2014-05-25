@@ -89,7 +89,12 @@ namespace mcmtestOpenTK.Shared
         /// <returns>The file's data, as a byte array</returns>
         public static byte[] ReadBytes(string filename)
         {
-            return File.ReadAllBytes(BaseDirectory + CleanFileName(filename));
+            string cleanedname = CleanFileName(filename);
+            if (!File.Exists(BaseDirectory + cleanedname))
+            {
+                throw new UnknownFileException(cleanedname);
+            }
+            return File.ReadAllBytes(BaseDirectory + cleanedname);
         }
 
         /// <summary>

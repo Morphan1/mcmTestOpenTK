@@ -109,7 +109,6 @@ namespace mcmtestOpenTK.Client.Networking
             {
                 return;
             }
-            SysConsole.Output(OutputType.CLIENTINFO, "Got " + avail + " bytes");
             if (avail + ReceivedSoFar.Length >= MAX_PACKET_SIZE)
             {
                 // NOPE NOPE NOPE.

@@ -115,14 +115,26 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static void setup3D()
         {
             // Update the perspective matrix
-            Perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(ClientCVar.g_fov.ValueF), (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
+            Perspective = Matrix4.CreatePerspectiveFieldOfView(
+                MathHelper.DegreesToRadians(ClientCVar.r_fov.ValueF), (float)ScreenWidth / (float)ScreenHeight, 1, 4000);
             // Initialise the projection view matrix
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
             // Setup a perspective view
             GL.MultMatrix(ref Perspective);
-            View = Matrix4.LookAt(Player.player.Position + new Vector3(0, 0, 6), Player.player.Position + new Vector3(0, 0, 6) + Forward, new Vector3(0, 0, 1));
+            if (ClientCVar.r_thirdperson.ValueB)
+            {
+                Vector3 start = Player.player.Position + new Vector3(0, 0, 8);
+                Vector3 target = start - Forward * 15;
+                target = Collision.Line(start, target) - Forward;
+                View = Matrix4.LookAt(target, start + Forward, new Vector3(0, 0, 1));
+            }
+            else
+            {
+                View = Matrix4.LookAt(Player.player.Position + new Vector3(0, 0, 6),
+                    Player.player.Position + new Vector3(0, 0, 6) + Forward, new Vector3(0, 0, 1));
+            }
             GL.MultMatrix(ref View);
 
             // Enable depth and culling

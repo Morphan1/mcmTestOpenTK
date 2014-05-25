@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
+    <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
+    <Compile Include="Shared\UnknownFileException.cs" />
     <Compile Include="Shared\Utilities.cs" />
     <Compile Include="Shared\TextStyle.cs" />
     <Compile Include="Shared\ErrorHandler.cs" />

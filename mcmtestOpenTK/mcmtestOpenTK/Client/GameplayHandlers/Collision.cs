@@ -73,11 +73,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         /// <param name="Start">The starting location</param>
         /// <param name="Target">The target location</param>
+        /// <param name="scale">The precision scale to use (for internal use)</param>
         /// <returns>where the collision slid to</returns>
-        public static Vector3 Slide(Vector3 Start, Vector3 Target)
+        public static Vector3 Slide(Vector3 Start, Vector3 Target, float scale = 1)
         {
             Vector3 advance = Target - Start;
-            float size = advance.Length;
+            float size = advance.Length * scale;
             if (size == 0)
             {
                 return Start;
@@ -142,7 +143,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Nextpoint.Z -= Jump.Z;
                 break;
             }
-            return Nextpoint;
+            if (scale == 1 || scale == 10 || scale == 100)
+            {
+                return Slide(Nextpoint, Target, scale * 10);
+            }
+            else
+            {
+                return Nextpoint;
+            }
         }
 
         /// <summary>
@@ -152,11 +160,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <param name="Target">The target location</param>
         /// <param name="Mins">The lowest point of the collision box</param>
         /// <param name="Maxs">The highest point of the collision box</param>
+        /// <param name="scale">The precision scale to use (for internal use)</param>
         /// <returns>where the collision slid to</returns>
-        public static Vector3 SlideBox(Vector3 Start, Vector3 Target, Vector3 Mins, Vector3 Maxs)
+        public static Vector3 SlideBox(Vector3 Start, Vector3 Target, Vector3 Mins, Vector3 Maxs, float scale = 1)
         {
             Vector3 advance = Target - Start;
-            float size = advance.Length;
+            float size = advance.Length * scale;
             if (size == 0)
             {
                 return Start;
@@ -221,7 +230,55 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Nextpoint.Z -= Jump.Z;
                 break;
             }
-            return Nextpoint;
+            if (scale == 1 || scale == 10 || scale == 100)
+            {
+                return SlideBox(Nextpoint, Target, Mins, Maxs, scale * 10);
+            }
+            else
+            {
+                return Nextpoint;
+            }
+        }
+
+        /// <summary>
+        /// Traces a straight line through the collision map, stopping immediately on collision.
+        /// </summary>
+        /// <param name="Start">The starting location</param>
+        /// <param name="Target">The target location</param>
+        /// <param name="scale">The precision scale to use (for internal use)</param>
+        /// <returns>where the collision traced to</returns>
+        public static Vector3 Line(Vector3 Start, Vector3 Target, float scale = 1)
+        {
+            Vector3 advance = Target - Start;
+            float size = advance.Length * scale;
+            if (size == 0)
+            {
+                return Start;
+            }
+            advance /= size;
+            int ticks = (int)Math.Floor(size);
+            float extra = size - (float)ticks;
+            ticks += 1;
+            Vector3 Nextpoint = Start;
+            Vector3 Jump;
+            for (int i = 0; i < ticks; i++)
+            {
+                Jump = (i == ticks - 1 ? advance * extra : advance);
+                Nextpoint += Jump;
+                if (Point(Nextpoint))
+                {
+                    Nextpoint -= Jump;
+                    break;
+                }
+            }
+            if (scale == 1 || scale == 10 || scale == 100)
+            {
+                return Line(Nextpoint, Target, scale * 10);
+            }
+            else
+            {
+                return Nextpoint;
+            }
         }
 
         /// <summary>
