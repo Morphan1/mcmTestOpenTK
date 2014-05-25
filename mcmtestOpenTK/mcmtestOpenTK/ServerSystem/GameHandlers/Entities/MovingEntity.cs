@@ -6,6 +6,7 @@ using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -42,5 +43,30 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         Location lastvel;
         Location lastdir;
+
+        public override bool HandleVariable(string varname, string vardata)
+        {
+            if (varname == "direction")
+            {
+                Direction = Location.FromString(vardata);
+            }
+            else if (varname == "velocity")
+            {
+                Velocity = Location.FromString(vardata);
+            }
+            else
+            {
+                return base.HandleVariable(varname, vardata);
+            }
+            return true;
+        }
+
+        public override List<Variable> GetSaveVars()
+        {
+            List<Variable> ToReturn = base.GetSaveVars();
+            ToReturn.Add(new Variable("direction", Direction.ToSimpleString()));
+            ToReturn.Add(new Variable("velocity", Velocity.ToSimpleString()));
+            return ToReturn;
+        }
     }
 }

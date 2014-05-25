@@ -27,7 +27,7 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers.CommonCmds
             }
             else
             {
-                string mapname = entry.GetArgument(0);
+                string mapname = FileHandler.CleanFileName(entry.GetArgument(0));
                 entry.Good("Loading map '<{color.emphasis}>" + TagParser.Escape(mapname) + "<{color.base}>'...");
                 bool worked = MapLoader.LoadMap(Server.MainWorld, mapname);
                 if (worked)

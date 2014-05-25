@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -56,9 +57,17 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             else
             {
-                return false;
+                return base.HandleVariable(varname, vardata);
             }
             return true;
+        }
+
+        public override List<Variable> GetSaveVars()
+        {
+            List<Variable> ToReturn = base.GetSaveVars();
+            ToReturn.Add(new Variable("scale", Scale.ToSimpleString()));
+            ToReturn.Add(new Variable("texture", texture));
+            return ToReturn;
         }
     }
 }

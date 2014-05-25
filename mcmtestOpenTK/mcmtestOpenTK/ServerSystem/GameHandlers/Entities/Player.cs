@@ -7,6 +7,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -145,7 +146,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override bool HandleVariable(string varname, string vardata)
         {
-            return false;
+            throw new InvalidOperationException("Tried to apply variable to Player entity!");
+        }
+
+        public override List<Variable> GetSaveVars()
+        {
+            throw new InvalidOperationException("Tried to get variables of a Player entity!");
         }
     }
 }

@@ -30,6 +30,7 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
             CommandSystem.RegisterCommand(new QuitCommand());
             // World Commands
             CommandSystem.RegisterCommand(new LoadCommand());
+            CommandSystem.RegisterCommand(new SaveCommand());
 
             // Common Tags
             CommandSystem.TagSystem.Register(new ServerTags());

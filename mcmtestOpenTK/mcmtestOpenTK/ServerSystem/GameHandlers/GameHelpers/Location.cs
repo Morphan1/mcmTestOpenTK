@@ -85,6 +85,15 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
             return "(" + X + ", " + Y + ", " + Z + ")";
         }
 
+        /// <summary>
+        /// Returns the location as a string in the form: X, Y, Z
+        /// </summary>
+        /// <returns>The location string</returns>
+        public string ToSimpleString()
+        {
+            return X + ", " + Y + ", " + Z;
+        }
+
         public byte[] ToBytes()
         {
             byte[] toret = new byte[12];

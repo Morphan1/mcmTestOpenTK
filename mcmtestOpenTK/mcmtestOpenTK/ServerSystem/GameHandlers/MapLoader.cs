@@ -99,7 +99,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 }
                 else if (data[i] == ';' && invar && !quoted)
                 {
-                    ApplyVar(ent, map, type, varname.ToLower(), vardata.ToString());
+                    string vardatastr = vardata.ToString();
+                    if (!ent.HandleVariable(varname, vardatastr))
+                    {
+                        ErrorHandler.HandleError("Error loading map '" + map +
+                            "': invalid variable '" + vardatastr + "' for entity type '" + type + "'.");
+                    }
                     varname = "";
                     invar = false;
                     vardata = new StringBuilder();
@@ -113,19 +118,52 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             world.Spawn(ent);
         }
 
-        static void ApplyVar(Entity ent, string map, string type, string name, string value)
+        /// <summary>
+        /// Saves the world to a map file.
+        /// </summary>
+        /// <param name="world">The world to save</param>
+        /// <param name="mapname">The name of the map to save to</param>
+        public static void SaveMap(World world, string mapname)
         {
-            if (name == "position")
+            string SaveStr = GetMapString(world);
+            try
             {
-                ent.Position = Location.FromString(value);
+                FileHandler.WriteText("maps/" + mapname + ".map", SaveStr);
             }
-            else
+            catch (Exception ex)
             {
-                if (!ent.HandleVariable(name, value))
+                ErrorHandler.HandleError(ex);
+            }
+        }
+
+        static string GetMapString(World world)
+        {
+            StringBuilder ToReturn = new StringBuilder();
+            for (int i = 0; i < world.Entities.Count; i++)
+            {
+                Entity ent = world.Entities[i];
+                string type;
+                switch (ent.Type)
                 {
-                    ErrorHandler.HandleError("Error loading map '" + map + "': invalid variable '" + name + "' for entity type '" + type + "'.");
+                    case EntityType.CUBE:
+                        type = "cube";
+                        break;
+                    default:
+                        type = null;
+                        break;
                 }
+                if (type == null)
+                {
+                    continue;
+                }
+                ToReturn.Append(type + "\n{\n");
+                foreach (Variable var in ent.GetSaveVars())
+                {
+                    ToReturn.Append("\t").Append(var.Name).Append(": ").Append(var.Value).Append(";\n");
+                }
+                ToReturn.Append("}\n");
             }
+            return ToReturn.ToString();
         }
     }
 }

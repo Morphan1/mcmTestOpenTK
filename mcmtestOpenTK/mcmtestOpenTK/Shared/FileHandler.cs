@@ -68,6 +68,12 @@ namespace mcmtestOpenTK.Shared
                 // All others normal
                 output.Append(input[i]);
             }
+            // Limit length
+            if (output.Length > 100)
+            {
+                // Also, trim leading/trailing spaces.
+                return output.ToString().Substring(0, 100).Trim();
+            }
             // Also, trim leading/trailing spaces.
             return output.ToString().Trim();
         }

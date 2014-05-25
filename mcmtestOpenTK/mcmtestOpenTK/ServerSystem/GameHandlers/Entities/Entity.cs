@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -26,11 +27,35 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         /// <summary>
         /// Handle variable strings from the map file.
+        /// This method should invert GetSaveVars.
         /// </summary>
         /// <param name="varname">The variable name</param>
         /// <param name="vardata">The variable's data</param>
         /// <returns>Whether the variable was valid</returns>
-        public abstract bool HandleVariable(string varname, string vardata);
+        public virtual bool HandleVariable(string varname, string vardata)
+        {
+            if (varname == "position")
+            {
+                Position = Location.FromString(vardata);
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Gets a list of all variables on this entity, for saving maps.
+        /// This method should invert HandleVariable.
+        /// </summary>
+        /// <returns>A full list of saved variables</returns>
+        public virtual List<Variable> GetSaveVars()
+        {
+            List<Variable> ToReturn = new List<Variable>();
+            ToReturn.Add(new Variable("position", Position.ToSimpleString()));
+            return ToReturn;
+        }
 
         /// <summary>
         /// Whether this entity needs to be ticked.
