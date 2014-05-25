@@ -5,9 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.CommonHandlers;
@@ -125,15 +123,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.MultMatrix(ref Perspective);
             if (ClientCVar.r_thirdperson.ValueB)
             {
-                Vector3 start = Player.player.Position + new Vector3(0, 0, 8);
-                Vector3 target = start - Forward * 15;
+                Location start = Player.player.Position + new Location(0, 0, 8);
+                Location target = start - Forward * 15;
                 target = Collision.Line(start, target) - Forward;
-                View = Matrix4.LookAt(target, start + Forward, new Vector3(0, 0, 1));
+                View = Matrix4.LookAt(Util.LocVec(target), Util.LocVec(start + Forward), new Vector3(0, 0, 1));
             }
             else
             {
-                View = Matrix4.LookAt(Player.player.Position + new Vector3(0, 0, 6),
-                    Player.player.Position + new Vector3(0, 0, 6) + Forward, new Vector3(0, 0, 1));
+                View = Matrix4.LookAt(Util.LocVec(Player.player.Position + new Location(0, 0, 6)),
+                    Util.LocVec(Player.player.Position + new Location(0, 0, 6) + Forward), new Vector3(0, 0, 1));
             }
             GL.MultMatrix(ref View);
 
@@ -205,7 +203,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void DrawCube(float x, float y, float z, float angle = 0, float scale = 10)
         {
-            CubeModel model = new CubeModel(new Vector3(x, y, z), new Vector3(scale), Texture.Test);
+            CubeModel model = new CubeModel(new Location(x, y, z), new Location(scale), Texture.Test);
             model.Draw();
         }
     }

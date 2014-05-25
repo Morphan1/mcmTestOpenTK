@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
 
@@ -76,6 +75,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// Whether the entity is still in the world.
         /// </summary>
         public bool Valid = false;
+
+        /// <summary>
+        /// Whether this entity is solid (for collision).
+        /// </summary>
+        public bool Solid = false;
+
+        /// <summary>
+        /// How far below the origin location the collision box goes.
+        /// </summary>
+        public Location Mins = new Location(-1);
+
+        /// <summary>
+        /// How far past the origin location the collision box goes.
+        /// </summary>
+        public Location Maxs = new Location(1);
 
         /// <summary>
         /// The world-unique ID of the entity, assigned at spawn time.

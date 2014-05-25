@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using OpenTK;
 using OpenTK.Input;
-using OpenTK.Graphics;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
@@ -25,7 +24,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <summary>
         /// The precise X/Y/Z location of the entity.
         /// </summary>
-        public Vector3 Position = Vector3.Zero;
+        public Location Position = Location.Zero;
 
         /// <summary>
         /// How much health the player currently has.
@@ -35,12 +34,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <summary>
         /// The precise X/Y/Z worldly movement speed.
         /// </summary>
-        public Vector3 Velocity = Vector3.Zero;
+        public Location Velocity = Location.Zero;
 
         /// <summary>
         /// The precise Yaw/Pitch/Roll direction of the entity.
         /// </summary>
-        public Vector3 Direction = Vector3.Zero;
+        public Location Direction = Location.Zero;
 
         float ticker = 0;
 
@@ -68,7 +67,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Direction.Y = -80;
             }
-            MainGame.Forward = Util.ForwardVector(MathHelper.DegreesToRadians(Direction.X), MathHelper.DegreesToRadians(Direction.Y));
+            MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
             if (KeyHandler.IsPressed(Key.LShift))
             {
                 if (MouseHandler.MouseCaptured)
@@ -81,7 +80,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 }
             }
             // Keyboard based movement.
-            Vector3 movement = Vector3.Zero;
+            Location oldvel = Velocity;
+            Location movement = Location.Zero;
             bool left = KeyHandler.IsDown(Key.D);
             bool right = KeyHandler.IsDown(Key.A);
             bool forward = KeyHandler.IsDown(Key.W);
@@ -120,9 +120,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     movement.X = 1;
                 }
             }
-            if (movement.LengthSquared > 0)
+            if (movement.LengthSquared() > 0)
             {
-                movement = Util.RotateVector(movement, MathHelper.DegreesToRadians(Direction.X), MathHelper.DegreesToRadians(Direction.Y));
+                movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
             }
             if (ClientCVar.g_noclip.ValueB)
             {
@@ -146,17 +146,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 if (up)
                 {
                     if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
-                        && Collision.Box(Position, new Vector3(-1.5f, -1.5f, -0.5f), new Vector3(1.5f, 1.5f, 2)))
+                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
                         Velocity.Z = 20;
                     }
                 }
-                Velocity = new Vector3(movement.X * 30, movement.Y * 30, Velocity.Z);
+                Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
                 Velocity.Z -= 100 * MainGame.DeltaF;
             }
-            Vector3 target = Position + Velocity * MainGame.DeltaF;
+            Location target = Position + (oldvel + Velocity) * 0.5f * MainGame.DeltaF;
             float pZ = Position.Z;
-            Position = Collision.MoveForward(Position, target, new Vector3(-1.5f, -1.5f, 0), new Vector3(1.5f, 1.5f, 8));
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!ClientCVar.g_noclip.ValueB)
             {
                 Velocity.Z = (Position.Z - pZ) / MainGame.DeltaF;
@@ -175,7 +175,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
         }
 
-        Vector3 LastVel = Vector3.Zero;
-        Vector3 LastDir = Vector3.Zero;
+        Location LastVel = Location.Zero;
+        Location LastDir = Location.Zero;
     }
 }

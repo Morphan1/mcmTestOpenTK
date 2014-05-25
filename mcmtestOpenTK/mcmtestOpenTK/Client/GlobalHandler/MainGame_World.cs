@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.AudioHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
@@ -66,7 +62,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="ID">The entity ID to use</param>
         /// <param name="Position">Where to spawn it</param>
         /// <param name="Data">Optional - network binary data describing the entity</param>
-        public static void SpawnEntity(EntityType e, ulong ID, Vector3 Position, byte[] Data = null)
+        public static void SpawnEntity(EntityType e, ulong ID, Location Position, byte[] Data = null)
         {
             Entity ent = Entity.FromType(e);
             if (ent == null)

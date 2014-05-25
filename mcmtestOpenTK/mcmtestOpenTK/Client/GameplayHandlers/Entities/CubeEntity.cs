@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
-using OpenTK;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 
@@ -18,8 +17,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public CubeEntity(): base(false)
         {
-            model = new CubeModel(Position, Vector3.One, null);
-            Mins = new Vector3(0, 0, 0);
+            model = new CubeModel(Position, Location.One, null);
+            Mins = new Location(0);
+            Solid = true;
         }
 
         /// <summary>
@@ -42,10 +42,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 throw new ArgumentException("Binary network data for CUBE entity is invalid!");
             }
-            float X = BitConverter.ToSingle(data, 0);
-            float Y = BitConverter.ToSingle(data, 4);
-            float Z = BitConverter.ToSingle(data, 8);
-            model.Scale = new Vector3(X, Y, Z);
+            model.Scale = Location.FromBytes(data, 0);
             Maxs = model.Scale;
             string texture = FileHandler.encoding.GetString(data, 12, data.Length - 12);
             model.texture = Texture.GetTexture(texture);

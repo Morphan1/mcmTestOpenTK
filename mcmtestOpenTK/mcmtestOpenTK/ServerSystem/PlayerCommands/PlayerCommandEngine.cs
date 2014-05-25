@@ -65,6 +65,7 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
         public static void Init()
         {
             RegisteredCommands = new List<PlayerAbstractCommand>();
+            RegisterCommand(new BulletCommand());
             RegisterCommand(new SayCommand());
         }
     }

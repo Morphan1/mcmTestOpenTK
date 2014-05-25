@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.GraphicsHandlers;
-using OpenTK;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -14,9 +14,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public OtherPlayer(): base()
         {
-            model = new CubeModel(Vector3.Zero, new Vector3(3, 3, 8), Texture.Test);
-            Mins = new Vector3(-1.5f, -1.5f, 0);
-            Maxs = new Vector3(1.5f, 1.5f, 8);
+            model = new CubeModel(Location.Zero, new Location(3, 3, 8), Texture.Test);
+            Mins = new Location(-1.5f, -1.5f, 0);
+            Maxs = new Location(1.5f, 1.5f, 8);
             Solid = false;
             CheckCollision = true;
             Gravity = 100;
@@ -29,7 +29,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            model.Position = new Vector3(Position.X - 1.5f, Position.Y - 1.5f, Position.Z);
+            model.Position = new Location(Position.X - 1.5f, Position.Y - 1.5f, Position.Z);
             model.Draw();
         }
 

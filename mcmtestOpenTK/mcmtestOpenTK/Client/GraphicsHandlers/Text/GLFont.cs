@@ -7,7 +7,6 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;

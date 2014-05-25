@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;

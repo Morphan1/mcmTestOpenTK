@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenTK;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
@@ -15,22 +14,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <summary>
         /// The precise X/Y/Z location of the entity.
         /// </summary>
-        public Vector3 Position = Vector3.Zero;
+        public Location Position = Location.Zero;
 
         /// <summary>
         /// Whether this entity is solid (for collision).
         /// </summary>
-        public bool Solid = true;
+        public bool Solid = false;
 
         /// <summary>
         /// How far below the origin location the collision box goes.
         /// </summary>
-        public Vector3 Mins = new Vector3(-1);
+        public Location Mins = new Location(-1);
 
         /// <summary>
         /// How far past the origin location the collision box goes.
         /// </summary>
-        public Vector3 Maxs = Vector3.One;
+        public Location Maxs = Location.One;
 
         /// <summary>
         /// A fairly unique ID stored as long as the entity is alive.
@@ -81,6 +80,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     return new OtherPlayer();
                 case EntityType.CUBE:
                     return new CubeEntity();
+                case EntityType.BULLET:
+                    return new Bullet();
                 default:
                     return null;
             }

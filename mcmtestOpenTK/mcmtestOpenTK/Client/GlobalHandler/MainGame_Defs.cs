@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -54,7 +52,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// The current GPU processing Frames Per Second.
         /// </summary>
         public static int gFPS = 0;
-        public static Vector3 Forward = Vector3.UnitX;
+        public static Location Forward = Location.UnitX;
         public static bool IsFirstGraphicsDraw = true;
 
         /// <summary>

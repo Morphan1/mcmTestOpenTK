@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
@@ -22,6 +21,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public CubeEntity(): base(false, EntityType.CUBE)
         {
+            Solid = true;
+            Mins = new Location(0);
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             if (varname == "scale")
             {
                 Scale = Location.FromString(vardata);
+                Maxs = Scale;
             }
             else if (varname == "texture")
             {

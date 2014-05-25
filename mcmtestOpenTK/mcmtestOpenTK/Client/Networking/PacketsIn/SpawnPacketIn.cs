@@ -7,14 +7,13 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
-using OpenTK;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
     class SpawnPacketIn: AbstractPacketIn
     {
         EntityType type;
-        Vector3 position;
+        Location position;
         ulong id;
         byte[] LeftOver;
 
@@ -27,10 +26,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             }
             type = (EntityType)input[0];
             id = BitConverter.ToUInt64(input, 1);
-            float X = BitConverter.ToSingle(input, 9);
-            float Y = BitConverter.ToSingle(input, 13);
-            float Z = BitConverter.ToSingle(input, 17);
-            position = new Vector3(X, Y, Z);
+            position = Location.FromBytes(input, 9);
             LeftOver = new byte[input.Length - 21];
             if (LeftOver.Length > 0)
             {

@@ -8,7 +8,6 @@ using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.ServerSystem.CommonHandlers;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
-using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
 {
@@ -25,18 +24,9 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
                 IsValid = false;
                 return;
             }
-            float X = BitConverter.ToSingle(input, 0);
-            float Y = BitConverter.ToSingle(input, 4);
-            float Z = BitConverter.ToSingle(input, 8);
-            Position = new Location(X, Y, Z);
-            X = BitConverter.ToSingle(input, 12);
-            Y = BitConverter.ToSingle(input, 16);
-            Z = BitConverter.ToSingle(input, 20);
-            Velocity = new Location(X, Y, Z);
-            X = BitConverter.ToSingle(input, 24);
-            Y = BitConverter.ToSingle(input, 28);
-            Z = BitConverter.ToSingle(input, 32);
-            Direction = new Location(X, Y, Z);
+            Position = Location.FromBytes(input, 0);
+            Velocity = Location.FromBytes(input, 12);
+            Direction = Location.FromBytes(input, 24);
             IsValid = true;
         }
 

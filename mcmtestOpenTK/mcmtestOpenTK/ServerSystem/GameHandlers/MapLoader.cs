@@ -5,7 +5,6 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
-using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {
@@ -78,6 +77,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 case "cube":
                     ent = new CubeEntity();
                     break;
+                case "bullet":
+                    ent = new Bullet();
+                    break;
                 default:
                     ErrorHandler.HandleError("Error loading map '" + map + "': invalid entity type '" + type + "'.");
                     return;
@@ -147,6 +149,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 {
                     case EntityType.CUBE:
                         type = "cube";
+                        break;
+                    case EntityType.BULLET:
+                        type = "bullet";
                         break;
                     default:
                         type = null;

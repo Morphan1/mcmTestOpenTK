@@ -9,8 +9,6 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommandHandlers;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared.TagHandlers;
 

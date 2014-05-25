@@ -2,36 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
+namespace mcmtestOpenTK.Shared
 {
     public struct Location: IEquatable<Location>
     {
         /// <summary>
         /// A Location of (0, 0, 0).
         /// </summary>
-        public readonly static Location Zero = new Location(0);
+        public static Location Zero { get { return new Location(0); } }
 
         /// <summary>
         /// A Location of (1, 1, 1).
         /// </summary>
-        public readonly static Location One = new Location(1);
+        public static Location One { get { return new Location(1); } }
 
         /// <summary>
         /// A location of (1, 0, 0).
         /// </summary>
-        public readonly static Location UnitX = new Location(1, 0, 0);
+        public static Location UnitX { get { return new Location(1, 0, 0); } }
 
         /// <summary>
         /// A location of (0, 1, 0).
         /// </summary>
-        public readonly static Location UnitY = new Location(0, 1, 0);
+        public static Location UnitY { get { return new Location(0, 1, 0); } }
 
         /// <summary>
         /// A location of (0, 0, 1).
         /// </summary>
-        public readonly static Location UnitZ = new Location(0, 0, 1);
+        public static Location UnitZ { get { return new Location(0, 0, 1); } }
 
         /// <summary>
         /// The X coordinate of this location.
@@ -87,6 +86,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
 
         /// <summary>
         /// Returns the location as a string in the form: X, Y, Z
+        /// Inverts .FromString()
         /// </summary>
         /// <returns>The location string</returns>
         public string ToSimpleString()
@@ -94,6 +94,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
             return X + ", " + Y + ", " + Z;
         }
 
+        /// <summary>
+        /// Converts the Location to a simple byte[] representation.
+        /// Inverts .FromBytes()
+        /// </summary>
+        /// <returns></returns>
         public byte[] ToBytes()
         {
             byte[] toret = new byte[12];
@@ -158,14 +163,39 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers
             return new Location(v.X / scale, v.Y / scale, v.Z / scale);
         }
 
+        /// <summary>
+        /// Converts a string representation of a location to a Location object.
+        /// Inverts .ToString(), .ToSimpleString()
+        /// </summary>
+        /// <param name="input">The location string</param>
+        /// <returns>the location object</returns>
         public static Location FromString(string input)
         {
-            string[] data = input.Replace(" ", "").Split(',');
+            string[] data = input.Replace('(',' ').Replace(')', ' ').Replace(" ", "").Split(',');
             if (data.Length != 3)
             {
                 return new Location(0);
             }
             return new Location(Utilities.StringToFloat(data[0]), Utilities.StringToFloat(data[1]), Utilities.StringToFloat(data[2]));
+        }
+
+        /// <summary>
+        /// Reads the byte array to a Location object.
+        /// Inverts .ToBytes()
+        /// </summary>
+        /// <param name="bytes">The bytes to read</param>
+        /// <param name="index">The index to start at</param>
+        /// <returns>the location object</returns>
+        public static Location FromBytes(byte[] bytes, int index)
+        {
+            if (bytes.Length - index < 12)
+            {
+                return new Location(0);
+            }
+            float X = BitConverter.ToSingle(bytes, index);
+            float Y = BitConverter.ToSingle(bytes, index + 4);
+            float Z = BitConverter.ToSingle(bytes, index + 8);
+            return new Location(X, Y, Z);
         }
     }
 }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Client.GlobalHandler;
-using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers
+namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {
-    public class Collision
+    class Collision
     {
         /// <summary>
         /// Returns whether there is something solid at the specified point.
@@ -20,9 +20,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Entity ent;
             Location lower;
             Location upper;
-            for (int i = 0; i < MainGame.Entities.Count; i++)
+            for (int i = 0; i < Server.MainWorld.Entities.Count; i++)
             {
-                ent = MainGame.Entities[i];
+                ent = Server.MainWorld.Entities[i];
                 if (ent.Solid)
                 {
                     lower = ent.Position + ent.Mins;
@@ -51,9 +51,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location High = spot + Maxs;
             Location elow;
             Location ehigh;
-            for (int i = 0; i < MainGame.Entities.Count; i++)
+            for (int i = 0; i < Server.MainWorld.Entities.Count; i++)
             {
-                ent = MainGame.Entities[i];
+                ent = Server.MainWorld.Entities[i];
                 if (ent.Solid)
                 {
                     elow = ent.Position + ent.Mins;
@@ -91,7 +91,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location Jump;
             for (int i = 0; i < ticks; i++)
             {
-                Jump = (i == ticks - 1 ? advance * extra: advance);
+                Jump = (i == ticks - 1 ? advance * extra : advance);
                 Nextpoint += Jump;
                 if (!Point(Nextpoint))
                 {

@@ -118,15 +118,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
     <Compile Include="ServerSystem\CommonHandlers\Util.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Collision.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\Bullet.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\CubeEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />
-    <Compile Include="ServerSystem\GameHandlers\GameHelpers\Location.cs" />
+    <Compile Include="Shared\Location.cs" />
     <Compile Include="ServerSystem\GameHandlers\MapLoader.cs" />
     <Compile Include="ServerSystem\GameHandlers\World.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server_Load.cs" />
@@ -152,6 +155,7 @@
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\HelloPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PlayerHandler.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\WebHandler.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\CommonCmds\BulletCommand.cs" />
     <Compile Include="ServerSystem\PlayerCommands\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\PlayerCommands\PlayerAbstractCommand.cs" />
     <Compile Include="ServerSystem\PlayerCommands\PlayerCommandEngine.cs" />

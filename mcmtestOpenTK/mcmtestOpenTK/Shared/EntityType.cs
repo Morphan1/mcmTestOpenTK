@@ -10,5 +10,6 @@ namespace mcmtestOpenTK.Shared
         NUL = 0,
         PLAYER = 1,
         CUBE = 2,
+        BULLET = 3,
     }
 }

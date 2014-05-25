@@ -8,7 +8,6 @@ using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
-using OpenTK;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {

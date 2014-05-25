@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -13,12 +12,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// <summary>
         /// Where the cube is at (Min location).
         /// </summary>
-        public Vector3 Position;
+        public Location Position;
 
         /// <summary>
         /// What size the cube is (Max - Min).
         /// </summary>
-        public Vector3 Scale;
+        public Location Scale;
 
         /// <summary>
         /// What angle to render at, if any.
@@ -35,7 +34,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public Shader shader = null;
 
-        public CubeModel(Vector3 _position, Vector3 _scale, Texture _texture, Shader _shader = null)
+        public CubeModel(Location _position, Location _scale, Texture _texture, Shader _shader = null)
         {
             Position = _position;
             Scale = _scale;
@@ -54,7 +53,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 shader.Bind();
             }
             GL.PushMatrix();
-            GL.Translate(Position);
+            GL.Translate(Position.X, Position.Y, Position.Z);
             GL.Rotate(Angle, 0, 0, 1);
             GL.Scale(Scale.X, Scale.Y, -Scale.Z); // TODO: WHY IS Z NEGATIVE?!
 

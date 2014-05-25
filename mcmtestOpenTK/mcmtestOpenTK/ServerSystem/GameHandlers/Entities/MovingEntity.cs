@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.ServerSystem.GameHandlers.GameHelpers;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
@@ -26,11 +25,62 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public Location Velocity = Location.Zero;
 
+        /// <summary>
+        /// How fast gravity should pull the entity downward.
+        /// </summary>
+        public float Gravity = 0;
+
+        /// <summary>
+        /// Whether this entity should check for collision while moving.
+        /// </summary>
+        public bool CheckCollision = false;
+
+        /// <summary>
+        /// How this entity moves.
+        /// </summary>
+        public MovementType MoveType = MovementType.Line;
+
+        // TODO: Rotation velocity
+
+        int retrans = 0;
+
         public override void Tick()
         {
-            Position += Velocity * Server.DeltaF;
-            if (lastvel != Velocity || lastdir != Direction)
+            Velocity.Z -= Gravity * Server.DeltaF;
+            Location target = Position + Velocity * Server.DeltaF;
+            if (CheckCollision)
             {
+                switch (MoveType)
+                {
+                    case MovementType.Line:
+                        Position = Collision.Line(Position, target);
+                        break;
+                    case MovementType.LineBox:
+                        Position = Collision.LineBox(Position, target, Mins, Maxs);
+                        break;
+                    case MovementType.Slide:
+                        Position = Collision.Slide(Position, target);
+                        break;
+                    case MovementType.SlideBox:
+                        Position = Collision.SlideBox(Position, target, Mins, Maxs);
+                        break;
+                    default:
+                        Position = target;
+                        break;
+                }
+                if (Position != target)
+                {
+                    Collide();
+                }
+            }
+            else
+            {
+                Position = target;
+            }
+            retrans++;
+            if (lastvel != Velocity || lastdir != Direction || retrans == 20)
+            {
+                retrans = 0;
                 PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
                 for (int i = 0; i < world.Players.Count; i++)
                 {
@@ -40,6 +90,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 lastdir = Direction;
             }
         }
+
+        public abstract void Collide();
 
         Location lastvel;
         Location lastdir;
@@ -54,6 +106,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 Velocity = Location.FromString(vardata);
             }
+            else if (varname == "gravity")
+            {
+                Gravity = Utilities.StringToFloat(vardata);
+            }
             else
             {
                 return base.HandleVariable(varname, vardata);
@@ -66,7 +122,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             List<Variable> ToReturn = base.GetSaveVars();
             ToReturn.Add(new Variable("direction", Direction.ToSimpleString()));
             ToReturn.Add(new Variable("velocity", Velocity.ToSimpleString()));
+            ToReturn.Add(new Variable("gravity", Gravity.ToString()));
             return ToReturn;
         }
+    }
+
+    public enum MovementType
+    {
+        Slide = 1,
+        SlideBox = 2,
+        Line = 3,
+        LineBox = 4,
     }
 }

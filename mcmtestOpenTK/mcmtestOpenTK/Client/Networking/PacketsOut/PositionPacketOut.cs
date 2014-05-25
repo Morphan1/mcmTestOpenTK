@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using OpenTK;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsOut
 {
     public class PositionPacketOut: AbstractPacketOut
     {
-        Vector3 Position;
-        Vector3 Velocity;
-        Vector3 Direction;
+        Location Position;
+        Location Velocity;
+        Location Direction;
 
-        public PositionPacketOut(Vector3 _Position, Vector3 _Velocity, Vector3 _Direction)
+        public PositionPacketOut(Location _Position, Location _Velocity, Location _Direction)
         {
             ID = 4;
             Position = _Position;
@@ -24,15 +23,9 @@ namespace mcmtestOpenTK.Client.Networking.PacketsOut
         public override byte[] ToBytes()
         {
             byte[] ToSend = new byte[36];
-            BitConverter.GetBytes(Position.X).CopyTo(ToSend, 0);
-            BitConverter.GetBytes(Position.Y).CopyTo(ToSend, 4);
-            BitConverter.GetBytes(Position.Z).CopyTo(ToSend, 8);
-            BitConverter.GetBytes(Velocity.X).CopyTo(ToSend, 12);
-            BitConverter.GetBytes(Velocity.Y).CopyTo(ToSend, 16);
-            BitConverter.GetBytes(Velocity.Z).CopyTo(ToSend, 20);
-            BitConverter.GetBytes(Direction.X).CopyTo(ToSend, 24);
-            BitConverter.GetBytes(Direction.Y).CopyTo(ToSend, 28);
-            BitConverter.GetBytes(Direction.Z).CopyTo(ToSend, 32);
+            Position.ToBytes().CopyTo(ToSend, 0);
+            Velocity.ToBytes().CopyTo(ToSend, 12);
+            Direction.ToBytes().CopyTo(ToSend, 24);
             return ToSend;
         }
     }

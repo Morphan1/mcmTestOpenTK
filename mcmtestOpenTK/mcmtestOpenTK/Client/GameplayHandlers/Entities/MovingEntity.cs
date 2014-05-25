@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenTK;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -16,12 +16,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <summary>
         /// The precise X/Y/Z worldly movement speed.
         /// </summary>
-        public Vector3 Velocity = Vector3.Zero;
+        public Location Velocity = Location.Zero;
 
         /// <summary>
         /// The precise Yaw/Pitch/Roll direction of the entity.
         /// </summary>
-        public Vector3 Direction = Vector3.Zero;
+        public Location Direction = Location.Zero;
 
         /// <summary>
         /// How fast gravity should pull the entity downward.
@@ -33,18 +33,51 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// </summary>
         public bool CheckCollision = false;
 
+        /// <summary>
+        /// How this entity moves.
+        /// </summary>
+        public MovementType MoveType = MovementType.Line;
+
+        // TODO: Rotation velocity
+
         public override void Tick()
         {
+            Location oldvel = Velocity;
             Velocity.Z -= Gravity * MainGame.DeltaF;
-            Vector3 target = Position + Velocity * MainGame.DeltaF;
+            Location target = Position + (oldvel + Velocity) * 0.5f * MainGame.DeltaF;
             if (CheckCollision)
             {
-                Position = Collision.MoveForward(Position, target, Mins, Maxs);
+                switch (MoveType)
+                {
+                    case MovementType.Line:
+                        Position = Collision.Line(Position, target);
+                        break;
+                    case MovementType.LineBox:
+                        Position = Collision.LineBox(Position, target, Mins, Maxs);
+                        break;
+                    case MovementType.Slide:
+                        Position = Collision.Slide(Position, target);
+                        break;
+                    case MovementType.SlideBox:
+                        Position = Collision.SlideBox(Position, target, Mins, Maxs);
+                        break;
+                    default:
+                        Position = target;
+                        break;
+                }
             }
             else
             {
                 Position = target;
             }
+        }
+
+        public enum MovementType
+        {
+            Slide = 1,
+            SlideBox = 2,
+            Line = 3,
+            LineBox = 4,
         }
     }
 }
