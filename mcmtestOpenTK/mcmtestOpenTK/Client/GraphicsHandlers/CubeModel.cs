@@ -34,6 +34,26 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public Shader shader = null;
 
+        /// <summary>
+        /// The horizontal scaling of the texture.
+        /// </summary>
+        public float Texture_HScale = 1;
+
+        /// <summary>
+        /// The vertical scaling of the texture.
+        /// </summary>
+        public float Texture_VScale = 1;
+
+        /// <summary>
+        /// The horizontal shift of the texture.
+        /// </summary>
+        public float Texture_HShift = 0;
+
+        /// <summary>
+        /// The vertical shift of the texture.
+        /// </summary>
+        public float Texture_VShift = 0;
+
         public CubeModel(Location _position, Location _scale, Texture _texture, Shader _shader = null)
         {
             Position = _position;
@@ -57,37 +77,43 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.Rotate(Angle, 0, 0, 1);
             GL.Scale(Scale.X, Scale.Y, -Scale.Z); // TODO: WHY IS Z NEGATIVE?!
 
+            float TexH0 = 0;
+            float TexV0 = 0;
+            float TexX1 = Scale.X / 10;
+            float TexY1 = Scale.Y / 10;
+            float TexZ1 = Scale.Z / 10;
+
             GL.Begin(PrimitiveType.Quads);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 0); GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, 0);
-            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 0);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(TexX1, TexV0); GL.Vertex3(1, 0, 0);
+            GL.TexCoord2(TexX1, TexY1); GL.Vertex3(1, 1, 0);
+            GL.TexCoord2(TexH0, TexY1); GL.Vertex3(0, 1, 0);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(1, 0); GL.Vertex3(1, 0, 1);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, 1);
-            GL.TexCoord2(0, 1); GL.Vertex3(1, 1, 0);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(1, 0, 0);
+            GL.TexCoord2(TexZ1, TexV0); GL.Vertex3(1, 0, 1);
+            GL.TexCoord2(TexZ1, TexY1); GL.Vertex3(1, 1, 1);
+            GL.TexCoord2(TexH0, TexY1); GL.Vertex3(1, 1, 0);
 
-            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 1);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 0, 1);
-            GL.TexCoord2(0, 1); GL.Vertex3(1, 0, 0);
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(TexZ1, TexV0); GL.Vertex3(0, 0, 1);
+            GL.TexCoord2(TexZ1, TexX1); GL.Vertex3(1, 0, 1);
+            GL.TexCoord2(TexH0, TexX1); GL.Vertex3(1, 0, 0);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(0, 0, 0);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 0, 1);
-            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 0);
-            GL.TexCoord2(1, 1); GL.Vertex3(0, 1, 0);
-            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 1);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(0, 0, 1);
+            GL.TexCoord2(TexZ1, TexV0); GL.Vertex3(0, 0, 0);
+            GL.TexCoord2(TexZ1, TexY1); GL.Vertex3(0, 1, 0);
+            GL.TexCoord2(TexH0, TexY1); GL.Vertex3(0, 1, 1);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(0, 1, 0);
-            GL.TexCoord2(1, 0); GL.Vertex3(1, 1, 0);
-            GL.TexCoord2(1, 1); GL.Vertex3(1, 1, 1);
-            GL.TexCoord2(0, 1); GL.Vertex3(0, 1, 1);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(0, 1, 0);
+            GL.TexCoord2(TexX1, TexV0); GL.Vertex3(1, 1, 0);
+            GL.TexCoord2(TexX1, TexZ1); GL.Vertex3(1, 1, 1);
+            GL.TexCoord2(TexH0, TexZ1); GL.Vertex3(0, 1, 1);
 
-            GL.TexCoord2(0, 0); GL.Vertex3(1, 0, 1);
-            GL.TexCoord2(1, 0); GL.Vertex3(0, 0, 1);
-            GL.TexCoord2(1, 1); GL.Vertex3(0, 1, 1);
-            GL.TexCoord2(0, 1); GL.Vertex3(1, 1, 1);
+            GL.TexCoord2(TexH0, TexV0); GL.Vertex3(1, 0, 1);
+            GL.TexCoord2(TexX1, TexV0); GL.Vertex3(0, 0, 1);
+            GL.TexCoord2(TexX1, TexY1); GL.Vertex3(0, 1, 1);
+            GL.TexCoord2(TexH0, TexY1); GL.Vertex3(1, 1, 1);
 
             GL.End();
 

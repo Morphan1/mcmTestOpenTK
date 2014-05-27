@@ -15,7 +15,9 @@ namespace mcmtestOpenTK.Shared
         /// <returns>A valid socket object</returns>
         public static Socket CreateSocket()
         {
-            return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Socket toret = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            toret.NoDelay = true;
+            return toret;
         }
 
         /// <summary>
@@ -24,7 +26,9 @@ namespace mcmtestOpenTK.Shared
         /// <returns>A valid socket object</returns>
         public static Socket Createv6Socket()
         {
-            return new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            Socket toret = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            toret.NoDelay = true;
+            return toret;
         }
 
         /// <summary>
