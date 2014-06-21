@@ -25,12 +25,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             else
             {
-                string fname = (entry.Output is ServerOutputter ? "serverscripts/" : "scripts/") + entry.GetArgument(0) + ".cfg";
-                if (FileHandler.Exists(fname))
+                string fname = entry.GetArgument(0);
+                CommandScript script = entry.Queue.CommandSystem.GetScript(fname);
+                if (script != null)
                 {
-                    string text = FileHandler.ReadText(fname);
                     entry.Good("Running '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'...");
-                    entry.Queue.CommandSystem.ExecuteCommands(text);
+                    entry.Queue.CommandSystem.ExecuteScript(script);
                 }
                 else
                 {

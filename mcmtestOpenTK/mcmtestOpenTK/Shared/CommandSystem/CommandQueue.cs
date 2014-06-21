@@ -10,138 +10,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
     public class CommandQueue
     {
         /// <summary>
-        /// Separates a string list of command inputs (separated by newlines, semicolons, ...)
-        /// and returns a queue object containing all the input commands
-        /// </summary>
-        /// <param name="commands">The command string to parse</param>
-        /// <param name="system">The command system to put the queue in</param>
-        /// <returns>A list of command strings</returns>
-        public static CommandQueue SeparateCommands(string commands, Commands system)
-        {
-            List<string> CommandList = new List<string>();
-            int start = 0;
-            bool quoted = false;
-            for (int i = 0; i < commands.Length; i++)
-            {
-                if (commands[i] == '"')
-                {
-                    quoted = !quoted;
-                }
-                else if ((commands[i] == '\n') || (!quoted && commands[i] == ';'))
-                {
-                    if (start < i)
-                    {
-                        CommandList.Add(commands.Substring(start, i - start).Trim());
-                    }
-                    start = i + 1;
-                    quoted = false;
-                }
-            }
-            if (start < commands.Length)
-            {
-                CommandList.Add(commands.Substring(start).Trim());
-            }
-            return new CommandQueue(CreateBlock(CommandList, null), system);
-        }
-
-        /// <summary>
-        /// Seperates a string list of command inputs (separated by newlines, semicolons, ...)
-        /// and returns a list of the individual commands.
-        /// </summary>
-        /// <param name="commands">The command string to parse</param>
-        /// <returns>A list of command strings</returns>
-        public static List<CommandEntry> SeparateCommands(string commands)
-        {
-            List<string> CommandList = new List<string>();
-            int start = 0;
-            bool quoted = false;
-            for (int i = 0; i < commands.Length; i++)
-            {
-                if (commands[i] == '"')
-                {
-                    quoted = !quoted;
-                }
-                else if ((commands[i] == '\n') || (!quoted && commands[i] == ';'))
-                {
-                    if (start < i)
-                    {
-                        CommandList.Add(commands.Substring(start, i - start).Trim());
-                    }
-                    start = i + 1;
-                    quoted = false;
-                }
-            }
-            if (start < commands.Length)
-            {
-                CommandList.Add(commands.Substring(start).Trim());
-            }
-            return CreateBlock(CommandList, null);
-        }
-
-        /// <summary>
-        /// Converts a list of command strings to a CommandEntry list, handling any { braced } blocks inside.
-        /// </summary>
-        /// <param name="from">The command strings</param>
-        /// <param name="entry">The entry that owns this block</param>
-        /// <returns>A list of entries with blocks separated</returns>
-        public static List<CommandEntry> CreateBlock(List<string> from, CommandEntry entry)
-        {
-            List<CommandEntry> toret = new List<CommandEntry>();
-            List<string> Temp = null;
-            int blocks = 0;
-            for (int i = 0; i < from.Count; i++)
-            {
-                if (from[i] == "{")
-                {
-                    blocks++;
-                    if (blocks == 1)
-                    {
-                        Temp = new List<string>();
-                    }
-                    else
-                    {
-                        Temp.Add("{");
-                    }
-                }
-                else if (from[i] == "}")
-                {
-                    blocks--;
-                    if (blocks == 0)
-                    {
-                        if (toret.Count == 0)
-                        {
-                            List<CommandEntry> block = CreateBlock(Temp, entry);
-                            toret.AddRange(block);
-                        }
-                        else
-                        {
-                            List<CommandEntry> block = CreateBlock(Temp, toret[toret.Count - 1]);
-                            toret[toret.Count - 1].Block = block;
-                        }
-                    }
-                    else if (blocks < 0)
-                    {
-                        blocks = 0;
-                        Temp.Add("echo \"" + TextStyle.Color_Error + "SCRIPT ERROR: EXTRA } SYMBOL!\"");
-                    }
-                    else
-                    {
-                        Temp.Add("}");
-                    }
-                }
-                else if (blocks > 0)
-                {
-                    Temp.Add(from[i]);
-                }
-                else
-                {
-                    toret.Add(new CommandEntry(from[i], null, entry));
-                }
-            }
-            return toret;
-        }
-
-        /// <summary>
         /// All commands in this queue, as strings.
         /// </summary>
         public List<CommandEntry> CommandList;
@@ -177,12 +45,18 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public Commands CommandSystem;
 
         /// <summary>
+        /// The script that was used to build this queue.
+        /// </summary>
+        public CommandScript Script;
+
+        /// <summary>
         /// How much debug information this queue should show.
         /// </summary>
         public DebugMode Debug;
 
-        public CommandQueue(List<CommandEntry> _commands, Commands _system)
+        public CommandQueue(CommandScript _script, List<CommandEntry> _commands, Commands _system)
         {
+            Script = _script;
             CommandList = _commands;
             CommandSystem = _system;
             Variables = new List<Variable>();

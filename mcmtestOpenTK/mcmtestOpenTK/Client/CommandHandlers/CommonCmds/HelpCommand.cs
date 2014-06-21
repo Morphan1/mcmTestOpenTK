@@ -7,6 +7,8 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.Networking.PacketsOut;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
 {
@@ -50,8 +52,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
                         {
                             AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
-                            commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
-                                (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
+                            if (c.Name.Length != 0 && c.Name[0] != '\0')
+                            {
+                                commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
+                                    (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
+                            }
                         }
                         entry.Output.Good("There are <{color.emphasis}>" + ClientCommands.CommandSystem.RegisteredCommands.Count
                             + "<{color.base}> clientside commands loaded.\n" + TagParser.Escape(commandlist.ToString()));
@@ -70,13 +75,21 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                                 AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
                                 if (c.Name == cmd)
                                 {
-                                    AbstractCommand.ShowUsage(new CommandEntry(cmd, null, null) { Name = cmd, Command = c, Output = entry.Output });
+                                    AbstractCommand.ShowUsage(new CommandEntry() { Name = cmd, Command = c,
+                                        Output = entry.Output, Queue = entry.Queue, Arguments = new List<string>(), CommandLine = cmd });
                                     found = true;
                                 }
                             }
                             if (!found)
                             {
-                                entry.Bad("Unknown command '<{color.emphasis}>" + TagParser.Escape(cmd) + "<{color.base}>'.");
+                                if (NetworkBase.IsActive)
+                                {
+                                    NetworkBase.Send(new CommandPacketOut("help\ncommand\n" + cmd));
+                                }
+                                else
+                                {
+                                    entry.Bad("Unknown command '<{color.emphasis}>" + TagParser.Escape(cmd) + "<{color.base}>'.");
+                                }
                             }
                         }
                         break;
@@ -84,7 +97,20 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         entry.Output.Good("The following characters are recognized by the system: <{color.standout}>" + TagParser.Escape(GLFont.textfile));
                         break;
                     default:
-                        entry.Bad("Invalid help type! Type '<{color.emphasis}>/help<{color.base}>' to see a list of available help types.");
+                        if (NetworkBase.IsActive)
+                        {
+                            StringBuilder argstr = new StringBuilder();
+                            argstr.Append("help\n").Append(input);
+                            for (int i = 1; i < entry.Arguments.Count; i++)
+                            {
+                                argstr.Append("\n" + entry.GetArgument(i));
+                            }
+                            NetworkBase.Send(new CommandPacketOut(argstr.ToString()));
+                        }
+                        else
+                        {
+                            entry.Bad("Invalid help type! Type '<{color.emphasis}>/help<{color.base}>' to see a list of available help types.");
+                        }
                         break;
                 }
             }

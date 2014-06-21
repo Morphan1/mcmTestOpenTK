@@ -2,11 +2,77 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared.CommandSystem.CommonCmds;
 
 namespace mcmtestOpenTK.Shared.CommandSystem
 {
     public class CommandEntry
     {
+        /// <summary>
+        /// Creates a CommandEntry from the given input and queue information.
+        /// </summary>
+        /// <param name="_command">The command line text itself</param>
+        /// <param name="_block">The command block that held this entry</param>
+        /// <param name="_owner">The command entry that owns the block that held this entry</param>
+        /// <param name="system">The command system to work from</param>
+        /// <returns>The command system</returns>
+        public static CommandEntry FromInput(string command, List<CommandEntry> _block, CommandEntry _owner, Commands system)
+        {
+            if (command.StartsWith("//"))
+            {
+                return null;
+            }
+            if (command.StartsWith("/"))
+            {
+                command = command.Substring(1);
+            }
+            List<string> args = new List<string>();
+            int start = 0;
+            bool quoted = false;
+            for (int i = 0; i < command.Length; i++)
+            {
+                if (command[i] == '"')
+                {
+                    quoted = !quoted;
+                }
+                else if (!quoted && command[i] == ' ' && (i - start > 0))
+                {
+                    string arg = command.Substring(start, i - start).Trim().Replace("\"", "");
+                    args.Add(arg);
+                    start = i + 1;
+                }
+            }
+            if (command.Length - start > 0)
+            {
+                string arg = command.Substring(start, command.Length - start).Trim().Replace("\"", "");
+                args.Add(arg);
+            }
+            if (args.Count == 0)
+            {
+                return null;
+            }
+            string BaseCommand = args[0];
+            string BaseCommandLow = args[0].ToLower();
+            args.RemoveAt(0);
+            for (int i = 0; i < system.RegisteredCommands.Count; i++)
+            {
+                if (BaseCommandLow == system.RegisteredCommands[i].Name)
+                {
+                    return new CommandEntry(command, _block, _owner, system.RegisteredCommands[i], args, BaseCommand);
+                }
+            }
+            return CreateInvalidOutput(BaseCommand, _block, args, _owner, system);
+        }
+
+        public static CommandEntry CreateInvalidOutput(string name, List<CommandEntry> _block,
+            List<string> _arguments, CommandEntry _owner, Commands system)
+        {
+            _arguments.Insert(0, name);
+            return new CommandEntry("\0DebugOutputInvalidCommand \"" + name + "\"", _block, _owner,
+                system.DebugInvalidCommand, _arguments, name);
+                
+        }
+
         /// <summary>
         /// The command itself.
         /// </summary>
@@ -22,11 +88,22 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public CommandEntry BlockOwner = null;
 
-        public CommandEntry(string _command, List<CommandEntry> _block, CommandEntry _owner)
+        public CommandEntry(string _commandline, List<CommandEntry> _block, CommandEntry _owner,
+            AbstractCommand _command, List<string> _arguments, string _name)
         {
-            CommandLine = Utilities.CleanStringInput(_command);
+            CommandLine = Utilities.CleanStringInput(_commandline);
             Block = _block;
             BlockOwner = _owner;
+            Command = _command;
+            Arguments = _arguments;
+            Name = _name;
+        }
+
+        /// <summary>
+        /// Use at own risk.
+        /// </summary>
+        public CommandEntry()
+        {
         }
 
         /// <summary>
@@ -47,12 +124,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <summary>
         /// The command queue this command is running inside.
         /// </summary>
-        public CommandQueue Queue;
+        public CommandQueue Queue = null;
 
         /// <summary>
         /// The object to use for any console / debug output.
         /// </summary>
-        public Outputter Output;
+        public Outputter Output = null;
 
         /// <summary>
         /// A result set by the command, if any.
@@ -109,6 +186,26 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 Output.Bad(text);
             }
+        }
+
+        /// <summary>
+        /// Returns a duplicate of this command entry.
+        /// </summary>
+        /// <returns>The duplicate entry</returns>
+        public CommandEntry Duplicate()
+        {
+            CommandEntry entry = new CommandEntry();
+            entry.Arguments = new List<string>(Arguments);
+            entry.Block = Block;
+            entry.BlockOwner = BlockOwner;
+            entry.Command = Command;
+            entry.CommandLine = CommandLine;
+            entry.Index = Index;
+            entry.Name = Name;
+            entry.Output = Output;
+            entry.Queue = Queue;
+            entry.Result = Result;
+            return entry;
         }
     }
 }
