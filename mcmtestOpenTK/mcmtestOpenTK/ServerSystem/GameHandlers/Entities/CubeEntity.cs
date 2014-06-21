@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -58,15 +59,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override byte[] GetData()
         {
-            byte[] texturebytes = FileHandler.encoding.GetBytes(texture);
             byte[] scalebytes = Scale.ToBytes();
-            byte[] toret = new byte[12 + 4 * 4 + texturebytes.Length];
-            scalebytes.CopyTo(toret, 0);
-            BitConverter.GetBytes(Texture_HScale).CopyTo(toret, 12);
-            BitConverter.GetBytes(Texture_VScale).CopyTo(toret, 12 + 4);
-            BitConverter.GetBytes(Texture_HShift).CopyTo(toret, 12 + 4 * 2);
-            BitConverter.GetBytes(Texture_VShift).CopyTo(toret, 12 + 4 * 3);
-            texturebytes.CopyTo(toret, 12 + 4 * 4);
+            byte[] toret = new byte[scalebytes.Length + 4 * 4 + 4];
+            int pos = 0;
+            scalebytes.CopyTo(toret, pos);
+            pos += scalebytes.Length;
+            BitConverter.GetBytes(Texture_HScale).CopyTo(toret, pos);
+            pos += 4;
+            BitConverter.GetBytes(Texture_VScale).CopyTo(toret, pos);
+            pos += 4;
+            BitConverter.GetBytes(Texture_HShift).CopyTo(toret, pos);
+            pos += 4;
+            BitConverter.GetBytes(Texture_VShift).CopyTo(toret, pos);
+            pos += 4;
+            BitConverter.GetBytes(NetStringManager.GetStringID(texture)).CopyTo(toret, pos);
+            pos += 4;
             return toret;
         }
 
@@ -79,7 +86,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             else if (varname == "texture")
             {
-                texture = vardata;
+                texture = FileHandler.CleanFileName(vardata);
             }
             else if (varname == "texture_hscale")
             {

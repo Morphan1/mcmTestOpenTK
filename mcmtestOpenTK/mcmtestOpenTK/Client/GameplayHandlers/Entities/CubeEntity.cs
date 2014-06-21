@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.Networking;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -42,14 +43,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 throw new ArgumentException("Binary network data for CUBE entity is invalid!");
             }
-            model.Scale = Location.FromBytes(data, 0);
+            int pos = 0;
+            model.Scale = Location.FromBytes(data, pos);
+            pos += 12;
             Maxs = model.Scale;
-            model.Texture_HScale = BitConverter.ToSingle(data, 12);
-            model.Texture_VScale = BitConverter.ToSingle(data, 12 + 4);
-            model.Texture_HShift = BitConverter.ToSingle(data, 12 + 4 * 2);
-            model.Texture_VShift = BitConverter.ToSingle(data, 12 + 4 * 3);
-            string texture = FileHandler.encoding.GetString(data, 12 + 4 * 4, data.Length - (12 + 4 * 4));
+            model.Texture_HScale = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            model.Texture_VScale = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            model.Texture_HShift = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            model.Texture_VShift = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             model.texture = Texture.GetTexture(texture);
+            pos += 4;
         }
     }
 }

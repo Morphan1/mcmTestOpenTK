@@ -69,11 +69,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         void Spawn(World world)
         {
+            world.Spawn(this);
+            NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
             {
                 Send(new SpawnPacketOut(world.Entities[i]));
             }
-            world.Spawn(this);
         }
 
         /// <summary>

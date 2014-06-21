@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.ServerSystem.CommonHandlers;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -32,6 +33,8 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
         {
             try
             {
+                SysConsole.Output(OutputType.INIT, "Preparing network string manager...");
+                NetStringManager.Init();
                 SysConsole.Output(OutputType.INIT, "Creating socket...");
                 MainSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
                 MainSocket.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
@@ -81,6 +84,18 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                         i--;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Sends a packet to all online players.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        public static void SendToAllPlayers(AbstractPacketOut packet)
+        {
+            foreach (Player player in Server.MainWorld.Players)
+            {
+                player.Send(packet);
             }
         }
     }

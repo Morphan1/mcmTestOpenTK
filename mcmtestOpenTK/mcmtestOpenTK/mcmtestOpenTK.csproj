@@ -120,6 +120,8 @@
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
+    <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
@@ -130,6 +132,8 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NetstringPacketOut.cs" />
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\Location.cs" />

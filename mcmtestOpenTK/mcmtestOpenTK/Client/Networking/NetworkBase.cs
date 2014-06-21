@@ -39,6 +39,14 @@ namespace mcmtestOpenTK.Client.Networking
         public static bool WaitingToIdentify = false;
 
         /// <summary>
+        /// Prepares networking.
+        /// </summary>
+        public static void Init()
+        {
+            NetStringManager.Init();
+        }
+
+        /// <summary>
         /// Connects to a specified IP.
         /// </summary>
         /// <param name="IP">The IP to connect to</param>
@@ -186,6 +194,8 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new DespawnPacketIn(); break;
                 case 6:
                     Handler = new MessagePacketIn(); break;
+                case 7:
+                    Handler = new NetstringPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
@@ -248,6 +258,7 @@ namespace mcmtestOpenTK.Client.Networking
         {
             IsActive = false;
             MainGame.DestroyWorld();
+            NetStringManager.Init();
             ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + reason);
             if (!Connected)
             {
