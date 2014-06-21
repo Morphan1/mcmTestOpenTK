@@ -161,7 +161,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <returns>The combined string</returns>
         public string AllArguments()
         {
-            return Queue.CommandSystem.TagSystem.ParseTags(Utilities.Concat(Arguments), TextStyle.Color_Simple, Queue.Variables);
+            StringBuilder result = new StringBuilder(CommandLine.Length);
+            for (int i = 0; i < Arguments.Count; i++)
+            {
+                result.Append(GetArgument(i)).Append(" ");
+            }
+            return result.ToString();
         }
 
         /// <summary>

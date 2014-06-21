@@ -81,6 +81,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.Output(OutputType.INIT, "Preparing gameplay system...");
                 Player.player = new Player();
                 LoadWorld();
+                Crosshair.texture = Texture.GetTexture("common/crosshair");
                 // Everything's loaded now... scrap the system console
                 SysConsole.Output(OutputType.INIT, "System prepared, hiding console and playing the game!");
                 SysConsole.HideConsole();
@@ -147,6 +148,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.Output(OutputType.INIT, "Disabling FULLSCREEN");
                 PrimaryGameWindow.WindowState = WindowState.Normal;
             }
+            // Correct the crosshair
+            Crosshair.PositionLow = new Location(ScreenWidth / 2 - 16, ScreenHeight / 2 - 16, 0);
+            Crosshair.PositionHigh = new Location(ScreenWidth / 2 + 16, ScreenHeight / 2 + 16, 0);
             // Correct the viewport (screen size, fullscreen, etc. might affect)
             GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
         }

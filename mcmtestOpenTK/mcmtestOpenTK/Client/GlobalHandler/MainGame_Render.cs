@@ -179,6 +179,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void Standard2D()
         {
+            GL.Color4(Color.White);
+            Crosshair.Draw();
+
             // Render debug text
             GLFont.DrawColoredText(debug);
 

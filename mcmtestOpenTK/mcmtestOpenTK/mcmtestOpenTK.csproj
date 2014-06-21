@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
+    <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
