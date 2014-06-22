@@ -35,6 +35,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             if (ID == player.PingID)
             {
                 player.Send(new PingPacketOut(player));
+                player.Send(new TimePacketOut());
             }
             else
             {

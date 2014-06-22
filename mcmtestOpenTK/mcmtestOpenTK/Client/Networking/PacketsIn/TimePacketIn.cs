@@ -32,9 +32,15 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            MainGame.GlobalTickNote = servertime;
-            MainGame.GlobalTickTime = servertime;
-            MainGame.globaltickdelta = 0.0f;
+            long absd = Math.Abs(servertime - MainGame.GlobalTickTime);
+            if (absd < 10 || absd > 3000)
+            {
+                MainGame.GlobalTickTime = servertime;
+            }
+            else
+            {
+                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 10;
+            }
         }
     }
 }

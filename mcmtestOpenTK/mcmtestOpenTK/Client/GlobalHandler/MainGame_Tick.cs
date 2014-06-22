@@ -26,7 +26,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         static float movetestX;
         static float movetestY;
         public static float pingbump = 0;
-        public static double globaltickdelta = 0;
 
         /// <summary>
         /// Called every update tick - should handle all logic!
@@ -49,14 +48,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     cticknumber = 0;
                     ctickdelta -= 1.0f;
                 }
-                globaltickdelta += Delta;
-                if (globaltickdelta > 1.0f)
-                {
-                    globaltickdelta -= 1.0f;
-                    GlobalTickNote += 1000;
-                    GlobalTickTime = GlobalTickNote - (int)(globaltickdelta * 1000);
-                }
                 GlobalTickTime += (int)(Delta * 1000);
+                SysConsole.Output(OutputType.INFO, "Tick:" + GlobalTickTime);
 
                 // Calculate ping
                 pingbump += DeltaF;
