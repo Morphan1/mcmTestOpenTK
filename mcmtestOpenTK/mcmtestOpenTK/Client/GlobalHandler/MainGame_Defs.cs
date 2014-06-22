@@ -137,5 +137,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// The logged-in account session key.
         /// </summary>
         public static string Session = "";
+
+        /// <summary>
+        /// The current global time.
+        /// </summary>
+        public static long GlobalTickTime;
+
+        public static long GlobalTickNote;
     }
 }

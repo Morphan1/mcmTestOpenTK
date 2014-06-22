@@ -79,13 +79,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 Tickers.Add(entity);
             }
+            int playerindex = -1;
             if (entity is Player)
             {
                 Players.Add((Player)entity);
+                playerindex = Players.Count - 1;
             }
             for (int i = 0; i < Players.Count; i++)
             {
-                Players[i].Send(new SpawnPacketOut(entity));
+                if (i != playerindex)
+                {
+                    Players[i].Send(new SpawnPacketOut(entity));
+                }
             }
         }
 

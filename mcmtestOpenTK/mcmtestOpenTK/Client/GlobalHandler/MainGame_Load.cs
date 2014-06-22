@@ -32,6 +32,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 // Always at the start
                 Initializing = true;
+                GlobalTickNote = 0;
+                GlobalTickTime = 0;
                 ClientOutputter cout = new ClientOutputter();
                 cout.Initializing = true;
                 // Prepare the CVar system

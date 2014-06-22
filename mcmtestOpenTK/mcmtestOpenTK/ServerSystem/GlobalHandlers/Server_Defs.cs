@@ -31,5 +31,12 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         /// The primary server world.
         /// </summary>
         public static World MainWorld;
+
+        /// <summary>
+        /// The current global time.
+        /// </summary>
+        public static long GlobalTickTime;
+
+        static long GlobalTickNote;
     }
 }

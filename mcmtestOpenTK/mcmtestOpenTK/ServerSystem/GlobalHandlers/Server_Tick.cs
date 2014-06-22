@@ -8,6 +8,7 @@ using System.Threading;
 using System.Diagnostics;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.Global;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
@@ -28,12 +29,16 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             // Calculate FPS: always first!
             ticknumber++;
             tickdelta += Delta;
-            if (tickdelta > 1.0f)
+            if (tickdelta >= 1.0f)
             {
                 FPS = ticknumber;
                 ticknumber = 0;
-                tickdelta = 0.0f;
+                tickdelta -= 1.0f;
+                GlobalTickNote += 1000;
+                GlobalTickTime = GlobalTickNote - (int)(tickdelta * 1000);
             }
+            GlobalTickTime += (int)(Delta * 1000);
+            SysConsole.Output(OutputType.INFO, "N:" + GlobalTickNote + ",T:" + GlobalTickTime);
 
             // Update global networking
             GlobalNetwork.Tick();
@@ -49,6 +54,9 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 
             // Update the world
             MainWorld.Tick();
+            
+            // Tell all players what time it is
+            NetworkBase.SendToAllPlayers(new TimePacketOut());
 
             // Update networking again for speed's sake
             NetworkBase.Tick();

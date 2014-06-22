@@ -8,17 +8,16 @@ using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
 {
-    public class HelloPacketOut: AbstractPacketOut
+    public class TimePacketOut: AbstractPacketOut
     {
-        public HelloPacketOut()
+        public TimePacketOut()
         {
-            ID = 1;
+            ID = 8;
         }
 
         public override byte[] ToBytes()
         {
-            return new byte[] { (byte)'H', (byte)'E', (byte)'L', (byte)'L', (byte)'O',
-                ServerCVar.g_online.ValueB ? (byte)1 : (byte)0 };
+            return BitConverter.GetBytes(Server.GlobalTickTime);
         }
     }
 }

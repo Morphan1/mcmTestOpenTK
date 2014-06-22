@@ -119,7 +119,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public void Init()
         {
-            Send(new HelloPacketOut(this));
+            Send(new HelloPacketOut());
+            Send(new TimePacketOut());
         }
 
         public override void Tick()

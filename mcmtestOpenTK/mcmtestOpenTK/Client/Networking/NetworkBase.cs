@@ -196,6 +196,8 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new MessagePacketIn(); break;
                 case 7:
                     Handler = new NetstringPacketIn(); break;
+                case 8:
+                    Handler = new TimePacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:

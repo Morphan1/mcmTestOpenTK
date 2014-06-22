@@ -28,6 +28,8 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             {
                 return;
             }
+            GlobalTickTime = 0;
+            GlobalTickNote = 0;
             SysConsole.Output(OutputType.INIT, "Loaded! Ticking...");
             double TARGETFPS = 20d; // TODO: CVar?
             Stopwatch Counter = new Stopwatch();
