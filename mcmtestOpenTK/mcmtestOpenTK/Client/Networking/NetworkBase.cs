@@ -10,6 +10,7 @@ using mcmtestOpenTK.Client.Networking.PacketsIn;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.TagHandlers;
 
 namespace mcmtestOpenTK.Client.Networking
 {
@@ -26,7 +27,7 @@ namespace mcmtestOpenTK.Client.Networking
 
         static Socket Sock = null;
 
-        static bool Connected = false;
+        public static bool Connected = false;
 
         /// <summary>
         /// Whether networking is active (packets should be sent).
@@ -263,7 +264,11 @@ namespace mcmtestOpenTK.Client.Networking
             IsActive = false;
             MainGame.DestroyWorld();
             NetStringManager.Init();
-            ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + reason);
+            if (reason != null)
+            {
+                // TODO: LANGUAGE FILE
+                ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + TagParser.Escape(reason));
+            }
             if (!Connected)
             {
                 return;

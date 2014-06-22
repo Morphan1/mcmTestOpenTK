@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\CommandHandlers\NetworkCmds\DisconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />

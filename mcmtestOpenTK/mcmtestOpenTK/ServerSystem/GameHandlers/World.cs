@@ -95,11 +95,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 SpawnPoints.Add((SpawnPoint)entity);
             }
-            for (int i = 0; i < Players.Count; i++)
+            if (entity.NetTransmit)
             {
-                if (i != playerindex)
+                for (int i = 0; i < Players.Count; i++)
                 {
-                    Players[i].Send(new SpawnPacketOut(entity));
+                    if (i != playerindex)
+                    {
+                        Players[i].Send(new SpawnPacketOut(entity));
+                    }
                 }
             }
         }
@@ -124,9 +127,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 Tickers.Remove(ent);
             }
-            for (int i = 0; i < Players.Count; i++)
+            if (ent.NetTransmit)
             {
-                Players[i].Send(new DespawnPacketOut(ent.UniqueID));
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    Players[i].Send(new DespawnPacketOut(ent.UniqueID));
+                }
             }
         }
 

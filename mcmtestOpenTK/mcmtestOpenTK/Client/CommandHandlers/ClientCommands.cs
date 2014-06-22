@@ -41,6 +41,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
 
             // Network Commands
             CommandSystem.RegisterCommand(new ConnectCommand());
+            CommandSystem.RegisterCommand(new DisconnectCommand());
             CommandSystem.RegisterCommand(new LoginCommand());
             CommandSystem.RegisterCommand(new TimeCommand());
 

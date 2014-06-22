@@ -77,19 +77,43 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                     {
                         SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: time out");
                         IsAlive = false;
-                        Sock.Close();
+                        Sock.Close(1);
                         return;
                     }
                 }
                 else
                 {
-                    PlayerHandler.TickSend(player);
+                    if (!Sock.Connected)
+                    {
+                        if (!IsAlive)
+                        {
+                            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: socket died");
+                        }
+                        IsAlive = false;
+                        Sock.Close(1);
+                        return;
+                    }
+                    if (!player.IsIdentified && TimeAlive > 10f)
+                    {
+                        SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: time out / no identification");
+                        IsAlive = false;
+                        player.Kick("IDENTIFY TIMEOUT");
+                        Sock.Close(1);
+                        return;
+                    }
+                    else
+                    {
+                        PlayerHandler.TickSend(player);
+                    }
                 }
                 if (!Sock.Connected)
                 {
-                    SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: disconnected");
+                    if (IsAlive)
+                    {
+                        SysConsole.Output(OutputType.INFO, "[Net] " + IP + " failed to connect: forcibly disconnected");
+                    }
                     IsAlive = false;
-                    Sock.Close();
+                    Sock.Close(1);
                     return;
                 }
                 int avail = Sock.Available;
@@ -233,7 +257,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             // TODO
             SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent ping, doing nothing...");
             IsAlive = false;
-            Sock.Close();
+            Sock.Close(5);
         }
 
         void HandleGame()
@@ -275,7 +299,14 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                     player.IsAlive = false;
                 }
             }
-            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " disconnected.");
+            if (player != null && player.IsIdentified)
+            {
+                SysConsole.Output(OutputType.INFO, "[Net] " + player.Username + "/" + IP + " disconnected.");
+            }
+            else
+            {
+                SysConsole.Output(OutputType.INFO, "[Net] " + IP + " disconnected.");
+            }
         }
     }
 

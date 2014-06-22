@@ -105,7 +105,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             byte ID = Packet[0];
             AbstractPacketIn Handler;
-            if (!player.IsIdentified && ID != 2 && ID != 3)
+            if (!player.IsIdentified && ID != 2 && ID != 3 && ID != 255)
             {
                 SysConsole.Output(OutputType.WARNING, "Invalid player packet from " + player.Network.IP + " (ID: " + ID + ") (not identified!)");
                 return;
@@ -182,9 +182,12 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 {
                     throw ex;
                 }
+                if (!player.IsAlive)
+                {
+                    SysConsole.Output(OutputType.INFO, "[Net] " + player.Username + "/" + player.Network.IP +
+                        " failed connection: internal error: " + ex.Message);
+                }
                 player.IsAlive = false;
-                SysConsole.Output(OutputType.INFO, "[Net] " + player.Username + "/" + player.Network.IP +
-                    " failed connection: internal error: " + ex.Message);
                 player.Network.Disconnect();
                 try
                 {
