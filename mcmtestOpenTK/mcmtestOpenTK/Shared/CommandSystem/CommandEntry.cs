@@ -54,12 +54,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             string BaseCommand = args[0];
             string BaseCommandLow = args[0].ToLower();
             args.RemoveAt(0);
-            for (int i = 0; i < system.RegisteredCommands.Count; i++)
+            AbstractCommand cmd;
+            if (system.RegisteredCommands.TryGetValue(BaseCommandLow, out cmd))
             {
-                if (BaseCommandLow == system.RegisteredCommands[i].Name)
-                {
-                    return new CommandEntry(command, _block, _owner, system.RegisteredCommands[i], args, BaseCommand);
-                }
+                return new CommandEntry(command, _block, _owner, cmd, args, BaseCommand);
             }
             return CreateInvalidOutput(BaseCommand, _block, args, _owner, system);
         }
@@ -196,13 +194,25 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <summary>
         /// Returns a duplicate of this command entry.
         /// </summary>
+        /// <param name="NewOwner">The new owner of the command entry</param>
         /// <returns>The duplicate entry</returns>
-        public CommandEntry Duplicate()
+        public CommandEntry Duplicate(CommandEntry NewOwner = null)
         {
             CommandEntry entry = new CommandEntry();
             entry.Arguments = new List<string>(Arguments);
-            entry.Block = Block;
-            entry.BlockOwner = BlockOwner;
+            if (Block == null)
+            {
+                entry.Block = null;
+            }
+            else
+            {
+                entry.Block = new List<CommandEntry>();
+                for (int i = 0; i < Block.Count; i++)
+                {
+                    entry.Block.Add(Block[i].Duplicate(entry));
+                }
+            }
+            entry.BlockOwner = NewOwner;
             entry.Command = Command;
             entry.CommandLine = CommandLine;
             entry.Index = Index;

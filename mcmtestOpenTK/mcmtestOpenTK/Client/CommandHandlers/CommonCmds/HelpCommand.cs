@@ -49,9 +49,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         break;
                     case "commands":
                         StringBuilder commandlist = new StringBuilder();
-                        for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
+                        for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommandList.Count; i++)
                         {
-                            AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
+                            AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommandList[i];
                             if (c.Name.Length != 0 && c.Name[0] != '\0')
                             {
                                 commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
@@ -70,9 +70,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         {
                             string cmd = entry.Arguments[1].ToLower();
                             bool found = false;
-                            for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommands.Count; i++)
+                            for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommandList.Count; i++)
                             {
-                                AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommands[i];
+                                AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommandList[i];
                                 if (c.Name == cmd)
                                 {
                                     AbstractCommand.ShowUsage(new CommandEntry() { Name = cmd, Command = c,

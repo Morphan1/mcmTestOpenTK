@@ -12,9 +12,14 @@ namespace mcmtestOpenTK.Shared.CommandSystem
     public class Commands
     {
         /// <summary>
+        /// A full dictionary of all registered commands.
+        /// </summary>
+        public Dictionary<string, AbstractCommand> RegisteredCommands;
+
+        /// <summary>
         /// A full list of all registered commands.
         /// </summary>
-        public List<AbstractCommand> RegisteredCommands;
+        public List<AbstractCommand> RegisteredCommandList;
 
         /// <summary>
         /// All command queues currently running.
@@ -107,7 +112,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="command">The command to register</param>
         public void RegisterCommand(AbstractCommand command)
         {
-            RegisteredCommands.Add(command);
+            RegisteredCommands.Add(command.Name, command);
+            RegisteredCommandList.Add(command);
         }
 
         /// <summary>
@@ -115,7 +121,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public void Init()
         {
-            RegisteredCommands = new List<AbstractCommand>(30);
+            RegisteredCommands = new Dictionary<string, AbstractCommand>(30);
+            RegisteredCommandList = new List<AbstractCommand>(30);
             Scripts = new Dictionary<string, CommandScript>(30);
             Queues = new List<CommandQueue>(20);
             TagSystem = new TagParser();

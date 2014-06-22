@@ -49,7 +49,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     ctickdelta -= 1.0f;
                 }
                 GlobalTickTime += (int)(Delta * 1000);
-                SysConsole.Output(OutputType.INFO, "Tick:" + GlobalTickTime);
 
                 // Calculate ping
                 pingbump += DeltaF;

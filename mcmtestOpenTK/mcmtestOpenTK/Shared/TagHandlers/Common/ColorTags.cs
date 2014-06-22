@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
             data.Shrink();
             if (data.Input.Count == 0)
             {
-                return "{TAG_ERROR:EMPTY}";
+                return ToString();
             }
             switch (data.Input[0])
             {
@@ -37,7 +37,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
                 case "base":
                     return new TextTag(data.BaseColor).Handle(data.Shrink());
                 default:
-                    return "{TAG_ERROR:UNKNOWN_COLOR}";
+                    return new TextTag(ToString()).Handle(data);
             }
         }
     }

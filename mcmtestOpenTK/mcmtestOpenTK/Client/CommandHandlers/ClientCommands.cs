@@ -8,6 +8,8 @@ using mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds;
 using mcmtestOpenTK.Client.CommandHandlers.NetworkCmds;
 using mcmtestOpenTK.Client.CommandHandlers.AudioCmds;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Client.CommandHandlers.TagHandlers.Common;
 
 namespace mcmtestOpenTK.Client.CommandHandlers
 {
@@ -60,6 +62,9 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new SavetextureCommand());
             CommandSystem.RegisterCommand(new ShaderlistCommand());
             CommandSystem.RegisterCommand(new TexturelistCommand());
+
+            // Tags
+            CommandSystem.TagSystem.Register(new RendererTags());
         }
 
         /// <summary>

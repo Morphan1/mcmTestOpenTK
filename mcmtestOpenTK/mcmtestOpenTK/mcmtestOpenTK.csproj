@@ -118,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\CommandHandlers\NetworkCmds\DisconnectCommand.cs" />
+    <Compile Include="Client\CommandHandlers\TagHandlers\Common\RendererTags.cs" />
+    <Compile Include="Client\CommandHandlers\TagObjects\ShaderTag.cs" />
+    <Compile Include="Client\CommandHandlers\TagObjects\TextureTag.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
@@ -205,6 +208,8 @@
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
+    <Compile Include="Shared\TagHandlers\Common\ListTags.cs" />
+    <Compile Include="Shared\TagHandlers\Objects\ListTag.cs" />
     <Compile Include="Shared\UnknownFileException.cs" />
     <Compile Include="Shared\Utilities.cs" />
     <Compile Include="Shared\TextStyle.cs" />
@@ -243,9 +248,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Client\CommandHandlers\TagObjects\Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

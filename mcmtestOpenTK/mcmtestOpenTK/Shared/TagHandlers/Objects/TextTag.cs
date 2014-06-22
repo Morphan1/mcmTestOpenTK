@@ -21,7 +21,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
         {
             if (data.Input.Count == 0)
             {
-                return Text;
+                return ToString();
             }
             switch (data.Input[0])
             {
@@ -30,8 +30,13 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 case "to_lower":
                     return new TextTag(Text.ToLower()).Handle(data.Shrink());
                 default:
-                    return "{UNKNOWN_TAG_BIT:" + data.Input[0] + "}";
+                    return "&{UNKNOWN_TAG_BIT:" + data.Input[0] + "}";
             }
+        }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }

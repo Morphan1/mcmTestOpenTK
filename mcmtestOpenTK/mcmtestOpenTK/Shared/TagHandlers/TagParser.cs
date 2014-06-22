@@ -32,7 +32,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <summary>
         /// All tag handler objects currently registered.
         /// </summary>
-        public List<TemplateTags> Handlers = new List<TemplateTags>();
+        public Dictionary<string, TemplateTags> Handlers = new Dictionary<string, TemplateTags>();
 
         /// <summary>
         /// Registers a handler object for later usage by tags.
@@ -40,7 +40,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <param name="handler">The handler object to register.</param>
         public void Register(TemplateTags handler)
         {
-            Handlers.Add(handler);
+            Handlers.Add(handler.Name, handler);
         }
 
         /// <summary>
@@ -49,8 +49,9 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         public void Init()
         {
             Register(new ColorTags());
-            Register(new VarTags());
+            Register(new ListTags());
             Register(new TextTags());
+            Register(new VarTags());
             // TODO: CVars, ...
         }
 
@@ -90,17 +91,13 @@ namespace mcmtestOpenTK.Shared.TagHandlers
                         string value = blockbuilder.ToString().ToLower();
                         List<string> split = split = value.Split(new char[] { '.' }).ToList();
                         TagData data = new TagData(this, split, base_color, vars);
-                        bool handled = false;
-                        for (int x = 0; x < Handlers.Count; x++)
+                        TemplateTags handler;
+                        bool handled = Handlers.TryGetValue(data.Input[0], out handler);
+                        if (handled)
                         {
-                            if (Handlers[x].Name == data.Input[0])
-                            {
-                                final.Append(Handlers[x].Handle(data));
-                                handled = true;
-                                break;
-                            }
+                            final.Append(handler.Handle(data));
                         }
-                        if (!handled)
+                        else
                         {
                             final.Append("{UNKNOWN_TAG:" + data.Input[0] + "}");
                         }

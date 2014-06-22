@@ -17,5 +17,10 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// </summary>
         /// <param name="data">The input tag data</param>
         public abstract string Handle(TagData data);
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
