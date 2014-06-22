@@ -42,6 +42,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepares the command system
                 SysConsole.Output(OutputType.INIT, "Preparing command system...");
                 ClientCommands.Init(cout);
+                // Prepare key system
+                SysConsole.Output(OutputType.INIT, "Preparing key bind system...");
+                KeyHandler.Init();
                 // TODO: Load default.cfg / etc.
                 // Prepare text output / language related info
                 SysConsole.Output(OutputType.INIT, "Preparing text/languaging...");

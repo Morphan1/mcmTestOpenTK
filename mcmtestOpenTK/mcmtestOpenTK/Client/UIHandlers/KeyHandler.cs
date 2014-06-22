@@ -13,6 +13,62 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 {
     public class KeyHandler
     {
+        static List<Key>[] HardBinds;
+
+        static Dictionary<Key, string> Binds;
+
+        static Dictionary<string, Key> keynames;
+
+        /// <summary>
+        /// Prepare key handler.
+        /// </summary>
+        public static void Init()
+        {
+            HardBinds = new List<Key>[6];
+            for (int i = 0; i < HardBinds.Length; i++)
+            {
+                HardBinds[i] = new List<Key>();
+            }
+            HardBinds[(int)KeyBind.FORWARD].Add(Key.W);
+            HardBinds[(int)KeyBind.BACK].Add(Key.S);
+            HardBinds[(int)KeyBind.LEFT].Add(Key.A);
+            HardBinds[(int)KeyBind.RIGHT].Add(Key.D);
+            HardBinds[(int)KeyBind.DOWN].Add(Key.C);
+            HardBinds[(int)KeyBind.UP].Add(Key.Space);
+            keynames = new Dictionary<string, Key>();
+            keynames.Add("a", Key.A); keynames.Add("b", Key.B); keynames.Add("c", Key.C);
+            keynames.Add("d", Key.D); keynames.Add("e", Key.E); keynames.Add("f", Key.F);
+            keynames.Add("g", Key.G); keynames.Add("h", Key.H); keynames.Add("i", Key.I);
+            keynames.Add("j", Key.J); keynames.Add("k", Key.K); keynames.Add("l", Key.L);
+            keynames.Add("m", Key.M); keynames.Add("n", Key.N); keynames.Add("o", Key.O);
+            keynames.Add("p", Key.P); keynames.Add("q", Key.Q); keynames.Add("r", Key.R);
+            keynames.Add("s", Key.S); keynames.Add("t", Key.T); keynames.Add("u", Key.U);
+            keynames.Add("v", Key.V); keynames.Add("w", Key.W); keynames.Add("x", Key.X);
+            keynames.Add("y", Key.Y); keynames.Add("z", Key.Z); keynames.Add("1", Key.Number1);
+            keynames.Add("2", Key.Number2); keynames.Add("3", Key.Number3); keynames.Add("4", Key.Number4);
+            keynames.Add("5", Key.Number5); keynames.Add("6", Key.Number6); keynames.Add("7", Key.Number7);
+            keynames.Add("8", Key.Number8); keynames.Add("9", Key.Number9); keynames.Add("0", Key.Number0);
+            keynames.Add("lalt", Key.AltLeft); keynames.Add("ralt", Key.AltRight);
+            keynames.Add("f1", Key.F1); keynames.Add("f2", Key.F2); keynames.Add("f3", Key.F3);
+            keynames.Add("f4", Key.F4); keynames.Add("f5", Key.F5); keynames.Add("f6", Key.F6);
+            keynames.Add("f7", Key.F7); keynames.Add("f8", Key.F8); keynames.Add("f9", Key.F9);
+            keynames.Add("f10", Key.F10); keynames.Add("f11", Key.F11); keynames.Add("f12", Key.F12);
+            keynames.Add("enter", Key.Enter); keynames.Add("end", Key.End); keynames.Add("home", Key.Home);
+            keynames.Add("insert", Key.Insert); keynames.Add("delete", Key.Delete); keynames.Add("pause", Key.Pause);
+            keynames.Add("lshift", Key.ShiftLeft); keynames.Add("rshift", Key.ShiftRight); keynames.Add("tab", Key.Tab);
+            keynames.Add("caps", Key.CapsLock); keynames.Add("lctrl", Key.ControlLeft); keynames.Add("rctrl", Key.ControlRight);
+            keynames.Add(",", Key.Comma); keynames.Add(".", Key.Period); keynames.Add("/", Key.Slash);
+            keynames.Add("backslash", Key.BackSlash); keynames.Add("-", Key.Minus); keynames.Add("=", Key.Plus);
+            keynames.Add("backspace", Key.BackSpace); keynames.Add("semicolon", Key.Semicolon); keynames.Add("'", Key.Quote);
+            keynames.Add("[", Key.BracketLeft); keynames.Add("]", Key.BracketRight); keynames.Add("kp1", Key.Keypad1);
+            keynames.Add("kp2", Key.Keypad2); keynames.Add("kp3", Key.Keypad3); keynames.Add("kp4", Key.Keypad4);
+            keynames.Add("kp5", Key.Keypad5); keynames.Add("kp6", Key.Keypad6); keynames.Add("kp7", Key.Keypad7);
+            keynames.Add("kp8", Key.Keypad8); keynames.Add("kp9", Key.Keypad9); keynames.Add("kp0", Key.Keypad0);
+            keynames.Add("kpenter", Key.KeypadEnter); keynames.Add("kpmultiply", Key.KeypadMultiply);
+            keynames.Add("kpadd", Key.KeypadAdd); keynames.Add("kpsubtract", Key.KeypadSubtract);
+            keynames.Add("kpdivide", Key.KeypadDivide); keynames.Add("kpperiod", Key.KeypadPeriod);
+        }
+
         /// <summary>
         /// All text that was written since the information was last retrieved.
         /// </summary>
@@ -269,5 +325,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             return IsValid() && CurrentKeyboard.IsKeyDown(key) && !PreviousKeyboard.IsKeyDown(key);
         }
+    }
+
+    public enum KeyBind: int
+    {
+        FORWARD = 0,
+        BACK = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        UP = 4,
+        DOWN = 5
     }
 }

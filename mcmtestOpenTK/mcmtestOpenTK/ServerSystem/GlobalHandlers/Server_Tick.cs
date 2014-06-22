@@ -38,7 +38,6 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 GlobalTickTime = GlobalTickNote - (int)(tickdelta * 1000);
             }
             GlobalTickTime += (int)(Delta * 1000);
-            SysConsole.Output(OutputType.INFO, "N:" + GlobalTickNote + ",T:" + GlobalTickTime);
 
             // Update global networking
             GlobalNetwork.Tick();
