@@ -10,7 +10,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
     class Bullet: MovingEntity
     {
-        public Bullet(): base(EntityType.BULLET)
+        public Bullet(): base(EntityType.BULLET, true)
         {
             CheckCollision = true;
             Mins = new Location(-0.5f);

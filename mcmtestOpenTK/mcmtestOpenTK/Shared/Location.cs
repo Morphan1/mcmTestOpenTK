@@ -10,27 +10,27 @@ namespace mcmtestOpenTK.Shared
         /// <summary>
         /// A Location of (0, 0, 0).
         /// </summary>
-        public static Location Zero { get { return new Location(0); } }
+        public static Location Zero = new Location(0);
 
         /// <summary>
         /// A Location of (1, 1, 1).
         /// </summary>
-        public static Location One { get { return new Location(1); } }
+        public static Location One = new Location(1);
 
         /// <summary>
         /// A location of (1, 0, 0).
         /// </summary>
-        public static Location UnitX { get { return new Location(1, 0, 0); } }
+        public static Location UnitX = new Location(1, 0, 0);
 
         /// <summary>
         /// A location of (0, 1, 0).
         /// </summary>
-        public static Location UnitY { get { return new Location(0, 1, 0); } }
+        public static Location UnitY = new Location(0, 1, 0);
 
         /// <summary>
         /// A location of (0, 0, 1).
         /// </summary>
-        public static Location UnitZ { get { return new Location(0, 0, 1); } }
+        public static Location UnitZ = new Location(0, 0, 1);
 
         /// <summary>
         /// The X coordinate of this location.
@@ -106,6 +106,15 @@ namespace mcmtestOpenTK.Shared
             BitConverter.GetBytes(Y).CopyTo(toret, 4);
             BitConverter.GetBytes(Z).CopyTo(toret, 8);
             return toret;
+        }
+
+        /// <summary>
+        /// Returns a copy of this location.
+        /// </summary>
+        /// <returns>A copy of the location</returns>
+        public Location Duplicate()
+        {
+            return new Location(X, Y, Z);
         }
 
         public override bool Equals(object obj)

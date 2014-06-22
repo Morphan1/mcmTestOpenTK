@@ -115,6 +115,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static bool Initializing = true;
 
+        /// <summary>
+        /// Whether the client has been spawned into a world.
+        /// </summary>
+        public static bool Spawned = false;
+
         // Temporary, for testing
         public static int X = 0;
         public static int Y = 0;

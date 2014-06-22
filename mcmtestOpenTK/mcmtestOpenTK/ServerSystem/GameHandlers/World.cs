@@ -30,12 +30,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// </summary>
         public List<Entity> Tickers;
 
+        /// <summary>
+        /// A list of all entities that serve as spawn points.
+        /// </summary>
+        public List<SpawnPoint> SpawnPoints;
+
         public World(string _name)
         {
             Name = _name;
             Players = new List<Player>();
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+            SpawnPoints = new List<SpawnPoint>();
         }
 
         /// <summary>
@@ -85,6 +91,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 Players.Add((Player)entity);
                 playerindex = Players.Count - 1;
             }
+            else if (entity is SpawnPoint)
+            {
+                SpawnPoints.Add((SpawnPoint)entity);
+            }
             for (int i = 0; i < Players.Count; i++)
             {
                 if (i != playerindex)
@@ -105,6 +115,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             if (ent is Player)
             {
                 Players.Remove((Player)ent);
+            }
+            else if (ent is SpawnPoint)
+            {
+                SpawnPoints.Remove((SpawnPoint)ent);
             }
             if (ent.TickMe)
             {
@@ -190,6 +204,34 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             }
         }
 
+        /// <summary>
+        /// Finds a place to spawn a player at.
+        /// </summary>
+        /// <returns>A valid spawn location</returns>
+        public Location FindSpawnPoint()
+        {
+            // Make sure we have spawn points
+            if (SpawnPoints.Count == 0)
+            {
+                SysConsole.Output(OutputType.ERROR, "World lacks a spawn point! Adding one at (0, 0, 1)");
+                Spawn(new SpawnPoint() { Position = new Location(0, 0, 1) });
+            }
+            // Loop a few times to look for an open spawn
+            for (int tries = 0; tries < SpawnPoints.Count * 2; tries++)
+            {
+                SpawnPoint sp = SpawnPoints[Utilities.random.Next(SpawnPoints.Count)];
+                if (!sp.IsBlocked())
+                {
+                    return sp.Position;
+                }
+            }
+            // Oh dear! Most of them are blocked! Pick one at random and hope something horrible doesn't happen.
+            return SpawnPoints[Utilities.random.Next(SpawnPoints.Count)].Position;
+        }
+
+        /// <summary>
+        /// Whether a map is loaded onto the world currently.
+        /// </summary>
         public bool HasMap = false;
 
         /// <summary>

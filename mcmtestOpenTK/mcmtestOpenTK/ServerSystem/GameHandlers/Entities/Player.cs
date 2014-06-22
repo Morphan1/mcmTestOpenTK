@@ -12,9 +12,24 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
     public class Player: MovingEntity
     {
-        public Player(): base(EntityType.PLAYER)
+        /// <summary>
+        /// The default collision mins for a player.
+        /// </summary>
+        public static Location DefaultMins = new Location(-1.5f, -1.5f, 0);
+
+        /// <summary>
+        /// The default collision maxes for a player.
+        /// </summary>
+        public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
+
+        public Player(): base(EntityType.PLAYER, true)
         {
             ToSend = new List<byte[]>();
+            Solid = true;
+            Mins = DefaultMins;
+            Maxs = DefaultMaxes;
+            Gravity = 100;
+            CheckCollision = true;
         }
 
         /// <summary>
@@ -69,12 +84,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         void Spawn(World world)
         {
+            Position = world.FindSpawnPoint();
             world.Spawn(this);
             NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
             {
                 Send(new SpawnPacketOut(world.Entities[i]));
             }
+            Teleport(Position);
         }
 
         /// <summary>
@@ -85,7 +102,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         {
             if (IsAlive)
             {
-                Send(new DisconnectPacketOut(this, reason));
+                Send(new DisconnectPacketOut(reason));
                 SysConsole.Output(OutputType.INFO, "Player " + Username + "/" + Network.IP + " was kicked: " + reason);
                 IsAlive = false;
                 Network.Disconnect();
@@ -111,7 +128,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <param name="message">The message to show</param>
         public void SendMessage(string message)
         {
-            Send(new MessagePacketOut(this, message));
+            Send(new MessagePacketOut(message));
+        }
+
+        /// <summary>
+        /// Teleports the player to the specified location.
+        /// </summary>
+        /// <param name="loc">The location to teleport to</param>
+        public void Teleport(Location loc)
+        {
+            Position = loc;
+            Velocity = Location.Zero;
+            Send(new TeleportPacketOut(loc));
         }
 
         /// <summary>

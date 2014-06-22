@@ -62,6 +62,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public readonly bool TickMe;
 
         /// <summary>
+        /// Whether this entity should be sent to the client.
+        /// </summary>
+        public readonly bool NetTransmit;
+
+        /// <summary>
         /// Where the entity is at in the world.
         /// </summary>
         public Location Position = Location.Zero;
@@ -101,9 +106,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public EntityType Type = EntityType.NUL;
 
-        public Entity(bool _TickMe, EntityType _type)
+        public Entity(bool _TickMe, bool _NetTransmit, EntityType _type)
         {
             TickMe = _TickMe;
+            NetTransmit = _NetTransmit;
             Type = _type;
         }
     }

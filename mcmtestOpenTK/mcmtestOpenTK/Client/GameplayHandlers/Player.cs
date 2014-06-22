@@ -48,6 +48,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         public void Update()
         {
+            // Don't move if not even spawned.
+            if (!MainGame.Spawned)
+            {
+                if (MouseHandler.MouseCaptured)
+                {
+                    MouseHandler.ReleaseMouse();
+                }
+                return;
+            }
             // Mouse based rotation
             Direction.X += MouseHandler.MouseDelta.X;
             Direction.Y += MouseHandler.MouseDelta.Y;

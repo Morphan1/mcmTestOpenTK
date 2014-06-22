@@ -11,5 +11,6 @@ namespace mcmtestOpenTK.Shared
         PLAYER = 1,
         CUBE = 2,
         BULLET = 3,
+        SPAWNPOINT = 4,
     }
 }

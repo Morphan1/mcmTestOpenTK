@@ -10,13 +10,23 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public class OtherPlayer: MovingEntity
     {
+        /// <summary>
+        /// The default collision mins for a player.
+        /// </summary>
+        public static Location DefaultMins = new Location(-1.5f, -1.5f, 0);
+
+        /// <summary>
+        /// The default collision maxes for a player.
+        /// </summary>
+        public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
+
         CubeModel model;
 
         public OtherPlayer(): base()
         {
             model = new CubeModel(Location.Zero, new Location(3, 3, 8), Texture.Test);
-            Mins = new Location(-1.5f, -1.5f, 0);
-            Maxs = new Location(1.5f, 1.5f, 8);
+            Mins = DefaultMins;
+            Maxs = DefaultMaxes;
             Solid = false;
             CheckCollision = true;
             Gravity = 100;

@@ -9,14 +9,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
 {
     public class DisconnectPacketOut: AbstractPacketOut
     {
-        Player player;
-
         string Reason;
 
-        public DisconnectPacketOut(Player _player, string _reason)
+        public DisconnectPacketOut(string _reason)
         {
             ID = 255;
-            player = _player;
             Reason = _reason;
         }
 

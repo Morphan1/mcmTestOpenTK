@@ -13,7 +13,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
     {
         public string Message;
 
-        public MessagePacketOut(Player player, string _message)
+        public MessagePacketOut(string _message)
         {
             ID = 6;
             Message = _message;

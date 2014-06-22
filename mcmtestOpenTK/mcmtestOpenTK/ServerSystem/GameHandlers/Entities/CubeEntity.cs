@@ -40,7 +40,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public String texture;
 
-        public CubeEntity(): base(false, EntityType.CUBE)
+        public CubeEntity(): base(false, true, EntityType.CUBE)
         {
             Solid = true;
             Mins = new Location(0);

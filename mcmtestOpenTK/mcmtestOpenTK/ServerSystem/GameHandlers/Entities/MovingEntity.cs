@@ -11,7 +11,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
     public abstract class MovingEntity: Entity
     {
-        public MovingEntity(EntityType type): base(true, type)
+        public MovingEntity(EntityType type, bool NetTransmit): base(true, NetTransmit, type)
         {
         }
 

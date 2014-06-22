@@ -80,6 +80,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 case "bullet":
                     ent = new Bullet();
                     break;
+                case "spawnpoint":
+                    ent = new SpawnPoint();
+                    break;
                 default:
                     ErrorHandler.HandleError("Error loading map '" + map + "': invalid entity type '" + type + "'.");
                     return;
