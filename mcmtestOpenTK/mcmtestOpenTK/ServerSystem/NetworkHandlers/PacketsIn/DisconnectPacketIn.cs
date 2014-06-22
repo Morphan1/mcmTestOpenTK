@@ -21,6 +21,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             {
                 return;
             }
+            player.IsAlive = false;
             player.Kick("CLIENT SENT DISCONNECT");
         }
     }

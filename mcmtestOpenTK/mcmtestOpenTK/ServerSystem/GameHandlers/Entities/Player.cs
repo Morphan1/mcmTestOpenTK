@@ -89,7 +89,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
             {
-                Send(new SpawnPacketOut(world.Entities[i]));
+                if (world.Entities[i].NetTransmit)
+                {
+                    Send(new SpawnPacketOut(world.Entities[i]));
+                }
             }
             Teleport(Position);
         }
