@@ -147,6 +147,7 @@
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ForeachCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\DefineCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\ScriptCacheCommand.cs" />
     <Compile Include="Shared\Location.cs" />
     <Compile Include="ServerSystem\GameHandlers\MapLoader.cs" />
     <Compile Include="ServerSystem\GameHandlers\World.cs" />

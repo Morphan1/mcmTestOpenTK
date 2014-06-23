@@ -19,45 +19,40 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // entry in the list and restart the command block via the 'next' argument.
     // TODO: Explain more!
     // @Example
-    // This example runs through the list and echos "one", then "two", then "three" back to the console.
-    // <@code>
-    // foreach start one|two|three
+    // // This example runs through the list and echos "1/3", then "2/3", then "3/3" back to the console.
+    // repeat 3
     // {
-    //     echo "<{var[foreach_value]}>";
+    //     echo "<{var[repeat_index]}>/<{var[repeat_total]}>";
     // }
-    // <@/code>
     // @Example
-    // This example runs through the list and echos "one", then "oner", then "two", then "three", then "threer" back to the console.
-    // <@code>
-    // foreach start one|two|three
+    // // This example runs through the list and echos "1", then "1r", then "2", then "3", then "3r" back to the console.
+    // repeat 3
     // {
-    //     echo "<{var[foreach_value]}>"
-    //     if <{var[foreach_value].equals[two]}>
+    //     echo "<{var[repeat_index]}>"
+    //     if <{var[repeat_index].equals[2]}>
     //     {
-    //         foreach next;
+    //         repeat next;
     //     }
-    //     echo "<{var[foreach_value]}>r"
+    //     echo "<{var[repeat_index]}>r"
     // }
-    // <@/code>
     // @Example
-    // This example runs through the list and echos "one", then "two", then stops early back to the console.
-    // <@code>
-    // foreach start one|two|three
+    // // This example runs through the list and echos "1", then "2", then stops early back to the console.
+    // repeat 3
     // {
-    //     echo "<{var[foreach_value]}>"
-    //     if <{var[foreach_value].equals[three]}>
+    //     echo "<{var[repeat_index]}>"
+    //     if <{var[repeat_index].equals[3]}>
     //     {
-    //         foreach stop
+    //         repeat stop
     //     }
     // }
-    // <@/code>
     // @Example
     // TODO: More examples!
     // @Tags
-    // <{var[foreach_index]}> returns what iteration (numeric) the foreach is on.
-    // <{var[foreach_total]}> returns what iteration (numeric) the foreach is aiming for, and will end on if not stopped early.
-    // <{var[foreach_value]}> returns the current item in the list.
-    // <{var[foreach_list]}> returns the full list being looped through.
+    // <{var[repeat_index]}> returns what iteration (numeric) the repeat is on.
+    // <{var[repeat_total]}> returns what iteration (numeric) the repeat is aiming for, and will end on if not stopped early.
+    // @BlockVars
+    // repeat_index TextTag
+    // repeat_total TextTag
     // -->
     class RepeatCommand : AbstractCommand
     {

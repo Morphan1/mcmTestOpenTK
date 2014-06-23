@@ -19,7 +19,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
     // onto the queue it is running in.
     // TODO: Explain more!
     // @Example
-    // This example sets variable "name" to "value"
+    // // This example sets variable "name" to "value"
     // define name value
     // @Example
     // TODO: More examples!

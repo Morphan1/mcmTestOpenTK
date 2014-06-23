@@ -13,7 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public DebugCommand()
         {
             Name = "debug";
-            Arguments = "<full/minimal/none>";
+            Arguments = "full/minimal/none";
             Description = "Modifies the debug mode of the current queue.";
             IsFlow = true;
         }

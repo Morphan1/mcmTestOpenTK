@@ -21,16 +21,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // entry in the list and restart the command block via the 'next' argument.
     // TODO: Explain more!
     // @Example
-    // This example runs through the list and echos "one", then "two", then "three" back to the console.
-    // <@code>
+    // // This example runs through the list and echos "one", then "two", then "three" back to the console.
     // foreach start one|two|three
     // {
     //     echo "<{var[foreach_value]}>";
     // }
-    // <@/code>
     // @Example
-    // This example runs through the list and echos "one", then "oner", then "two", then "three", then "threer" back to the console.
-    // <@code>
+    // // This example runs through the list and echos "one", then "oner", then "two", then "three", then "threer" back to the console.
     // foreach start one|two|three
     // {
     //     echo "<{var[foreach_value]}>"
@@ -40,10 +37,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     //     }
     //     echo "<{var[foreach_value]}>r"
     // }
-    // <@/code>
     // @Example
-    // This example runs through the list and echos "one", then "two", then stops early back to the console.
-    // <@code>
+    // // This example runs through the list and echos "one", then "two", then stops early back to the console.
     // foreach start one|two|three
     // {
     //     echo "<{var[foreach_value]}>"
@@ -52,7 +47,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     //         foreach stop
     //     }
     // }
-    // <@/code>
     // @Example
     // TODO: More examples!
     // @Tags
@@ -60,6 +54,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // <{var[foreach_total]}> returns what iteration (numeric) the foreach is aiming for, and will end on if not stopped early.
     // <{var[foreach_value]}> returns the current item in the list.
     // <{var[foreach_list]}> returns the full list being looped through.
+    // @BlockVars
+    // foreach_index TextTag
+    // foreach_total TextTag
+    // foreach_value TextTag
+    // foreach_list TextTag
     // -->
     class ForeachCommand : AbstractCommand
     {
