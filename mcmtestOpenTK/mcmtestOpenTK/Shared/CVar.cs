@@ -19,6 +19,12 @@ namespace mcmtestOpenTK.Shared
         UserMade = 0x20,
         InitOnly = 0x40,
     }
+    // <--[explanation]
+    // @Name CVars
+    // @Description
+    // CVars are global control variables.
+    // TODO: Explain better!
+    // -->
     public class CVar
     {
         /// <summary>

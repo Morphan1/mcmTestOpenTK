@@ -13,7 +13,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
     // Variables are defined primarily by the <@link command define>define<@/link> command,
     // but can be added by other tags and commands, such as the <@link command repeat>repeat<@/link> command.
     // To use a queue variable in a tag, simply use the tag <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>.
-    // TODO: Explain better
+    // TODO: Explain better!
     // -->
     class VarTags: TemplateTags
     {
@@ -56,7 +56,8 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
             // @Group Variables
             // @ReturnType TextTag
             // @Returns whether the specified variable exists.
-            // Specifically for the tag <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>
+            // Specifically for the tags <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>
+            // and  <@link tag cvar[<TextTag>]><{cvar[<TextTag>]}><@/link>
             // -->
             if (data.Input.Count > 0 && data.Input[0] == "exists")
             {

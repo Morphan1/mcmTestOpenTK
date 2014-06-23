@@ -10,6 +10,14 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers.TagObjects.Common
 {
     public class ServerTags : TemplateTags
     {
+        // <--[tag]
+        // @Base server
+        // @Group Global Information
+        // @Mode Server
+        // @ReturnType ServerTag
+        // @Returns a generic server class full of specific helpful global information tags,
+        // such as <@link tag ServerTag.fps><{server.fps}><@/link>.
+        // -->
         public ServerTags()
         {
             Name = "server";
@@ -20,14 +28,21 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers.TagObjects.Common
             data.Shrink();
             if (data.Input.Count == 0)
             {
-                return "{TAG_ERROR:EMPTY}";
+                return ToString();
             }
             switch (data.Input[0])
             {
+                // <--[tag]
+                // @Name ServerTag.fps
+                // @Group Variables
+                // @Mode Server
+                // @ReturnType TextTag
+                // @Returns the current server FPS (frames per second).
+                // -->
                 case "fps":
                     return new TextTag(Server.FPS.ToString()).Handle(data.Shrink());
                 default:
-                    return "{TAG_ERROR:UNKNOWN_SUBTAG}";
+                    return new TextTag(ToString()).Handle(data.Shrink());
             }
         }
     }
