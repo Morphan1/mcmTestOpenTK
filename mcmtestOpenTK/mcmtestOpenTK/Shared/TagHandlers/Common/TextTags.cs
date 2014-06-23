@@ -6,8 +6,22 @@ using mcmtestOpenTK.Shared.TagHandlers.Objects;
 
 namespace mcmtestOpenTK.Shared.TagHandlers.Common
 {
+    // <--[explanation]
+    // @Name Text Tags
+    // @Description
+    // TextTags are any random text, built into the tag system.
+    // TODO: Explain better
+    // TODO: Link tag system explanation
+    // -->
     class TextTags : TemplateTags
     {
+        // <--[tag]
+        // @Base text[<TextTag>]
+        // @Group Common Base Types
+        // @ReturnType TextTag
+        // @Returns the input text as a TextTag.
+        // <@link explanation Text Tags>What are text tags?<@/link>
+        // -->
         public TextTags()
         {
             Name = "text";

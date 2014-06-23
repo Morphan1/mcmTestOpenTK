@@ -145,6 +145,7 @@
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NetstringPacketOut.cs" />
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\DefineCommand.cs" />
     <Compile Include="Shared\Location.cs" />
     <Compile Include="ServerSystem\GameHandlers\MapLoader.cs" />
     <Compile Include="ServerSystem\GameHandlers\World.cs" />

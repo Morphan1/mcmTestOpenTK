@@ -40,30 +40,80 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             }
             switch (data.Input[0])
             {
+                // <--[tag]
+                // @Name ListTag.size
+                // @Group List Attributes
+                // @ReturnType TextTag
+                // @Returns the number of entries in the list.
+                // -->
                 case "size":
                     return new TextTag(ListEntries.Count.ToString()).Handle(data.Shrink());
+                // <--[tag]
+                // @Name ListTag.comma_separated
+                // @Group List Attributes
+                // @ReturnType TextTag
+                // @Returns the list in a user-friendly comma-separated format.
+                // EG, "one|two|three" becomes "one, two, three".
+                // -->
                 case "comma_separated":
                     return new TextTag(ToCSString()).Handle(data.Shrink());
+                // <--[tag]
+                // @Name ListTag.formatted
+                // @Group List Attributes
+                // @ReturnType TextTag
+                // @Returns the list in a user-friendly format.
+                // EG, "one|two|three" becomes "one, two, and three",
+                // "one|two" becomes "one and two".
+                // -->
                 case "formatted":
                     return new TextTag(Formatted()).Handle(data.Shrink());
-                case "reverse":
+                // <--[tag]
+                // @Name ListTag.reversed
+                // @Group List Attributes
+                // @ReturnType ListTag
+                // @Returns the list entirely backwards.
+                // EG, "one|two|three" becomes "three|two|one".
+                // -->
+                case "reversed":
                     {
                         ListTag newlist = new ListTag(ListEntries);
                         newlist.ListEntries.Reverse();
                         return newlist.Handle(data.Shrink());
                     }
+                // <--[tag]
+                // @Name ListTag.first
+                // @Group List Attributes
+                // @ReturnType Dynamic
+                // @Returns the first entry in the list.
+                // EG, "one|two|three" gets "one".
+                // -->
                 case "first":
                     if (ListEntries.Count == 0)
                     {
                         return new TextTag("&null").Handle(data.Shrink());
                     }
                     return ListEntries[0].Handle(data.Shrink());
+                // <--[tag]
+                // @Name ListTag.last
+                // @Group List Attributes
+                // @ReturnType Dynamic
+                // @Returns the last entry in the list.
+                // EG, "one|two|three" gets "three".
+                // -->
                 case "last":
                     if (ListEntries.Count == 0)
                     {
                         return new TextTag("&null").Handle(data.Shrink());
                     }
                     return ListEntries[ListEntries.Count - 1].Handle(data.Shrink());
+                // <--[tag]
+                // @Name ListTag.get[<TextTag>]
+                // @Group List Attributes
+                // @ReturnType Dynamic
+                // @Returns the specified entry in the list.
+                // Note that indices are zero-based.
+                // EG, "one|two|three" .get[1] gets "two".
+                // -->
                 case "get":
                     {
                         int number = Utilities.StringToInt(data.GetModifier(0));
@@ -122,6 +172,10 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
         /// </summary>
         public string Formatted()
         {
+            if (ListEntries.Count == 2)
+            {
+                return (ListEntries[0] + " and " + ListEntries[1]);
+            }
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < ListEntries.Count; i++)
             {
@@ -130,7 +184,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 {
                     sb.Append(", and ");
                 }
-                if (i + 1 < ListEntries.Count)
+                else if (i + 1 < ListEntries.Count)
                 {
                     sb.Append(", ");
                 }
