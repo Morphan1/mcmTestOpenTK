@@ -15,6 +15,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "insert";
             Arguments = "<script to insert>";
             Description = "Inserts a script file to the current command queue.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

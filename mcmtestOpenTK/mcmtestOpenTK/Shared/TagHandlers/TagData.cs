@@ -39,12 +39,13 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// </summary>
         public string BaseColor = null;
 
-        public TagData(TagParser _system, List<string> _input, string _basecolor, List<Variable> _vars, DebugMode mode)
+        public TagData(TagParser _system, List<string> _input, string _basecolor, List<Variable> _vars, DebugMode _mode)
         {
             TagSystem = _system;
             Input = _input;
             BaseColor = _basecolor;
             Variables = _vars;
+            mode = _mode;
             Modifiers = new List<string>();
             for (int x = 0; x < Input.Count; x++)
             {

@@ -15,6 +15,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "debug";
             Arguments = "<full/minimal/none>";
             Description = "Modifies the debug mode of the current queue.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

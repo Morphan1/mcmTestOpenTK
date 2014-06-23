@@ -30,6 +30,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public bool IsDebug = false;
 
         /// <summary>
+        /// Whether the command is part of a script's flow rather than for normal client use.
+        /// </summary>
+        public bool IsFlow = false;
+
+        /// <summary>
         /// Executes the command.
         /// </summary>
         /// <param name="entry">Entry to be executed</param>

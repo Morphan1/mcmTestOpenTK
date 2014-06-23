@@ -15,6 +15,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "run";
             Arguments = "<script to run>";
             Description = "Runs a script file.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

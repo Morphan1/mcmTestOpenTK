@@ -29,7 +29,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                     "<{color.base}>Help Types:\n" +
                     "<{color.base}>    textstyle - view help with the text styling (color, bold, etc.)\n" +
                     "<{color.base}>    characters - view a list of what text characters are currently supported.\n" +
-                    "<{color.base}>    commands - lists the commands available\n" +
+                    "<{color.base}>    commands ['all'] - lists the commands available - specify 'all' to see hidden commands\n" +
                     "<{color.base}>    command [command name] - view information on a specific command\n" +
                     "<{color.info}>Press CTRL-C to copy console text. Press CTRL-V to paste into the console.\n" +
                     "<{color.info}>Press the PageUp (PGUP) key to scroll the console text up, or the PageDown (PGDN) key to scroll down.");
@@ -48,11 +48,12 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                             "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).", DebugMode.MINIMAL);
                         break;
                     case "commands":
+                        bool all = entry.Arguments.Count > 1 && entry.GetArgument(1).ToLower() == "all";
                         StringBuilder commandlist = new StringBuilder();
                         for (int i = 0; i < ClientCommands.CommandSystem.RegisteredCommandList.Count; i++)
                         {
                             AbstractCommand c = ClientCommands.CommandSystem.RegisteredCommandList[i];
-                            if (c.Name.Length != 0 && c.Name[0] != '\0')
+                            if (((!c.IsDebug && !c.IsFlow) || all) && !c.Name.StartsWith("\0"))
                             {
                                 commandlist.Append(TextStyle.Color_Commandhelp + "/" + c.Name + TextStyle.Color_Outgood + " - " + c.Description +
                                     (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
@@ -60,6 +61,10 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         }
                         entry.Output.Good("There are <{color.emphasis}>" + ClientCommands.CommandSystem.RegisteredCommands.Count
                             + "<{color.base}> clientside commands loaded.\n" + TagParser.Escape(commandlist.ToString()), DebugMode.MINIMAL);
+                        if (NetworkBase.IsActive)
+                        {
+                            NetworkBase.Send(new CommandPacketOut("help\ncommands"));
+                        }
                         break;
                     case "command":
                         if (entry.Arguments.Count < 2)

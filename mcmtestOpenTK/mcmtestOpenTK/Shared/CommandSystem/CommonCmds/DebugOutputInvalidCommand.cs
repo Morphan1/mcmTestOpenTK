@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             Arguments = "<invalid command name>";
             Description = "Reports that a command is invalid, or submits it to a server.";
             IsDebug = true;
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

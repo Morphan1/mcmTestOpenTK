@@ -101,7 +101,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 }
                 else
                 {
-                    toret.Add(CommandEntry.FromInput(from[i], null, entry, system));
+                    CommandEntry centry = CommandEntry.FromInput(from[i], null, entry, system);
+                    if (centry != null)
+                    {
+                        toret.Add(centry);
+                    }
                 }
             }
             return toret;

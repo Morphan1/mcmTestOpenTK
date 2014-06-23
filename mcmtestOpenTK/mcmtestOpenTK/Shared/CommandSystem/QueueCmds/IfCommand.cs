@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "if";
             Arguments = "<true/false>";
             Description = "Executes the following block of commands only if the input is true.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

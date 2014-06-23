@@ -209,9 +209,11 @@
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
+    <Compile Include="Shared\TagHandlers\Common\UtilTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\TernaryTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\CVarTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\ListTags.cs" />
+    <Compile Include="Shared\TagHandlers\Objects\TimeTag.cs" />
     <Compile Include="Shared\TagHandlers\Objects\ListTag.cs" />
     <Compile Include="Shared\UnknownFileException.cs" />
     <Compile Include="Shared\Utilities.cs" />

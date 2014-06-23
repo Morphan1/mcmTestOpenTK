@@ -12,7 +12,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         {
             Name = "else";
             Arguments = "[if <true/false>]";
-            Description = "Executes the following block of commands only if the previous if failed, and optionally if additional requirements are met.";
+            Description = "Executes the following block of commands only if the previous if failed, "
+            + "and optionally if additional requirements are met.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

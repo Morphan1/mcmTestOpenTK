@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "stopall";
             Arguments = "";
             Description = "Stops all currently running command queues.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

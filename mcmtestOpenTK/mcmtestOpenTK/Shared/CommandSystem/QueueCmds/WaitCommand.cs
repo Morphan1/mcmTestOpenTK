@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "wait";
             Arguments = "<time to wait in seconds>";
             Description = "Delays the current command queue a specified amount of time.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

@@ -23,6 +23,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
     // define name value;
     // @Example
     // TODO: More examples!
+    // @Tags
+    // var[<TextTag>]
     // -->
     class DefineCommand: AbstractCommand
     {
@@ -31,6 +33,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             Name = "define";
             Arguments = "<Variable to set> <new value>";
             Description = "Modifies the value of a specified queue variable, or creates a new one.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)

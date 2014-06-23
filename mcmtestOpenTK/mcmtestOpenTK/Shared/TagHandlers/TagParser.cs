@@ -64,11 +64,12 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         {
             CommandSystem = _system;
             Register(new ColorTags());
+            Register(new CVarTags());
             Register(new ListTags());
             Register(new TernaryTags());
             Register(new TextTags());
+            Register(new UtilTags());
             Register(new VarTags());
-            Register(new CVarTags());
             // TODO: CVars, ...
         }
 

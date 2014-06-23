@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "repeat";
             Arguments = "<times to repeat>";
             Description = "Executes the following block of commands a specified number of times.";
+            IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)
