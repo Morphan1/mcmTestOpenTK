@@ -26,6 +26,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 command = command.Substring(1);
             }
+            command = Utilities.CleanStringInput(command);
             List<string> args = new List<string>();
             int start = 0;
             bool quoted = false;
@@ -89,7 +90,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public CommandEntry(string _commandline, List<CommandEntry> _block, CommandEntry _owner,
             AbstractCommand _command, List<string> _arguments, string _name)
         {
-            CommandLine = Utilities.CleanStringInput(_commandline);
+            CommandLine = _commandline;
             Block = _block;
             BlockOwner = _owner;
             Command = _command;

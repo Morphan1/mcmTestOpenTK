@@ -58,6 +58,24 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 case "comma_separated":
                     return new TextTag(ToCSString()).Handle(data.Shrink());
                 // <--[tag]
+                // @Name ListTag.space_separated
+                // @Group List Attributes
+                // @ReturnType TextTag
+                // @Returns the list in a space-separated format.
+                // EG, "one|two|three" becomes "one two three".
+                // -->
+                case "space_separated":
+                    return new TextTag(ToSpaceString()).Handle(data.Shrink());
+                // <--[tag]
+                // @Name ListTag.unseparated
+                // @Group List Attributes
+                // @ReturnType TextTag
+                // @Returns the list as an unseparated string.
+                // EG, "one|two|three" becomes "onetwothree".
+                // -->
+                case "unseparated":
+                    return new TextTag(ToFlatString()).Handle(data.Shrink());
+                // <--[tag]
                 // @Name ListTag.formatted
                 // @Group List Attributes
                 // @ReturnType TextTag
@@ -163,6 +181,36 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 {
                     sb.Append(", ");
                 }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Renders the list as a space-separated string (no escaping).
+        /// </summary>
+        public string ToSpaceString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ListEntries.Count; i++)
+            {
+                sb.Append(ListEntries[i].ToString());
+                if (i + 1 < ListEntries.Count)
+                {
+                    sb.Append(" ");
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Renders the list as an unseparated string (no escaping).
+        /// </summary>
+        public string ToFlatString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ListEntries.Count; i++)
+            {
+                sb.Append(ListEntries[i].ToString());
             }
             return sb.ToString();
         }

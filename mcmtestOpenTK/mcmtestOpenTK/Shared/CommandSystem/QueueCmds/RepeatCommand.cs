@@ -6,6 +6,59 @@ using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
+    // <--[command]
+    // @Name repeat
+    // @Arguments <times to repeat>/stop/next
+    // @Short Executes the following block of commands a specified number of times.
+    // @Updated 2014/06/23
+    // @Authors mcmonkey
+    // @Description
+    // The repeat command will loop the given number of times and execute the included command block
+    // each time it loops.
+    // It can also be used to stop the looping via the 'stop' argument, or to jump to the next
+    // entry in the list and restart the command block via the 'next' argument.
+    // TODO: Explain more!
+    // @Example
+    // This example runs through the list and echos "one", then "two", then "three" back to the console.
+    // <@code>
+    // foreach start one|two|three
+    // {
+    //     echo "<{var[foreach_value]}>";
+    // }
+    // <@/code>
+    // @Example
+    // This example runs through the list and echos "one", then "oner", then "two", then "three", then "threer" back to the console.
+    // <@code>
+    // foreach start one|two|three
+    // {
+    //     echo "<{var[foreach_value]}>"
+    //     if <{var[foreach_value].equals[two]}>
+    //     {
+    //         foreach next;
+    //     }
+    //     echo "<{var[foreach_value]}>r"
+    // }
+    // <@/code>
+    // @Example
+    // This example runs through the list and echos "one", then "two", then stops early back to the console.
+    // <@code>
+    // foreach start one|two|three
+    // {
+    //     echo "<{var[foreach_value]}>"
+    //     if <{var[foreach_value].equals[three]}>
+    //     {
+    //         foreach stop
+    //     }
+    // }
+    // <@/code>
+    // @Example
+    // TODO: More examples!
+    // @Tags
+    // <{var[foreach_index]}> returns what iteration (numeric) the foreach is on.
+    // <{var[foreach_total]}> returns what iteration (numeric) the foreach is aiming for, and will end on if not stopped early.
+    // <{var[foreach_value]}> returns the current item in the list.
+    // <{var[foreach_list]}> returns the full list being looped through.
+    // -->
     class RepeatCommand : AbstractCommand
     {
         public RepeatCommand()
@@ -55,6 +108,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     {
                         if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
                         {
+                            entry.Queue.CommandList.RemoveAt(0);
                             break;
                         }
                         entry.Queue.CommandList.RemoveAt(0);
@@ -63,9 +117,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 else if (count.ToLower() == "next")
                 {
                     entry.Good("Skipping to next repeat entry...");
-                    while (entry.Queue.CommandList.Count > 1)
+                    while (entry.Queue.CommandList.Count > 0)
                     {
-                        if (entry.Queue.CommandList[1].CommandLine == "repeat \0CALLBACK")
+                        if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
                         {
                             break;
                         }

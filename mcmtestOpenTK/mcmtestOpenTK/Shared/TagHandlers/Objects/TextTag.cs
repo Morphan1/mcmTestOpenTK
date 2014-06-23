@@ -67,6 +67,63 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 case "to_lower":
                     return new TextTag(Text.ToLower()).Handle(data.Shrink());
                 // <--[tag]
+                // @Name TextTag.to_list
+                // @Group Text Modification
+                // @ReturnType ListTag
+                // @Returns the text as a list of characters.
+                // Can be reverted via <@link tag ListTag.unseparated>ListTag.unseparated<@/link>.
+                // -->
+                case "to_list":
+                    {
+                        List<TemplateObject> list = new List<TemplateObject>(Text.Length);
+                        for (int i = 0; i < Text.Length; i++)
+                        {
+                            list.Add(new TextTag(Text[i].ToString()));
+                        }
+                        return new ListTag(list).Handle(data.Shrink());
+                    }
+                // <--[tag]
+                // @Name TextTag.substring[<TextTag>,<TextTag>]
+                // @Group Text Modification
+                // @ReturnType TextTag
+                // @Returns the portion of text in the specified range.
+                // Note that indices are one-based.
+                // EG, "hello" .substring [2,4] returns "ell".
+                // -->
+                case "substring":
+                    {
+                        string modif = data.GetModifier(0);
+                        string[] inputs = modif.Split(',');
+                        if (inputs.Length < 2)
+                        {
+                            break;
+                        }
+                        int num1 = Utilities.StringToInt(inputs[0]) - 1;
+                        int num2 = Utilities.StringToInt(inputs[1]) - 1;
+                        if (num1 < 0)
+                        {
+                            num1 = 0;
+                        }
+                        if (num1 > Text.Length - 1)
+                        {
+                            num1 = Text.Length - 1;
+                        }
+                        if (num2 < 0)
+                        {
+                            num2 = 0;
+                        }
+                        if (num2 > Text.Length - 1)
+                        {
+                            num2 = Text.Length - 1;
+                        }
+                        if (num2 < num1)
+                        {
+                            num2 = num1;
+                            return new TextTag("").Handle(data.Shrink());
+                        }
+                        return new TextTag(Text.Substring(num1, (num2 - num1) + 1)).Handle(data.Shrink());
+                    }
+                // <--[tag]
                 // @Name TextTag.length
                 // @Group Text Attributes
                 // @ReturnType TextTag
@@ -396,8 +453,9 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 case "truncate":
                     return new TextTag(Math.Truncate(Utilities.StringToDouble(Text))).Handle(data.Shrink());
                 default:
-                    return "&{UNKNOWN_TAG_BIT:" + data.Input[0] + "}";
+                    break;
             }
+            return "&{UNKNOWN_TAG_BIT:" + data.Input[0] + "}";
         }
 
         public override string ToString()

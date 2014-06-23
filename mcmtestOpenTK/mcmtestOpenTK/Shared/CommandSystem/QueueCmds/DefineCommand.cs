@@ -20,11 +20,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
     // TODO: Explain more!
     // @Example
     // This example sets variable "name" to "value"
-    // define name value;
+    // define name value
     // @Example
     // TODO: More examples!
     // @Tags
-    // var[<TextTag>]
+    // <{var[<TextTag>]}>
     // -->
     class DefineCommand: AbstractCommand
     {

@@ -8,16 +8,17 @@ using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Shared.TagHandlers
 {
-    // <--[definition]
-    // @Word specified
-    // @Set tag
-    // @Description The word 'specified', when used in a tag description, refers to the value input after the tag.
-    // EG, you might have the tag <@link tag TextTag.equals[<TextTag>]><{text[<TextTag>].equals[<TextTag>]}><@/link>
-    // In this tag, the first <TextTag> is referred to as 'the text', and the second <TextTag> as 'specified text'.
-    // Which would look like: <{text[the text].equals[specified text]}>
-    // -->
     public class TagParser
     {
+        // <--[definition]
+        // @Word specified
+        // @Set tag
+        // @Description The word 'specified', when used in a tag description, refers to the value input after the tag.
+        // EG, you might have the tag <@link tag TextTag.equals[<TextTag>]><{text[<TextTag>].equals[<TextTag>]}><@/link>
+        // In this tag, the first <TextTag> is referred to as 'the text', and the second <TextTag> as 'specified text'.
+        // Which would look like: <{text[the text].equals[specified text]}>.
+        // -->
+
         /// <summary>
         /// The command system that made this tag system.
         /// </summary>

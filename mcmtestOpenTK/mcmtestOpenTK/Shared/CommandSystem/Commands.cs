@@ -11,6 +11,22 @@ namespace mcmtestOpenTK.Shared.CommandSystem
 {
     public class Commands
     {
+        // <--[definition]
+        // @Word argument
+        // @Set commands
+        // @Description The word 'argument', when used in a command description, refers to the any input value
+        // outside the command itself.
+        // Generally a command is formatted like:
+        // /command <required argument> literal_argument/option2 [optional argument] [optional argument]
+        // A required argument is an input that *must* be included, while an optional argument is something you
+        // can choose whether or not to fill in. (Generally, if not included, they will receive default values
+        // or just not be used, depending on the specific command and argument in question.) A literal argument
+        // is one the should be input exactly as-is. In the example above, "literal_argument" or "option2" must
+        // be typed in exactly, or the command will fail.
+        // A / between two arguments, EG "<required argument>/literal_argument" means you may pick either
+        // "literal_argument" as input, or you can fill in the required argument there, but not both.
+        // -->
+
         /// <summary>
         /// A full dictionary of all registered commands.
         /// </summary>
