@@ -108,6 +108,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                     }
                 }
             }
+            if (toret.Count == 0 && entry != null)
+            {
+                return null;
+            }
             return toret;
         }
 
