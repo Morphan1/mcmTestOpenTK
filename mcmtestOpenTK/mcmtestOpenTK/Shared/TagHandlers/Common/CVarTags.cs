@@ -6,25 +6,20 @@ using mcmtestOpenTK.Shared.TagHandlers.Objects;
 
 namespace mcmtestOpenTK.Shared.TagHandlers.Common
 {
-    class VarTags: TemplateTags
+    class CVarTags: TemplateTags
     {
-        public VarTags()
+        public CVarTags()
         {
-            Name = "var";
+            Name = "cvar";
         }
 
         public override string Handle(TagData data)
         {
             string modif = data.GetModifier(0).ToLower();
-            if (data.Variables != null)
+            CVar cvar = data.TagSystem.CommandSystem.Output.CVarSys.Get(modif);
+            if (cvar != null)
             {
-                for (int i = 0; i < data.Variables.Count; i++)
-                {
-                    if (data.Variables[i].Name == modif)
-                    {
-                        return new TextTag(data.Variables[i].Value).Handle(data.Shrink());
-                    }
-                }
+                return new TextTag(cvar.Value).Handle(data.Shrink());
             }
             return new TextTag("").Handle(data.Shrink());
         }

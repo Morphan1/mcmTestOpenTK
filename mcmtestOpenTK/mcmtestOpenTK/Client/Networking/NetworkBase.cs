@@ -11,6 +11,7 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.Networking
 {
@@ -100,7 +101,7 @@ namespace mcmtestOpenTK.Client.Networking
             if (Sock.Connected && !Connected)
             {
                 Connected = true;
-                ClientCommands.CommandSystem.Output.Good("Connected to server! Communicating...");
+                ClientCommands.CommandSystem.Output.Good("Connected to server! Communicating...", DebugMode.MINIMAL);
                 Sock.Send(new byte[] { (byte)'G', (byte)'A', (byte)'M', (byte)'E', (byte)0 });
                 return;
             }
@@ -204,7 +205,7 @@ namespace mcmtestOpenTK.Client.Networking
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
-                    ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
+                    ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!", DebugMode.MINIMAL);
                     return;
             }
             byte[] Holder = new byte[Packet.Length - 1];
@@ -216,7 +217,7 @@ namespace mcmtestOpenTK.Client.Networking
             }
             else
             {
-                ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Imperfect packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
+                ClientCommands.CommandSystem.Output.Bad("<{color.warning}>Imperfect packet from server (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!", DebugMode.MINIMAL);
             }
         }
 
@@ -267,7 +268,7 @@ namespace mcmtestOpenTK.Client.Networking
             if (reason != null)
             {
                 // TODO: LANGUAGE FILE
-                ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + TagParser.Escape(reason));
+                ClientCommands.CommandSystem.Output.Bad("<{color.info}>Disconnected from server! Reason: " + TagParser.Escape(reason), DebugMode.MINIMAL);
             }
             if (!Connected)
             {

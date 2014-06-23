@@ -119,8 +119,8 @@
   <ItemGroup>
     <Compile Include="Client\CommandHandlers\NetworkCmds\DisconnectCommand.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Common\RendererTags.cs" />
-    <Compile Include="Client\CommandHandlers\TagObjects\ShaderTag.cs" />
-    <Compile Include="Client\CommandHandlers\TagObjects\TextureTag.cs" />
+    <Compile Include="Client\CommandHandlers\TagHandlers\Objects\ShaderTag.cs" />
+    <Compile Include="Client\CommandHandlers\TagHandlers\Objects\TextureTag.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
@@ -208,6 +208,8 @@
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
+    <Compile Include="Shared\TagHandlers\Common\TernaryTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\CVarTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\ListTags.cs" />
     <Compile Include="Shared\TagHandlers\Objects\ListTag.cs" />
     <Compile Include="Shared\UnknownFileException.cs" />

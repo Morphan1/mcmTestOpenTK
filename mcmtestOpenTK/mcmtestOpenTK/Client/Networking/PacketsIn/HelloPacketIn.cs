@@ -7,6 +7,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.Networking.Global;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
@@ -33,27 +34,27 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            ClientCommands.Output.Bad("Server sent HELLO! Server is " + (ServerOnline ? "ONLINE" : "OFFLINE"));
+            ClientCommands.Output.Bad("Server sent HELLO! Server is " + (ServerOnline ? "ONLINE" : "OFFLINE"), DebugMode.MINIMAL);
             NetworkBase.WaitingToIdentify = true;
             if (MainGame.Username == "")
             {
-                ClientCommands.Output.Bad("The server requires you identify yourself...");
+                ClientCommands.Output.Bad("The server requires you identify yourself...", DebugMode.MINIMAL);
             }
             else if (ServerOnline && MainGame.Session == "")
             {
                 if (MainGame.Password == "")
                 {
-                    ClientCommands.Output.Bad("The server requires you identify yourself...");
+                    ClientCommands.Output.Bad("The server requires you identify yourself...", DebugMode.MINIMAL);
                 }
                 else
                 {
-                    ClientCommands.Output.Bad("Logging in to global server...");
+                    ClientCommands.Output.Bad("Logging in to global server...", DebugMode.MINIMAL);
                     GlobalLoginRequest.RequestLogin(false, MainGame.Username, MainGame.Password);
                 }
             }
             else
             {
-                ClientCommands.Output.Bad("Sending identity to server.");
+                ClientCommands.Output.Bad("Sending identity to server.", DebugMode.MINIMAL);
                 NetworkBase.Identify();
             }
         }

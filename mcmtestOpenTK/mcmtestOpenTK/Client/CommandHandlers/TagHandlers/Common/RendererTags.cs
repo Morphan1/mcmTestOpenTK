@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared.TagHandlers.Objects;
-using mcmtestOpenTK.Client.CommandHandlers.TagObjects;
+using mcmtestOpenTK.Client.CommandHandlers.TagHandlers.Objects;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared.TagHandlers;
 

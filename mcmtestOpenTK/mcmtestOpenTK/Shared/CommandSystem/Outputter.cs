@@ -23,13 +23,15 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// Used to output a failure message.
         /// </summary>
         /// <param name="tagged_text">The text to output, with tags included</param>
-        public abstract void Bad(string tagged_text);
+        /// <param name="mode">What debug mode is currently in use</param>
+        public abstract void Bad(string tagged_text, DebugMode mode);
 
         /// <summary>
         /// Used to output a success message.
         /// </summary>
         /// <param name="tagged_text">The text to output, with tags included</param>
-        public abstract void Good(string tagged_text);
+        /// <param name="mode">What debug mode is currently in use</param>
+        public abstract void Good(string tagged_text, DebugMode mode);
 
         /// <summary>
         /// Used to properly handle an unknown command.

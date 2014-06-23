@@ -126,7 +126,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             Scripts = new Dictionary<string, CommandScript>(30);
             Queues = new List<CommandQueue>(20);
             TagSystem = new TagParser();
-            TagSystem.Init();
+            TagSystem.Init(this);
 
             // Common Commands
             RegisterCommand(new CvarinfoCommand());

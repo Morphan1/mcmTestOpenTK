@@ -72,7 +72,6 @@ namespace mcmtestOpenTK.Shared
         public static void Write(string text)
         {
             StringBuilder outme = new StringBuilder();
-            text = TagParser.Unescape(text);
             for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] == '^' && i + 1 < text.Length && TextStyle.IsColorSymbol(text[i + 1]))

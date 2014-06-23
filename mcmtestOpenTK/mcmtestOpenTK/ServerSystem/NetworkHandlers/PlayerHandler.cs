@@ -8,6 +8,7 @@ using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn;
 using System.Threading;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -123,7 +124,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
-                    ServerCommands.CommandSystem.Output.Bad("<{color.warning}>Invalid packet from client (ID: <{color.emphasis}>" + ID + "<{color.warning}>)!");
+                    SysConsole.Output(OutputType.WARNING, "Invalid packet from client (ID: " + ID + ")!");
                     return;
             }
             byte[] Holder = new byte[Packet.Length - 1];

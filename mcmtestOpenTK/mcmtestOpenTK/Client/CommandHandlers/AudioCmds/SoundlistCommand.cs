@@ -23,13 +23,13 @@ namespace mcmtestOpenTK.Client.CommandHandlers.AudioCmds
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Output.Good("There are <{color.emphasis}>" + Sound.LoadedSounds.Count + "<{color.base}> loaded sounds.");
+            entry.Output.Good("There are <{color.emphasis}>" + Sound.LoadedSounds.Count + "<{color.base}> loaded sounds.", DebugMode.MINIMAL);
             for (int i = 0; i < Sound.LoadedSounds.Count; i++)
             {
                 entry.Output.Good("- <{color.emphasis}>" + TagParser.Escape(Sound.LoadedSounds[i].Name) +
-                    (Sound.LoadedSounds[i].RemappedTo != null ? "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Sound.LoadedSounds[i].RemappedTo.Name): ""));
+                    (Sound.LoadedSounds[i].RemappedTo != null ? "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Sound.LoadedSounds[i].RemappedTo.Name) : ""), DebugMode.MINIMAL);
             }
-            entry.Output.Good("-------");
+            entry.Output.Good("-------", DebugMode.MINIMAL);
         }
     }
 }

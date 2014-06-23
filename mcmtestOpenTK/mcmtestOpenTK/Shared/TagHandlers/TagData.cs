@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Shared.TagHandlers
 {
     public class TagData
     {
+        /// <summary>
+        /// What debug mode to use while filling tags.
+        /// </summary>
+        public DebugMode mode;
+
         /// <summary>
         /// The tags current simplified input data.
         /// </summary>
@@ -33,7 +39,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// </summary>
         public string BaseColor = null;
 
-        public TagData(TagParser _system, List<string> _input, string _basecolor, List<Variable> _vars)
+        public TagData(TagParser _system, List<string> _input, string _basecolor, List<Variable> _vars, DebugMode mode)
         {
             TagSystem = _system;
             Input = _input;
@@ -47,10 +53,11 @@ namespace mcmtestOpenTK.Shared.TagHandlers
                 {
                     int index = Input[x].IndexOf('[');
                     Modifiers.Add(Input[x].Substring(index + 1, Input[x].Length - (index + 2)));
-                    Input[x] = Input[x].Substring(0, index);
+                    Input[x] = Input[x].Substring(0, index).ToLower();
                 }
                 else
                 {
+                    Input[x] = Input[x].ToLower();
                     Modifiers.Add("");
                 }
             }
@@ -84,7 +91,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
             {
                 return "";
             }
-            return TagSystem.ParseTags(Modifiers[place], TextStyle.Color_Simple, Variables);
+            return TagSystem.ParseTags(Modifiers[place], TextStyle.Color_Simple, Variables, mode);
         }
     }
 }

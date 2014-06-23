@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers.Common;
+using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.Shared.TagHandlers
 {
     public class TagParser
     {
+        /// <summary>
+        /// The command system that made this tag system.
+        /// </summary>
+        public Commands CommandSystem;
+
         /// <summary>
         /// Escapes any tags inside a string.
         /// </summary>
@@ -46,14 +52,19 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <summary>
         /// Prepares the tag system.
         /// </summary>
-        public void Init()
+        public void Init(Commands _system)
         {
+            CommandSystem = _system;
             Register(new ColorTags());
             Register(new ListTags());
+            Register(new TernaryTags());
             Register(new TextTags());
             Register(new VarTags());
+            Register(new CVarTags());
             // TODO: CVars, ...
         }
+
+        static char[] dot = new char[] { '.' };
 
         /// <summary>
         /// Reads and parses all tags inside a string.
@@ -62,14 +73,15 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <param name="vars">Any variables in this tag's context</param>
         /// <param name="input">The tagged string</param>
         /// <returns>The string with tags parsed</returns>
-        public string ParseTags(string input, string base_color, List<Variable> vars)
+        public string ParseTags(string input, string base_color, List<Variable> vars, DebugMode mode)
         {
             if (input.IndexOf("<{") < 0)
             {
-                return input;
+                return Unescape(input);
             }
             int len = input.Length;
             int blocks = 0;
+            int brackets = 0;
             StringBuilder blockbuilder = new StringBuilder();
             StringBuilder final = new StringBuilder(len);
             for (int i = 0; i < len; i++)
@@ -88,17 +100,29 @@ namespace mcmtestOpenTK.Shared.TagHandlers
                     blocks--;
                     if (blocks == 0)
                     {
-                        string value = blockbuilder.ToString().ToLower();
-                        List<string> split = split = value.Split(new char[] { '.' }).ToList();
-                        TagData data = new TagData(this, split, base_color, vars);
+                        string value = blockbuilder.ToString();
+                        List<string> split = value.Split(dot).ToList();
+                        TagData data = new TagData(this, split, base_color, vars, mode);
                         TemplateTags handler;
                         bool handled = Handlers.TryGetValue(data.Input[0], out handler);
                         if (handled)
                         {
-                            final.Append(handler.Handle(data));
+                            string res = handler.Handle(data);
+                            final.Append(res);
+                            if (mode <= DebugMode.FULL)
+                            {
+                                CommandSystem.Output.Good("Filled tag " + TextStyle.Color_Separate +
+                                    Escape("<{" + value + "}>") + TextStyle.Color_Outgood + " with \"" + TextStyle.Color_Separate + res
+                                    + TextStyle.Color_Outgood + "\".", mode);
+                            }
                         }
                         else
                         {
+                            if (mode <= DebugMode.MINIMAL)
+                            {
+                                CommandSystem.Output.Bad("Failed to fill tag tag " + TextStyle.Color_Separate +
+                                    Escape("<{" + value + "}>") + TextStyle.Color_Outbad + "!", mode);
+                            }
                             final.Append("{UNKNOWN_TAG:" + data.Input[0] + "}");
                         }
                         blockbuilder = new StringBuilder();
@@ -106,12 +130,20 @@ namespace mcmtestOpenTK.Shared.TagHandlers
                         continue;
                     }
                 }
+                else if (blocks == 1 && input[i] == '[')
+                {
+                    brackets++;
+                }
+                else if (blocks == 1 && input[i] == ']')
+                {
+                    brackets--;
+                }
                 if (blocks > 0)
                 {
                     switch (input[i])
                     {
                         case '.':
-                            if (blocks > 1)
+                            if (blocks > 1 || brackets > 0)
                             {
                                 blockbuilder.Append("&dot");
                             }
@@ -133,7 +165,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
                     final.Append(input[i]);
                 }
             }
-            return final.ToString();
+            return Unescape(final.ToString());
         }
     }
 }

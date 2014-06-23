@@ -7,15 +7,15 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Shared.TagHandlers.Objects;
 
-namespace mcmtestOpenTK.Client.CommandHandlers.TagObjects
+namespace mcmtestOpenTK.Client.CommandHandlers.TagHandlers.Objects
 {
-    class TextureTag: TemplateObject
+    class ShaderTag : TemplateObject
     {
-        public Texture texture;
+        public Shader shader;
 
-        public TextureTag(Texture text)
+        public ShaderTag(Shader shad)
         {
-            texture = text;
+            shader = shad;
         }
 
         public override string Handle(TagData data)
@@ -27,23 +27,19 @@ namespace mcmtestOpenTK.Client.CommandHandlers.TagObjects
             switch (data.Input[0])
             {
                 case "name":
-                    return new TextTag(texture.Name).Handle(data.Shrink());
-                case "width":
-                    return new TextTag(texture.Width.ToString()).Handle(data.Shrink());
-                case "height":
-                    return new TextTag(texture.Height.ToString()).Handle(data.Shrink());
+                    return new TextTag(shader.Name).Handle(data.Shrink());
                 case "internal_id":
-                    return new TextTag(texture.Internal_Texture.ToString()).Handle(data.Shrink());
+                    return new TextTag(shader.Internal_Program.ToString()).Handle(data.Shrink());
                 case "original_internal_id":
-                    return new TextTag(texture.Original_InternalID.ToString()).Handle(data.Shrink());
+                    return new TextTag(shader.Original_Program.ToString()).Handle(data.Shrink());
                 case "loaded_properly":
-                    return new TextTag(texture.LoadedProperly.ToString()).Handle(data.Shrink());
+                    return new TextTag(shader.LoadedProperly.ToString()).Handle(data.Shrink());
                 case "is_remapped":
-                    return new TextTag((texture.RemappedTo != null).ToString()).Handle(data.Shrink());
+                    return new TextTag((shader.RemappedTo != null).ToString()).Handle(data.Shrink());
                 case "remapped_to":
-                    if (texture.RemappedTo != null)
+                    if (shader.RemappedTo != null)
                     {
-                        return new TextureTag(texture.RemappedTo).Handle(data.Shrink());
+                        return new ShaderTag(shader.RemappedTo).Handle(data.Shrink());
                     }
                     else
                     {
@@ -56,7 +52,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.TagObjects
 
         public override string ToString()
         {
-            return texture.Name;
+            return shader.Name;
         }
     }
 }

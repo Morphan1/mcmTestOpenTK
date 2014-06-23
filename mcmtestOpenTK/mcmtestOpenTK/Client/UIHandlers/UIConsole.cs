@@ -139,7 +139,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
             }
-            text = TagParser.Unescape(text.Replace('\r', ' '));
+            text = text.Replace('\r', ' ');
             lock (NewTextLock)
             {
                 NewText += text;

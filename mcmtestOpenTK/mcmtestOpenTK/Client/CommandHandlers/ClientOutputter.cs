@@ -23,15 +23,15 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             UIConsole.Write(text);
         }
 
-        public override void Good(string tagged_text)
+        public override void Good(string tagged_text, DebugMode mode)
         {
-            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outgood, null);
+            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outgood, null, mode);
             UIConsole.WriteLine(TextStyle.Color_Outgood + text);
         }
 
-        public override void Bad(string tagged_text)
+        public override void Bad(string tagged_text, DebugMode mode)
         {
-            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null);
+            string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outbad, null, mode);
             UIConsole.WriteLine(TextStyle.Color_Outbad + text);
         }
 

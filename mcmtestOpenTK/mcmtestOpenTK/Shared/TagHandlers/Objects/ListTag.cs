@@ -42,6 +42,10 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             {
                 case "size":
                     return new TextTag(ListEntries.Count.ToString()).Handle(data.Shrink());
+                case "comma_separated":
+                    return new TextTag(ToCSString()).Handle(data.Shrink());
+                case "formatted":
+                    return new TextTag(Formatted()).Handle(data.Shrink());
                 case "reverse":
                     {
                         ListTag newlist = new ListTag(ListEntries);
@@ -91,6 +95,44 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 if (i + 1 < ListEntries.Count)
                 {
                     sb.Append("|");
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Renders the list as a comma-separated string (no escaping).
+        /// </summary>
+        public string ToCSString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ListEntries.Count; i++)
+            {
+                sb.Append(ListEntries[i].ToString());
+                if (i + 1 < ListEntries.Count)
+                {
+                    sb.Append(", ");
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Renders the list as a comma-separated string with 'and' and similar constructs.
+        /// </summary>
+        public string Formatted()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ListEntries.Count; i++)
+            {
+                sb.Append(ListEntries[i].ToString());
+                if (i + 2 == ListEntries.Count)
+                {
+                    sb.Append(", and ");
+                }
+                if (i + 1 < ListEntries.Count)
+                {
+                    sb.Append(", ");
                 }
             }
             return sb.ToString();
