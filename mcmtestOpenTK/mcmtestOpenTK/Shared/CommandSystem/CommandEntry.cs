@@ -140,6 +140,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public int Index = 0;
 
         /// <summary>
+        /// An object set by the command, if any.
+        /// </summary>
+        public Object obj = null;
+
+        /// <summary>
         /// Gets an argument at a specified place, handling any tags.
         /// </summary>
         /// <param name="place">The argument place number</param>
@@ -220,6 +225,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             entry.Output = Output;
             entry.Queue = Queue;
             entry.Result = Result;
+            entry.obj = obj;
             return entry;
         }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
@@ -12,7 +11,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public RepeatCommand()
         {
             Name = "repeat";
-            Arguments = "<times to repeat>";
+            Arguments = "<times to repeat>/stop/next";
             Description = "Executes the following block of commands a specified number of times.";
             IsFlow = true;
         }
@@ -26,7 +25,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             else
             {
                 string count = entry.GetArgument(0);
-                if (count == "CALLBACK")
+                if (count == "\0CALLBACK")
                 {
                     if (entry.BlockOwner.Command.Name == "repeat" || entry.BlockOwner.Block == null || entry.BlockOwner.Block.Count == 0
                         || entry.BlockOwner.Block[entry.BlockOwner.Block.Count - 1] != entry)
@@ -49,9 +48,37 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                         entry.Bad("Repeat CALLBACK invalid: not a real callback!");
                     }
                 }
+                else if (count.ToLower() == "stop")
+                {
+                    entry.Good("Stopping repeat loop.");
+                    while (entry.Queue.CommandList.Count > 0)
+                    {
+                        if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                        {
+                            break;
+                        }
+                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                }
+                else if (count.ToLower() == "next")
+                {
+                    entry.Good("Skipping to next repeat entry...");
+                    while (entry.Queue.CommandList.Count > 1)
+                    {
+                        if (entry.Queue.CommandList[1].CommandLine == "repeat \0CALLBACK")
+                        {
+                            break;
+                        }
+                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                }
                 else
                 {
                     int target = Utilities.StringToInt(count);
+                    if (target <= 0)
+                    {
+                        entry.Good("Not repeating.");
+                    }
                     if (entry.Result > 0)
                     {
                         entry.Block.RemoveAt(entry.Block.Count - 1);
@@ -61,8 +88,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     if (entry.Block != null)
                     {
                         entry.Good("Repeating <{color.emphasis}>" + target + "<{color.base}> times...");
-                        CommandEntry callback = new CommandEntry("repeat CALLBACK", null, entry,
-                            this, new List<string> { "CALLBACK" }, "repeat");
+                        CommandEntry callback = new CommandEntry("repeat \0CALLBACK", null, entry,
+                            this, new List<string> { "\0CALLBACK" }, "repeat");
                         entry.Block.Add(callback);
                         entry.Queue.SetVariable("repeat_index", "1");
                         entry.Queue.SetVariable("repeat_total", target.ToString());

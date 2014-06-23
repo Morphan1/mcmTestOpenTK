@@ -111,12 +111,12 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 // @Group List Attributes
                 // @ReturnType Dynamic
                 // @Returns the specified entry in the list.
-                // Note that indices are zero-based.
-                // EG, "one|two|three" .get[1] gets "two".
+                // Note that indices are one-based.
+                // EG, "one|two|three" .get[2] gets "two".
                 // -->
                 case "get":
                     {
-                        int number = Utilities.StringToInt(data.GetModifier(0));
+                        int number = Utilities.StringToInt(data.GetModifier(0)) - 1;
                         if (ListEntries.Count == 0)
                         {
                             return new TextTag("&null").Handle(data.Shrink());
