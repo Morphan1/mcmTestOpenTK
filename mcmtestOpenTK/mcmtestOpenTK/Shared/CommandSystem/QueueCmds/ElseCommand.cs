@@ -54,8 +54,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else
                 {
-                    string comparison = entry.GetArgument(1);
-                    bool success = comparison.ToLower() == "true";
+                    string comparison = entry.AllArguments(1);
+                    bool success = IfCommand.TryIf(comparison);
                     if (entry.Block != null)
                     {
                         if (success)

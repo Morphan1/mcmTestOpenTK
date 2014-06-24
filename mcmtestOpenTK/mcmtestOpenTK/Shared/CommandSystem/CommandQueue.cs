@@ -57,7 +57,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public CommandQueue(CommandScript _script, List<CommandEntry> _commands, Commands _system)
         {
             Script = _script;
-            CommandList = _commands;
+            CommandList = new List<CommandEntry>(_commands);
+            CommandList.Reverse();
             CommandSystem = _system;
             Variables = new List<Variable>();
             Debug = DebugMode.FULL;
@@ -97,8 +98,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             }
             while (CommandList.Count > 0)
             {
-                CommandEntry CurrentCommand = CommandList[0];
-                CommandList.RemoveAt(0);
+                CommandEntry CurrentCommand = CommandList[CommandList.Count - 1];
+                CommandList.RemoveAt(CommandList.Count - 1);
                 CommandSystem.ExecuteCommand(CurrentCommand, this);
                 LastCommand = CurrentCommand;
                 if (Delayable && Wait > 0f)
@@ -110,12 +111,33 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         }
 
         /// <summary>
+        /// Gets the command at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the command</param>
+        /// <returns>The specified command</returns>
+        public CommandEntry GetCommand(int index)
+        {
+            return CommandList[(CommandList.Count - 1) - index];
+        }
+
+        /// <summary>
+        /// Removes the command at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the command</param>
+        public void RemoveCommand(int index)
+        {
+            CommandList.RemoveAt((CommandList.Count - 1) - index);
+        }
+
+        /// <summary>
         /// Adds a list of entries to be executed next in line.
         /// </summary>
         /// <param name="entries">Commands to be run</param>
         public void AddCommandsNow(List<CommandEntry> entries)
         {
-            CommandList.InsertRange(0, entries);
+            List<CommandEntry> nentries = new List<CommandEntry>(entries);
+            nentries.Reverse();
+            CommandList.AddRange(nentries);
         }
 
         /// <summary>

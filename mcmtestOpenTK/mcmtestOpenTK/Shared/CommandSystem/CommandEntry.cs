@@ -168,11 +168,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <summary>
         /// Gets all arguments piled together into a string.
         /// </summary>
+        /// <param name="index">The index to start at</param>
         /// <returns>The combined string</returns>
-        public string AllArguments()
+        public string AllArguments(int index = 0)
         {
             StringBuilder result = new StringBuilder(CommandLine.Length);
-            for (int i = 0; i < Arguments.Count; i++)
+            for (int i = index; i < Arguments.Count; i++)
             {
                 result.Append(GetArgument(i)).Append(" ");
             }
