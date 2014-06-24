@@ -23,17 +23,17 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Output.Good("There are <{color.emphasis}>" + Shader.LoadedShaders.Count + "<{color.base}> loaded shaders.", DebugMode.MINIMAL);
-            entry.Output.Good("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] " +
-                "<{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName", DebugMode.MINIMAL);
+            entry.Info("There are <{color.emphasis}>" + Shader.LoadedShaders.Count + "<{color.base}> loaded shaders.");
+            entry.Info("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] " +
+                "<{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName");
             for (int i = 0; i < Shader.LoadedShaders.Count; i++)
             {
-                entry.Output.Good("- <{color.emphasis}>" + Shader.LoadedShaders[i].Original_Program + "<{color.simple}>) [<{color.emphasis}>" +
+                entry.Info("- <{color.emphasis}>" + Shader.LoadedShaders[i].Original_Program + "<{color.simple}>) [<{color.emphasis}>" +
                     Shader.LoadedShaders[i].Internal_Program + "<{color.simple}>] <{color.emphasis}>" + TagParser.Escape(Shader.LoadedShaders[i].Name) +
                     (Shader.LoadedShaders[i].Internal_Program != Shader.LoadedShaders[i].Original_Program ?
-                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Shader.LoadedShaders[i].RemappedTo.Name) : ""), DebugMode.MINIMAL);
+                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Shader.LoadedShaders[i].RemappedTo.Name) : ""));
             }
-            entry.Output.Good("-------", DebugMode.MINIMAL);
+            entry.Info("-------");
         }
     }
 }

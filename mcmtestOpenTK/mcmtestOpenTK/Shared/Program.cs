@@ -7,6 +7,7 @@ using System.Diagnostics;
 using mcmtestOpenTK.Client.GlobalHandler;
 #endif
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using System.Threading;
 
 namespace mcmtestOpenTK.Shared
 {
@@ -27,6 +28,8 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         public static IntPtr ConsoleHandle = IntPtr.Zero;
 
+        public static List<Thread> ThreadsToClose = new List<Thread>();
+
         /// <summary>
         /// Central entry point for all forms of the program
         /// </summary>
@@ -34,6 +37,8 @@ namespace mcmtestOpenTK.Shared
         [STAThread]
         static void Main(string[] args)
         {
+            // Make a shutdown hook
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
             // Identify the current process.
             CurrentProcess = Process.GetCurrentProcess();
             ConsoleHandle = CurrentProcess.MainWindowHandle;
@@ -59,6 +64,23 @@ namespace mcmtestOpenTK.Shared
             MainGame.Client_Main(system_arguments);
             return;
 #endif
+        }
+
+        public static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            FileHandler.WriteText("test.txt", "SHUTDOWN SUCCESS?");
+            while (ThreadsToClose.Count > 0)
+            {
+                try
+                {
+                    ThreadsToClose[0].Abort();
+                }
+                catch
+                {
+                    // Ignore
+                }
+                ThreadsToClose.RemoveAt(0);
+            }
         }
     }
 }

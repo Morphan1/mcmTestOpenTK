@@ -121,6 +121,8 @@
     <Compile Include="Client\CommandHandlers\TagHandlers\Common\RendererTags.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Objects\ShaderTag.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Objects\TextureTag.cs" />
+    <Compile Include="Client\CommandHandlers\UICmds\BindCommand.cs" />
+    <Compile Include="Client\CommandHandlers\UICmds\UnbindCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />

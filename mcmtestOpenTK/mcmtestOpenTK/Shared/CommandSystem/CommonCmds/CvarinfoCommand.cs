@@ -21,11 +21,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
         {
             if (entry.Arguments.Count < 1)
             {
-                entry.Output.Good("Listing <{color.emphasis}>" + entry.Output.CVarSys.CVars.Count + "<{color.base}> CVars...", DebugMode.MINIMAL);
+                entry.Info("Listing <{color.emphasis}>" + entry.Output.CVarSys.CVars.Count + "<{color.base}> CVars...");
                 for (int i = 0; i < entry.Output.CVarSys.CVars.Count; i++)
                 {
                     CVar cvar = entry.Output.CVarSys.CVars[i];
-                    entry.Output.Good("<{color.emphasis}>" + (i + 1).ToString() + "<{color.simple}>)<{color.emphasis}> " + TagParser.Escape(cvar.Info()), DebugMode.MINIMAL);
+                    entry.Info("<{color.emphasis}>" + (i + 1).ToString() + "<{color.simple}>)<{color.emphasis}> " + TagParser.Escape(cvar.Info()));
                 }
             }
             else
@@ -38,7 +38,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 }
                 else
                 {
-                    entry.Output.Good("<{color.emphasis}>" + TagParser.Escape(cvar.Info()), DebugMode.MINIMAL);
+                    entry.Info("<{color.emphasis}>" + TagParser.Escape(cvar.Info()));
                 }
             }
         }

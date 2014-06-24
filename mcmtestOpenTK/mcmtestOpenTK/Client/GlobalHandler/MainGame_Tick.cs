@@ -23,8 +23,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
     {
         public static int cticknumber = 0;
         static double ctickdelta = 0;
-        static float movetestX;
-        static float movetestY;
         public static float pingbump = 0;
 
         /// <summary>
@@ -79,22 +77,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Update gameplay
                 X = PrimaryGameWindow.Mouse.X;
                 Y = PrimaryGameWindow.Mouse.Y;
-                if (KeyHandler.IsDown(Key.Left))
-                {
-                    movetestX -= (float)(Delta * 100f);
-                }
-                else if (KeyHandler.IsDown(Key.Right))
-                {
-                    movetestX += (float)(Delta * 100f);
-                }
-                if (KeyHandler.IsDown(Key.Up))
-                {
-                    movetestY -= (float)(Delta * 100f);
-                }
-                else if (KeyHandler.IsDown(Key.Down))
-                {
-                    movetestY += (float)(Delta * 100f);
-                }
 
                 // Update player
                 Player.player.Update();

@@ -63,6 +63,10 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new ShaderlistCommand());
             CommandSystem.RegisterCommand(new TexturelistCommand());
 
+            // User Interface Commands
+            CommandSystem.RegisterCommand(new BindCommand());
+            CommandSystem.RegisterCommand(new UnbindCommand());
+
             // Tags
             CommandSystem.TagSystem.Register(new RendererTags());
         }

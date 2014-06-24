@@ -197,20 +197,18 @@ namespace mcmtestOpenTK.Shared
                                 ((float)Math.Sin((double)pitch)));
         }
 
-        /*
         /// <summary>
         /// Rotates a vector by a certain yaw.
         /// </summary>
         /// <param name="vec">The original vector</param>
         /// <param name="yaw">The yaw to rotate by</param>
         /// <returns>The rotated vector.</returns>
-        public static Vector2 RotateVector(Vector2 vec, float yaw)
+        public static Location RotateVector(Location vec, float yaw)
         {
             float cos = (float)Math.Cos(yaw);
             float sin = (float)Math.Sin(yaw);
-            return new Vector2((vec.X * cos) - (vec.Y * sin), (vec.X * sin) + (vec.Y * cos));
+            return new Location((vec.X * cos) - (vec.Y * sin), (vec.X * sin) + (vec.Y * cos), vec.Z);
         }
-         * */
 
         /// <summary>
         /// Rotates a vector by a certain yaw and pitch.

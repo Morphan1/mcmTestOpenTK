@@ -77,6 +77,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Direction.Y = -80;
             }
             MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
+            // TODO: Switch to 'capturemouse' command.
             if (KeyHandler.IsPressed(Key.LShift))
             {
                 if (MouseHandler.MouseCaptured)
@@ -91,33 +92,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             // Keyboard based movement.
             Location oldvel = Velocity;
             Location movement = Location.Zero;
-            bool left = KeyHandler.IsDown(Key.D);
-            bool right = KeyHandler.IsDown(Key.A);
-            bool forward = KeyHandler.IsDown(Key.W);
-            bool back = KeyHandler.IsDown(Key.S);
-            bool up = KeyHandler.IsDown(Key.Space);
-            bool down = KeyHandler.IsDown(Key.C);
-            if (left && !right)
-            {
-                movement.Y = 1;
-            }
-            if (right && !left)
+            bool left = KeyHandler.KeyBindIsDown(KeyBind.LEFT);
+            bool right = KeyHandler.KeyBindIsDown(KeyBind.RIGHT);
+            bool forward = KeyHandler.KeyBindIsDown(KeyBind.FORWARD);
+            bool back = KeyHandler.KeyBindIsDown(KeyBind.BACK);
+            bool up = KeyHandler.KeyBindIsDown(KeyBind.UP);
+            bool down = KeyHandler.KeyBindIsDown(KeyBind.DOWN);
+            if (left)
             {
                 movement.Y = -1;
             }
-            if (forward && !back)
+            if (right)
             {
-                if (movement.Y != 0)
-                {
-                    movement.Y *= 0.5f;
-                    movement.X = -0.5f;
-                }
-                else
-                {
-                    movement.X = -1;
-                }
+                movement.Y = 1;
             }
-            if (back && !forward)
+            if (back)
             {
                 if (movement.Y != 0)
                 {
@@ -129,12 +118,24 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     movement.X = 1;
                 }
             }
-            if (movement.LengthSquared() > 0)
+            if (forward)
             {
-                movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
+                if (movement.Y != 0)
+                {
+                    movement.Y *= 0.5f;
+                    movement.X = -0.5f;
+                }
+                else
+                {
+                    movement.X = -1;
+                }
             }
             if (ClientCVar.g_noclip.ValueB)
             {
+                if (movement.LengthSquared() > 0)
+                {
+                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
+                }
                 if (up)
                 {
                     movement.Z = 1;
@@ -147,6 +148,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             else
             {
+                if (movement.LengthSquared() > 0)
+                {
+                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
+                }
                 if (down)
                 {
                     Velocity.Z = 0;

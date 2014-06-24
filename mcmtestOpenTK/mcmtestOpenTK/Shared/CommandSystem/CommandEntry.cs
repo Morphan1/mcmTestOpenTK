@@ -66,15 +66,14 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 return new CommandEntry(command, _block, _owner, cmd, args, BaseCommand);
             }
-            return CreateInvalidOutput(BaseCommand, _block, args, _owner, system);
+            return CreateInvalidOutput(BaseCommand, _block, args, _owner, system, command);
         }
 
         public static CommandEntry CreateInvalidOutput(string name, List<CommandEntry> _block,
-            List<string> _arguments, CommandEntry _owner, Commands system)
+            List<string> _arguments, CommandEntry _owner, Commands system, string line)
         {
             _arguments.Insert(0, name);
-            return new CommandEntry("\0DebugOutputInvalidCommand \"" + name + "\"", _block, _owner,
-                system.DebugInvalidCommand, _arguments, name);
+            return new CommandEntry(line, _block, _owner, system.DebugInvalidCommand, _arguments, name);
                 
         }
 
@@ -175,9 +174,22 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             StringBuilder result = new StringBuilder(CommandLine.Length);
             for (int i = index; i < Arguments.Count; i++)
             {
-                result.Append(GetArgument(i)).Append(" ");
+                result.Append(GetArgument(i));
+                if (i + 1 < Arguments.Count)
+                {
+                    result.Append(" ");
+                }
             }
             return result.ToString();
+        }
+
+        /// <summary>
+        /// Used to output requested information.
+        /// </summary>
+        /// <param name="tagged_text">The text to output, with tags included</param>
+        public void Info(string text)
+        {
+            Output.Good(text, DebugMode.MINIMAL);
         }
 
         /// <summary>

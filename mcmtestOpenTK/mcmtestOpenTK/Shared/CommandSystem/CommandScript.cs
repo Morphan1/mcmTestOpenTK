@@ -202,5 +202,32 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         {
             return new CommandQueue(this, GetEntries(), system);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        /// <summary>
+        /// Gets the full command string that represents this script.
+        /// </summary>
+        /// <returns>The full command string</returns>
+        public string FullString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < Commands.Count; i++)
+            {
+                sb.Append(Commands[i].CommandLine);
+                if (i + 1 < Commands.Count)
+                {
+                    sb.Append("; ");
+                }
+                else
+                {
+                    sb.Append(";");
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

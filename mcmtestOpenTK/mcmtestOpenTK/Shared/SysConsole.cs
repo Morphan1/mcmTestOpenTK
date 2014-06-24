@@ -27,6 +27,7 @@ namespace mcmtestOpenTK.Shared
             Console.WriteLine("Starting system...");
             ConsoleLock = new Object();
             ConsoleOutputThread = new Thread(new ThreadStart(ConsoleLoop));
+            Program.ThreadsToClose.Add(ConsoleOutputThread);
             ConsoleOutputThread.Start();
             Output(OutputType.INIT, "Console prepared...");
             Output(OutputType.INIT, "Test colors: ^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +

@@ -25,6 +25,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Create the window and establish basic event info / settings
             PrimaryGameWindow = new GameWindow(ScreenWidth, ScreenHeight);
             PrimaryGameWindow.Title = WindowTitle;
+            PrimaryGameWindow.Closed += new EventHandler<EventArgs>(PrimaryGameWindow_Closed);
             PrimaryGameWindow.Load += new EventHandler<EventArgs>(PrimaryGameWindow_Load);
             PrimaryGameWindow.UpdateFrame += new EventHandler<FrameEventArgs>(PrimaryGameWindow_UpdateFrame);
             PrimaryGameWindow.RenderFrame += new EventHandler<FrameEventArgs>(PrimaryGameWindow_RenderFrame);

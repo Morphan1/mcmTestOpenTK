@@ -8,6 +8,8 @@ using OpenTK.Input;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Client.CommandHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -15,58 +17,67 @@ namespace mcmtestOpenTK.Client.GlobalHandler
     {
         static List<Key>[] HardBinds;
 
-        static Dictionary<Key, string> Binds;
+        static Dictionary<Key, CommandScript> Binds;
 
-        static Dictionary<string, Key> keynames;
+        static Dictionary<string, Key> namestokeys;
 
         /// <summary>
         /// Prepare key handler.
         /// </summary>
         public static void Init()
         {
+            KeyPresses = new Queue<Key>();
             HardBinds = new List<Key>[6];
             for (int i = 0; i < HardBinds.Length; i++)
             {
                 HardBinds[i] = new List<Key>();
             }
+            Binds = new Dictionary<Key, CommandScript>();
+            Binds.Add(Key.ShiftLeft, CommandScript.SeparateCommands("bind:lshift", "capturemouse", ClientCommands.CommandSystem));
             HardBinds[(int)KeyBind.FORWARD].Add(Key.W);
             HardBinds[(int)KeyBind.BACK].Add(Key.S);
             HardBinds[(int)KeyBind.LEFT].Add(Key.A);
             HardBinds[(int)KeyBind.RIGHT].Add(Key.D);
             HardBinds[(int)KeyBind.DOWN].Add(Key.C);
             HardBinds[(int)KeyBind.UP].Add(Key.Space);
-            keynames = new Dictionary<string, Key>();
-            keynames.Add("a", Key.A); keynames.Add("b", Key.B); keynames.Add("c", Key.C);
-            keynames.Add("d", Key.D); keynames.Add("e", Key.E); keynames.Add("f", Key.F);
-            keynames.Add("g", Key.G); keynames.Add("h", Key.H); keynames.Add("i", Key.I);
-            keynames.Add("j", Key.J); keynames.Add("k", Key.K); keynames.Add("l", Key.L);
-            keynames.Add("m", Key.M); keynames.Add("n", Key.N); keynames.Add("o", Key.O);
-            keynames.Add("p", Key.P); keynames.Add("q", Key.Q); keynames.Add("r", Key.R);
-            keynames.Add("s", Key.S); keynames.Add("t", Key.T); keynames.Add("u", Key.U);
-            keynames.Add("v", Key.V); keynames.Add("w", Key.W); keynames.Add("x", Key.X);
-            keynames.Add("y", Key.Y); keynames.Add("z", Key.Z); keynames.Add("1", Key.Number1);
-            keynames.Add("2", Key.Number2); keynames.Add("3", Key.Number3); keynames.Add("4", Key.Number4);
-            keynames.Add("5", Key.Number5); keynames.Add("6", Key.Number6); keynames.Add("7", Key.Number7);
-            keynames.Add("8", Key.Number8); keynames.Add("9", Key.Number9); keynames.Add("0", Key.Number0);
-            keynames.Add("lalt", Key.AltLeft); keynames.Add("ralt", Key.AltRight);
-            keynames.Add("f1", Key.F1); keynames.Add("f2", Key.F2); keynames.Add("f3", Key.F3);
-            keynames.Add("f4", Key.F4); keynames.Add("f5", Key.F5); keynames.Add("f6", Key.F6);
-            keynames.Add("f7", Key.F7); keynames.Add("f8", Key.F8); keynames.Add("f9", Key.F9);
-            keynames.Add("f10", Key.F10); keynames.Add("f11", Key.F11); keynames.Add("f12", Key.F12);
-            keynames.Add("enter", Key.Enter); keynames.Add("end", Key.End); keynames.Add("home", Key.Home);
-            keynames.Add("insert", Key.Insert); keynames.Add("delete", Key.Delete); keynames.Add("pause", Key.Pause);
-            keynames.Add("lshift", Key.ShiftLeft); keynames.Add("rshift", Key.ShiftRight); keynames.Add("tab", Key.Tab);
-            keynames.Add("caps", Key.CapsLock); keynames.Add("lctrl", Key.ControlLeft); keynames.Add("rctrl", Key.ControlRight);
-            keynames.Add(",", Key.Comma); keynames.Add(".", Key.Period); keynames.Add("/", Key.Slash);
-            keynames.Add("backslash", Key.BackSlash); keynames.Add("-", Key.Minus); keynames.Add("=", Key.Plus);
-            keynames.Add("backspace", Key.BackSpace); keynames.Add("semicolon", Key.Semicolon); keynames.Add("'", Key.Quote);
-            keynames.Add("[", Key.BracketLeft); keynames.Add("]", Key.BracketRight); keynames.Add("kp1", Key.Keypad1);
-            keynames.Add("kp2", Key.Keypad2); keynames.Add("kp3", Key.Keypad3); keynames.Add("kp4", Key.Keypad4);
-            keynames.Add("kp5", Key.Keypad5); keynames.Add("kp6", Key.Keypad6); keynames.Add("kp7", Key.Keypad7);
-            keynames.Add("kp8", Key.Keypad8); keynames.Add("kp9", Key.Keypad9); keynames.Add("kp0", Key.Keypad0);
-            keynames.Add("kpenter", Key.KeypadEnter); keynames.Add("kpmultiply", Key.KeypadMultiply);
-            keynames.Add("kpadd", Key.KeypadAdd); keynames.Add("kpsubtract", Key.KeypadSubtract);
-            keynames.Add("kpdivide", Key.KeypadDivide); keynames.Add("kpperiod", Key.KeypadPeriod);
+            namestokeys = new Dictionary<string, Key>();
+            RegKey("a", Key.A); RegKey("b", Key.B); RegKey("c", Key.C);
+            RegKey("d", Key.D); RegKey("e", Key.E); RegKey("f", Key.F);
+            RegKey("g", Key.G); RegKey("h", Key.H); RegKey("i", Key.I);
+            RegKey("j", Key.J); RegKey("k", Key.K); RegKey("l", Key.L);
+            RegKey("m", Key.M); RegKey("n", Key.N); RegKey("o", Key.O);
+            RegKey("p", Key.P); RegKey("q", Key.Q); RegKey("r", Key.R);
+            RegKey("s", Key.S); RegKey("t", Key.T); RegKey("u", Key.U);
+            RegKey("v", Key.V); RegKey("w", Key.W); RegKey("x", Key.X);
+            RegKey("y", Key.Y); RegKey("z", Key.Z); RegKey("1", Key.Number1);
+            RegKey("2", Key.Number2); RegKey("3", Key.Number3); RegKey("4", Key.Number4);
+            RegKey("5", Key.Number5); RegKey("6", Key.Number6); RegKey("7", Key.Number7);
+            RegKey("8", Key.Number8); RegKey("9", Key.Number9); RegKey("0", Key.Number0);
+            RegKey("lalt", Key.AltLeft); RegKey("ralt", Key.AltRight);
+            RegKey("f1", Key.F1); RegKey("f2", Key.F2); RegKey("f3", Key.F3);
+            RegKey("f4", Key.F4); RegKey("f5", Key.F5); RegKey("f6", Key.F6);
+            RegKey("f7", Key.F7); RegKey("f8", Key.F8); RegKey("f9", Key.F9);
+            RegKey("f10", Key.F10); RegKey("f11", Key.F11); RegKey("f12", Key.F12);
+            RegKey("enter", Key.Enter); RegKey("end", Key.End); RegKey("home", Key.Home);
+            RegKey("insert", Key.Insert); RegKey("delete", Key.Delete); RegKey("pause", Key.Pause);
+            RegKey("lshift", Key.ShiftLeft); RegKey("rshift", Key.ShiftRight); RegKey("tab", Key.Tab);
+            RegKey("caps", Key.CapsLock); RegKey("lctrl", Key.ControlLeft); RegKey("rctrl", Key.ControlRight);
+            RegKey(",", Key.Comma); RegKey(".", Key.Period); RegKey("/", Key.Slash);
+            RegKey("backslash", Key.BackSlash); RegKey("-", Key.Minus); RegKey("=", Key.Plus);
+            RegKey("backspace", Key.BackSpace); RegKey("semicolon", Key.Semicolon); RegKey("'", Key.Quote);
+            RegKey("[", Key.BracketLeft); RegKey("]", Key.BracketRight); RegKey("kp1", Key.Keypad1);
+            RegKey("kp2", Key.Keypad2); RegKey("kp3", Key.Keypad3); RegKey("kp4", Key.Keypad4);
+            RegKey("kp5", Key.Keypad5); RegKey("kp6", Key.Keypad6); RegKey("kp7", Key.Keypad7);
+            RegKey("kp8", Key.Keypad8); RegKey("kp9", Key.Keypad9); RegKey("kp0", Key.Keypad0);
+            RegKey("kpenter", Key.KeypadEnter); RegKey("kpmultiply", Key.KeypadMultiply);
+            RegKey("kpadd", Key.KeypadAdd); RegKey("kpsubtract", Key.KeypadSubtract);
+            RegKey("kpdivide", Key.KeypadDivide); RegKey("kpperiod", Key.KeypadPeriod);
+            RegKey("space", Key.Space);
+        }
+
+        static void RegKey(string name, Key key)
+        {
+            namestokeys.Add(name, key);
         }
 
         /// <summary>
@@ -117,7 +128,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static int LeftRights = 0;
         static int _LeftRights = 0;
 
+        static bool _BindsValid = false;
+
         static Object Locker = new Object();
+
+        static Queue<Key> KeyPresses;
 
         /// <summary>
         /// Called every time a key is pressed, adds to the Keyboard String.
@@ -226,6 +241,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     default:
                         break;
                 }
+                if (_BindsValid)
+                {
+                    KeyPresses.Enqueue(e.Key);
+                }
             }
         }
 
@@ -294,7 +313,115 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Pages = _Pages;
                 Scrolls = _Scrolls;
                 LeftRights = _LeftRights;
+                _BindsValid = IsValid();
+                while (KeyPresses.Count > 0)
+                {
+                    Key key = KeyPresses.Dequeue();
+                    CommandScript script;
+                    if (Binds.TryGetValue(key, out script))
+                    {
+                        if (!IsHardBound(key))
+                        {
+                            ClientCommands.CommandSystem.ExecuteScript(script);
+                        }
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Returns whether a specific keybind is pressed.
+        /// </summary>
+        /// <param name="key">The keybind to check</param>
+        /// <returns>Whether it's pressed</returns>
+        public static bool KeyBindIsDown(KeyBind key)
+        {
+            if (!IsValid())
+            {
+                return false;
+            }
+            List<Key> keys = HardBinds[(int)key];
+            for (int i = 0; i < keys.Count; i++)
+            {
+                if (CurrentKeyboard.IsKeyDown(keys[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static Key GetKeyForName(string name)
+        {
+            Key key;
+            if (namestokeys.TryGetValue(name.ToLower(), out key))
+            {
+                return key;
+            }
+            return Key.Unknown;
+        }
+
+        /// <summary>
+        /// Binds a key to a command.
+        /// </summary>
+        /// <param name="key">The key to bind</param>
+        /// <param name="bind">The command to bind to it (null to unbind)</param>
+        public static void BindKey(Key key, string bind)
+        {
+                Binds.Remove(key);
+                for (int i = 0; i < HardBinds.Length; i++)
+                {
+                    for (int x = 0; x < HardBinds[i].Count; x++)
+                    {
+                        if (HardBinds[i][x] == key)
+                        {
+                            HardBinds[i].RemoveAt(x--);
+                        }
+                    }
+                }
+                if (bind != null)
+                {
+                    Binds.Add(key, CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem));
+                    string bindlow = bind.ToLower();
+                    switch (bindlow)
+                    {
+                        case "+forward":
+                            HardBinds[(int)KeyBind.FORWARD].Add(key);
+                            break;
+                        case "+back":
+                            HardBinds[(int)KeyBind.BACK].Add(key);
+                            break;
+                        case "+left":
+                            HardBinds[(int)KeyBind.LEFT].Add(key);
+                            break;
+                        case "+right":
+                            HardBinds[(int)KeyBind.RIGHT].Add(key);
+                            break;
+                        case "+up":
+                            HardBinds[(int)KeyBind.UP].Add(key);
+                            break;
+                        case "+down":
+                            HardBinds[(int)KeyBind.DOWN].Add(key);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+        }
+
+        static bool IsHardBound(Key key)
+        {
+            for (int i = 0; i < HardBinds.Length; i++)
+            {
+                for (int x = 0; x < HardBinds[i].Count; x++)
+                {
+                    if (HardBinds[i][x] == key)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -324,6 +451,21 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static bool IsPressed(Key key)
         {
             return IsValid() && CurrentKeyboard.IsKeyDown(key) && !PreviousKeyboard.IsKeyDown(key);
+        }
+
+        /// <summary>
+        /// Returns the script this key is bound to.
+        /// </summary>
+        /// <param name="key">The key to check for</param>
+        /// <returns>A script, or null</returns>
+        public static CommandScript GetBind(Key key)
+        {
+            CommandScript script;
+            if (Binds.TryGetValue(key, out script))
+            {
+                return script;
+            }
+            return null;
         }
     }
 

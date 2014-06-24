@@ -42,10 +42,10 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                     case "textstyle":
                     case "text":
                     case "style":
-                        entry.Output.Good("^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
+                        entry.Info("^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
                             "^r^7Text styles: ^b^^nb is bold,^r ^i^^ni is italic,^r ^u^^nu is underline,^r ^s^^ns is strike-through,^r ^O^^nO is overline,^r ^7^h^0^^nh is highlight,^r^7 ^j^^nj is jello (AKA jiggle),^r " +
                             "^2^e^0^^ne is emphasis,^r^7 ^t^^nt is transparent,^r ^T^^nT is more transparent,^r ^o^^no is opaque,^r ^R^^nR is random,^r ^p^^np is pseudo-random,^r ^^nk is obfuscated (^kobfu^r),^r " +
-                            "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).", DebugMode.MINIMAL);
+                            "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).");
                         break;
                     case "commands":
                         bool all = entry.Arguments.Count > 1 && entry.GetArgument(1).ToLower() == "all";
@@ -59,8 +59,8 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                                     (i + 1 < ClientCommands.CommandSystem.RegisteredCommands.Count ? "\n" : ""));
                             }
                         }
-                        entry.Output.Good("There are <{color.emphasis}>" + ClientCommands.CommandSystem.RegisteredCommands.Count
-                            + "<{color.base}> clientside commands loaded.\n" + TagParser.Escape(commandlist.ToString()), DebugMode.MINIMAL);
+                        entry.Info("There are <{color.emphasis}>" + ClientCommands.CommandSystem.RegisteredCommands.Count
+                            + "<{color.base}> clientside commands loaded.\n" + TagParser.Escape(commandlist.ToString()));
                         if (NetworkBase.IsActive)
                         {
                             NetworkBase.Send(new CommandPacketOut("help\ncommands"));
@@ -99,7 +99,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers.CommonCmds
                         }
                         break;
                     case "characters":
-                        entry.Output.Good("The following characters are recognized by the system: <{color.standout}>" + TagParser.Escape(GLFont.textfile), DebugMode.MINIMAL);
+                        entry.Info("The following characters are recognized by the system: <{color.standout}>" + TagParser.Escape(GLFont.textfile));
                         break;
                     default:
                         if (NetworkBase.IsActive)

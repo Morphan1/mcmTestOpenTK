@@ -23,18 +23,18 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Output.Good("There are <{color.emphasis}>" + Texture.LoadedTextures.Count + "<{color.base}> loaded textures.", DebugMode.MINIMAL);
-            entry.Output.Good("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] <{color.emphasis}>" +
-                "Width<{color.simple}>*<{color.emphasis}>Height<{color.simple}>: <{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName", DebugMode.MINIMAL);
+            entry.Info("There are <{color.emphasis}>" + Texture.LoadedTextures.Count + "<{color.base}> loaded textures.");
+            entry.Info("<{color.emphasis}>OriginalID<{color.simple}>) [<{color.emphasis}>CurrentID<{color.simple}>] <{color.emphasis}>" +
+                "Width<{color.simple}>*<{color.emphasis}>Height<{color.simple}>: <{color.emphasis}>Name<{color.simple}> -> <{color.emphasis}>RemappedName");
             for (int i = 0; i < Texture.LoadedTextures.Count; i++)
             {
-                entry.Output.Good("- <{color.emphasis}>" + Texture.LoadedTextures[i].Original_InternalID + "<{color.simple}>) [<{color.emphasis}>" +
+                entry.Info("- <{color.emphasis}>" + Texture.LoadedTextures[i].Original_InternalID + "<{color.simple}>) [<{color.emphasis}>" +
                     Texture.LoadedTextures[i].Internal_Texture + "<{color.simple}>] <{color.emphasis}>" + Texture.LoadedTextures[i].Width +
                     "<{color.simple}>*<{color.emphasis}>" + Texture.LoadedTextures[i].Height + "<{color.simple}>: <{color.emphasis}>" +
                     TagParser.Escape(Texture.LoadedTextures[i].Name) + (Texture.LoadedTextures[i].Internal_Texture != Texture.LoadedTextures[i].Original_InternalID ?
-                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Texture.LoadedTextures[i].RemappedTo.Name) : ""), DebugMode.MINIMAL);
+                    "<{color.simple}> -> <{color.emphasis}>" + TagParser.Escape(Texture.LoadedTextures[i].RemappedTo.Name) : ""));
             }
-            entry.Output.Good("-------", DebugMode.MINIMAL);
+            entry.Info("-------");
         }
     }
 }
