@@ -8,6 +8,21 @@ using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
+    // <--[command]
+    // @Name call
+    // @Arguments <function to call>
+    // @Short Runs a function.
+    // @Updated 2014/06/23
+    // @Authors mcmonkey
+    // @Description
+    // Activates a function created by the <@link command function>function<@/link> command.
+    // TODO: Explain more!
+    // @Example
+    // // This example calls the function 'helloworld'.
+    // call helloworld
+    // @Example
+    // TODO: More examples!
+    // -->
     class CallCommand: AbstractCommand
     {
         public CallCommand()
@@ -31,6 +46,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 {
                     return;
                 }
+                fname = fname.ToLower();
                 CommandScript script = entry.Queue.CommandSystem.GetFunction(fname);
                 if (script != null)
                 {

@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using mcmtestOpenTK.Shared.TagHandlers;
+using System.Threading;
 
 namespace mcmtestOpenTK.Shared
 {
     public class SysConsole
     {
+        volatile static string Waiting = "";
+
+        static Object ConsoleLock;
+
+        static Thread ConsoleOutputThread;
+
         /// <summary>
         /// Prepares the system console.
         /// </summary>
@@ -16,11 +23,34 @@ namespace mcmtestOpenTK.Shared
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Preparing console...");
+            Console.WriteLine("Starting system...");
+            ConsoleLock = new Object();
+            ConsoleOutputThread = new Thread(new ThreadStart(ConsoleLoop));
+            ConsoleOutputThread.Start();
             Output(OutputType.INIT, "Console prepared...");
             Output(OutputType.INIT, "Test colors: ^r^7Text Colors: ^0^h^1^^n1 ^!^^n! ^2^^n2 ^@^^n@ ^3^^n3 ^#^^n# ^4^^n4 ^$^^n$ ^5^^n5 ^%^^n% ^6^^n6 ^-^^n- ^7^^n7 ^&^^n& ^8^^n8 ^*^^** ^9^^n9 ^(^^n( ^&^h^0^^n0^h ^)^^n) ^a^^na ^A^^nA\n" +
                             "^r^7Text styles: ^b^^nb is bold,^r ^i^^ni is italic,^r ^u^^nu is underline,^r ^s^^ns is strike-through,^r ^O^^nO is overline,^r ^7^h^0^^nh is highlight,^r^7 ^j^^nj is jello (AKA jiggle),^r " +
                             "^7^h^2^e^0^^ne is emphasis,^r^7 ^t^^nt is transparent,^r ^T^^nT is more transparent,^r ^o^^no is opaque,^r ^R^^nR is random,^r ^p^^np is pseudo-random,^r ^^nk is obfuscated (^kobfu^r),^r " +
                             "^^nS is ^SSuperScript^r, ^^nl is ^lSubScript (AKA Lower-Text)^r, ^h^8^d^^nd is Drop-Shadow,^r^7 ^f^^nf is flip,^r ^^nr is regular text, ^^nq is a ^qquote^q, and ^^nn is nothing (escape-symbol).");
+        }
+
+        static void ConsoleLoop()
+        {
+            while (true)
+            {
+                string twaiting;
+                lock (ConsoleLock)
+                {
+                    twaiting = Waiting;
+                    Waiting = "";
+                }
+                if (twaiting.Length > 0)
+                {
+                    WriteInternal(twaiting);
+                }
+                Thread.Sleep(100);
+            }
         }
 
         /// <summary>
@@ -64,12 +94,20 @@ namespace mcmtestOpenTK.Shared
         {
             Write(text + "\n");
         }
-
+        
         /// <summary>
         /// Writes some colored text to the system console.
         /// </summary>
         /// <param name="text">The text to write</param>
         public static void Write(string text)
+        {
+            lock (ConsoleLock)
+            {
+                Waiting += text;
+            }
+        }
+
+        static void WriteInternal(string text)
         {
             StringBuilder outme = new StringBuilder();
             for (int i = 0; i < text.Length; i++)

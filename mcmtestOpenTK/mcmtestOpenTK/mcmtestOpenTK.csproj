@@ -193,7 +193,6 @@
     <Compile Include="Shared\CommandSystem\QueueCmds\DebugCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\RepeatCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\InsertCommand.cs" />
-    <Compile Include="Shared\CommandSystem\QueueCmds\StopallCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\StopCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\RunCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ElseCommand.cs" />
