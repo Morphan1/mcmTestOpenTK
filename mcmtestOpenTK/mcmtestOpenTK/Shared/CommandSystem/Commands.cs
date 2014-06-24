@@ -17,12 +17,13 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         // @Description The word 'argument', when used in a command description, refers to the any input value
         // outside the command itself.
         // Generally a command is formatted like:
-        // /command <required argument> literal_argument/option2 [optional argument] [optional argument]
+        // /command <required argument> literal_argument/option2 (optional_literal) [optional argument] [optional argument]
         // A required argument is an input that *must* be included, while an optional argument is something you
         // can choose whether or not to fill in. (Generally, if not included, they will receive default values
         // or just not be used, depending on the specific command and argument in question.) A literal argument
         // is one the should be input exactly as-is. In the example above, "literal_argument" or "option2" must
         // be typed in exactly, or the command will fail.
+        // An optional literal is similar to a literal, except it is not required.
         // A / between two arguments, EG "<required argument>/literal_argument" means you may pick either
         // "literal_argument" as input, or you can fill in the required argument there, but not both.
         // -->
@@ -63,6 +64,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public Dictionary<string, CommandScript> Scripts;
 
         /// <summary>
+        /// All functions this command system has loaded.
+        /// </summary>
+        public Dictionary<string, CommandScript> Functions;
+
+        /// <summary>
         /// Executes a command script.
         /// </summary>
         /// <param name="script">The script to execute</param>
@@ -95,6 +101,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         }
 
         /// <summary>
+        /// Gets a function saved in the command system by name.
+        /// </summary>
+        /// <param name="script">The name of the script</param>
+        /// <returns>A script, or null if there's no match</returns>
+        public CommandScript GetFunction(string script)
+        {
+            CommandScript commandscript;
+            if (Functions.TryGetValue(script.ToLower(), out commandscript))
+            {
+                return commandscript;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Executes an arbitrary list of command inputs (separated by newlines, semicolons, ...)
         /// </summary>
         /// <param name="commands">The command string to parse</param>
@@ -118,7 +142,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError("Command '" + TextStyle.Color_Standout + entry.CommandLine + TextStyle.Color_Error + "' threw an error", ex);
+                ErrorHandler.HandleError("Command '" + TextStyle.Color_Standout + entry.CommandLine +
+                    TextStyle.Color_Error + "' threw an error", ex);
             }
         }
 
@@ -140,6 +165,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisteredCommands = new Dictionary<string, AbstractCommand>(30);
             RegisteredCommandList = new List<AbstractCommand>(30);
             Scripts = new Dictionary<string, CommandScript>(30);
+            Functions = new Dictionary<string, CommandScript>(30);
             Queues = new List<CommandQueue>(20);
             TagSystem = new TagParser();
             TagSystem.Init(this);
@@ -150,10 +176,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new SetCommand());
 
             // Queue-related Commands
+            RegisterCommand(new CallCommand());
             RegisterCommand(new DebugCommand());
             RegisterCommand(new DefineCommand());
             RegisterCommand(new ElseCommand());
             RegisterCommand(new ForeachCommand());
+            RegisterCommand(new FunctionCommand());
             RegisterCommand(new IfCommand());
             RegisterCommand(new InsertCommand());
             RegisterCommand(new RepeatCommand());

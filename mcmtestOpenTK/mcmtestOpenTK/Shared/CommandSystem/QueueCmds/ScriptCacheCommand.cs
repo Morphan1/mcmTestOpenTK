@@ -7,12 +7,14 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
     // <--[command]
     // @Name scriptcache
-    // @Arguments clear scripts
+    // @Arguments clear scripts/functions/all
     // @Short Modifies the state of the script cache, EG clearing it.
     // @Updated 2014/06/23
     // @Authors mcmonkey
     // @Description
-    // The ScriptCache command can be used to clear all standard scripts in the script cache.
+    // The ScriptCache command can be used to clear all standard scripts in the script cache,
+    // or of all functions in the script cache.
+    // Specify "all" to affect all cache types.
     // TODO: Explain more!
     // TODO: ScriptCache info tags!
     // @Example
@@ -26,7 +28,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public ScriptCacheCommand()
         {
             Name = "scriptcache";
-            Arguments = "clear scripts";
+            Arguments = "clear scripts/functions/all";
             Description = "Modifies the state of the script cache, EG clearing it.";
         }
 
@@ -52,6 +54,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     entry.Queue.CommandSystem.Scripts.Clear();
                     entry.Good("Script cache cleared of <{color.emphasis}>" +
                         count + "<{color.base}> script" + (count == 1 ? ".": "s."));
+                }
+                else if (target == "functions")
+                {
+                    int count = entry.Queue.CommandSystem.Functions.Count;
+                    entry.Queue.CommandSystem.Functions.Clear();
+                    entry.Good("Script cache cleared of <{color.emphasis}>" +
+                        count + "<{color.base}> function" + (count == 1 ? "." : "s."));
+                }
+                else if (target == "all")
+                {
+                    int countScripts = entry.Queue.CommandSystem.Scripts.Count;
+                    int countFunctions = entry.Queue.CommandSystem.Functions.Count;
+                    entry.Queue.CommandSystem.Scripts.Clear();
+                    entry.Queue.CommandSystem.Functions.Clear();
+                    entry.Good("Script cache cleared of <{color.emphasis}>" +
+                        countScripts + "<{color.base}> script" + (countScripts == 1 ? "," : "s,")
+                        + " and <{color.emphasis}>" + countFunctions + "<{color.base}> function" +
+                        (countFunctions == 1 ? ".": "s."));
                 }
                 else
                 {

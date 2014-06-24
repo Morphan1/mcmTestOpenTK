@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // // This example runs through the list and echos "1/3", then "2/3", then "3/3" back to the console.
     // repeat 3
     // {
-    //     echo "<{var[repeat_index]}>/<{var[repeat_total]}>";
+    //     echo "<{var[repeat_index]}>/<{var[repeat_total]}>"
     // }
     // @Example
     // // This example runs through the list and echos "1", then "1r", then "2", then "3", then "3r" back to the console.
@@ -31,7 +31,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     //     echo "<{var[repeat_index]}>"
     //     if <{var[repeat_index].equals[2]}>
     //     {
-    //         repeat next;
+    //         repeat next
     //     }
     //     echo "<{var[repeat_index]}>r"
     // }
@@ -98,27 +98,59 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else if (count.ToLower() == "stop")
                 {
-                    entry.Good("Stopping repeat loop.");
-                    while (entry.Queue.CommandList.Count > 0)
+                    bool hasnext = false;
+                    for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                        if (entry.Queue.CommandList[i].CommandLine == "repeat \0CALLBACK")
                         {
-                            entry.Queue.CommandList.RemoveAt(0);
+                            hasnext = true;
                             break;
                         }
-                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                    if (hasnext)
+                    {
+                        entry.Good("Stopping repeat loop.");
+                        while (entry.Queue.CommandList.Count > 0)
+                        {
+                            if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                            {
+                                entry.Queue.CommandList.RemoveAt(0);
+                                break;
+                            }
+                            entry.Queue.CommandList.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        entry.Bad("Cannot stop repeat: not in one!");
                     }
                 }
                 else if (count.ToLower() == "next")
                 {
-                    entry.Good("Skipping to next repeat entry...");
-                    while (entry.Queue.CommandList.Count > 0)
+                    bool hasnext = false;
+                    for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                        if (entry.Queue.CommandList[i].CommandLine == "repeat \0CALLBACK")
                         {
+                            hasnext = true;
                             break;
                         }
-                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                    if (hasnext)
+                    {
+                        entry.Good("Skipping to next repeat entry...");
+                        while (entry.Queue.CommandList.Count > 0)
+                        {
+                            if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                            {
+                                break;
+                            }
+                            entry.Queue.CommandList.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        entry.Bad("Cannot stop repeat: not in one!");
                     }
                 }
                 else

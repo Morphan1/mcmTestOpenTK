@@ -145,6 +145,26 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         }
 
         /// <summary>
+        /// Removes an entry's ownership over the list of entries, and returns them in a new list of duplicates.
+        /// </summary>
+        /// <param name="entries">The list of entries</param>
+        /// <param name="baseentry">The entry that is no longer an owner</param>
+        /// <returns>The new entry list</returns>
+        public static List<CommandEntry> DisOwn(List<CommandEntry> entries, CommandEntry baseentry)
+        {
+            List<CommandEntry> newentries = new List<CommandEntry>();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                newentries.Add(entries[i].Duplicate());
+                if (newentries[i].BlockOwner == baseentry)
+                {
+                    newentries[i].BlockOwner = null;
+                }
+            }
+            return newentries;
+        }
+
+        /// <summary>
         /// The name of the script.
         /// </summary>
         public string Name;

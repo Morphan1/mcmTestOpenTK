@@ -39,14 +39,20 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                 else if (!quoted && command[i] == ' ' && (i - start > 0))
                 {
                     string arg = command.Substring(start, i - start).Trim().Replace("\"", "");
-                    args.Add(arg);
+                    if (arg.Length > 0)
+                    {
+                        args.Add(arg);
+                    }
                     start = i + 1;
                 }
             }
             if (command.Length - start > 0)
             {
                 string arg = command.Substring(start, command.Length - start).Trim().Replace("\"", "");
-                args.Add(arg);
+                if (arg.Length > 0)
+                {
+                    args.Add(arg);
+                }
             }
             if (args.Count == 0)
             {

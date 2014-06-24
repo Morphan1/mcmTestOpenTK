@@ -24,7 +24,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // // This example runs through the list and echos "one", then "two", then "three" back to the console.
     // foreach start one|two|three
     // {
-    //     echo "<{var[foreach_value]}>";
+    //     echo "<{var[foreach_value]}>"
     // }
     // @Example
     // // This example runs through the list and echos "one", then "oner", then "two", then "three", then "threer" back to the console.
@@ -33,7 +33,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     //     echo "<{var[foreach_value]}>"
     //     if <{var[foreach_value].equals[two]}>
     //     {
-    //         foreach next;
+    //         foreach next
     //     }
     //     echo "<{var[foreach_value]}>r"
     // }
@@ -107,27 +107,59 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else if (type.ToLower() == "stop")
                 {
-                    entry.Good("Stopping foreach loop.");
-                    while (entry.Queue.CommandList.Count > 0)
+                    bool hasnext = false;
+                    for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[0].CommandLine == "foreach \0CALLBACK")
+                        if (entry.Queue.CommandList[i].CommandLine == "foreach \0CALLBACK")
                         {
-                            entry.Queue.CommandList.RemoveAt(0);
+                            hasnext = true;
                             break;
                         }
-                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                    if (hasnext)
+                    {
+                        entry.Good("Stopping foreach loop.");
+                        while (entry.Queue.CommandList.Count > 0)
+                        {
+                            if (entry.Queue.CommandList[0].CommandLine == "foreach \0CALLBACK")
+                            {
+                                entry.Queue.CommandList.RemoveAt(0);
+                                break;
+                            }
+                            entry.Queue.CommandList.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        entry.Bad("Cannot stop foreach: not in one!");
                     }
                 }
                 else if (type.ToLower() == "next")
                 {
-                    entry.Good("Skipping to next foreach entry...");
-                    while (entry.Queue.CommandList.Count > 0)
+                    bool hasnext = false;
+                    for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[0].CommandLine == "foreach \0CALLBACK")
+                        if (entry.Queue.CommandList[i].CommandLine == "foreach \0CALLBACK")
                         {
+                            hasnext = true;
                             break;
                         }
-                        entry.Queue.CommandList.RemoveAt(0);
+                    }
+                    if (hasnext)
+                    {
+                        entry.Good("Skipping to next foreach entry...");
+                        while (entry.Queue.CommandList.Count > 0)
+                        {
+                            if (entry.Queue.CommandList[0].CommandLine == "foreach \0CALLBACK")
+                            {
+                                break;
+                            }
+                            entry.Queue.CommandList.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        entry.Bad("Cannot stop foreach: not in one!");
                     }
                 }
                 else if (type.ToLower() == "start" && entry.Arguments.Count > 1)
