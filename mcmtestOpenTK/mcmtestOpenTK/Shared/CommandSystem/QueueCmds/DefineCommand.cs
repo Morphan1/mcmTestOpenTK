@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
     // @Short Modifies the value of a specified queue variable, or creates a new one.
     // @Updated 2014/06/22
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // The define command sets a <@link explanation Queue Variables>queue variable<@/link>
     // onto the queue it is running in.

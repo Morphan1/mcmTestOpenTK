@@ -12,6 +12,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Short Modifies the state of the script cache, EG clearing it.
     // @Updated 2014/06/23
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // The ScriptCache 'removefunction' command is used to remove specified functions from the ScriptCache.
     // Specify 'all' to remove all cached functions.

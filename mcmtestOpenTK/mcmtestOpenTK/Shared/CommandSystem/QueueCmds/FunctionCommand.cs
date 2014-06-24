@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Short Creates a new function of the following command block, and adds it to the script cache.
     // @Updated 2014/06/23
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // The function command will define the included command block to be a function which can be activated
     // by the <@link command call>call<@/link> command.

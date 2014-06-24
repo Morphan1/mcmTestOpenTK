@@ -12,6 +12,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Short Executes the following block of commands a specified number of times.
     // @Updated 2014/06/23
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // The repeat command will loop the given number of times and execute the included command block
     // each time it loops.

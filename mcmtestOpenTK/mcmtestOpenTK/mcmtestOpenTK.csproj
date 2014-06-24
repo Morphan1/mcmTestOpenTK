@@ -146,6 +146,7 @@
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\CallCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\BreakCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\FunctionCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ForeachCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\DefineCommand.cs" />

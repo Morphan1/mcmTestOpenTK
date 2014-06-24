@@ -25,6 +25,10 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             }
             else
             {
+                if (entry.Arguments[0] == "\0CALLBACK")
+                {
+                    return;
+                }
                 if (entry.Block == null)
                 {
                     entry.Bad("If invalid: No block follows!");
@@ -36,6 +40,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 {
                     entry.Good("If is true, executing...");
                     entry.Result = 1;
+                    entry.Block.Add(new CommandEntry("if \0CALLBACK", null, entry,
+                        this, new List<string> { "\0CALLBACK" }, "if"));
                     entry.Queue.AddCommandsNow(entry.Block);
                 }
                 else

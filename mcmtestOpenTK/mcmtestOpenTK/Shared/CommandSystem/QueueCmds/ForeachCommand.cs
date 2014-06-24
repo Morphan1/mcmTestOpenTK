@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Short Executes the following block of commands once foreach item in the given list.
     // @Updated 2014/06/23
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // The foreach command will loop through the given list and run the included command block
     // once for each entry in the list.

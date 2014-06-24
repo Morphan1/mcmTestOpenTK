@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
-using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {

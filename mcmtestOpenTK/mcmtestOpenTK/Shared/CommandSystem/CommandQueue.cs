@@ -57,8 +57,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public CommandQueue(CommandScript _script, List<CommandEntry> _commands, Commands _system)
         {
             Script = _script;
-            CommandList = new List<CommandEntry>(_commands);
-            CommandList.Reverse();
+            CommandList = _commands;
             CommandSystem = _system;
             Variables = new List<Variable>();
             Debug = DebugMode.FULL;
@@ -98,8 +97,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             }
             while (CommandList.Count > 0)
             {
-                CommandEntry CurrentCommand = CommandList[CommandList.Count - 1];
-                CommandList.RemoveAt(CommandList.Count - 1);
+                CommandEntry CurrentCommand = CommandList[0];
+                CommandList.RemoveAt(0);
                 CommandSystem.ExecuteCommand(CurrentCommand, this);
                 LastCommand = CurrentCommand;
                 if (Delayable && Wait > 0f)
@@ -117,7 +116,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <returns>The specified command</returns>
         public CommandEntry GetCommand(int index)
         {
-            return CommandList[(CommandList.Count - 1) - index];
+            return CommandList[index];
         }
 
         /// <summary>
@@ -126,7 +125,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="index">The index of the command</param>
         public void RemoveCommand(int index)
         {
-            CommandList.RemoveAt((CommandList.Count - 1) - index);
+            CommandList.RemoveAt(index);
         }
 
         /// <summary>
@@ -135,9 +134,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <param name="entries">Commands to be run</param>
         public void AddCommandsNow(List<CommandEntry> entries)
         {
-            List<CommandEntry> nentries = new List<CommandEntry>(entries);
-            nentries.Reverse();
-            CommandList.AddRange(nentries);
+            CommandList.InsertRange(0, entries);
         }
 
         /// <summary>

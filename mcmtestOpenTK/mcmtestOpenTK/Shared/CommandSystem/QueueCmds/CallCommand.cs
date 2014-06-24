@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
-using mcmtestOpenTK.ServerSystem.CommandHandlers;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
@@ -14,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Short Runs a function.
     // @Updated 2014/06/23
     // @Authors mcmonkey
+    // @Group Queue
     // @Description
     // Activates a function created by the <@link command function>function<@/link> command.
     // TODO: Explain more!
