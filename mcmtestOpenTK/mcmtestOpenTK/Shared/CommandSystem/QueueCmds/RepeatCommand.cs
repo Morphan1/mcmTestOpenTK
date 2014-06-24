@@ -101,7 +101,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     bool hasnext = false;
                     for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[i].CommandLine == "repeat \0CALLBACK")
+                        if (entry.Queue.GetCommand(i).CommandLine == "repeat \0CALLBACK")
                         {
                             hasnext = true;
                             break;
@@ -112,12 +112,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                         entry.Good("Stopping repeat loop.");
                         while (entry.Queue.CommandList.Count > 0)
                         {
-                            if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                            if (entry.Queue.GetCommand(0).CommandLine == "repeat \0CALLBACK")
                             {
-                                entry.Queue.CommandList.RemoveAt(0);
+                                entry.Queue.RemoveCommand(0);
                                 break;
                             }
-                            entry.Queue.CommandList.RemoveAt(0);
+                            entry.Queue.RemoveCommand(0);
                         }
                     }
                     else
@@ -130,7 +130,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     bool hasnext = false;
                     for (int i = 0; i < entry.Queue.CommandList.Count; i++)
                     {
-                        if (entry.Queue.CommandList[i].CommandLine == "repeat \0CALLBACK")
+                        if (entry.Queue.GetCommand(i).CommandLine == "repeat \0CALLBACK")
                         {
                             hasnext = true;
                             break;
@@ -141,11 +141,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                         entry.Good("Skipping to next repeat entry...");
                         while (entry.Queue.CommandList.Count > 0)
                         {
-                            if (entry.Queue.CommandList[0].CommandLine == "repeat \0CALLBACK")
+                            if (entry.Queue.GetCommand(0).CommandLine == "repeat \0CALLBACK")
                             {
                                 break;
                             }
-                            entry.Queue.CommandList.RemoveAt(0);
+                            entry.Queue.RemoveCommand(0);
                         }
                     }
                     else

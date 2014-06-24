@@ -88,7 +88,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
                     else if (blocks < 0)
                     {
                         blocks = 0;
-                        Temp.Add("echo \"" + TextStyle.Color_Error + "SCRIPT ERROR: EXTRA } SYMBOL!\"");
                     }
                     else
                     {
