@@ -11,6 +11,7 @@ using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
@@ -181,7 +182,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
-                if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 10)
+                if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
                 {
                     lastMove = move;
                     lastdir = Location.Zero;
@@ -222,14 +223,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Position = Points[i].Position;
                     Velocity = Points[i].Velocity;
                     double ctime = Points[i].Time;
-                    double Target;
-                    SysConsole.Output(OutputType.INFO, "Apply " + Points[i].Time + " isvel " + Velocity);
+                    double Target = Time - ctime;
+                    while (Target > 1f / 60f)
+                    {
+                        Update(1f / 60f, true);
+                        Target -= 1f / 60f;
+                    }
+                    Update((float)Target, true);
+                    ctime = Time;
+                    // Apply changes
+                    Position = pos;
+                    Velocity = vel;
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {
                         // Apply the movement from the last point to this one
                         Target = Points[x].Time - ctime;
-                        SysConsole.Output(OutputType.INFO, "ReApply " + Points[x].Time + " is targ " + Target);
                         while (Target > 1f / 60f)
                         {
                             Update(1f / 60f, true);
@@ -242,7 +251,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     }
                     // Apply the movement from the last point to now
                     Target = MainGame.GlobalTickTime - ctime;
-                    SysConsole.Output(OutputType.INFO, "ApplyFinal " + MainGame.GlobalTickTime + " is targ " + Target);
                     while (Target > 1f / 60f)
                     {
                         Update(1f / 60f, true);
@@ -250,76 +258,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     }
                     Update((float)Target, true);
                     // Restore our keys to what they should be (probably not needed, just in case)
-                    SysConsole.Output(OutputType.INFO, "Done");
                     cpoint.Apply(this);
                     break;
                 }
             }
         }
-
-        /*
-        public void ApplyMovement(Location Pos, Location Vel, double Time)
-        {
-            Location RealDir = Direction;
-            BroadcastPoint cpoint = CPoint();
-            // Loop through recorded move points in reverse
-            for (int i = Points.Count - 1; i >= 0; i--)
-            {
-                // If the pointed time is before our target
-                if (Points[i].Time < Time)
-                {
-                    // Apply recorded movement from that point
-                    Position = Points[i].Position;
-                    Velocity = Points[i].Velocity;
-                    Points[i].Apply(this);
-                    // Update from that point to our new time
-                    double TargetToMove = Time - Points[i].Time;
-                    while (TargetToMove > 1f / 60f)
-                    {
-                        Update((float)TargetToMove, true);
-                        TargetToMove -= 1f / 60f;
-                    }
-                    Update((float)TargetToMove, true);
-                    // Move position/velocity to what the server says it should be
-                    // Position += (Pos - Position) / 10;
-                    // Velocity += (Vel - Velocity) / 10;
-                    // Record what time we're at
-                    double ctime = Time;
-                    // Loop through remaining points
-                    for (int x = i + 1; x < Points.Count; x++)
-                    {
-                        if (Points[i].Time > ctime)
-                        {
-                            // Apply keypresses from this point
-                            Points[i].Apply(this);
-                            // Update for that time minus current time
-                            TargetToMove = Points[i].Time - ctime;
-                            while (TargetToMove > 1f / 60f)
-                            {
-                                Update((float)TargetToMove, true);
-                                TargetToMove -= 1f / 60f;
-                            }
-                            Update((float)TargetToMove, true);
-                            // Update current time to that time
-                            ctime = Points[i].Time;
-                        }
-                    }
-                    // Apply the latest settings
-                    cpoint.Apply(this);
-                    // Tick from 'current time' to the actual current time
-                    TargetToMove = MainGame.GlobalTickTime - ctime;
-                    while (TargetToMove > 1f / 60f)
-                    {
-                        Update((float)TargetToMove, true);
-                        TargetToMove -= 1f / 60f;
-                    }
-                    Update((float)TargetToMove, true);
-                    break;
-                }
-            }
-            // Backup - ensure Direction doesn't get messed up
-            Direction = RealDir;
-        }*/
 
         int reps = 0;
         byte lastMove = 0;

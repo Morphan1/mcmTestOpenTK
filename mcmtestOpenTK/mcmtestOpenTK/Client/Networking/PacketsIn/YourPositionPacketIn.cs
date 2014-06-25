@@ -9,6 +9,7 @@ using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.GraphicsHandlers;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
@@ -37,13 +38,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            MainGame.SpawnEntity(new Bullet() { Position = position, Solid = false });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
-            //Player.player.ApplyMovement(position, velocity, time);
+            Player.player.ApplyMovement(position, velocity, time);
         }
     }
 }

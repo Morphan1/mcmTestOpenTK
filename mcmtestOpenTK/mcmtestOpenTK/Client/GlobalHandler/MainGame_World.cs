@@ -136,6 +136,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             for (int i = 0; i < Tickers.Count; i++)
             {
                 Tickers[i].Tick();
+                if (!Tickers[i].IsValid)
+                {
+                    MainGame.Destroy(Tickers[i--]);
+                }
             }
         }
 
