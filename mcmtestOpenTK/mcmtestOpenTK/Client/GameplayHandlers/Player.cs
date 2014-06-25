@@ -171,10 +171,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
                 Velocity.Z -= 100 * MyDelta;
             }
+            float pZ = Position.Z;
             Location target = Position + (oldvel + Velocity) * 0.5f * MyDelta;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
+                Velocity.Z = (Position.Z - pZ) / MyDelta;
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
@@ -244,14 +246,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         Points[x].Apply(this);
                         ctime = Points[x].Time;
                     }
-                    // Apply the movement from the last point to now
-                    Target = MainGame.GlobalTickTime - ctime;
-                    while (Target > 1f / 60f)
-                    {
-                        Update(1f / 60f, true);
-                        Target -= 1f / 60f;
-                    }
-                    Update((float)Target, true);
                     // Restore our keys to what they should be (probably not needed, just in case)
                     cpoint.Apply(this);
                     break;
