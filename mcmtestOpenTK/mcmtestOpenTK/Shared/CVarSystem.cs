@@ -43,8 +43,9 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         /// <param name="CVar">The name of the CVar</param>
         /// <param name="value">The value to set it to</param>
+        /// <param name="force">Whether to force a server send</param>
         /// <returns>The set CVar</returns>
-        public CVar AbsoluteSet(string CVar, string value)
+        public CVar AbsoluteSet(string CVar, string value, bool force = false)
         {
             CVar gotten = Get(CVar);
             if (gotten == null)
@@ -53,7 +54,7 @@ namespace mcmtestOpenTK.Shared
             }
             else
             {
-                gotten.Set(value);
+                gotten.Set(value, force);
             }
             return gotten;
         }

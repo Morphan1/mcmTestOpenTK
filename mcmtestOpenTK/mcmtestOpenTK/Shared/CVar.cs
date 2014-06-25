@@ -18,6 +18,7 @@ namespace mcmtestOpenTK.Shared
         Delayed = 0x10,
         UserMade = 0x20,
         InitOnly = 0x40,
+        ServerControl = 0x80,
     }
     // <--[explanation]
     // @Name CVars
@@ -84,13 +85,17 @@ namespace mcmtestOpenTK.Shared
         /// Sets the CVar to a new value.
         /// </summary>
         /// <param name="newvalue">The value to set the CVar to</param>
-        public void Set(string newvalue)
+        public void Set(string newvalue, bool force = false)
         {
             if (Flags.HasFlag(CVarFlag.ReadOnly))
             {
                 return;
             }
             if (Flags.HasFlag(CVarFlag.InitOnly) && !system.Output.Initializing)
+            {
+                return;
+            }
+            if (Flags.HasFlag(CVarFlag.ServerControl) && !force)
             {
                 return;
             }
@@ -149,6 +154,17 @@ namespace mcmtestOpenTK.Shared
                 else
                 {
                     return "Delayed";
+                }
+            }
+            else if (Flags.HasFlag(CVarFlag.ServerControl))
+            {
+                if (Type != null)
+                {
+                    return "ServerControlled, " + Type;
+                }
+                else
+                {
+                    return "ServerControlled";
                 }
             }
             else

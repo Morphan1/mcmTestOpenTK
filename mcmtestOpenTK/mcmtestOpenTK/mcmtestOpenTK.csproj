@@ -128,6 +128,7 @@
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\PacketsIn\SetcvarPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\YourPositionPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TeleportPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TimePacketIn.cs" />
@@ -146,10 +147,12 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\SpawnPoint.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\MovementPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\SetcvarPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\YourPositionPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TeleportPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TimePacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NetstringPacketOut.cs" />
+    <Compile Include="ServerSystem\PlayerCommands\CommonCmds\NoclipCommand.cs" />
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\CallCommand.cs" />

@@ -16,6 +16,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);
             MoveType = MovementType.Line;
+            Solid = false;
         }
 
         public override void Kill()

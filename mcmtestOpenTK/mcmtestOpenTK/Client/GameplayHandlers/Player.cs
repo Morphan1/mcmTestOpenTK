@@ -165,19 +165,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
                         && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
-                        Velocity.Z = 20;
+                        Velocity.Z = 50;
                     }
                 }
                 Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
                 Velocity.Z -= 100 * MyDelta;
             }
             Location target = Position + (oldvel + Velocity) * 0.5f * MyDelta;
-            float pZ = Position.Z;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            if (!ClientCVar.g_noclip.ValueB)
-            {
-                Velocity.Z = (Position.Z - pZ) / MyDelta;
-            }
             if (!IsCustom)
             {
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);

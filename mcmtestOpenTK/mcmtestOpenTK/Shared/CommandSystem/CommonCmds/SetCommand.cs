@@ -13,7 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
         public SetCommand()
         {
             Name = "set";
-            Arguments = "<CVar to set> <new value>";
+            Arguments = "<CVar to set> <new value> (force)";
             Description = "Modifies the value of a specified CVar, or creates a new one.";
         }
 
@@ -27,7 +27,17 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             {
                 string target = entry.GetArgument(0);
                 string newvalue = entry.GetArgument(1);
+                bool force = (entry.Arguments.Count > 2 && entry.GetArgument(2) == "force");
                 CVar cvar = entry.Output.CVarSys.AbsoluteSet(target, newvalue);
+                if (cvar.Flags.HasFlag(CVarFlag.ServerControl))
+                {
+                    if (!force)
+                    {
+                        entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name)
+                            + "<{color.base}>' cannot be modified, it is server controlled!");
+                        return;
+                    }
+                }
                 if (cvar.Flags.HasFlag(CVarFlag.ReadOnly))
                 {
                     entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(cvar.Name)

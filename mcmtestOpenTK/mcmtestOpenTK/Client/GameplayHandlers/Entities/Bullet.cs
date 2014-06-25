@@ -23,6 +23,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);
             CheckCollision = true;
+            Solid = false;
         }
 
         public override void Tick()

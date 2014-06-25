@@ -29,7 +29,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Solid = true;
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
-            Gravity = 100;
+            PlayerGravity = 100;
             CheckCollision = true;
             MoveType = MovementType.SlideBox;
         }
@@ -68,6 +68,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// A list of all packets waiting to be sent.
         /// </summary>
         public List<byte[]> ToSend;
+
+        /// <summary>
+        /// Whether this player is in noclip mode.
+        /// </summary>
+        public bool Noclip = false;
+
+        /// <summary>
+        /// What the player's gravity is (Do not directly set Gravity!)
+        /// </summary>
+        public float PlayerGravity = 100;
 
         /// <summary>
         /// Call when the user has fully identified, to let them into the server.
@@ -147,7 +157,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Velocity = Location.Zero;
             LastVelocity = Location.Zero;
             Send(new TeleportPacketOut(loc));
-            SysConsole.Output(OutputType.INFO, "tele:Player is at " + Position);
         }
 
         /// <summary>
@@ -228,25 +237,45 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     movement.X = -1;
                 }
             }
-            // TODO: Noclip 'n' such
-            if (movement.LengthSquared() > 0)
+            if (Noclip)
             {
-                movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
-            }
-            if (Down)
-            {
-                Velocity.Z = 0;
-                Position.Z = 20;
-            }
-            if (Up)
-            {
-                if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
-                    && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
+                Gravity = 0;
+                if (movement.LengthSquared() > 0)
                 {
-                    Velocity.Z = 20;
+                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
                 }
+                if (Up)
+                {
+                    movement.Z = 1;
+                }
+                if (Down)
+                {
+                    movement.Z -= 1;
+                }
+                Velocity = movement * 30;
             }
-            Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
+            else
+            {
+                Gravity = PlayerGravity;
+                if (movement.LengthSquared() > 0)
+                {
+                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
+                }
+                if (Down)
+                {
+                    Velocity.Z = 0;
+                    Position.Z = 20;
+                }
+                if (Up)
+                {
+                    if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
+                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
+                    {
+                        Velocity.Z = 50;
+                    }
+                }
+                Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
+            }
             base.Tick(MyDelta, isCustom);
         }
 
