@@ -250,23 +250,43 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public double LastMovement;
         Location LastMoveLoc;
         Location LastVelocity;
+        MovementPacketIn LastPacket;
 
         public List<MovementPacketIn> PacketsToApply = new List<MovementPacketIn>();
 
-        public void ApplyNewMovement(double MoveTime)
+        public void ApplyNewMovement(double MoveTime, MovementPacketIn pack)
         {
-            float targetdelta = (float)(Server.GlobalTickTime - MoveTime);
+            // Apply last known position / movement.
             Position = LastMoveLoc;
+            Velocity = LastVelocity;
+            if (LastPacket != null)
+            {
+                MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
+            }
+            // Tick from last known movement to new position.
+            float targetdelta = (float)(MoveTime - LastMovement);
             while (targetdelta > 0.05f)
             {
                 Tick(0.05f, true);
                 targetdelta -= 0.05f;
             }
             Tick(targetdelta, true);
+            // Tell the player where they were at when the packet arrived.
             LastMoveLoc = Position;
             LastVelocity = Velocity;
             LastMovement = MoveTime;
             Send(new YourPositionPacketOut(MoveTime, Position, Velocity));
+            LastPacket = pack;
+            // Apply the new movement packet.
+            MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);
+            // Tick back up to now.
+            targetdelta = (float)(Server.GlobalTickTime - MoveTime);
+            while (targetdelta > 0.05f)
+            {
+                Tick(0.05f, true);
+                targetdelta -= 0.05f;
+            }
+            Tick(targetdelta, true);
         }
 
         public override void Kill()

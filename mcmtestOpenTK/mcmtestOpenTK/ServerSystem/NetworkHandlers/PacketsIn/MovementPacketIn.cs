@@ -10,10 +10,10 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
 {
     public class MovementPacketIn : AbstractPacketIn
     {
-        double Time;
-        byte movement;
-        float yaw;
-        float pitch;
+        public double Time;
+        public byte movement;
+        public float yaw;
+        public float pitch;
 
         public override void FromBytes(Player player, byte[] input)
         {
@@ -57,6 +57,11 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
                 }
                 return;
             }
+            player.ApplyNewMovement(Time, this);
+        }
+
+        public static void ApplyPosition(Player player, byte movement, float yaw, float pitch)
+        {
             player.Forward = (movement & 1) == 1;
             player.Back = (movement & 2) == 2;
             player.Left = (movement & 4) == 4;
@@ -65,7 +70,6 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             player.Down = (movement & 32) == 32;
             player.Direction.X = yaw;
             player.Direction.Y = pitch;
-            player.ApplyNewMovement(Time);
         }
     }
 }
