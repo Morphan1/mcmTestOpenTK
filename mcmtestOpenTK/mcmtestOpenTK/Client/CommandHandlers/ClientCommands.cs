@@ -65,6 +65,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
 
             // User Interface Commands
             CommandSystem.RegisterCommand(new BindCommand());
+            CommandSystem.RegisterCommand(new CapturemouseCommand());
             CommandSystem.RegisterCommand(new UnbindCommand());
 
             // Tags

@@ -46,9 +46,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override void Tick()
         {
-            Velocity.Z -= Gravity * Server.DeltaF;
+            Tick(Server.DeltaF, false);
+        }
+
+        public virtual void Tick(float MyDelta, bool IsCustom)
+        {
+            Velocity.Z -= Gravity * MyDelta;
             float pZ = Position.Z;
-            Location target = Position + (lastvel + Velocity) * 0.5f * Server.DeltaF;
+            Location target = Position + (lastvel + Velocity) * 0.5f * MyDelta;
             if (CheckCollision)
             {
                 bool WasSolid = Solid;
@@ -81,21 +86,24 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 Position = target;
             }
-            Velocity.Z = (Position.Z - pZ) / Server.DeltaF;
-            retrans++;
-            if (lastvel != Velocity || lastdir != Direction || retrans == 20)
+            Velocity.Z = (Position.Z - pZ) / MyDelta;
+            if (!IsCustom)
             {
-                retrans = 0;
-                PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
-                for (int i = 0; i < world.Players.Count; i++)
+                retrans++;
+                if (lastvel != Velocity || lastdir != Direction || (retrans == 10 && Velocity.LengthSquared() != 0))
                 {
-                    if (world.Players[i] != this)
+                    retrans = 0;
+                    PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
+                    for (int i = 0; i < world.Players.Count; i++)
                     {
-                        world.Players[i].Send(pack);
+                        if (world.Players[i] != this)
+                        {
+                            world.Players[i].Send(pack);
+                        }
                     }
+                    lastvel = Velocity;
+                    lastdir = Direction;
                 }
-                lastvel = Velocity;
-                lastdir = Direction;
             }
         }
 

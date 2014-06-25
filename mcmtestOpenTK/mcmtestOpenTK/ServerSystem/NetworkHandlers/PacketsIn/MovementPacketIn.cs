@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
 {
-    class MovementPacketIn : AbstractPacketIn
+    public class MovementPacketIn : AbstractPacketIn
     {
         double Time;
         byte movement;
@@ -36,7 +37,26 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             {
                 return;
             }
-            // TODO: Use time too!
+            if (Time > Server.GlobalTickTime)
+            {
+                if (Time > Server.GlobalTickTime + 0.5)
+                {
+                    SysConsole.Output(OutputType.WARNING, player.Username +
+                        " is cheating?: moving in the future ~ " + (float)Time + " vs " + (float)Server.GlobalTickTime);
+                    return;
+                }
+                player.PacketsToApply.Add(this);
+                return;
+            }
+            if (Time < player.LastMovement)
+            {
+                if (Time < player.LastMovement - 0.5)
+                {
+                    SysConsole.Output(OutputType.WARNING, player.Username +
+                        " is cheating?: moving in the past ~ " + (float)Time + " vs " + (float)player.LastMovement);
+                }
+                return;
+            }
             player.Forward = (movement & 1) == 1;
             player.Back = (movement & 2) == 2;
             player.Left = (movement & 4) == 4;
@@ -45,6 +65,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             player.Down = (movement & 32) == 32;
             player.Direction.X = yaw;
             player.Direction.Y = pitch;
+            player.ApplyNewMovement(Time);
         }
     }
 }

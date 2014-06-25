@@ -7,6 +7,7 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -143,6 +144,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         {
             Position = loc;
             Velocity = Location.Zero;
+            LastMoveLoc = Location.Zero;
+            LastVelocity = Location.Zero;
             Send(new TeleportPacketOut(loc));
         }
 
@@ -164,12 +167,29 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override void Tick()
         {
+            Tick(Server.DeltaF, false);
+        }
+
+        public override void Tick(float MyDelta, bool isCustom)
+        {
             if (!IsAlive || !Network.IsAlive)
             {
                 IsAlive = false;
                 Network.Disconnect();
                 world.Destroy(this);
                 return;
+            }
+            if (!isCustom)
+            {
+                int count = PacketsToApply.Count;
+                if (count > 0)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        PacketsToApply[i].Execute(this);
+                    }
+                    PacketsToApply.RemoveRange(0, count);
+                }
             }
             Location movement = Location.Zero;
             if (Left)
@@ -223,7 +243,29 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 }
             }
             Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
-            base.Tick();
+            base.Tick(MyDelta, isCustom);
+        }
+
+        public double LastMovement;
+        Location LastMoveLoc;
+        Location LastVelocity;
+
+        public List<MovementPacketIn> PacketsToApply = new List<MovementPacketIn>();
+
+        public void ApplyNewMovement(double MoveTime)
+        {
+            Position = LastMoveLoc;
+            float targetdelta = (float)(Server.GlobalTickTime - MoveTime);
+            while (targetdelta > 50)
+            {
+                Tick(50, true);
+                targetdelta -= 50;
+            }
+            Tick(targetdelta, true);
+            LastMoveLoc = Position;
+            LastVelocity = Velocity;
+            LastMovement = MoveTime;
+            Send(new YourPositionPacketOut(MoveTime, Position, Velocity));
         }
 
         public override void Kill()

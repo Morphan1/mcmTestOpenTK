@@ -122,11 +122,13 @@
     <Compile Include="Client\CommandHandlers\TagHandlers\Objects\ShaderTag.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Objects\TextureTag.cs" />
     <Compile Include="Client\CommandHandlers\UICmds\BindCommand.cs" />
+    <Compile Include="Client\CommandHandlers\UICmds\CapturemouseCommand.cs" />
     <Compile Include="Client\CommandHandlers\UICmds\UnbindCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\PacketsIn\YourPositionPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TeleportPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TimePacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\SpawnPoint.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\MovementPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\YourPositionPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TeleportPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TimePacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NetstringPacketOut.cs" />

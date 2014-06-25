@@ -41,12 +41,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         public Location Direction = Location.Zero;
 
-        float ticker = 0;
+        public bool forward = false;
+        public bool back = false;
+        public bool left = false;
+        public bool right = false;
+        public bool up = false;
+        public bool down = false;
 
         /// <summary>
         /// Called to tick the default player.
         /// </summary>
-        public void Update()
+        public void Update(float MyDelta, bool IsCustom)
         {
             // Don't move if not even spawned.
             if (!MainGame.Spawned)
@@ -77,27 +82,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Direction.Y = -80;
             }
             MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
-            // TODO: Switch to 'capturemouse' command.
-            if (KeyHandler.IsPressed(Key.LShift))
-            {
-                if (MouseHandler.MouseCaptured)
-                {
-                    MouseHandler.ReleaseMouse();
-                }
-                else
-                {
-                    MouseHandler.CaptureMouse();
-                }
-            }
             // Keyboard based movement.
             Location oldvel = Velocity;
             Location movement = Location.Zero;
-            bool left = KeyHandler.KeyBindIsDown(KeyBind.LEFT);
-            bool right = KeyHandler.KeyBindIsDown(KeyBind.RIGHT);
-            bool forward = KeyHandler.KeyBindIsDown(KeyBind.FORWARD);
-            bool back = KeyHandler.KeyBindIsDown(KeyBind.BACK);
-            bool up = KeyHandler.KeyBindIsDown(KeyBind.UP);
-            bool down = KeyHandler.KeyBindIsDown(KeyBind.DOWN);
+            if (!IsCustom)
+            {
+                left = KeyHandler.KeyBindIsDown(KeyBind.LEFT);
+                right = KeyHandler.KeyBindIsDown(KeyBind.RIGHT);
+                forward = KeyHandler.KeyBindIsDown(KeyBind.FORWARD);
+                back = KeyHandler.KeyBindIsDown(KeyBind.BACK);
+                up = KeyHandler.KeyBindIsDown(KeyBind.UP);
+                down = KeyHandler.KeyBindIsDown(KeyBind.DOWN);
+            }
             if (left)
             {
                 movement.Y = -1;
@@ -166,28 +162,114 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     }
                 }
                 Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
-                Velocity.Z -= 100 * MainGame.DeltaF;
+                Velocity.Z -= 100 * MyDelta;
             }
-            Location target = Position + (oldvel + Velocity) * 0.5f * MainGame.DeltaF;
+            Location target = Position + (oldvel + Velocity) * 0.5f * MyDelta;
             float pZ = Position.Z;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!ClientCVar.g_noclip.ValueB)
             {
-                Velocity.Z = (Position.Z - pZ) / MainGame.DeltaF;
+                Velocity.Z = (Position.Z - pZ) / MyDelta;
             }
-            byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
-            if (move != lastMove || Direction != lastdir)
+            if (!IsCustom)
             {
-                lastMove = move;
-                lastdir = Location.Zero;
-                if (NetworkBase.IsActive)
+                byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
+                reps++;
+                if (move != lastMove || Direction != lastdir || reps > 10)
                 {
-                    NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, Direction.X, Direction.Y));
+                    lastMove = move;
+                    lastdir = Location.Zero;
+                    reps = 0;
+                    if (NetworkBase.IsActive)
+                    {
+                        Points.Add(CPoint());
+                        if (Points.Count > 60)
+                        {
+                            Points.RemoveAt(0);
+                        }
+                        NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, Direction.X, Direction.Y));
+                    }
                 }
             }
         }
 
+        public BroadcastPoint CPoint()
+        {
+            return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down);
+        }
+
+        List<BroadcastPoint> Points = new List<BroadcastPoint>();
+
+        public void ApplyMovement(Location Pos, Location Vel, double Time)
+        {
+            Location RealDir = Direction;
+            for (int i = Points.Count - 1; i >= 0; i--)
+            {
+                if (Points[i].Time < Time)
+                {
+                    double TargetToMove = Time - Points[i].Time;
+                    Position = Points[i].Position;
+                    Velocity = Points[i].Velocity;
+                    Points[i].Apply(this);
+                    Update((float)TargetToMove, true);
+                    Position += (Pos - Position);
+                    Velocity += (Vel - Velocity);
+                    double ctime = Time;
+                    for (int x = i + 1; x < Points.Count; x++)
+                    {
+                        Points[i].Apply(this);
+                        Update((float)(Points[i].Time - ctime), true);
+                        ctime = Points[i].Time;
+                    }
+                    CPoint().Apply(this);
+                    Update((float)(MainGame.GlobalTickTime - ctime), true);
+                    break;
+                }
+            }
+            // Backup - ensure Direction doesn't get messed up
+            Direction = RealDir;
+        }
+
+        int reps = 0;
         byte lastMove = 0;
         Location lastdir = Location.Zero;
+    }
+
+    public class BroadcastPoint
+    {
+        public double Time;
+        public Location Position;
+        public Location Velocity;
+        public Location Direction;
+        public bool left;
+        public bool right;
+        public bool forward;
+        public bool back;
+        public bool up;
+        public bool down;
+        public BroadcastPoint(double _time, Location _position, Location _velocity, Location _direction,
+            bool _forward, bool _back, bool _left, bool _right, bool _up, bool _down)
+        {
+            Direction = _direction;
+            Time = _time;
+            Position = _position;
+            Velocity = _velocity;
+            forward = _forward;
+            back = _back;
+            left = _left;
+            right = _right;
+            up = _up;
+            down = _down;
+        }
+        public void Apply(Player player)
+        {
+            player.Direction = Direction;
+            player.forward = forward;
+            player.back = back;
+            player.left = left;
+            player.right = right;
+            player.up = up;
+            player.down = down;
+        }
     }
 }

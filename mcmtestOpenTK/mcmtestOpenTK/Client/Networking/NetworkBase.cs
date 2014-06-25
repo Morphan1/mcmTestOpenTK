@@ -202,6 +202,8 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new TimePacketIn(); break;
                 case 9:
                     Handler = new TeleportPacketIn(); break;
+                case 10:
+                    Handler = new YourPositionPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:

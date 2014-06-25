@@ -32,14 +32,22 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            double absd = Math.Abs(servertime - MainGame.GlobalTickTime);
-            if (absd < 10 || absd > 3000)
+            double timedif = servertime - MainGame.GlobalTickTime;
+            if (timedif < 0)
+            {
+                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 10;
+            }
+            else if (timedif < 5)
             {
                 MainGame.GlobalTickTime = servertime;
             }
+            else  if (timedif > 3000)
+            {
+                MainGame.GlobalTickTime += timedif / 5;
+            }
             else
             {
-                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 10;
+                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 20;
             }
         }
     }
