@@ -198,8 +198,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down);
         }
 
-        List<BroadcastPoint> Points = new List<BroadcastPoint>();
-
+        List<BroadcastPoint> Points = new List<BroadcastPoint>(65);
+        
         public void ApplyMovement(Location Pos, Location Vel, double Time)
         {
             Location RealDir = Direction;

@@ -87,6 +87,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         void Spawn(World world)
         {
             Position = world.FindSpawnPoint();
+            Teleport(Position);
             world.Spawn(this);
             NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
@@ -96,7 +97,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     Send(new SpawnPacketOut(world.Entities[i]));
                 }
             }
-            Teleport(Position);
         }
 
         /// <summary>
@@ -143,10 +143,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public void Teleport(Location loc)
         {
             Position = loc;
+            LastMoveLoc = loc;
             Velocity = Location.Zero;
-            LastMoveLoc = Location.Zero;
             LastVelocity = Location.Zero;
             Send(new TeleportPacketOut(loc));
+            SysConsole.Output(OutputType.INFO, "tele:Player is at " + Position);
         }
 
         /// <summary>
@@ -254,12 +255,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public void ApplyNewMovement(double MoveTime)
         {
-            Position = LastMoveLoc;
             float targetdelta = (float)(Server.GlobalTickTime - MoveTime);
-            while (targetdelta > 50)
+            Position = LastMoveLoc;
+            while (targetdelta > 0.05f)
             {
-                Tick(50, true);
-                targetdelta -= 50;
+                Tick(0.05f, true);
+                targetdelta -= 0.05f;
             }
             Tick(targetdelta, true);
             LastMoveLoc = Position;

@@ -101,10 +101,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                             world.Players[i].Send(pack);
                         }
                     }
-                    lastvel = Velocity;
-                    lastdir = Direction;
                 }
             }
+            lastvel = Velocity;
+            lastdir = Direction;
         }
 
         public abstract void Collide();

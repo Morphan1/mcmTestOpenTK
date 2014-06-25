@@ -8,6 +8,7 @@ using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
@@ -41,7 +42,8 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 // Just ignore.
                 return;
             }
-            Player.player.ApplyMovement(position, velocity, time);
+            // Player.player.ApplyMovement(position, velocity, time);
+            MainGame.SpawnEntity(new Bullet() { Position = position, Solid = false });
         }
     }
 }
