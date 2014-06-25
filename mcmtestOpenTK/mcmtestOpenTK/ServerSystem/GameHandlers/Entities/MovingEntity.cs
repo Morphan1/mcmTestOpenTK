@@ -56,8 +56,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Location target = Position + (lastvel + Velocity) * 0.5f * MyDelta;
             if (CheckCollision)
             {
-                bool WasSolid = Solid;
-                Solid = false;
                 switch (MoveType)
                 {
                     case MovementType.Line:
@@ -76,7 +74,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                         Position = target;
                         break;
                 }
-                Solid = WasSolid;
                 if (Position != target)
                 {
                     Collide();

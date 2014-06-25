@@ -268,9 +268,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 }
                 if (Up)
                 {
-                    if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
+                    if (Velocity.Z < 0.01f && Velocity.Z > -0.01f
                         && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
+                        SysConsole.Output(OutputType.INFO, "There's a solid at " + Position);
                         Velocity.Z = 50;
                     }
                 }
@@ -288,6 +289,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public void ApplyNewMovement(double MoveTime, MovementPacketIn pack)
         {
+            bool WasSolid = Solid;
+            Solid = false;
             // Apply last known position / movement.
             Position = LastMoveLoc;
             Velocity = LastVelocity;
@@ -316,6 +319,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 targetdelta -= 0.05f;
             }
             Tick(targetdelta, true);
+            Solid = WasSolid;
         }
 
         public override void Kill()

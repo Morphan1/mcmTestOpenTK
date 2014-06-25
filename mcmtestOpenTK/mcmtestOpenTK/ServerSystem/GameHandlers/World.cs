@@ -59,7 +59,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             for (int i = 0; i < Tickers.Count; i++)
             {
                 Entity e = Tickers[i];
+                bool WasSolid = e.Solid;
+                e.Solid = false;
                 e.Tick();
+                e.Solid = WasSolid;
                 if (!e.Valid)
                 {
                     i--;
