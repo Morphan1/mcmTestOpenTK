@@ -12,12 +12,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
     class TimePacketIn: AbstractPacketIn
     {
-        long servertime;
+        double servertime;
         public override void FromBytes(byte[] input)
         {
             if (input.Length == 8)
             {
-                servertime = BitConverter.ToInt64(input, 0);
+                servertime = BitConverter.ToDouble(input, 0);
                 IsValid = true;
             }
             else
@@ -32,7 +32,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            long absd = Math.Abs(servertime - MainGame.GlobalTickTime);
+            double absd = Math.Abs(servertime - MainGame.GlobalTickTime);
             if (absd < 10 || absd > 3000)
             {
                 MainGame.GlobalTickTime = servertime;

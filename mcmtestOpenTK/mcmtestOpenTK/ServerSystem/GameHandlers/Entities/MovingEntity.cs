@@ -47,9 +47,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public override void Tick()
         {
             Velocity.Z -= Gravity * Server.DeltaF;
-            Location target = Position + Velocity * Server.DeltaF;
+            float pZ = Position.Z;
+            Location target = Position + (lastvel + Velocity) * 0.5f * Server.DeltaF;
             if (CheckCollision)
             {
+                bool WasSolid = Solid;
+                Solid = false;
                 switch (MoveType)
                 {
                     case MovementType.Line:
@@ -68,6 +71,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                         Position = target;
                         break;
                 }
+                Solid = WasSolid;
                 if (Position != target)
                 {
                     Collide();
@@ -77,6 +81,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 Position = target;
             }
+            Velocity.Z = (Position.Z - pZ) / Server.DeltaF;
             retrans++;
             if (lastvel != Velocity || lastdir != Direction || retrans == 20)
             {
@@ -84,7 +89,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
                 for (int i = 0; i < world.Players.Count; i++)
                 {
-                    world.Players[i].Send(pack);
+                    if (world.Players[i] != this)
+                    {
+                        world.Players[i].Send(pack);
+                    }
                 }
                 lastvel = Velocity;
                 lastdir = Direction;

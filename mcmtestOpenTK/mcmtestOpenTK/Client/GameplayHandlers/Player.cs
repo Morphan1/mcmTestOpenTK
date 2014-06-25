@@ -175,21 +175,19 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Velocity.Z = (Position.Z - pZ) / MainGame.DeltaF;
             }
-            ticker += MainGame.DeltaF;
-            // TODO: Have server identify proper TPS
-            if (ticker > (1 / 20) && NetworkBase.IsActive)
+            byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
+            if (move != lastMove || Direction != lastdir)
             {
-                ticker = 0;
-                if (Velocity != LastVel || LastDir != Direction)
+                lastMove = move;
+                lastdir = Location.Zero;
+                if (NetworkBase.IsActive)
                 {
-                    NetworkBase.Send(new PositionPacketOut(Position, Velocity, Direction));
-                    LastVel = Velocity;
-                    LastDir = Direction;
+                    NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, Direction.X, Direction.Y));
                 }
             }
         }
 
-        Location LastVel = Location.Zero;
-        Location LastDir = Location.Zero;
+        byte lastMove = 0;
+        Location lastdir = Location.Zero;
     }
 }

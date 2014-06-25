@@ -30,6 +30,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Maxs = DefaultMaxes;
             Gravity = 100;
             CheckCollision = true;
+            MoveType = MovementType.SlideBox;
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
             {
-                if (world.Entities[i].NetTransmit)
+                if (world.Entities[i].NetTransmit && world.Entities[i] != this)
                 {
                     Send(new SpawnPacketOut(world.Entities[i]));
                 }
@@ -154,6 +155,13 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Send(new TimePacketOut());
         }
 
+        public bool Forward = false;
+        public bool Back = false;
+        public bool Left = false;
+        public bool Right = false;
+        public bool Up = false;
+        public bool Down = false;
+
         public override void Tick()
         {
             if (!IsAlive || !Network.IsAlive)
@@ -163,6 +171,58 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 world.Destroy(this);
                 return;
             }
+            Location movement = Location.Zero;
+            if (Left)
+            {
+                movement.Y = -1;
+            }
+            if (Right)
+            {
+                movement.Y = 1;
+            }
+            if (Back)
+            {
+                if (movement.Y != 0)
+                {
+                    movement.Y *= 0.5f;
+                    movement.X = 0.5f;
+                }
+                else
+                {
+                    movement.X = 1;
+                }
+            }
+            if (Forward)
+            {
+                if (movement.Y != 0)
+                {
+                    movement.Y *= 0.5f;
+                    movement.X = -0.5f;
+                }
+                else
+                {
+                    movement.X = -1;
+                }
+            }
+            // TODO: Noclip 'n' such
+            if (movement.LengthSquared() > 0)
+            {
+                movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
+            }
+            if (Down)
+            {
+                Velocity.Z = 0;
+                Position.Z = 20;
+            }
+            if (Up)
+            {
+                if (Velocity.Z < 0.1f && Velocity.Z > -0.1f
+                    && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
+                {
+                    Velocity.Z = 20;
+                }
+            }
+            Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
             base.Tick();
         }
 

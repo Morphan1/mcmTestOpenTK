@@ -46,7 +46,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     cticknumber = 0;
                     ctickdelta -= 1.0f;
                 }
-                GlobalTickTime += (int)(Delta * 1000);
+                GlobalTickTime += Delta;
 
                 // Calculate ping
                 pingbump += DeltaF;

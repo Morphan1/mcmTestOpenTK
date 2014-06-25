@@ -37,7 +37,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
 
             // Game CVars
             // TODO: Make below CVar only settable by server packet
-            g_noclip = Register("g_noclip", "true", CVarFlag.Boolean); // Whether the player is in 'noclip' mode.
+            g_noclip = Register("g_noclip", "false", CVarFlag.Boolean); // Whether the player is in 'noclip' mode.
             // Text CVars
             // TODO: IMPLEMENT BELOW CVAR
             t_fastrender = Register("t_fastrender", "false", CVarFlag.Boolean); // Whether to only render text when needed.

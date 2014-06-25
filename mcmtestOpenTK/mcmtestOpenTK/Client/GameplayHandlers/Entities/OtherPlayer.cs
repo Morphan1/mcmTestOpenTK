@@ -27,8 +27,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             model = new CubeModel(Location.Zero, new Location(3, 3, 8), Texture.Test);
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
-            Solid = false;
+            Solid = true;
             CheckCollision = true;
+            MoveType = MovementType.SlideBox;
             Gravity = 100;
         }
 

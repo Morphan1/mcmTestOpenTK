@@ -18,6 +18,15 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         static double tickdelta = 0;
 
         /// <summary>
+        /// Ticks exactly once per every second.
+        /// </summary>
+        public static void OncePerSecondTick()
+        {
+            // Tell all players what time it is
+            NetworkBase.SendToAllPlayers(new TimePacketOut());
+        }
+
+        /// <summary>
         /// Tick the entire server.
         /// </summary>
         public static void Tick(double ticktime)
@@ -34,10 +43,9 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 FPS = ticknumber;
                 ticknumber = 0;
                 tickdelta -= 1.0f;
-                GlobalTickNote += 1000;
-                GlobalTickTime = GlobalTickNote - (int)(tickdelta * 1000);
+                OncePerSecondTick();
             }
-            GlobalTickTime += (int)(Delta * 1000);
+            GlobalTickTime += Delta;
 
             // Update global networking
             GlobalNetwork.Tick();
@@ -54,9 +62,6 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             // Update the world
             MainWorld.Tick();
             
-            // Tell all players what time it is
-            NetworkBase.SendToAllPlayers(new TimePacketOut());
-
             // Update networking again for speed's sake
             NetworkBase.Tick();
 

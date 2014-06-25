@@ -146,6 +146,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <summary>
         /// The current global time.
         /// </summary>
-        public static long GlobalTickTime;
+        public static double GlobalTickTime;
     }
 }

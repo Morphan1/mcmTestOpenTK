@@ -118,7 +118,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 case 3:
                     Handler = new IdentityPacketIn(); break;
                 case 4:
-                    Handler = new PositionPacketIn(); break;
+                    Handler = new MovementPacketIn(); break;
                 case 5:
                     Handler = new CommandPacketIn(); break;
                 case 255:

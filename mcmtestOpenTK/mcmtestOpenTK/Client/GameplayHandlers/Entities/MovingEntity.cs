@@ -47,6 +47,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location target = Position + (oldvel + Velocity) * 0.5f * MainGame.DeltaF;
             if (CheckCollision)
             {
+                bool WasSolid = Solid;
+                Solid = false;
                 switch (MoveType)
                 {
                     case MovementType.Line:
@@ -65,6 +67,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                         Position = target;
                         break;
                 }
+                Solid = WasSolid;
             }
             else
             {
