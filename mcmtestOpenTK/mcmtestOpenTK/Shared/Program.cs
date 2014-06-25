@@ -30,6 +30,8 @@ namespace mcmtestOpenTK.Shared
 
         public static List<Thread> ThreadsToClose = new List<Thread>();
 
+        public static Thread MainThread;
+
         /// <summary>
         /// Central entry point for all forms of the program
         /// </summary>
@@ -41,6 +43,7 @@ namespace mcmtestOpenTK.Shared
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
             // Identify the current process.
             CurrentProcess = Process.GetCurrentProcess();
+            MainThread = Thread.CurrentThread;
             ConsoleHandle = CurrentProcess.MainWindowHandle;
             // Prepare utilities before doing handling the client/server.
             Utilities.Init();

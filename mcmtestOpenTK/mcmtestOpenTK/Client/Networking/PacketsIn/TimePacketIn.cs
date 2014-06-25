@@ -33,21 +33,21 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 return;
             }
             double timedif = servertime - MainGame.GlobalTickTime;
-            if (timedif < 0)
+            if (timedif < -1f)
             {
-                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 10;
+                MainGame.GlobalTickTime -= 0.1f;
             }
-            else if (timedif < 5)
+            else if (timedif > 1f)
             {
-                MainGame.GlobalTickTime = servertime;
+                MainGame.GlobalTickTime += 0.1f;
             }
-            else  if (timedif > 3000)
+            else if (timedif < -0.01f)
             {
-                MainGame.GlobalTickTime += timedif / 5;
+                MainGame.GlobalTickTime -= 0.01f;
             }
-            else
+            else if (timedif > 0.01f)
             {
-                MainGame.GlobalTickTime += (servertime - MainGame.GlobalTickTime) / 20;
+                MainGame.GlobalTickTime += 0.01f;
             }
         }
     }

@@ -63,8 +63,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 return;
             }
             // Mouse based rotation
-            Direction.X += MouseHandler.MouseDelta.X;
-            Direction.Y += MouseHandler.MouseDelta.Y;
+            if (!IsCustom)
+            {
+                Direction.X += MouseHandler.MouseDelta.X;
+                Direction.Y += MouseHandler.MouseDelta.Y;
+            }
             while (Direction.X < 0)
             {
                 Direction.X += 360;
@@ -81,7 +84,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Direction.Y = -80;
             }
-            MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
+            if (!IsCustom)
+            {
+                MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
+            }
             // Keyboard based movement.
             Location oldvel = Velocity;
             Location movement = Location.Zero;
@@ -175,10 +181,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
-                if (move != lastMove || Direction != lastdir || reps > 10)
+                if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 10)
                 {
                     lastMove = move;
                     lastdir = Location.Zero;
+                    lastvel = Velocity;
                     reps = 0;
                     if (NetworkBase.IsActive)
                     {
@@ -199,40 +206,125 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         }
 
         List<BroadcastPoint> Points = new List<BroadcastPoint>(65);
-        
+
+        public void ApplyMovement(Location pos, Location vel, double Time)
+        {
+            // Loop through all points in reverse
+            for (int i = Points.Count - 1; i >= 0; i--)
+            {
+                // At the first point found that is before the target
+                if (Points[i].Time < Time)
+                {
+                    // Record our current point (probably not needed, just in case)
+                    BroadcastPoint cpoint = CPoint();
+                    // Apply the last point fully
+                    Points[i].Apply(this);
+                    Position = Points[i].Position;
+                    Velocity = Points[i].Velocity;
+                    double ctime = Points[i].Time;
+                    double Target;
+                    SysConsole.Output(OutputType.INFO, "Apply " + Points[i].Time + " isvel " + Velocity);
+                    // Loop through all future points
+                    for (int x = i + 1; x < Points.Count; x++)
+                    {
+                        // Apply the movement from the last point to this one
+                        Target = Points[x].Time - ctime;
+                        SysConsole.Output(OutputType.INFO, "ReApply " + Points[x].Time + " is targ " + Target);
+                        while (Target > 1f / 60f)
+                        {
+                            Update(1f / 60f, true);
+                            Target -= 1f / 60f;
+                        }
+                        Update((float)Target, true);
+                        // Apply this point for the next calculation
+                        Points[x].Apply(this);
+                        ctime = Points[x].Time;
+                    }
+                    // Apply the movement from the last point to now
+                    Target = MainGame.GlobalTickTime - ctime;
+                    SysConsole.Output(OutputType.INFO, "ApplyFinal " + MainGame.GlobalTickTime + " is targ " + Target);
+                    while (Target > 1f / 60f)
+                    {
+                        Update(1f / 60f, true);
+                        Target -= 1f / 60f;
+                    }
+                    Update((float)Target, true);
+                    // Restore our keys to what they should be (probably not needed, just in case)
+                    SysConsole.Output(OutputType.INFO, "Done");
+                    cpoint.Apply(this);
+                    break;
+                }
+            }
+        }
+
+        /*
         public void ApplyMovement(Location Pos, Location Vel, double Time)
         {
             Location RealDir = Direction;
+            BroadcastPoint cpoint = CPoint();
+            // Loop through recorded move points in reverse
             for (int i = Points.Count - 1; i >= 0; i--)
             {
+                // If the pointed time is before our target
                 if (Points[i].Time < Time)
                 {
-                    double TargetToMove = Time - Points[i].Time;
+                    // Apply recorded movement from that point
                     Position = Points[i].Position;
                     Velocity = Points[i].Velocity;
                     Points[i].Apply(this);
+                    // Update from that point to our new time
+                    double TargetToMove = Time - Points[i].Time;
+                    while (TargetToMove > 1f / 60f)
+                    {
+                        Update((float)TargetToMove, true);
+                        TargetToMove -= 1f / 60f;
+                    }
                     Update((float)TargetToMove, true);
-                    Position += (Pos - Position);
-                    Velocity += (Vel - Velocity);
+                    // Move position/velocity to what the server says it should be
+                    // Position += (Pos - Position) / 10;
+                    // Velocity += (Vel - Velocity) / 10;
+                    // Record what time we're at
                     double ctime = Time;
+                    // Loop through remaining points
                     for (int x = i + 1; x < Points.Count; x++)
                     {
-                        Points[i].Apply(this);
-                        Update((float)(Points[i].Time - ctime), true);
-                        ctime = Points[i].Time;
+                        if (Points[i].Time > ctime)
+                        {
+                            // Apply keypresses from this point
+                            Points[i].Apply(this);
+                            // Update for that time minus current time
+                            TargetToMove = Points[i].Time - ctime;
+                            while (TargetToMove > 1f / 60f)
+                            {
+                                Update((float)TargetToMove, true);
+                                TargetToMove -= 1f / 60f;
+                            }
+                            Update((float)TargetToMove, true);
+                            // Update current time to that time
+                            ctime = Points[i].Time;
+                        }
                     }
-                    CPoint().Apply(this);
-                    Update((float)(MainGame.GlobalTickTime - ctime), true);
+                    // Apply the latest settings
+                    cpoint.Apply(this);
+                    // Tick from 'current time' to the actual current time
+                    TargetToMove = MainGame.GlobalTickTime - ctime;
+                    while (TargetToMove > 1f / 60f)
+                    {
+                        Update((float)TargetToMove, true);
+                        TargetToMove -= 1f / 60f;
+                    }
+                    Update((float)TargetToMove, true);
                     break;
                 }
             }
             // Backup - ensure Direction doesn't get messed up
             Direction = RealDir;
-        }
+        }*/
 
         int reps = 0;
         byte lastMove = 0;
         Location lastdir = Location.Zero;
+        Location lastvel = Location.Zero;
     }
 
     public class BroadcastPoint

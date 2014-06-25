@@ -37,13 +37,13 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
+            MainGame.SpawnEntity(new Bullet() { Position = position, Solid = false });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
-            // Player.player.ApplyMovement(position, velocity, time);
-            MainGame.SpawnEntity(new Bullet() { Position = position, Solid = false });
+            //Player.player.ApplyMovement(position, velocity, time);
         }
     }
 }

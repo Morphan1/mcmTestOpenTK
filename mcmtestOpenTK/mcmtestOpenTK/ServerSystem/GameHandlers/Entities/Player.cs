@@ -155,6 +155,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public void Init()
         {
+            LastPacket = new MovementPacketIn();
+            LastPacket.Time = Server.GlobalTickTime;
+            LastMovement = Server.GlobalTickTime;
             Send(new HelloPacketOut());
             Send(new TimePacketOut());
         }
@@ -259,10 +262,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             // Apply last known position / movement.
             Position = LastMoveLoc;
             Velocity = LastVelocity;
-            if (LastPacket != null)
-            {
-                MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
-            }
+            MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
             // Tick from last known movement to new position.
             float targetdelta = (float)(MoveTime - LastMovement);
             while (targetdelta > 0.05f)

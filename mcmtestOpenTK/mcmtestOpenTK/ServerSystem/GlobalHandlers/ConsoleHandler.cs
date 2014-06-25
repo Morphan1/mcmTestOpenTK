@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.ServerSystem.CommandHandlers;
 using mcmtestOpenTK.Shared;
 using System.Threading;
+using System.Diagnostics;
 
 namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
 {
