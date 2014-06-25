@@ -20,9 +20,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Entity ent;
             Location lower;
             Location upper;
-            for (int i = 0; i < MainGame.Entities.Count; i++)
+            for (int i = 0; i < MainGame.Solids.Count; i++)
             {
-                ent = MainGame.Entities[i];
+                ent = MainGame.Solids[i];
                 if (ent.Solid)
                 {
                     lower = ent.Position + ent.Mins;
@@ -51,9 +51,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location High = spot + Maxs;
             Location elow;
             Location ehigh;
-            for (int i = 0; i < MainGame.Entities.Count; i++)
+            for (int i = 0; i < MainGame.Solids.Count; i++)
             {
-                ent = MainGame.Entities[i];
+                ent = MainGame.Solids[i];
                 if (ent.Solid)
                 {
                     elow = ent.Position + ent.Mins;

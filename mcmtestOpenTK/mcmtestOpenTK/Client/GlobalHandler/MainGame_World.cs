@@ -24,12 +24,18 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static List<Entity> Tickers;
 
+        /// <summary>
+        /// A list of all solid entities in the world.
+        /// </summary>
+        public static List<Entity> Solids;
+
         static Skybox skybox = null;
 
         static void LoadWorld()
         {
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+            Solids = new List<Entity>();
             skybox = new Skybox();
             skybox.Init();
         }
@@ -51,6 +57,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 if (e.TickMe)
                 {
                     Tickers.Add(e);
+                }
+                if (e.Solid)
+                {
+                    Solids.Add(e);
                 }
             }
         }
