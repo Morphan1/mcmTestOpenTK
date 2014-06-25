@@ -268,18 +268,22 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 }
                 if (Up)
                 {
-                    if (Velocity.Z < 0.01f && Velocity.Z > -0.01f
+                    if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
                         && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
-                        SysConsole.Output(OutputType.INFO, "There's a solid at " + Position);
                         Velocity.Z = 50;
                     }
                 }
                 Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
             }
             base.Tick(MyDelta, isCustom);
+            if (!isCustom)
+            {
+                LastTick = Server.GlobalTickTime;
+            }
         }
 
+        public double LastTick;
         public double LastMovement;
         Location LastMoveLoc;
         Location LastVelocity;
@@ -312,7 +316,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             // Apply the new movement packet.
             MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);
             // Tick back up to now.
-            targetdelta = (float)(Server.GlobalTickTime - MoveTime);
+            targetdelta = (float)(LastTick - MoveTime);
             while (targetdelta > 0.05f)
             {
                 Tick(0.05f, true);

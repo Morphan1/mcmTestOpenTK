@@ -162,7 +162,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 }
                 if (up)
                 {
-                    if (Velocity.Z < 0.01f && Velocity.Z > -0.01f
+                    if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
                         && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
                         Velocity.Z = 50;
