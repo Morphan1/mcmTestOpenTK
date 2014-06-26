@@ -38,13 +38,12 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600 });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
-            //Player.player.ApplyMovement(position, velocity, time);
+            Player.player.ApplyMovement(position, velocity, time);
         }
     }
 }

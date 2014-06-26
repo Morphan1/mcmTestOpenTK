@@ -168,7 +168,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         Velocity.Z = 50;
                     }
                 }
-                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.Sky });
                 Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
                 Velocity.Z -= 100 * MyDelta;
             }
