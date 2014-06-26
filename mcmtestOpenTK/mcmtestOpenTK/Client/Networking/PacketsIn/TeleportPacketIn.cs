@@ -29,6 +29,10 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
 
         public override void Execute()
         {
+            if (!MainGame.Spawned)
+            {
+                MainGame.SetScreen(ScreenMode.Game);
+            }
             MainGame.Spawned = true;
             Player.player.Position = loc;
             Player.player.Velocity = Location.Zero;

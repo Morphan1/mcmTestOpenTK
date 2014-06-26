@@ -8,9 +8,9 @@ using OpenTK.Graphics;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
-    class Screen_MainMenu : AbstractScreen
+    class Screen_Loading : AbstractScreen
     {
-        public Screen_MainMenu(): base(ScreenMode.MainMenu)
+        public Screen_Loading(): base(ScreenMode.Loading)
         {
         }
 
@@ -19,28 +19,28 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Initted = true;
         }
 
-        float blue = 0;
+        float green = 0;
 
-        float bluemod = 1;
+        float greenmod = 1;
 
         public override void Tick()
         {
-            blue += (float)MainGame.Delta * bluemod / 10;
-            if (blue >= 1)
+            green += (float)MainGame.Delta * greenmod / 10;
+            if (green >= 1)
             {
-                bluemod = -1;
-                blue = 1;
+                greenmod = -1;
+                green = 1;
             }
-            if (blue <= 0)
+            if (green <= 0)
             {
-                bluemod = 1;
-                blue = 0;
+                greenmod = 1;
+                green = 0;
             }
         }
 
         public override void Draw2D()
         {
-            GL.ClearColor(new Color4(0, 0, (byte)(blue * 255), 255));
+            GL.ClearColor(new Color4(0, (byte)(green * 255), 0, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 

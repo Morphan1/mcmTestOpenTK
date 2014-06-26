@@ -85,6 +85,7 @@ namespace mcmtestOpenTK.Client.Networking
                 SAEA.RemoteEndPoint = target;
                 Connected = false;
                 Sock.ConnectAsync(SAEA);
+                MainGame.SetScreen(ScreenMode.Loading);
                 return true;
             }
             catch (Exception ex)
@@ -281,6 +282,7 @@ namespace mcmtestOpenTK.Client.Networking
         {
             IsActive = false;
             MainGame.DestroyWorld();
+            MainGame.SetScreen(ScreenMode.MainMenu);
             NetStringManager.Init();
             if (reason != null)
             {

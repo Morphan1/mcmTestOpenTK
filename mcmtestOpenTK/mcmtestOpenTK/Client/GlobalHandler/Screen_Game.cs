@@ -77,7 +77,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Crosshair.Draw();
 
             // Render debug text
-            GLFont.DrawColoredText(debug);
+            FontSet.DrawColoredText(debug);
         }
 
         public override void Draw3D()

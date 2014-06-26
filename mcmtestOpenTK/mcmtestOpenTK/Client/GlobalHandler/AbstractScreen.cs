@@ -30,8 +30,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         Logos = 1,
         MainMenu = 2,
         // Menus
-        Game = 3,
+        Loading = 3,
+        Game = 4,
         // In-game options
-        MAX = 4,
+        MAX = 5,
     }
 }

@@ -39,6 +39,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Screens = new AbstractScreen[(int)ScreenMode.MAX];
                 Screens[(int)ScreenMode.Logos] = new Screen_Logos();
                 Screens[(int)ScreenMode.MainMenu] = new Screen_MainMenu();
+                Screens[(int)ScreenMode.Loading] = new Screen_Loading();
                 Screens[(int)ScreenMode.Game] = new Screen_Game();
                 // Prepare the CVar system
                 SysConsole.Output(OutputType.INIT, "Preparing CVars...");
