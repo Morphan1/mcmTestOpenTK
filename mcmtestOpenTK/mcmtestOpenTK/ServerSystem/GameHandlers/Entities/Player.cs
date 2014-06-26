@@ -301,10 +301,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
             // Tick from last known movement to new position.
             float targetdelta = (float)(MoveTime - LastMovement);
-            while (targetdelta > 0.05f)
+            while (targetdelta > 1f / 60f)
             {
-                Tick(0.05f, true);
-                targetdelta -= 0.05f;
+                Tick(1f / 60f, true);
+                targetdelta -= 1f / 60f;
             }
             Tick(targetdelta, true);
             // Tell the player where they were at when the packet arrived.
@@ -317,10 +317,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);
             // Tick back up to now.
             targetdelta = (float)(LastTick - MoveTime);
-            while (targetdelta > 0.05f)
+            while (targetdelta > 1f / 60f)
             {
-                Tick(0.05f, true);
-                targetdelta -= 0.05f;
+                Tick(1f / 60f, true);
+                targetdelta -= 1f / 60f;
             }
             Tick(targetdelta, true);
             Solid = WasSolid;
