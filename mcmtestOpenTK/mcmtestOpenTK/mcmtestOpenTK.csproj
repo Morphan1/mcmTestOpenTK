@@ -128,12 +128,14 @@
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\PacketsIn\PlaysoundPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\SetcvarPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\YourPositionPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TeleportPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\TimePacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsOut\MovementPacketOut.cs" />
+    <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
     <Compile Include="ServerSystem\CommonHandlers\ServerCVar.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\SpawnPoint.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\MovementPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PlaysoundPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\SetcvarPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\YourPositionPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TeleportPacketOut.cs" />

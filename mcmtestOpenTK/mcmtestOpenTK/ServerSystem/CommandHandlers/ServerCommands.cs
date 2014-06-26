@@ -28,6 +28,7 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
 
             // Common Commands
             CommandSystem.RegisterCommand(new QuitCommand());
+            CommandSystem.RegisterCommand(new SayCommand());
             // World Commands
             CommandSystem.RegisterCommand(new LoadCommand());
             CommandSystem.RegisterCommand(new SaveCommand());

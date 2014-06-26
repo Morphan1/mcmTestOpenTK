@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {
@@ -132,10 +133,19 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             }
             if (ent.NetTransmit)
             {
-                for (int i = 0; i < Players.Count; i++)
-                {
-                    Players[i].Send(new DespawnPacketOut(ent.UniqueID));
-                }
+                SendToAllPlayers(new DespawnPacketOut(ent.UniqueID));
+            }
+        }
+
+        /// <summary>
+        /// Sends a packet to all connected players.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        public void SendToAllPlayers(AbstractPacketOut packet)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                Players[i].Send(packet);
             }
         }
 

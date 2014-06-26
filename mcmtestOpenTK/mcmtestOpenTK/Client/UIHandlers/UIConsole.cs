@@ -92,6 +92,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
 
         static string pre_waiting = "";
 
+        static int extralines = 0;
+        static double LineBack = 0;
+
         /// <summary>
         /// Prepares the console.
         /// </summary>
@@ -187,6 +190,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 }
                 ConsoleText.Text = ConsoleText.Text.Substring(i + 1, ConsoleText.Text.Length - (i + 1));
             }
+            extralines += lines;
+            if (extralines > 3)
+            {
+                extralines = 3;
+            }
+            LineBack = 3f;
             ConsoleText.Text += text;
         }
 
@@ -220,6 +229,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
             }
             if (Open)
             {
+                extralines = 0;
+                LineBack = 0;
                 // flicker the cursor
                 keymark_delta += MainGame.Delta;
                 if (keymark_delta > 0.5f)
@@ -230,8 +241,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // handle backspaces
                 if (KeyHandler.InitBS > 0)
                 {
-                    string partone = TypingCursor > 0 ? TypingText.Substring(0, TypingCursor): "";
-                    string parttwo = TypingCursor < TypingText.Length ? TypingText.Substring(TypingCursor): "";
+                    string partone = TypingCursor > 0 ? TypingText.Substring(0, TypingCursor) : "";
+                    string parttwo = TypingCursor < TypingText.Length ? TypingText.Substring(TypingCursor) : "";
                     if (partone.Length > KeyHandler.InitBS)
                     {
                         partone = partone.Substring(0, partone.Length - KeyHandler.InitBS);
@@ -346,6 +357,18 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // update the rendered text
                 Typing.Text = ">" + TypingText;
             }
+            else // !Open
+            {
+                if (extralines > 0)
+                {
+                    LineBack -= MainGame.Delta;
+                    if (LineBack <= 0)
+                    {
+                        extralines--;
+                        LineBack = 3f;
+                    }
+                }
+            }
             KeyHandler.Clear();
         }
 
@@ -433,13 +456,18 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                     Typing.set.font.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
                 }
+                // Render the console text
+                GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
+                if (ScrolledLine != 0)
+                {
+                    GLFont.DrawColoredText(ScrollText);
+                }
             }
-
-            // Render the console text
-            GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
-            if (ScrolledLine != 0)
+            else
             {
-                GLFont.DrawColoredText(ScrollText);
+                ConsoleText.Position.Y += (int)(ConsoleText.set.font.Height * (2 + extralines));
+                GLFont.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
+                ConsoleText.Position.Y -= (int)(ConsoleText.set.font.Height * (2 + extralines));
             }
         }
     }
