@@ -31,6 +31,17 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public Texture texture = null;
 
+        /// <summary>
+        /// Returns whether this square contains a given point.
+        /// </summary>
+        /// <param name="X">The X coordinate</param>
+        /// <param name="Y">The Y coordinate</param>
+        /// <returns>Whether it is contained</returns>
+        public bool Contains(int X, int Y)
+        {
+            return PositionLow.X <= X && PositionLow.Y <= Y && PositionHigh.X >= X && PositionHigh.Y >= Y;
+        }
+
         public Square()
         {
         }

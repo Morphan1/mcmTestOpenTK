@@ -197,8 +197,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Draw the current screen
             Screen.Draw2D();
 
-            // Render console
-            UIConsole.Draw();
+            if (Screen.Mode >= ScreenMode.MainMenu)
+            {
+                // Render console
+                UIConsole.Draw();
+            }
         }
 
         /// <summary>
@@ -206,9 +209,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static void Standard3D()
         {
-            // Temporary for testing
-            Shader.ColorMultShader.Bind();
-
             // Draw the current screen
             Screen.Draw3D();
         }

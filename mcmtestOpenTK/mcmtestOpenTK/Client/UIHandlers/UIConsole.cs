@@ -157,7 +157,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     i++;
                     continue;
                 }
-                if (FontSet.MeasureFancyText(text.Substring(linestart, i - linestart), ConsoleText) > MaxWidth)
+                if (FontSet.MeasureFancyText(text.Substring(linestart, i - linestart), ConsoleText.set) > MaxWidth)
                 {
                     i -= 1;
                     for (int x = i; x > 0 && x > linestart + 5; x--)
@@ -450,7 +450,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // Cursor
                 if (keymark_add)
                 {
-                    float XAdd = FontSet.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing) - 1;
+                    float XAdd = FontSet.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing.set) - 1;
                     if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
                         && TextStyle.IsColorSymbol(Typing.Text[TypingCursor + 1]))
                     {

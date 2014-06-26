@@ -128,6 +128,7 @@
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GlobalHandler\AbstractScreen.cs" />
+    <Compile Include="Client\GlobalHandler\Screen_Login.cs" />
     <Compile Include="Client\GlobalHandler\Screen_Loading.cs" />
     <Compile Include="Client\GlobalHandler\Screen_MainMenu.cs" />
     <Compile Include="Client\GlobalHandler\Screen_Game.cs" />
@@ -142,6 +143,10 @@
     <Compile Include="Client\Networking\PacketsIn\TimePacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsOut\MovementPacketOut.cs" />
+    <Compile Include="Client\UIHandlers\Menus\AbstractMenuItem.cs" />
+    <Compile Include="Client\UIHandlers\Menus\Login\LoginButton.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MenuButton.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MenuSystem.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />

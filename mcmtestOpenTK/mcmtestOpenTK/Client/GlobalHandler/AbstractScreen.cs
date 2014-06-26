@@ -28,11 +28,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
     public enum ScreenMode
     {
         Logos = 1,
-        MainMenu = 2,
+        Login = 2,
+        MainMenu = 3,
         // Menus
-        Loading = 3,
-        Game = 4,
+        Loading = 4,
+        Game = 5,
         // In-game options
-        MAX = 5,
+        MAX = 6,
     }
 }

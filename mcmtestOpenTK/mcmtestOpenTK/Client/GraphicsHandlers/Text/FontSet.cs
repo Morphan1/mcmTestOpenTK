@@ -487,15 +487,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// Note: Do not include newlines!
         /// </summary>
         /// <param name="line">The text to measure</param>
-        /// <param name="text">The PieceOfText to get fonts from</param>
+        /// <param name="set">The FontSet to get fonts from</param>
         /// <returns>the X-width of the text</returns>
-        public static float MeasureFancyText(string line, PieceOfText text)
+        public static float MeasureFancyText(string line, FontSet set)
         {
             bool bold = false;
             bool italic = false;
             bool sub = false;
             float MeasWidth = 0;
-            GLFont font = text.set.font;
+            GLFont font = set.font;
             int start = 0;
             line = line.Replace("^q", "\"");
             for (int x = 0; x < line.Length; x++)
@@ -514,26 +514,26 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         switch (line[x])
                         {
                             case 'r':
-                                font = text.set.font;
+                                font = set.font;
                                 bold = false;
                                 sub = false;
                                 italic = false;
                                 break;
                             case 'S':
                             case 'l':
-                                font = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
-                                    italic ? text.set.font_italichalf : text.set.font_half;
+                                font = bold && italic ? set.font_bolditalichalf : bold ? set.font_boldhalf :
+                                    italic ? set.font_italichalf : set.font_half;
                                 sub = true;
                                 break;
                             case 'i':
                                 italic = true;
-                                font = (sub) ? (bold ? text.set.font_bolditalichalf : text.set.font_italichalf) :
-                                    (bold ? text.set.font_bolditalic : text.set.font_italic);
+                                font = (sub) ? (bold ? set.font_bolditalichalf : set.font_italichalf) :
+                                    (bold ? set.font_bolditalic : set.font_italic);
                                 break;
                             case 'b':
                                 bold = true;
-                                font = (sub) ? (italic ? text.set.font_bolditalichalf : text.set.font_boldhalf) :
-                                    (italic ? text.set.font_bolditalic : text.set.font_bold);
+                                font = (sub) ? (italic ? set.font_bolditalichalf : set.font_boldhalf) :
+                                    (italic ? set.font_bolditalic : set.font_bold);
                                 break;
                             default:
                                 break;

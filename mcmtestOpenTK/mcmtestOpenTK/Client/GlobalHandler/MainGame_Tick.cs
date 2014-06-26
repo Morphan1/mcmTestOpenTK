@@ -61,8 +61,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     Exit();
                 }
 
-                // Update console
-                UIConsole.Tick();
+                if (Screen.Mode >= ScreenMode.MainMenu)
+                {
+                    // Update console
+                    UIConsole.Tick();
+                }
 
                 // Update audio
                 Sound.RecalculateChannels();

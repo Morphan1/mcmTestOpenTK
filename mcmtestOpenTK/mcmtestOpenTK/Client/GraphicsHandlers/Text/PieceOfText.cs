@@ -21,12 +21,19 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="pos">X/Y screen coordinates</param>
         /// <param name="fnt">The font to use... leave out to specify the global default font</param>
         /// <param name="fncy">Whether to apply fancy text rendering to this text</param>
-        public PieceOfText(string txt, Point pos, GLFont fnt = null, bool fncy = true)
+        public PieceOfText(string txt, Point pos, FontSet fnt = null, bool fncy = true)
         {
             Text = txt;
             Position = pos;
             fancy = fncy;
-            set = FontSet.Standard;
+            if (fnt == null)
+            {
+                set = FontSet.Standard;
+            }
+            else
+            {
+                set = fnt;
+            }
         }
     }
 }

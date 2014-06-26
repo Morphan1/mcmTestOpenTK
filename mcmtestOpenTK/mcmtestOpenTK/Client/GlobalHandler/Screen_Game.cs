@@ -16,8 +16,8 @@ using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking;
-
-
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -83,6 +83,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void Draw3D()
         {
+            // Correct clear color in case 3D isn't rendered blockingly
+            GL.ClearColor(new Color4(0, 0, 0, 255));
+
             // Draw everything in the world
             MainGame.DrawWorld();
         }

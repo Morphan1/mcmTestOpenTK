@@ -41,8 +41,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             if (LogoTimer <= 0)
             {
-                MainGame.SetScreen(ScreenMode.MainMenu);
+                MainGame.SetScreen(ScreenMode.Login);
             }
+            KeyHandler.Clear();
         }
 
         public override void Draw2D()
