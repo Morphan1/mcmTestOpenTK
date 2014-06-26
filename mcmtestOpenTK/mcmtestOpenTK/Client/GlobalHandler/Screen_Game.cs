@@ -27,6 +27,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
+        public override void SwitchTo()
+        {
+        }
+
         public override void Init()
         {
             // TEMPORARY?

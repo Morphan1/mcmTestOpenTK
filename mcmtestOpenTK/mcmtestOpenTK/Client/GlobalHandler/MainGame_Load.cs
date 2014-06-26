@@ -170,6 +170,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.Output(OutputType.INIT, "Prepare screen " + mode);
                 screen.Init();
             }
+            screen.SwitchTo();
             Screen = screen;
         }
     }

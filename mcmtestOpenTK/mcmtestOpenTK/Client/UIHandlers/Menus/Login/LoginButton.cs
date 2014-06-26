@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.Networking.OneOffs;
 
 namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
 {
@@ -16,9 +17,19 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
         {
         }
 
-        public override void LeftClick()
+        public override void LeftClick(int x, int y)
         {
-            MainGame.SetScreen(ScreenMode.MainMenu);
+            Screen_Login loginscr = (Screen_Login)MainGame.Screens[(int)ScreenMode.Login];
+            if (loginscr.UsernameBox.TypingText.Length < 6 || loginscr.PasswordBox.TypingText.Length < 4)
+            {
+                Menus.ShowNotice("You must enter your username and password!");
+            }
+            else
+            {
+                GlobalLoginRequest.RequestLogin(true, loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText);
+                Menus.ShowNotice("Logging in...");
+            }
+            // MainGame.SetScreen(ScreenMode.MainMenu);
         }
     }
 }

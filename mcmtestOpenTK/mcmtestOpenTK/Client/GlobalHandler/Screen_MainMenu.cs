@@ -14,6 +14,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
+        public override void SwitchTo()
+        {
+            // TODO: Clicky noises!
+        }
+
         public override void Init()
         {
             Initted = true;

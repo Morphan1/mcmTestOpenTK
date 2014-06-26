@@ -9,6 +9,7 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using System.IO;
 using System.Diagnostics;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

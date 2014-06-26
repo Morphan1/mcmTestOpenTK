@@ -80,9 +80,10 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                     {
                         string[] errorsplit = Error.Split(new char[] { ':' }, 2);
                         string[] subdata = errorsplit[1].Split(new char[] { '/' }, 2);
-                        UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " +
-                            LanguageHandler.GetMessage("login.refused." + subdata[0],
-                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ? subdata[1] : "") }));
+                        string mes = LanguageHandler.GetMessage("login.refused." + subdata[0],
+                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ? subdata[1] : "") });
+                        UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " + mes);
+                        Fail(mes);
                         MainGame.Username = Username;
                         MainGame.Password = "";
                         MainGame.Session = "";
@@ -96,6 +97,7 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                             UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
                                 LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo,
                                 new List<Variable> { new Variable("username", Username) }));
+                            Pass();
                         }
                         MainGame.Username = subdata[0];
                         MainGame.Password = Password;
@@ -105,6 +107,7 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                     else
                     {
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login failed with message: " + TextStyle.Color_Separate + Error);
+                        Fail(Error);
                         MainGame.Username = Username;
                         MainGame.Password = "";
                         MainGame.Session = "";
@@ -112,6 +115,21 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                     ready = true;
                     return;
                 }
+            }
+        }
+
+        void Fail(string message)
+        {
+            if (MainGame.Screen.Mode == ScreenMode.Login)
+            {
+                ((Screen_Login)MainGame.Screen).Menus.ShowNotice("Failed to log in:\n" + message);
+            }
+        }
+        void Pass()
+        {
+            if (MainGame.Screen.Mode == ScreenMode.Login)
+            {
+                MainGame.SetScreen(ScreenMode.MainMenu);
             }
         }
     }

@@ -147,6 +147,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// </summary>
         public static AbstractScreen Screen;
 
-        static AbstractScreen[] Screens;
+        /// <summary>
+        /// All loaded screens.
+        /// </summary>
+        public static AbstractScreen[] Screens;
     }
 }

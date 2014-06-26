@@ -144,6 +144,12 @@
     <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsOut\MovementPacketOut.cs" />
     <Compile Include="Client\UIHandlers\Menus\AbstractMenuItem.cs" />
+    <Compile Include="Client\UIHandlers\Menus\Login\LoginBox.cs" />
+    <Compile Include="Client\UIHandlers\Menus\Login\PasswordBox.cs" />
+    <Compile Include="Client\UIHandlers\Menus\NoticeOKButton.cs" />
+    <Compile Include="Client\UIHandlers\Menus\Login\PlayOfflineButton.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MenuLabel.cs" />
+    <Compile Include="Client\UIHandlers\Menus\TextBox.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\LoginButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuSystem.cs" />

@@ -10,8 +10,9 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Client.CommandHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.Client.GlobalHandler
+namespace mcmtestOpenTK.Client.UIHandlers
 {
     public class KeyHandler
     {
@@ -81,51 +82,50 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         }
 
         /// <summary>
-        /// All text that was written since the information was last retrieved.
+        /// Gets all text that was written since the information was last retrieved.
         /// </summary>
-        public static string KeyboardString = "";
+        public static KeyHandlerState GetKBState()
+        {
+            KeyHandlerState KB = new KeyHandlerState();
+            lock (Locker)
+            {
+                KB.KeyboardString = _KeyboardString;
+                _KeyboardString = "";
+                KB.InitBS = _InitBS;
+                _InitBS = 0;
+                KB.ControlDown = _ControlDown;
+                KB.CopyPressed = _CopyPressed;
+                _CopyPressed = false;
+                KB.EndDelete = _EndDelete;
+                _EndDelete = 0;
+                KB.LeftRights = _LeftRights;
+                _LeftRights = 0;
+                KB.Pages = _Pages;
+                _Pages = 0;
+                KB.Scrolls = _Scrolls;
+                _Scrolls = 0;
+                KB.TogglerPressed = _TogglerPressed;
+                _TogglerPressed = false;
+            }
+            return KB;
+        }
+
         static string _KeyboardString = "";
 
-        /// <summary>
-        /// How many backspaces were pressed, excluding ones that modified the KeyboardString.
-        /// </summary>
-        public static int InitBS = 0;
         static int _InitBS = 0;
 
-        /// <summary>
-        /// Whether the control key is currently down, primarily for internal purposes.
-        /// </summary>
-        public static bool ControlDown = false;
+        static int _EndDelete = 0;
+
         static bool _ControlDown = false;
 
-        /// <summary>
-        /// Whether COPY (CTRL+C) was pressed.
-        /// </summary>
-        public static bool CopyPressed = false;
         static bool _CopyPressed = false;
 
-        /// <summary>
-        /// Whether the console toggling key (~) was pressed.
-        /// </summary>
-        public static bool TogglerPressed = false;
         static bool _TogglerPressed = false;
 
-        /// <summary>
-        /// The number of times PageUp was pressed minus the number of times PageDown was pressed.
-        /// </summary>
-        public static int Pages = 0;
         static int _Pages = 0;
 
-        /// <summary>
-        /// The number of times the UP arrow was pressed minus the number of times the DOWN arrow was pressed.
-        /// </summary>
-        public static int Scrolls = 0;
         static int _Scrolls = 0;
 
-        /// <summary>
-        /// The number of times the RIGHT arrow was pressed minus the number of times the LEFT arrow was pressed.
-        /// </summary>
-        public static int LeftRights = 0;
         static int _LeftRights = 0;
 
         static bool _BindsValid = false;
@@ -171,7 +171,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                         _KeyboardString += "\n";
                         break;
                     case Key.Tab:
-                        _KeyboardString += "    ";
+                        _KeyboardString += "\t";
                         break;
                     case Key.PageUp:
                         _Pages++;
@@ -216,6 +216,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                         {
                             _KeyboardString = _KeyboardString.Substring(0, _KeyboardString.Length - 1);
                         }
+                        break;
+                    case Key.Delete:
+                        _EndDelete++;
                         break;
                     case Key.V:
                         if (_ControlDown)
@@ -269,30 +272,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
         }
 
-        /// <summary>
-        /// Clears all recorded KeyboardString information.
-        /// </summary>
-        public static void Clear()
-        {
-            KeyboardString = "";
-            InitBS = 0;
-            CopyPressed = false;
-            TogglerPressed = false;
-            Pages = 0;
-            Scrolls = 0;
-            LeftRights = 0;
-            lock (Locker)
-            {
-                _KeyboardString = "";
-                _InitBS = 0;
-                _CopyPressed = false;
-                _TogglerPressed = false;
-                _Pages = 0;
-                _Scrolls = 0;
-                _LeftRights = 0;
-            }
-        }
-
         public static KeyboardState CurrentKeyboard;
         public static KeyboardState PreviousKeyboard;
 
@@ -305,14 +284,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             CurrentKeyboard = Keyboard.GetState();
             lock (Locker)
             {
-                KeyboardString = _KeyboardString;
-                InitBS = _InitBS;
-                ControlDown = _ControlDown;
-                CopyPressed = _CopyPressed;
-                TogglerPressed = _TogglerPressed;
-                Pages = _Pages;
-                Scrolls = _Scrolls;
-                LeftRights = _LeftRights;
                 _BindsValid = IsValid();
                 while (KeyPresses.Count > 0)
                 {
@@ -469,6 +440,54 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             return null;
         }
+    }
+
+    public class KeyHandlerState
+    {
+        /// <summary>
+        /// All text that was written since the information was last retrieved.
+        /// </summary>
+        public string KeyboardString = "";
+
+        /// <summary>
+        /// How many backspaces were pressed, excluding ones that modified the KeyboardString.
+        /// </summary>
+        public int InitBS = 0;
+
+        /// <summary>
+        /// How many deletes were pressed.
+        /// </summary>
+        public int EndDelete = 0;
+
+        /// <summary>
+        /// Whether the control key is currently down, primarily for internal purposes.
+        /// </summary>
+        public bool ControlDown = false;
+
+        /// <summary>
+        /// Whether COPY (CTRL+C) was pressed.
+        /// </summary>
+        public bool CopyPressed = false;
+
+        /// <summary>
+        /// Whether the console toggling key (~) was pressed.
+        /// </summary>
+        public bool TogglerPressed = false;
+
+        /// <summary>
+        /// The number of times PageUp was pressed minus the number of times PageDown was pressed.
+        /// </summary>
+        public int Pages = 0;
+
+        /// <summary>
+        /// The number of times the UP arrow was pressed minus the number of times the DOWN arrow was pressed.
+        /// </summary>
+        public int Scrolls = 0;
+
+        /// <summary>
+        /// The number of times the RIGHT arrow was pressed minus the number of times the LEFT arrow was pressed.
+        /// </summary>
+        public int LeftRights = 0;
     }
 
     public enum KeyBind: int

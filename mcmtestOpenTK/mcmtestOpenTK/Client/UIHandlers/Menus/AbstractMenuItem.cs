@@ -9,6 +9,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
     public abstract class AbstractMenuItem
     {
         /// <summary>
+        /// The menu system that holds this item.
+        /// </summary>
+        public MenuSystem Menus;
+
+        /// <summary>
         /// Where the menu item is drawn at, and clicks are processed at.
         /// </summary>
         public Square RenderSquare;
@@ -35,13 +40,20 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
 
         /// <summary>
         /// Called when the menu item is left-clicked.
+        /// <param name="X">The relative X coordinate</param>
+        /// <param name="Y">The relative Y coordinate</param>
         /// </summary>
-        public abstract void LeftClick();
+        public abstract void LeftClick(int X, int Y);
 
         /// <summary>
         /// Called when there is a left click outside the menu item.
         /// </summary>
         public abstract void ClickOutside();
+
+        /// <summary>
+        /// Called every tick.
+        /// </summary>
+        public abstract void Tick();
 
         /// <summary>
         /// Draw the menu item.

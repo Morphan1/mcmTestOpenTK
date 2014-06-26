@@ -34,14 +34,8 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
             RenderSquare.texture = Hovered ? HoverTexture : StandardTexture;
             RenderSquare.Draw();
-            if (Hovered)
-            {
-                FontSet.DrawColoredText(Text, int.MaxValue, 1, true);
-            }
-            else
-            {
-                FontSet.DrawColoredText(Text);
-            }
+            Text.Position = new Point((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y);
+            FontSet.DrawColoredText(Text, int.MaxValue, 1, Hovered);
         }
 
         public override void RightClick()
@@ -53,6 +47,10 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         }
 
         public override void Unhover()
+        {
+        }
+
+        public override void Tick()
         {
         }
     }

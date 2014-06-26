@@ -5,6 +5,7 @@ using System.Text;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
+using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -17,6 +18,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public override void Init()
         {
             Initted = true;
+        }
+
+        public override void SwitchTo()
+        {
         }
 
         double LogoTimer = 1f;
@@ -43,7 +48,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 MainGame.SetScreen(ScreenMode.Login);
             }
-            KeyHandler.Clear();
+            KeyHandler.GetKBState();
         }
 
         public override void Draw2D()

@@ -482,6 +482,21 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             }
         }
 
+        public static Location MeasureFancyLinesOfText(string text, FontSet set)
+        {
+            string[] data = text.Split('\n');
+            float len = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                float newlen = MeasureFancyText(data[i], set);
+                if (newlen > len)
+                {
+                    len = newlen;
+                }
+            }
+            return new Location(len, data.Length * set.font.Height, 0);
+        }
+
         /// <summary>
         /// Measures fancy notated text strings.
         /// Note: Do not include newlines!

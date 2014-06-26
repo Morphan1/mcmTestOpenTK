@@ -208,8 +208,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// </summary>
         public static void Tick()
         {
+            KeyHandlerState KeyState = KeyHandler.GetKBState();
             // Update open/close state
-            if (KeyHandler.TogglerPressed)
+            if (KeyState.TogglerPressed)
             {
                 Open = !Open;
                 if (Open)
@@ -241,14 +242,14 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     keymark_delta = 0f;
                 }
                 // handle backspaces
-                if (KeyHandler.InitBS > 0)
+                if (KeyState.InitBS > 0)
                 {
                     string partone = TypingCursor > 0 ? TypingText.Substring(0, TypingCursor) : "";
                     string parttwo = TypingCursor < TypingText.Length ? TypingText.Substring(TypingCursor) : "";
-                    if (partone.Length > KeyHandler.InitBS)
+                    if (partone.Length > KeyState.InitBS)
                     {
-                        partone = partone.Substring(0, partone.Length - KeyHandler.InitBS);
-                        TypingCursor -= KeyHandler.InitBS;
+                        partone = partone.Substring(0, partone.Length - KeyState.InitBS);
+                        TypingCursor -= KeyState.InitBS;
                     }
                     else
                     {
@@ -258,25 +259,26 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     TypingText = partone + parttwo;
                 }
                 // handle input text
-                if (KeyHandler.KeyboardString.Length > 0)
+                KeyState.KeyboardString = KeyState.KeyboardString.Replace("\t", "    ");
+                if (KeyState.KeyboardString.Length > 0)
                 {
                     if (TypingText.Length == TypingCursor)
                     {
-                        TypingText += Utilities.CleanStringInput(KeyHandler.KeyboardString);
+                        TypingText += Utilities.CleanStringInput(KeyState.KeyboardString);
                     }
                     else
                     {
-                        if (KeyHandler.KeyboardString.Contains('\n'))
+                        if (KeyState.KeyboardString.Contains('\n'))
                         {
-                            string[] lines = KeyHandler.KeyboardString.Split(new char[] { '\n' }, 2);
+                            string[] lines = KeyState.KeyboardString.Split(new char[] { '\n' }, 2);
                             TypingText = TypingText.Insert(TypingCursor, Utilities.CleanStringInput(lines[0])) + "\n" + Utilities.CleanStringInput(lines[1]);
                         }
                         else
                         {
-                            TypingText = TypingText.Insert(TypingCursor, Utilities.CleanStringInput(KeyHandler.KeyboardString));
+                            TypingText = TypingText.Insert(TypingCursor, Utilities.CleanStringInput(KeyState.KeyboardString));
                         }
                     }
-                    TypingCursor += KeyHandler.KeyboardString.Length;
+                    TypingCursor += KeyState.KeyboardString.Length;
                     while (TypingText.Contains('\n'))
                     {
                         int index = TypingText.IndexOf('\n');
@@ -302,7 +304,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
                 // handle copying
-                if (KeyHandler.CopyPressed)
+                if (KeyState.CopyPressed)
                 {
                     if (TypingText.Length > 0)
                     {
@@ -310,9 +312,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
                 // handle cursor left/right movement
-                if (KeyHandler.LeftRights != 0)
+                if (KeyState.LeftRights != 0)
                 {
-                    TypingCursor += KeyHandler.LeftRights;
+                    TypingCursor += KeyState.LeftRights;
                     if (TypingCursor < 0)
                     {
                         TypingCursor = 0;
@@ -321,11 +323,13 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     {
                         TypingCursor = TypingText.Length;
                     }
+                    keymark_add = true;
+                    keymark_delta = 0f;
                 }
                 // handle scrolling up/down in the console
-                if (KeyHandler.Pages != 0)
+                if (KeyState.Pages != 0)
                 {
-                    ScrolledLine -= (int)(KeyHandler.Pages * ((float)MainGame.ScreenHeight / 2 / ConsoleText.set.font.Height - 3));
+                    ScrolledLine -= (int)(KeyState.Pages * ((float)MainGame.ScreenHeight / 2 / ConsoleText.set.font.Height - 3));
                 }
                 ScrolledLine -= MouseHandler.MouseScroll;
                 if (ScrolledLine > 0)
@@ -337,9 +341,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     ScrolledLine = -Lines + 5;
                 }
                 // handle scrolling through commands
-                if (KeyHandler.Scrolls != 0)
+                if (KeyState.Scrolls != 0)
                 {
-                    RecentSpot -= KeyHandler.Scrolls;
+                    RecentSpot -= KeyState.Scrolls;
                     if (RecentSpot < 0)
                     {
                         RecentSpot = 0;
@@ -371,7 +375,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     }
                 }
             }
-            KeyHandler.Clear();
         }
 
         /// <summary>

@@ -19,6 +19,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Initted = true;
         }
 
+        public override void SwitchTo()
+        {
+        }
+
         float green = 0;
 
         float greenmod = 1;
