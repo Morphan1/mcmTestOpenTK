@@ -468,7 +468,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             else
             {
                 ConsoleText.Position.Y += (int)(ConsoleText.set.font.Height * (2 + extralines));
-                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
+                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3), 1, true);
                 ConsoleText.Position.Y -= (int)(ConsoleText.set.font.Height * (2 + extralines));
             }
         }

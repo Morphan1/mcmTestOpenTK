@@ -155,8 +155,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="text">The textual information to render</param>
         /// <param name="MaxY">The maximum Y location to render text at.</param>
         /// <param name="transmod">Transparency modifier (EG, 0.5 = half opacity) (0.0 - 1.0)</param>
-        /// <param name="lockshadow">Whether to always have a drop-shadow</param>
-        public static void DrawColoredText(PieceOfText text, int MaxY = int.MaxValue, float transmod = 1, bool lockshadow = false)
+        /// <param name="extrashadow">Whether to always have a mini drop-shadow</param>
+        public static void DrawColoredText(PieceOfText text, int MaxY = int.MaxValue, float transmod = 1, bool extrashadow = false)
         {
             if (!text.fancy)
             {
@@ -185,7 +185,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             bool jello = false;
             bool obfu = false;
             bool random = false;
-            bool shadow = lockshadow;
+            bool shadow = false;
             int otrans = (int)(255 * transmod);
             int etrans = (int)(255 * transmod);
             int htrans = (int)(255 * transmod);
@@ -227,6 +227,13 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                             if (overline)
                             {
                                 DrawRectangle(X, Y + 2, width, 1, ColorFor(ocolor, otrans));
+                            }
+                            if (extrashadow)
+                            {
+                                foreach (Point point in ShadowPoints)
+                                {
+                                    RenderBaseText(X + point.X, Y + point.Y, drawme, font, 0, trans / 2, flip);
+                                }
                             }
                             if (shadow)
                             {
@@ -394,7 +401,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         pseudo = false;
                                         jello = false;
                                         obfu = false;
-                                        shadow = lockshadow;
+                                        shadow = false;
                                         bold = false;
                                         italic = false;
                                         underline = false;
