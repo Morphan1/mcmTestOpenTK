@@ -126,6 +126,10 @@
     <Compile Include="Client\CommandHandlers\UICmds\UnbindCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
+    <Compile Include="Client\GlobalHandler\AbstractScreen.cs" />
+    <Compile Include="Client\GlobalHandler\Screen_MainMenu.cs" />
+    <Compile Include="Client\GlobalHandler\Screen_Game.cs" />
+    <Compile Include="Client\GlobalHandler\Screen_Logos.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
     <Compile Include="Client\Networking\PacketsIn\PlaysoundPacketIn.cs" />

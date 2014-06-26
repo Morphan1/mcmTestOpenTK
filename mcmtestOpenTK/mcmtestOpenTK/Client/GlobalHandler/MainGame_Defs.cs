@@ -101,11 +101,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static Location Forward = Location.UnitX;
 
         /// <summary>
-        /// The crosshair's render square.
-        /// </summary>
-        public static Square Crosshair = new Square();
-
-        /// <summary>
         /// Whether this tick is the first time graphics has been called since reload.
         /// </summary>
         public static bool IsFirstGraphicsDraw = true;
@@ -124,12 +119,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// Whether the client has been spawned into a world.
         /// </summary>
         public static bool Spawned = false;
-
-        // Temporary, for testing
-        public static int X = 0;
-        public static int Y = 0;
-        public static PieceOfText debug;
-        public static float Ping = 0f;
 
         // Account Data
 
@@ -152,5 +141,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// The current global time.
         /// </summary>
         public static double GlobalTickTime;
+
+        /// <summary>
+        /// What screen the game is currently on.
+        /// </summary>
+        public static AbstractScreen Screen;
+
+        static AbstractScreen[] Screens;
     }
 }

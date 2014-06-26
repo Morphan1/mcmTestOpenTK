@@ -34,8 +34,8 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 return;
             }
             NetworkBase.IsActive = true;
-            MainGame.Ping = MainGame.pingbump;
-            MainGame.pingbump = 0;
+            NetworkBase.Ping = NetworkBase.pingbump;
+            NetworkBase.pingbump = 0;
             NetworkBase.Send(new PingPacketOut(ID));
         }
     }

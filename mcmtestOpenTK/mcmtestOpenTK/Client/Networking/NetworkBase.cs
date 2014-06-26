@@ -40,6 +40,12 @@ namespace mcmtestOpenTK.Client.Networking
         /// </summary>
         public static bool WaitingToIdentify = false;
 
+        public static float pingbump = 0;
+        /// <summary>
+        /// The current connection ping time (milliseconds).
+        /// </summary>
+        public static float Ping = 0f;
+
         /// <summary>
         /// Prepares networking.
         /// </summary>
@@ -97,6 +103,11 @@ namespace mcmtestOpenTK.Client.Networking
             {
                 Connected = false;
                 return;
+            }
+            pingbump += MainGame.DeltaF;
+            if (pingbump > Ping)
+            {
+                Ping = pingbump;
             }
             if (Sock.Connected && !Connected)
             {

@@ -23,7 +23,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
     {
         public static int cticknumber = 0;
         static double ctickdelta = 0;
-        public static float pingbump = 0;
 
         /// <summary>
         /// Called every update tick - should handle all logic!
@@ -48,9 +47,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
                 GlobalTickTime += Delta;
 
-                // Calculate ping
-                pingbump += DeltaF;
-
                 // Record current input
                 MouseHandler.Tick();
                 KeyHandler.Tick();
@@ -73,30 +69,19 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
                 // Update running commands
                 ClientCommands.Tick();
-
-                // Update gameplay
-                X = PrimaryGameWindow.Mouse.X;
-                Y = PrimaryGameWindow.Mouse.Y;
-
-                // Update player
-                Player.player.Update(DeltaF, false);
-
-                // Update world
-                TickWorld();
-
-                // Debug stuff, always near end
-                debug.Text = TextStyle.Color_Readable +
-                    "\ncFPS: " + cFPS +
-                    "\ngFPS: " + gFPS +
-                    "\nPosition: " + Player.player.Position.ToString() +
-                    "\nDirection: " + Player.player.Direction.ToString() +
-                    "\nVelocity: " + Player.player.Velocity.ToString() +
-                    "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
-                    "\nPing: " + (int)(Ping * 1000);
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError("MainGame/Tick", ex);
+                ErrorHandler.HandleError("MainGame/Tick-General", ex);
+            }
+            try
+            {
+                // Run the current screen
+                Screen.Tick();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError("MainGame/Tick-Screen", ex);
             }
         }
     }

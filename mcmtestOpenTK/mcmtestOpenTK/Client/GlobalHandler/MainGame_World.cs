@@ -130,7 +130,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Tickers = new List<Entity>();
         }
 
-        static void TickWorld()
+        /// <summary>
+        /// Ticks the entire world.
+        /// </summary>
+        public static void TickWorld()
         {
             // Update all entities
             for (int i = 0; i < Tickers.Count; i++)
@@ -143,7 +146,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
         }
 
-        static void DrawWorld()
+        /// <summary>
+        /// Draws the entire world.
+        /// </summary>
+        public static void DrawWorld()
         {
             skybox.Draw();
             Shader.Generic.Bind();

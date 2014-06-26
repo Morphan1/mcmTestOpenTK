@@ -74,7 +74,13 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // End 3D
                 end3D();
                 GL.PopMatrix();
-
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError("MainGame/Render-3D", ex);
+            }
+            try
+            {
                 // Set to begin 2D rendering
                 GL.PushMatrix();
                 Setup2D();
@@ -91,7 +97,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError("MainGame/Render-1", ex);
+                ErrorHandler.HandleError("MainGame/Render-2D", ex);
             }
             try
             {
@@ -100,7 +106,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError("MainGame/Render-2", ex);
+                // Shouldn't happen, but we're keeping everything in TRY's, and need this separate from the main rendering.
+                ErrorHandler.HandleError("MainGame/Render-Swap", ex);
             }
         }
 
@@ -165,18 +172,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Hue += MainGame.GraphicsDeltaF * HueMult;
             }
             GL.Color4(Util.HSVtoRGB(Hue, 1, 1, 1));
-            /*
-            GL.Enable(EnableCap.ColorMaterial);
-            GL.LightModel(LightModelParameter.LightModelAmbient, new[] { 0.2f, 0.2f, 0.2f, 1f });
-            GL.LightModel(LightModelParameter.LightModelLocalViewer, 1);
-            GL.Enable(EnableCap.Lighting);
-            GL.Light(LightName.Light0, LightParameter.Diffuse, Color.Blue);
-            GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
-            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, Color.White);
-            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Emission, Color.Green);
-            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, Color.Blue);
-            GL.ShadeModel(ShadingModel.Smooth);
-             * */
         }
 
         public static float Hue = 0;
@@ -191,17 +186,16 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.CullFace);
         }
-
+        
         /// <summary>
         /// Called every render frame to handle all 2D graphics.
         /// </summary>
         public static void Standard2D()
         {
             GL.Color4(Color.White);
-            Crosshair.Draw();
 
-            // Render debug text
-            GLFont.DrawColoredText(debug);
+            // Draw the current screen
+            Screen.Draw2D();
 
             // Render console
             UIConsole.Draw();
@@ -215,8 +209,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Temporary for testing
             Shader.ColorMultShader.Bind();
 
-            // Draw everything in the world
-            DrawWorld();
+            // Draw the current screen
+            Screen.Draw3D();
         }
 
         /// <summary>

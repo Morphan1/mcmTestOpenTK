@@ -35,6 +35,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GlobalTickTime = 0;
                 ClientOutputter cout = new ClientOutputter();
                 cout.Initializing = true;
+                // Build screen list
+                Screens = new AbstractScreen[(int)ScreenMode.MAX];
+                Screens[(int)ScreenMode.Logos] = new Screen_Logos();
+                Screens[(int)ScreenMode.MainMenu] = new Screen_MainMenu();
+                Screens[(int)ScreenMode.Game] = new Screen_Game();
                 // Prepare the CVar system
                 SysConsole.Output(OutputType.INIT, "Preparing CVars...");
                 ClientCVar.Init(cout);
@@ -70,8 +75,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GL.ClearColor(Color.Black);
                 // Textures are always enabled and in-use
                 GL.Enable(EnableCap.Texture2D);
-                // TEMPORARY?
-                debug = new PieceOfText("", new Point(5, ScreenHeight / 5 * 3));
                 // Prepare the console
                 SysConsole.Output(OutputType.INIT, "Preparing game console...");
                 UIConsole.InitConsole();
@@ -85,7 +88,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.Output(OutputType.INIT, "Preparing gameplay system...");
                 Player.player = new Player();
                 LoadWorld();
-                Crosshair.texture = Texture.GetTexture("common/crosshair");
+                SysConsole.Output(OutputType.INIT, "Preparing start screen...");
+                SetScreen(ScreenMode.Logos);
                 // Everything's loaded now... scrap the system console
                 SysConsole.Output(OutputType.INIT, "System prepared, hiding console and playing the game!");
                 SysConsole.HideConsole();
@@ -152,11 +156,19 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SysConsole.Output(OutputType.INIT, "Disabling FULLSCREEN");
                 PrimaryGameWindow.WindowState = WindowState.Normal;
             }
-            // Correct the crosshair
-            Crosshair.PositionLow = new Location(ScreenWidth / 2 - 16, ScreenHeight / 2 - 16, 0);
-            Crosshair.PositionHigh = new Location(ScreenWidth / 2 + 16, ScreenHeight / 2 + 16, 0);
             // Correct the viewport (screen size, fullscreen, etc. might affect)
             GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
+        }
+
+        public static void SetScreen(ScreenMode mode)
+        {
+            AbstractScreen screen = Screens[(int)mode];
+            if (!screen.Initted)
+            {
+                SysConsole.Output(OutputType.INIT, "Prepare screen " + mode);
+                screen.Init();
+            }
+            Screen = screen;
         }
     }
 }
