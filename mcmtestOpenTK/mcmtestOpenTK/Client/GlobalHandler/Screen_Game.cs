@@ -71,8 +71,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public override void Draw2D()
         {
             // Correct the crosshair
-            Crosshair.PositionLow = new Location(MainGame.ScreenWidth / 2 - 16, MainGame.ScreenHeight / 2 - 16, 0);
-            Crosshair.PositionHigh = new Location(MainGame.ScreenWidth / 2 + 16, MainGame.ScreenHeight / 2 + 16, 0);
+            float chsize = 16 * ClientCVar.r_crosshairscale.ValueF;
+            Crosshair.PositionLow = new Location(MainGame.ScreenWidth / 2 - chsize, MainGame.ScreenHeight / 2 - chsize, 0);
+            Crosshair.PositionHigh = new Location(MainGame.ScreenWidth / 2 + chsize, MainGame.ScreenHeight / 2 + chsize, 0);
             // Draw crosshair
             Crosshair.Draw();
 

@@ -23,7 +23,8 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         public static CVar t_fastrender, t_sidetextfastrender, t_allowobfu, t_allowrandom, t_allowjello, t_betteremphasis, t_bettershadow;
 
         //Graphics/Renderer CVars
-        public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson, r_showwireframe, r_render3d, r_whitewireframe;
+        public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson,
+            r_showwireframe, r_render3d, r_whitewireframe, r_crosshairscale;
 
         // System CVars
         public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
@@ -58,7 +59,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             r_showwireframe = Register("r_showwireframe", "false", CVarFlag.Boolean); // Whether to show a wireframe of the 3D world.
             r_render3d = Register("r_render3d", "true", CVarFlag.Boolean); // Whether to render the 3D world - generally combined with showwireframe.
             r_whitewireframe = Register("r_whitewireframe", "true", CVarFlag.Boolean); // Whether wireframes are rendered pitched white.
-
+            r_crosshairscale = Register("r_crosshairscale", "1", CVarFlag.Numeric); // How big the crosshair is
             // TODO: More graphics CVars
             // System CVars
             ComputerInfo CI = new ComputerInfo();

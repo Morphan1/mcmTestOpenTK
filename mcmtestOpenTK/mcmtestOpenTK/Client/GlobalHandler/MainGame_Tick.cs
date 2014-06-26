@@ -48,6 +48,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GlobalTickTime += Delta;
 
                 // Record current input
+                if (Screen.Mode != ScreenMode.Game && MouseHandler.MouseCaptured)
+                {
+                    MouseHandler.ReleaseMouse();
+                }
                 MouseHandler.Tick();
                 KeyHandler.Tick();
 
