@@ -30,15 +30,27 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             }
             else
             {
-                string target = entry.GetArgument(0);
-                CVar cvar = entry.Output.CVarSys.Get(target);
-                if (cvar == null)
+                string target = entry.GetArgument(0).ToLower();
+                List<CVar> cvars = new List<CVar>();
+                for (int i = 0; i < entry.Output.CVarSys.CVars.Count; i++)
+                {
+                    if (entry.Output.CVarSys.CVars[i].Name.StartsWith(target))
+                    {
+                        cvars.Add(entry.Output.CVarSys.CVars[i]);
+                    }
+                }
+                if (cvars.Count == 0)
                 {
                     entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(target) + "<{color.base}>' does not exist!");
                 }
                 else
                 {
-                    entry.Info("<{color.emphasis}>" + TagParser.Escape(cvar.Info()));
+                    entry.Info("Listing <{color.emphasis}>" + cvars.Count + "<{color.base}> CVars...");
+                    for (int i = 0; i < cvars.Count; i++)
+                    {
+                        CVar cvar = cvars[i];
+                        entry.Info("<{color.emphasis}>" + (i + 1).ToString() + "<{color.simple}>)<{color.emphasis}> " + TagParser.Escape(cvar.Info()));
+                    }
                 }
             }
         }

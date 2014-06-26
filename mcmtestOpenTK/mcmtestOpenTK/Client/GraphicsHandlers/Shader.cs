@@ -6,6 +6,7 @@ using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -20,6 +21,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// A generic shader with no modifications.
         /// </summary>
         public static Shader Generic;
+
+        /// <summary>
+        /// A shader that makes everything white - for wireframes.
+        /// </summary>
+        public static Shader White;
 
         /// <summary>
         /// A common shader that simplifies colors to grayscale.
@@ -65,6 +71,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             // Pregenerate a few needed shader
             Generic = CreateGeneric("generic");
             LoadedShaders.Add(Generic);
+            White = CreateWhite("white");
+            LoadedShaders.Add(White);
             ColorMultShader = CreateMultiplier("colormultiplier");
             LoadedShaders.Add(ColorMultShader);
             BlackRemoverShader = CreateBlackRemover("blackremover");
@@ -149,6 +157,20 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             string FS = "uniform sampler2D tex;void main()" +
             "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
             "gl_FragColor = color;}";
+            return CreateShader(VS, FS, name);
+        }
+
+        /// <summary>
+        /// Creates a white shader object.
+        /// </summary>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A pitch-white shader object</returns>
+        public static Shader CreateWhite(string name)
+        {
+            string VS = "void main(){gl_FrontColor = gl_Color;gl_TexCoord[0] = gl_MultiTexCoord0;gl_Position = ftransform();}";
+            string FS = "uniform sampler2D tex;void main()" +
+            "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
+            "gl_FragColor = vec4(1, 1, 1, color[3]);}";
             return CreateShader(VS, FS, name);
         }
 
@@ -274,6 +296,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public void Bind()
         {
+            if (MainGame.IsWireFrame)
+            {
+                return;
+            }
             if (Internal_Program != Bound_Program)
             {
                 GL.UseProgram(Internal_Program);

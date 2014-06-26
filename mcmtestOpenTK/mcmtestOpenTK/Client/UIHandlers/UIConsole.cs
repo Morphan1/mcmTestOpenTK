@@ -216,11 +216,13 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 {
                     mouse_was_captured = MouseHandler.MouseCaptured;
                     MouseHandler.ReleaseMouse();
-                    RecentSpot = RecentCommands.Count - 1;
+                    RecentSpot = RecentCommands.Count;
                 }
                 else
                 {
                     Typing.Text = "";
+                    TypingText = "";
+                    TypingCursor = 0;
                     if (mouse_was_captured)
                     {
                         MouseHandler.CaptureMouse();

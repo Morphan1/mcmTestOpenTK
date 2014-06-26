@@ -111,6 +111,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public static bool IsFirstGraphicsDraw = true;
 
         /// <summary>
+        /// Whether the system is currently rendering in wireframe-mode.
+        /// </summary>
+        public static bool IsWireFrame = false;
+
+        /// <summary>
         /// Whether the system is currently loading.
         /// </summary>
         public static bool Initializing = true;

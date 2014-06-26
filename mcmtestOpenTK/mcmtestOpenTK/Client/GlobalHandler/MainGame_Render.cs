@@ -50,7 +50,26 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 setup3D();
 
                 // Render all 3D graphics
-                Standard3D();
+                if (ClientCVar.r_render3d.ValueB)
+                {
+                    Standard3D();
+                }
+
+                // Render wireframes
+                if (ClientCVar.r_showwireframe.ValueB)
+                {
+                    if (ClientCVar.r_whitewireframe.ValueB)
+                    {
+                        Shader.White.Bind();
+                        IsWireFrame = true;
+                    }
+                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                    GL.Disable(EnableCap.DepthTest);
+                    Standard3D();
+                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                    GL.Enable(EnableCap.DepthTest);
+                    IsWireFrame = false;
+                }
 
                 // End 3D
                 end3D();
@@ -138,7 +157,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // Enable depth and culling
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-            GL.UseProgram(Shader.Grayscale.Internal_Program);
             Shader.ColorMultShader.Bind();
             Hue += MainGame.GraphicsDeltaF * HueMult;
             if (Hue > 1 || Hue < 0)
