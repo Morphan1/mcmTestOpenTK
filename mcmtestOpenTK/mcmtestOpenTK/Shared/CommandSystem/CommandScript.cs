@@ -168,6 +168,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public string Name;
 
+        public DebugMode Debug = DebugMode.FULL;
+
         /// <summary>
         /// All commands in the script.
         /// </summary>
@@ -200,7 +202,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <returns>The created queue</returns>
         public CommandQueue ToQueue(Commands system)
         {
-            return new CommandQueue(this, GetEntries(), system);
+            CommandQueue queue = new CommandQueue(this, GetEntries(), system);
+            queue.Debug = Debug;
+            return queue;
         }
 
         public override string ToString()

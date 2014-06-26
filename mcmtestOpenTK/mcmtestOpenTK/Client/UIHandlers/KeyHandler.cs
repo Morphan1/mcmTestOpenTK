@@ -33,7 +33,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 HardBinds[i] = new List<Key>();
             }
             Binds = new Dictionary<Key, CommandScript>();
-            Binds.Add(Key.ShiftLeft, CommandScript.SeparateCommands("bind:lshift", "capturemouse", ClientCommands.CommandSystem));
+            BindKey(Key.ShiftLeft, "capturemouse");
             HardBinds[(int)KeyBind.FORWARD].Add(Key.W);
             HardBinds[(int)KeyBind.BACK].Add(Key.S);
             HardBinds[(int)KeyBind.LEFT].Add(Key.A);
@@ -381,7 +381,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
                 if (bind != null)
                 {
-                    Binds.Add(key, CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem));
+                    CommandScript script = CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem);
+                    script.Debug = DebugMode.MINIMAL;
+                    Binds.Add(key, script);
                     string bindlow = bind.ToLower();
                     switch (bindlow)
                     {
