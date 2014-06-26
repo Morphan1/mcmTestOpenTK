@@ -49,6 +49,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool up = false;
         public bool down = false;
 
+        public const float MoveSpeed = 30;
+        public const float BaseGravity = 100;
+        public const float JumpPower = 50;
+
         /// <summary>
         /// Called to tick the default player.
         /// </summary>
@@ -90,7 +94,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 MainGame.Forward = Utilities.ForwardVector(Direction.X * Utilities.PI180, Direction.Y * Utilities.PI180);
             }
             // Keyboard based movement.
-            Location oldvel = Velocity;
             Location movement = Location.Zero;
             if (!IsCustom)
             {
@@ -147,7 +150,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement.Z -= 1;
                 }
-                Velocity = movement * 30;
+                Velocity = movement * MoveSpeed;
             }
             else
             {
@@ -165,17 +168,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
                         && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
                     {
-                        Velocity.Z = 50;
+                        Velocity.Z = JumpPower;
                     }
                 }
-                Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
-                Velocity.Z -= 100 * MyDelta;
+                Velocity = new Location(movement.X * MoveSpeed, movement.Y * MoveSpeed, Velocity.Z);
+                Velocity.Z -= BaseGravity * MyDelta;
             }
             float pZ = Position.Z;
-            Location target = Position + (oldvel + Velocity) * 0.5f * MyDelta;
+            Location target = Position + Velocity * MyDelta;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
+                // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White });
                 Velocity.Z = (Position.Z - pZ) / MyDelta;
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
@@ -229,8 +233,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Update((float)Target, true);
                     ctime = Time;
                     // Apply changes
-                    Position = pos;
-                    Velocity = vel;
+                    Position += (pos - Position)/* / 2*/;
+                    Velocity += (vel - Velocity)/* / 2*/;
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {

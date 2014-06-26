@@ -53,7 +53,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         {
             Velocity.Z -= Gravity * MyDelta;
             float pZ = Position.Z;
-            Location target = Position + (lastvel + Velocity) * 0.5f * MyDelta;
+            Location target = Position + Velocity * MyDelta;
             if (CheckCollision)
             {
                 switch (MoveType)
