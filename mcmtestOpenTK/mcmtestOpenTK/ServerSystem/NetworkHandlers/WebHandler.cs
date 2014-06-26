@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -65,17 +67,24 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             {
                 return;
             }
-            if (page.EndsWith(".html") || page.EndsWith(".php") && page.LastIndexOf('.') != 0)
+            if (!page.StartsWith("/"))
             {
-                Page = btos("Redirecting...");
-                AdditionalHeaders = "\r\nLocation: " + page.Substring(0, page.LastIndexOf('.'));
-                Status = 302;
                 return;
             }
-            if (page == "/" || page == "/index")
+            if (page.EndsWith(".html") || page.EndsWith(".php") && page.LastIndexOf('.') > 0)
+            {
+                Redirect(page.Substring(0, page.LastIndexOf('.')));
+                return;
+            }
+            if (page == "/index")
+            {
+                Redirect("/");
+                return;
+            }
+            if (page == "/")
             {
                 // TODO
-                Page = btos("TODO");
+                Page = btos("SERVER: " + HTMLEscape(ServerCVar.v_name.Value) + "\n<br>TODO: MORE INFO");
                 Status = 200;
                 return;
             }
@@ -85,6 +94,18 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             }
             Status = 404;
             Page = btos("TODO: 404 page!");
+        }
+
+        string HTMLEscape(string input)
+        {
+            return input.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+        }
+
+        void Redirect(string page)
+        {
+            Page = btos("Redirecting...");
+            AdditionalHeaders = "\r\nLocation: " + page;
+            Status = 302;
         }
 
         byte[] btos(string input)

@@ -13,7 +13,7 @@ using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommandHandlers;
-using mcmtestOpenTK.Client.Networking.Global;
+using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Shared;
 
@@ -83,7 +83,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Sound.InitSoundSystem();
                 // Prepare networking code
                 SysConsole.Output(OutputType.INIT, "Preparing networking...");
-                GlobalNetwork.Init();
+                NetPing.Init();
                 // Prepare gameplay-related code
                 SysConsole.Output(OutputType.INIT, "Preparing gameplay system...");
                 Player.player = new Player();

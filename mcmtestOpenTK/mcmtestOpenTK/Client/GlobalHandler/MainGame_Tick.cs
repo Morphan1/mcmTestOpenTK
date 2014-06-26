@@ -12,7 +12,7 @@ using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.UIHandlers;
-using mcmtestOpenTK.Client.Networking.Global;
+using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking;
@@ -65,7 +65,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
                 // Update networking
                 NetworkBase.Tick();
-                GlobalNetwork.Tick();
+                NetPing.Tick();
 
                 // Update running commands
                 ClientCommands.Tick();

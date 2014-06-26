@@ -45,6 +45,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new ConnectCommand());
             CommandSystem.RegisterCommand(new DisconnectCommand());
             CommandSystem.RegisterCommand(new LoginCommand());
+            CommandSystem.RegisterCommand(new PingCommand());
             CommandSystem.RegisterCommand(new TimeCommand());
 
             // Audio Commands

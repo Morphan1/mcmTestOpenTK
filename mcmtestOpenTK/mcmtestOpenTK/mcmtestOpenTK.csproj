@@ -69,10 +69,10 @@
     <Compile Include="Client\GraphicsHandlers\Shader.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\FontSet.cs" />
     <Compile Include="Client\GraphicsHandlers\Text\GLFont.cs" />
-    <Compile Include="Client\Networking\Global\GlobalLoginRequest.cs" />
-    <Compile Include="Client\Networking\Global\GlobalNetwork.cs" />
-    <Compile Include="Client\Networking\Global\GlobalSecureRequest.cs" />
-    <Compile Include="Client\Networking\Global\GlobalTimeRequest.cs" />
+    <Compile Include="Client\Networking\OneOffs\GlobalLoginRequest.cs" />
+    <Compile Include="Client\Networking\OneOffs\NetPing.cs" />
+    <Compile Include="Client\Networking\OneOffs\GlobalSecureRequest.cs" />
+    <Compile Include="Client\Networking\OneOffs\GlobalTimeRequest.cs" />
     <Compile Include="Client\UIHandlers\Categorizer.cs" />
     <Compile Include="Client\UIHandlers\LanguageHandler.cs" />
     <Compile Include="Client\UIHandlers\MouseHandler.cs" />
@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\CommandHandlers\NetworkCmds\PingCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\DisconnectCommand.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Common\RendererTags.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Objects\ShaderTag.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Client\GlobalHandler\Screen_Logos.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\OneOffs\ServerPingRequest.cs" />
     <Compile Include="Client\Networking\PacketsIn\PlaysoundPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\SetcvarPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\YourPositionPacketIn.cs" />

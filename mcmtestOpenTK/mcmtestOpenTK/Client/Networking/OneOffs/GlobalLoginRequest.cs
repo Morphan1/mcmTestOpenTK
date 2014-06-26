@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
 
-namespace mcmtestOpenTK.Client.Networking.Global
+namespace mcmtestOpenTK.Client.Networking.OneOffs
 {
     public class GlobalLoginRequest : GlobalSecureRequest
     {
@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
         /// <param name="Announce">Whether to announce the result in the console</param>
         /// <param name="username">The username to login with</param>
         /// <param name="password">The password to login with</param>
-        /// <returns>The GlobalNetwork object created for this login request</returns>
+        /// <returns>The NetPing object created for this login request</returns>
         public static GlobalLoginRequest RequestLogin(bool Announce, string username, string password)
         {
             GlobalLoginRequest glr = new GlobalLoginRequest();
@@ -74,7 +74,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
             {
                 if (Error != null)
                 {
-                    TimeRan = GlobalNetwork.MaxRunTime;
+                    TimeRan = NetPing.MaxRunTime;
                     KillQuietly = true;
                     if (Error.StartsWith("REFUSED:"))
                     {

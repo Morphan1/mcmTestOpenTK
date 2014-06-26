@@ -9,6 +9,7 @@ using System.Threading;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
+using mcmtestOpenTK.ServerSystem.CommonHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 {
@@ -254,8 +255,12 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 
         void HandlePing()
         {
-            // TODO
-            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent ping, doing nothing...");
+            byte[] name = FileHandler.encoding.GetBytes(ServerCVar.v_name.Value);
+            byte[] toret = new byte[4 + name.Length];
+            BitConverter.GetBytes(name.Length).CopyTo(toret, 0);
+            name.CopyTo(toret, 4);
+            Sock.Send(toret);
+            SysConsole.Output(OutputType.INFO, "[Net] " + IP + " successfully sent ping, responding with basic info.");
             IsAlive = false;
             Sock.Close(5);
         }

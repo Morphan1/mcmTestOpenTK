@@ -9,15 +9,15 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.Networking.Global
+namespace mcmtestOpenTK.Client.Networking.OneOffs
 {
-    public class GlobalTimeRequest : GlobalNetwork
+    public class GlobalTimeRequest : NetPing
     {
         /// <summary>
         /// Sends a message to the Global Server, requesting the remote time.
         /// </summary>
         /// <param name="Announce">Whether to announce the result in the console</param>
-        /// <returns>The GlobalNetwork object created for this time request</returns>
+        /// <returns>The NetPing object created for this time request</returns>
         public static GlobalTimeRequest RequestTime(bool Announce)
         {
             GlobalTimeRequest gtr = new GlobalTimeRequest();
@@ -54,7 +54,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
         {
             try
             {
-                socket.Connect(GlobalNetwork.GlobalAddress, GlobalNetwork.GlobalPort);
+                socket.Connect(NetPing.GlobalAddress, NetPing.GlobalPort);
                 byte[] SendMe = new byte[5] { 27, 27, 27, 27, 27 };
                 socket.Send(SendMe);
             }
@@ -73,7 +73,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
             {
                 if (Error != null)
                 {
-                    TimeRan = GlobalNetwork.MaxRunTime;
+                    TimeRan = NetPing.MaxRunTime;
                     KillQuietly = true;
                     UIConsole.WriteLine(TextStyle.Color_Error + "Global Time Request failed with message: " + TextStyle.Color_Separate + Error);
                     return;
@@ -82,7 +82,8 @@ namespace mcmtestOpenTK.Client.Networking.Global
             if (socket.Connected)
             {
                 int avail = socket.Available;
-                if (avail > 0)
+                // TODO: Handle less terribly - length int!
+                if (avail >= 3)
                 {
                     byte[] bytes = new byte[avail];
                     socket.Receive(bytes, avail, SocketFlags.None);

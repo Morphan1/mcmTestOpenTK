@@ -6,7 +6,7 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
-using mcmtestOpenTK.Client.Networking.Global;
+using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Client.UIHandlers;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn

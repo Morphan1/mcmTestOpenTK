@@ -10,9 +10,9 @@ using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
 using System.Security.Cryptography;
 
-namespace mcmtestOpenTK.Client.Networking.Global
+namespace mcmtestOpenTK.Client.Networking.OneOffs
 {
-    public abstract class GlobalSecureRequest: GlobalNetwork
+    public abstract class GlobalSecureRequest : NetPing
     {
         /// <summary>
         /// The networking socket.
@@ -165,7 +165,7 @@ namespace mcmtestOpenTK.Client.Networking.Global
         {
             try
             {
-                socket.Connect(GlobalNetwork.GlobalAddress, GlobalNetwork.GlobalPort);
+                socket.Connect(NetPing.GlobalAddress, NetPing.GlobalPort);
                 ECDiffieHellmanCng DHC = new ECDiffieHellmanCng();
                 DHC.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
                 DHC.HashAlgorithm = CngAlgorithm.Sha256;
