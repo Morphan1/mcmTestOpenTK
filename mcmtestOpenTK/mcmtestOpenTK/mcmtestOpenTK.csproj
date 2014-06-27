@@ -103,20 +103,6 @@
     <Compile Include="Client\GraphicsHandlers\Skybox.cs" />
     <Compile Include="Client\Networking\PacketsIn\MessagePacketIn.cs" />
     <Compile Include="Client\Networking\PacketsOut\CommandPacketOut.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Client\CommandHandlers\NetworkCmds\PingCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\DisconnectCommand.cs" />
     <Compile Include="Client\CommandHandlers\TagHandlers\Common\RendererTags.cs" />
@@ -158,6 +144,20 @@
     <Compile Include="Client\UIHandlers\Menus\Login\LoginButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuSystem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
