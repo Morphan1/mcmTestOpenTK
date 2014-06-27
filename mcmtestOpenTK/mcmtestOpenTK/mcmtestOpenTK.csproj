@@ -128,6 +128,7 @@
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GlobalHandler\AbstractScreen.cs" />
+    <Compile Include="Client\GlobalHandler\Screen_Servers.cs" />
     <Compile Include="Client\GlobalHandler\Screen_Login.cs" />
     <Compile Include="Client\GlobalHandler\Screen_Loading.cs" />
     <Compile Include="Client\GlobalHandler\Screen_MainMenu.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Client\GlobalHandler\Screen_Logos.cs" />
     <Compile Include="Client\GraphicsHandlers\Square.cs" />
     <Compile Include="Client\Networking\NetStringManager.cs" />
+    <Compile Include="Client\Networking\OneOffs\PingedServer.cs" />
     <Compile Include="Client\Networking\OneOffs\ServerPingRequest.cs" />
     <Compile Include="Client\Networking\PacketsIn\PlaysoundPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\SetcvarPacketIn.cs" />
@@ -146,6 +148,8 @@
     <Compile Include="Client\UIHandlers\Menus\AbstractMenuItem.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\LoginBox.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\PasswordBox.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MainMenu\ServersButton.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MainMenu\ReloginButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\NoticeOKButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\PlayOfflineButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuLabel.cs" />

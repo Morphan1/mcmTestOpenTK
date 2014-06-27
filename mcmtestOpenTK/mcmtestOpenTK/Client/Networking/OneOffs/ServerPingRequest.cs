@@ -8,6 +8,7 @@ using System.Threading;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.Networking.OneOffs
 {
@@ -111,12 +112,13 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                     byte[] bytes = new byte[length];
                     socket.Receive(bytes, length, SocketFlags.None);
                     string name = FileHandler.encoding.GetString(bytes);
+                    PingedServer serv = new PingedServer(name, ((int)DateTime.Now.Subtract(Sent).TotalMilliseconds), Address, Port);
+                    Screen_Servers.AddServer(serv);
                     if (ShouldAnnounce)
                     {
                         UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Response from server! Name: " +
                             TextStyle.Color_Separate + name + TextStyle.Color_Importantinfo + ", ping "
-                            + TextStyle.Color_Separate + ((int)DateTime.Now.Subtract(Sent).TotalMilliseconds) + "ms"
-                            + TextStyle.Color_Importantinfo + ".");
+                            + TextStyle.Color_Separate + serv.Ping + TextStyle.Color_Importantinfo + "ms.");
                     }
                     ready = true;
                 }

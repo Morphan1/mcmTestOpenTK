@@ -42,16 +42,6 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static int MaxWidth = MainGame.ScreenWidth - 50;
 
         /// <summary>
-        /// Any added text, for logging purposes.
-        /// </summary>
-        public static string NewText = "";
-
-        /// <summary>
-        /// Reference for locking the NewText variable.
-        /// </summary>
-        public static Object NewTextLock = new Object();
-
-        /// <summary>
         /// Whether the console is open.
         /// </summary>
         public static bool Open = false;
@@ -101,9 +91,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void InitConsole()
         {
             ready = true;
-            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Point(5, 0));
-            Typing = new PieceOfText("", new Point(5, 0));
-            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 150), new Point(5, 0));
+            ConsoleText = new PieceOfText(Utilities.CopyText("\n", Lines), new Location(5, 0, 0));
+            Typing = new PieceOfText("", new Location(5, 0, 0));
+            ScrollText = new PieceOfText("^1" + Utilities.CopyText("/\\ ", 150), new Location(5, 0, 0));
             MaxWidth = MainGame.ScreenWidth - 10;
             WriteLine("Console loaded!");
             Write(pre_waiting);
@@ -143,9 +133,13 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 }
             }
             text = text.Replace('\r', ' ');
-            lock (NewTextLock)
+            if (text.EndsWith("\n") && text.Length > 1)
             {
-                NewText += text;
+                SysConsole.Output(OutputType.CLIENTINFO, text.Substring(0, text.Length - 1));
+            }
+            else
+            {
+                SysConsole.Output(OutputType.CLIENTINFO, text);
             }
             int linestart = 0;
             int i = 0;
@@ -329,7 +323,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // handle scrolling up/down in the console
                 if (KeyState.Pages != 0)
                 {
-                    ScrolledLine -= (int)(KeyState.Pages * ((float)MainGame.ScreenHeight / 2 / ConsoleText.set.font.Height - 3));
+                    ScrolledLine -= (int)(KeyState.Pages * ((float)MainGame.ScreenHeight / 2 / ConsoleText.set.font_default.Height - 3));
                 }
                 ScrolledLine -= MouseHandler.MouseScroll;
                 if (ScrolledLine > 0)
@@ -383,9 +377,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void Draw()
         {
             // Render the console texture
-            Typing.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font.Internal_Font.Height) - 5;
-            ConsoleText.Position.Y = (-(Lines + 2) * ConsoleText.set.font.Internal_Font.Height) - 5 - ScrolledLine * (int)ConsoleText.set.font.Height;
-            ScrollText.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font.Internal_Font.Height * 2) - 5;
+            Typing.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font_default.Internal_Font.Height) - 5;
+            ConsoleText.Position.Y = (-(Lines + 2) * ConsoleText.set.font_default.Internal_Font.Height) - 5 - ScrolledLine * (int)ConsoleText.set.font_default.Height;
+            ScrollText.Position.Y = ((MainGame.ScreenHeight / 2) - ConsoleText.set.font_default.Internal_Font.Height * 2) - 5;
             if (Open)
             {
                 ConsoleText.Position.Y += MainGame.ScreenHeight / 2;
@@ -420,7 +414,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 GL.Color4(Color.Red);
                 float Y = MainGame.ScreenHeight / 2;
                 float percentone = -(float)ScrolledLine / (float)Lines;
-                float percenttwo = -((float)ScrolledLine - (float)MainGame.ScreenHeight / ConsoleText.set.font.Height) / (float)Lines;
+                float percenttwo = -((float)ScrolledLine - (float)MainGame.ScreenHeight / ConsoleText.set.font_default.Height) / (float)Lines;
                 GL.TexCoord2(0, 0);
                 GL.Vertex2(0, Y - Y * percenttwo);
                 GL.TexCoord2(1, 0);
@@ -457,12 +451,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
                         && TextStyle.IsColorSymbol(Typing.Text[TypingCursor + 1]))
                     {
-                        XAdd -= Typing.set.font.MeasureString(Typing.Text[TypingCursor].ToString());
+                        XAdd -= Typing.set.font_default.MeasureString(Typing.Text[TypingCursor].ToString());
                     }
-                    Typing.set.font.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
+                    Typing.set.font_default.DrawStringFull("|", Typing.Position.X + XAdd, Typing.Position.Y, Color.White);
                 }
                 // Render the console text
-                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3));
+                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font_default.Height * 3));
                 if (ScrolledLine != 0)
                 {
                     FontSet.DrawColoredText(ScrollText);
@@ -470,9 +464,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
             }
             else
             {
-                ConsoleText.Position.Y += (int)(ConsoleText.set.font.Height * (2 + extralines));
-                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font.Height * 3), 1, true);
-                ConsoleText.Position.Y -= (int)(ConsoleText.set.font.Height * (2 + extralines));
+                ConsoleText.Position.Y += (int)(ConsoleText.set.font_default.Height * (2 + extralines));
+                FontSet.DrawColoredText(ConsoleText, (int)(MainGame.ScreenHeight / 2 - ConsoleText.set.font_default.Height * 3), 1, true);
+                ConsoleText.Position.Y -= (int)(ConsoleText.set.font_default.Height * (2 + extralines));
             }
         }
     }

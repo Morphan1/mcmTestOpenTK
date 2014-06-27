@@ -6,6 +6,7 @@ using mcmtestOpenTK.Shared;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -66,6 +67,19 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.TexCoord2(0, 1);
             GL.Vertex2(PositionLow.X, PositionHigh.Y);
             GL.End();
+        }
+
+        public static void DrawColoredSquare(int X, int Y, int X2, int Y2, Color color)
+        {
+            Square sq = new Square();
+            sq.PositionLow.X = X;
+            sq.PositionLow.Y = Y;
+            sq.PositionHigh.X = X2;
+            sq.PositionHigh.Y = Y2;
+            sq.texture = Texture.White;
+            sq.shader = Shader.ColorMultShader;
+            GL.Color4(color);
+            sq.Draw();
         }
     }
 }

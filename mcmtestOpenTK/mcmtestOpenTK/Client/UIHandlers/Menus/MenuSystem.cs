@@ -75,16 +75,16 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                     index = i;
                 }
             }
-            while (Notice.EndsWith("\n"))
+            while (Notice.EndsWith("\n") || Notice.EndsWith("\r") || Notice.EndsWith(" "))
             {
                 Notice = Notice.Substring(0, Notice.Length - 1);
             }
-            Location size = FontSet.MeasureFancyLinesOfText(Notice, Set) + new Location(20, Set.font.Height * 3, 0);
+            Location size = FontSet.MeasureFancyLinesOfText(Notice, Set) + new Location(20, Set.font_default.Height * 3, 0);
             NoticeRenderSquare = new Square();
             NoticeRenderSquare.PositionLow = new Location(MainGame.ScreenWidth / 2 - size.X / 2, MainGame.ScreenHeight / 2 - size.Y / 2, 0);
             NoticeRenderSquare.PositionHigh = new Location(MainGame.ScreenWidth / 2 + size.X / 2, MainGame.ScreenHeight / 2 + size.Y / 2, 0);
             NoticeRenderSquare.texture = Texture.GetTexture("menus/notice");
-            NoticeOK = new NoticeOKButton(MainGame.ScreenWidth / 2 - 20, (int)(MainGame.ScreenHeight / 2 + size.Y / 2 - Set.font.Height * 2));
+            NoticeOK = new NoticeOKButton(MainGame.ScreenWidth / 2 - 20, (int)(MainGame.ScreenHeight / 2 + size.Y / 2 - Set.font_default.Height * 2));
             NoticeLabel = new MenuLabel(message, (int)(MainGame.ScreenWidth / 2 - size.X / 2 + 10), (int)(MainGame.ScreenHeight / 2 - size.Y / 2));
             NoticeOK.Menus = this;
             NoticeLabel.Menus = this;

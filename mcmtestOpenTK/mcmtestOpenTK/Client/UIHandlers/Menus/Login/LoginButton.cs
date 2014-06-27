@@ -29,7 +29,6 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
                 GlobalLoginRequest.RequestLogin(true, loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText);
                 Menus.ShowNotice("Logging in...");
             }
-            // MainGame.SetScreen(ScreenMode.MainMenu);
         }
     }
 }

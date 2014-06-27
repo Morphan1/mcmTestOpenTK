@@ -32,10 +32,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         Logos = 1,
         Login = 2,
         MainMenu = 3,
+        Servers = 4,
         // Menus
-        Loading = 4,
-        Game = 5,
+        Loading = 5,
+        Game = 6,
         // In-game options
-        MAX = 6,
+        MAX = 7,
     }
 }

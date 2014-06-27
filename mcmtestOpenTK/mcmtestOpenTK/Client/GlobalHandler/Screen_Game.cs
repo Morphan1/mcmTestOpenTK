@@ -33,8 +33,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void Init()
         {
-            // TEMPORARY?
-            debug = new PieceOfText("", new Point(5, MainGame.ScreenHeight / 5 * 3));
+            debug = new PieceOfText("", new Location(5, MainGame.ScreenHeight / 5 * 3, 0));
             Crosshair.texture = Texture.GetTexture("common/crosshair");
             Initted = true;
         }

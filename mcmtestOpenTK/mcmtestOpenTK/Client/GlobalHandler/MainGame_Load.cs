@@ -40,6 +40,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Screens[(int)ScreenMode.Logos] = new Screen_Logos();
                 Screens[(int)ScreenMode.Login] = new Screen_Login();
                 Screens[(int)ScreenMode.MainMenu] = new Screen_MainMenu();
+                Screens[(int)ScreenMode.Servers] = new Screen_Servers();
                 Screens[(int)ScreenMode.Loading] = new Screen_Loading();
                 Screens[(int)ScreenMode.Game] = new Screen_Game();
                 // Prepare the CVar system
@@ -94,7 +95,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 SetScreen(ScreenMode.Logos);
                 // Everything's loaded now... scrap the system console
                 SysConsole.Output(OutputType.INIT, "System prepared, hiding console and playing the game!");
-                SysConsole.HideConsole();
+                // SysConsole.HideConsole();
                 // Always at the end
                 Initializing = false;
                 cout.Initializing = false;

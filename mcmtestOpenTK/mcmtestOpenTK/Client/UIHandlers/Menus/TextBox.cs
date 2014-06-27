@@ -29,15 +29,15 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             RenderSquare = new Square();
             MaxWidth = _width > 0 ? _width: 1;
             RenderSquare.PositionLow = new Location(X, Y, 0);
-            Text = new PieceOfText("", new Point(X + 10, Y), FontSet.GetFont(GLFont.Standard.Name, (int)((float)GLFont.Standard.Size * 1.5f)));
-            RenderSquare.PositionHigh = new Location(X + MaxWidth + 20, Y + Text.set.font.Height + 8, 0);
+            Text = new PieceOfText("", new Location(X + 10, Y, 0), FontSet.GetFont(GLFont.Standard.Name, (int)((float)GLFont.Standard.Size * 1.5f)));
+            RenderSquare.PositionHigh = new Location(X + MaxWidth + 20, Y + Text.set.font_default.Height + 8, 0);
         }
 
         public override void Draw()
         {
             RenderSquare.texture = StandardTexture;
             RenderSquare.Draw();
-            Text.Position = new Point((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y);
+            Text.Position = new Location((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y, 0);
             FontSet.DrawColoredText(Text, int.MaxValue, 1, true);
             if (keymark_add > 0.5f)
             {
@@ -45,9 +45,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 if (Text.Text.Length > TypingCursor + 1 && Text.Text[TypingCursor] == '^'
                     && TextStyle.IsColorSymbol(Text.Text[TypingCursor + 1]))
                 {
-                    XAdd -= Text.set.font.MeasureString(Text.Text[TypingCursor].ToString());
+                    XAdd -= Text.set.font_default.MeasureString(Text.Text[TypingCursor].ToString());
                 }
-                PieceOfText SymText = new PieceOfText("|", new Point((int)(Text.Position.X + XAdd), (int)Text.Position.Y), Text.set);
+                PieceOfText SymText = new PieceOfText("|", new Location((int)(Text.Position.X + XAdd), (int)Text.Position.Y, 0), Text.set);
                 FontSet.DrawColoredText(SymText, int.MaxValue, 1, Hovered);
             }
         }
@@ -140,8 +140,15 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 // handle input text
                 if (KeyState.KeyboardString.Contains('\t'))
                 {
-                    Menus.RotateTextBoxSelect();
-                    KeyState.KeyboardString = "";
+                    if (Menus != null)
+                    {
+                        Menus.RotateTextBoxSelect();
+                        KeyState.KeyboardString = "";
+                    }
+                    else
+                    {
+                        KeyState.KeyboardString = KeyState.KeyboardString.Replace("\t", "    ");
+                    }
                 }
                 KeyState.KeyboardString = KeyState.KeyboardString.Replace("\r", "");
                 if (KeyState.KeyboardString.Contains("\n"))
@@ -163,7 +170,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                     TypingCursor += KeyState.KeyboardString.Length;
                 }
                 // handle copying
-                if (KeyState.CopyPressed)
+                if (KeyState.CopyPressed && !Password)
                 {
                     if (TypingText.Length > 0)
                     {

@@ -44,7 +44,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             string namelow = fontname.ToLower();
             for (int i = 0; i < Fonts.Count; i++)
             {
-                if (Fonts[i].font.Size == fontsize && Fonts[i].Name == namelow)
+                if (Fonts[i].font_default.Size == fontsize && Fonts[i].Name == namelow)
                 {
                     return Fonts[i];
                 }
@@ -55,7 +55,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             return toret;
         }
 
-        public GLFont font;
+        public GLFont font_default;
         public GLFont font_bold;
         public GLFont font_italic;
         public GLFont font_bolditalic;
@@ -73,7 +73,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 
         public void Load(string fontname, int fontsize)
         {
-            font = GLFont.GetFont(fontname, false, false, fontsize);
+            font_default = GLFont.GetFont(fontname, false, false, fontsize);
             font_bold = GLFont.GetFont(fontname, true, false, fontsize);
             font_italic = GLFont.GetFont(fontname, false, true, fontsize);
             font_bolditalic = GLFont.GetFont(fontname, true, true, fontsize);
@@ -148,7 +148,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             return Color.FromArgb(trans, colors[color].R, colors[color].G, colors[color].B);
         }
-
+        
         /// <summary>
         /// Fully renders colorful/fancy text (unless the text is not marked as fancy, or fancy rendering is disabled)
         /// </summary>
@@ -160,10 +160,23 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         {
             if (!text.fancy)
             {
-                text.set.font.DrawString(text.Text, text.Position.X, text.Position.Y);
+                text.set.font_default.DrawString(text.Text, text.Position.X, text.Position.Y);
                 return;
             }
-            string[] lines = text.Text.Replace('\r', ' ').Replace(' ', (char)0x00A0).Replace("^q", "\"").Split('\n');
+            text.set.DrawColoredText(text.Text, text.Position, MaxY, transmod, extrashadow);
+        }
+
+        /// <summary>
+        /// Fully renders colorful/fancy text (unless the text is not marked as fancy, or fancy rendering is disabled)
+        /// </summary>
+        /// <param name="Text">The text to render</param>
+        /// <param name="Position">Where to render the text at</param>
+        /// <param name="MaxY">The maximum Y location to render text at.</param>
+        /// <param name="transmod">Transparency modifier (EG, 0.5 = half opacity) (0.0 - 1.0)</param>
+        /// <param name="extrashadow">Whether to always have a mini drop-shadow</param>
+        public void DrawColoredText(string Text, Location Position, int MaxY = int.MaxValue, float transmod = 1, bool extrashadow = false)
+        {
+            string[] lines = Text.Replace('\r', ' ').Replace(' ', (char)0x00A0).Replace("^q", "\"").Split('\n');
             int color = DefaultColor;
             int trans = (int)(255 * transmod);
             bool bold = false;
@@ -191,9 +204,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int htrans = (int)(255 * transmod);
             int strans = (int)(255 * transmod);
             int utrans = (int)(255 * transmod);
-            float X = text.Position.X;
-            float Y = text.Position.Y;
-            GLFont font = text.set.font;
+            float X = Position.X;
+            float Y = Position.Y;
+            GLFont font = font_default;
             font.BaseTexture.Bind();
             Shader.ColorMultShader.Bind();
             GL.Begin(PrimitiveType.Quads);
@@ -202,7 +215,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                 string line = lines[i];
                 if (line.Length == 0)
                 {
-                    Y += text.set.font.Height;
+                    Y += font_default.Height;
                     continue;
                 }
                 int start = 0;
@@ -299,8 +312,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'i':
                                     {
                                         italic = true;
-                                        GLFont nfont = (super || sub) ? (bold ? text.set.font_bolditalichalf : text.set.font_italichalf) :
-                                            (bold ? text.set.font_bolditalic : text.set.font_italic);
+                                        GLFont nfont = (super || sub) ? (bold ? font_bolditalichalf : font_italichalf) :
+                                            (bold ? font_bolditalic : font_italic);
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -313,8 +326,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                 case 'b':
                                     {
                                         bold = true;
-                                        GLFont nfont = (super || sub) ? (italic ? text.set.font_bolditalichalf : text.set.font_boldhalf) :
-                                            (italic ? text.set.font_bolditalic : text.set.font_bold);
+                                        GLFont nfont = (super || sub) ? (italic ? font_bolditalichalf : font_boldhalf) :
+                                            (italic ? font_bolditalic : font_bold);
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -338,10 +351,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         if (sub)
                                         {
                                             sub = false;
-                                            Y -= text.set.font.Height / 2;
+                                            Y -= font.Height / 2;
                                         }
-                                        GLFont nfont = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
-                                            italic ? text.set.font_italichalf : text.set.font_half;
+                                        GLFont nfont = bold && italic ? font_bolditalichalf : bold ? font_boldhalf :
+                                            italic ? font_italichalf : font_half;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -359,9 +372,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         {
                                             super = false;
                                         }
-                                        Y += text.set.font.Height / 2;
-                                        GLFont nfont = bold && italic ? text.set.font_bolditalichalf : bold ? text.set.font_boldhalf :
-                                            italic ? text.set.font_italichalf : text.set.font_half;
+                                        Y += font_default.Height / 2;
+                                        GLFont nfont = bold && italic ? font_bolditalichalf : bold ? font_boldhalf :
+                                            italic ? font_italichalf : font_half;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -382,7 +395,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                     break;
                                 case 'r':
                                     {
-                                        GLFont nfont = text.set.font;
+                                        GLFont nfont = font_default;
                                         if (nfont != font)
                                         {
                                             GL.End();
@@ -392,7 +405,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                                         }
                                         if (sub)
                                         {
-                                            Y -= text.set.font.Height / 2;
+                                            Y -= font_default.Height / 2;
                                         }
                                         sub = false;
                                         super = false;
@@ -418,8 +431,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         }
                     }
                 }
-                Y += text.set.font.Height;
-                X = text.Position.X;
+                Y += font_default.Height;
+                X = Position.X;
             }
             GL.End();
             GL.UseProgram(0);
@@ -494,7 +507,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                     len = newlen;
                 }
             }
-            return new Location(len, data.Length * set.font.Height, 0);
+            return new Location(len, data.Length * set.font_default.Height, 0);
         }
 
         /// <summary>
@@ -510,7 +523,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             bool italic = false;
             bool sub = false;
             float MeasWidth = 0;
-            GLFont font = set.font;
+            GLFont font = set.font_default;
             int start = 0;
             line = line.Replace("^q", "\"");
             for (int x = 0; x < line.Length; x++)
@@ -529,7 +542,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
                         switch (line[x])
                         {
                             case 'r':
-                                font = set.font;
+                                font = set.font_default;
                                 bold = false;
                                 sub = false;
                                 italic = false;
