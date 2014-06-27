@@ -12,8 +12,14 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
 {
     public class TextBox: AbstractMenuItem
     {
+        /// <summary>
+        /// The backdrop box image.
+        /// </summary>
         Texture StandardTexture;
 
+        /// <summary>
+        /// The PieceOfText used to render the text.
+        /// </summary>
         PieceOfText Text;
 
         /// <summary>
@@ -21,6 +27,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         /// </summary>
         public bool Password = false;
 
+        /// <summary>
+        /// How wide the text can go.
+        /// </summary>
         int MaxWidth;
 
         public TextBox(int X, int Y, Texture _standText, int _width)
@@ -33,6 +42,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             RenderSquare.PositionHigh = new Location(X + MaxWidth + 20, Y + Text.set.font_default.Height + 8, 0);
         }
 
+        /// <summary>
+        /// Renders the text box.
+        /// </summary>
         public override void Draw()
         {
             RenderSquare.texture = StandardTexture;
@@ -56,8 +68,24 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
         }
 
+        /// <summary>
+        /// Jumps the cursor to the end of the text, useful when TypingText is modified.
+        /// </summary>
+        public void FixCursor()
+        {
+            TypingCursor = TypingText.Length;
+        }
+
+        /// <summary>
+        /// Whether the text box is currently selected.
+        /// </summary>
         public bool selected = false;
 
+        /// <summary>
+        /// Selects the TextBox, and calculates an updated cursor position.
+        /// </summary>
+        /// <param name="x">The X coordinate clicked, relative to the textbox's corner</param>
+        /// <param name="y">The Y coordinate clicked, relative to the textbox's corner</param>
         public override void LeftClick(int x, int y)
         {
             selected = true;
@@ -78,6 +106,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             keymark_add = 0.5f;
         }
 
+        /// <summary>
+        /// Deselects the TextBox.
+        /// </summary>
         public override void ClickOutside()
         {
             keymark_add = 0f;
@@ -96,15 +127,31 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
         }
 
+        /// <summary>
+        /// The text currently entered in the box.
+        /// </summary>
         public string TypingText = "";
+
+        /// <summary>
+        /// The cursor location.
+        /// </summary>
         int TypingCursor = 0;
+
+        /// <summary>
+        /// Whether to add a | symbol where the cursor is.
+        /// </summary>
         float keymark_add = 0;
 
+        /// <summary>
+        /// Update the TextBox, handle keyboard input.
+        /// </summary>
         public override void Tick()
         {
             if (selected)
             {
+                // Grab and clear the keyboard state
                 KeyHandlerState KeyState = KeyHandler.GetKBState();
+                // Handle backspaces presses
                 if (KeyState.InitBS > 0)
                 {
                     keymark_add = 0.5f;
@@ -122,6 +169,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                     }
                     TypingText = partone + parttwo;
                 }
+                // Handle delete key presses
                 if (KeyState.EndDelete > 0)
                 {
                     keymark_add = 0.5f;
@@ -222,7 +270,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                     keymark_add -= 1f;
                 }
             }
-            else
+            else // !Selected
             {
                 string restext;
                 if (Password)

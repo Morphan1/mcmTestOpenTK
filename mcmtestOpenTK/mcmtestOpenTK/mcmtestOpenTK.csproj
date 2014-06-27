@@ -146,6 +146,7 @@
     <Compile Include="Client\Networking\PacketsIn\NetstringPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsOut\MovementPacketOut.cs" />
     <Compile Include="Client\UIHandlers\Menus\AbstractMenuItem.cs" />
+    <Compile Include="Client\UIHandlers\Menus\MenuToggler.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\LoginBox.cs" />
     <Compile Include="Client\UIHandlers\Menus\Login\PasswordBox.cs" />
     <Compile Include="Client\UIHandlers\Menus\MainMenu\ServersButton.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\TimePacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NetstringPacketOut.cs" />
     <Compile Include="ServerSystem\PlayerCommands\CommonCmds\NoclipCommand.cs" />
+    <Compile Include="Shared\AccountFileSaver.cs" />
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\CallCommand.cs" />

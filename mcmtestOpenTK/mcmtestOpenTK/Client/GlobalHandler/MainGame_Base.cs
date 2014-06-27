@@ -6,7 +6,6 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.CommonHandlers;
-using System.IO;
 using System.Diagnostics;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;

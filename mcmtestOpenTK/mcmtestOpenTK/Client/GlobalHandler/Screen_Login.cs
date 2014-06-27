@@ -23,6 +23,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public TextBox PasswordBox;
 
+        public MenuToggler SaveBox;
+
         public Screen_Login(): base(ScreenMode.Login)
         {
         }
@@ -46,6 +48,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             UsernameBox = new LoginBox(MainGame.ScreenWidth / 2 - 260, 0, Texture.GetTexture("menus/textbox_back"), 500);
             PasswordBox = new PasswordBox(MainGame.ScreenWidth / 2 - 260, 0, Texture.GetTexture("menus/textbox_back"), 500);
             PasswordBox.Password = true;
+            SaveBox = new MenuToggler("Save Username/Password", 0, 0);
             // Calculate widths for X-centering
             float lwidth = LoginB.RenderSquare.PositionHigh.X + 10;
             float pwidth = PlayOffB.RenderSquare.PositionHigh.X;
@@ -62,13 +65,17 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             ladjust = PasswordBox.RenderSquare.PositionLow.X - PasswordLabel.RenderSquare.PositionLow.X;
             PasswordLabel.RenderSquare.PositionLow.X += ladjust;
             PasswordLabel.RenderSquare.PositionHigh.X += ladjust;
+            ladjust = MainGame.ScreenWidth / 2 - SaveBox.RenderSquare.PositionHigh.X / 2;
+            SaveBox.RenderSquare.PositionLow.X += ladjust;
+            SaveBox.RenderSquare.PositionHigh.X += ladjust;
             // Calculate heights for Y-centering
             float uheight = UsernameBox.RenderSquare.PositionHigh.Y + 10;
             float ulheight = UsernameLabel.RenderSquare.PositionHigh.Y + 10;
             float pheight = PasswordBox.RenderSquare.PositionHigh.Y + 10;
             float plheight = PasswordLabel.RenderSquare.PositionHigh.Y + 10;
             float lheight = LoginB.RenderSquare.PositionHigh.Y + 10;
-            float theight = uheight + pheight + lheight + ulheight + plheight;
+            float sheight = SaveBox.RenderSquare.PositionHigh.Y + 10;
+            float theight = uheight + pheight + lheight + ulheight + plheight + sheight;
             ladjust = MainGame.ScreenHeight / 2 - theight / 2;
             // Adjust their Y position (centering)
             float lat = ladjust;
@@ -88,6 +95,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             LoginB.RenderSquare.PositionHigh.Y += lat;
             PlayOffB.RenderSquare.PositionLow.Y += lat;
             PlayOffB.RenderSquare.PositionHigh.Y += lat;
+            lat += sheight;
+            SaveBox.RenderSquare.PositionLow.Y += lat;
+            SaveBox.RenderSquare.PositionHigh.Y += lat;
             // Add items to the menu
             Menus.Add(UsernameLabel);
             Menus.Add(UsernameBox);
@@ -95,6 +105,17 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Menus.Add(PasswordBox);
             Menus.Add(LoginB);
             Menus.Add(PlayOffB);
+            Menus.Add(SaveBox);
+            // Set the current username/password
+            string[] namepass = AccountFileSaver.GetAccountData();
+            UsernameBox.TypingText = namepass[0];
+            PasswordBox.TypingText = namepass[1];
+            UsernameBox.FixCursor();
+            PasswordBox.FixCursor();
+            if (UsernameBox.TypingText.Length > 0)
+            {
+                SaveBox.toggled = true;
+            }
             // Done!
             Initted = true;
         }

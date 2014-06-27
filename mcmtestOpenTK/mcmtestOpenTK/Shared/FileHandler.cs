@@ -173,12 +173,30 @@ namespace mcmtestOpenTK.Shared
         public static byte[] GZip(byte[] input)
         {
             MemoryStream memstream = new MemoryStream();
-            var GZStream = new GZipStream(memstream, CompressionMode.Compress);
+            GZipStream GZStream = new GZipStream(memstream, CompressionMode.Compress);
             GZStream.Write(input, 0, input.Length);
             GZStream.Close();
             byte[] finaldata = memstream.ToArray();
             memstream.Close();
             return finaldata;
+        }
+
+        /// <summary>
+        /// Decompress a byte array using the GZip algorithm.
+        /// </summary>
+        /// <param name="input">Compressed data</param>
+        /// <returns>Uncompressed data</returns>
+        public static byte[] UnGZip(byte[] input)
+        {
+            using (MemoryStream output = new MemoryStream())
+            {
+                MemoryStream memstream = new MemoryStream(input);
+                GZipStream GZStream = new GZipStream(memstream, CompressionMode.Decompress);
+                GZStream.CopyTo(output);
+                GZStream.Close();
+                memstream.Close();
+                return output.ToArray();
+            }
         }
     }
 }
