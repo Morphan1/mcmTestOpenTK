@@ -71,7 +71,6 @@ namespace mcmtestOpenTK.Shared
 
         public static void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
-            FileHandler.WriteText("test.txt", "SHUTDOWN SUCCESS?");
             while (ThreadsToClose.Count > 0)
             {
                 try
