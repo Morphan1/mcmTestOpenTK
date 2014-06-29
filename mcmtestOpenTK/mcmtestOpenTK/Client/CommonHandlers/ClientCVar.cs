@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using Microsoft.VisualBasic.Devices;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared.CommandSystem;
 
@@ -26,9 +25,6 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson,
             r_showwireframe, r_render3d, r_whitewireframe, r_crosshairscale;
 
-        // System CVars
-        public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
-
         /// <summary>
         /// Prepares the CVar system, generating default CVars.
         /// </summary>
@@ -37,7 +33,6 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             system = new CVarSystem(output);
 
             // Game CVars
-            // TODO: Make below CVar only settable by server packet
             g_noclip = Register("g_noclip", "false", CVarFlag.Boolean | CVarFlag.ServerControl); // Whether the player is in 'noclip' mode.
             // Text CVars
             // TODO: IMPLEMENT BELOW CVAR
@@ -61,18 +56,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             r_whitewireframe = Register("r_whitewireframe", "true", CVarFlag.Boolean); // Whether wireframes are rendered pitched white.
             r_crosshairscale = Register("r_crosshairscale", "1", CVarFlag.Numeric); // How big the crosshair is
             // TODO: More graphics CVars
-            // System CVars
-            ComputerInfo CI = new ComputerInfo();
-            s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly); // The current system environment filepath (The directory of /data).
-            s_osversion = Register("s_osversion", Environment.OSVersion.VersionString, CVarFlag.Textual | CVarFlag.ReadOnly); // The name and version of the operating system the game is being run on.
-            s_user = Register("s_user", Environment.UserName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name of the system user running the game.
-            s_dotnetversion = Register("s_dotnetversion", Environment.Version.ToString(), CVarFlag.Textual | CVarFlag.ReadOnly); // The system's .NET (CLR) version string.
-            s_totalram = Register("s_totalram", CI.TotalPhysicalMemory.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // How much RAM the system has.
-            s_culture = Register("s_culture", System.Globalization.CultureInfo.CurrentUICulture.EnglishName, CVarFlag.Textual | CVarFlag.ReadOnly); // The system culture (locale).
-            s_processors = Register("s_processors", Environment.ProcessorCount.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // The number of processors the system has.
-            s_machinename = Register("s_machinename", Environment.MachineName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name given to the computer.
             // TODO: OpenGL info
-            // TODO: other system info
             // TODO: Other CVars
         }
 

@@ -165,6 +165,8 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
         {
             try
             {
+                // TODO: FIND LINUX COMPATIBLE SECURE NETWORK STUFF
+#if WINDOWS
                 socket.Connect(NetPing.GlobalAddress, NetPing.GlobalPort);
                 ECDiffieHellmanCng DHC = new ECDiffieHellmanCng();
                 DHC.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
@@ -179,6 +181,9 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                 SendByteBlock(LoginInfo); // PACKET SEND 2: login request data -> server
                 GotBack = Decrypt(AES, Derived, ReceiveBlock()); // PACKET RECEIVE 2: result -> client
                 return FileHandler.encoding.GetString(GotBack);
+#else
+                return "";
+#endif
             }
             catch (Exception ex)
             {

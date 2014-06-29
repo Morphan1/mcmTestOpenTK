@@ -163,6 +163,8 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.Global
         {
             try
             {
+                // TODO: FIND LINUX COMPATIBLE SECURE NETWORK STUFF
+#if WINDOWS
                 socket.Connect(GlobalNetwork.GlobalAddress, GlobalNetwork.GlobalPort);
                 ECDiffieHellmanCng DHC = new ECDiffieHellmanCng();
                 DHC.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
@@ -177,6 +179,9 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.Global
                 SendByteBlock(LoginInfo); // PACKET SEND 2: login request data -> server
                 GotBack = Decrypt(AES, Derived, ReceiveBlock()); // PACKET RECEIVE 2: result -> client
                 return FileHandler.encoding.GetString(GotBack);
+#else
+                return "";
+#endif
             }
             catch (Exception ex)
             {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using Microsoft.VisualBasic.Devices;
 
 namespace mcmtestOpenTK.Shared
 {

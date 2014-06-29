@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
-using Microsoft.VisualBasic.Devices;
 using mcmtestOpenTK.Shared.CommandSystem;
 
 namespace mcmtestOpenTK.ServerSystem.CommonHandlers
@@ -24,9 +23,6 @@ namespace mcmtestOpenTK.ServerSystem.CommonHandlers
         // Network CVars
         public static CVar n_port;
 
-        // System CVars
-        public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
-
         /// <summary>
         /// Prepares the CVar system, generating default CVars.
         /// </summary>
@@ -40,17 +36,6 @@ namespace mcmtestOpenTK.ServerSystem.CommonHandlers
             v_name = Register("v_name", "My New Server", CVarFlag.Textual); // The name of the server
             // Network CVars
             n_port = Register("n_port", "26805", CVarFlag.Numeric | CVarFlag.InitOnly); // What port the network should listen on.
-            // System CVars
-            ComputerInfo CI = new ComputerInfo();
-            s_filepath = Register("s_filepath", FileHandler.BaseDirectory, CVarFlag.Textual | CVarFlag.ReadOnly); // The current system environment filepath (The directory of /data).
-            s_osversion = Register("s_osversion", Environment.OSVersion.VersionString, CVarFlag.Textual | CVarFlag.ReadOnly); // The name and version of the operating system the game is being run on.
-            s_user = Register("s_user", Environment.UserName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name of the system user running the game.
-            s_dotnetversion = Register("s_dotnetversion", Environment.Version.ToString(), CVarFlag.Textual | CVarFlag.ReadOnly); // The system's .NET (CLR) version string.
-            s_totalram = Register("s_totalram", CI.TotalPhysicalMemory.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // How much RAM the system has.
-            s_culture = Register("s_culture", System.Globalization.CultureInfo.CurrentUICulture.EnglishName, CVarFlag.Textual | CVarFlag.ReadOnly); // The system culture (locale).
-            s_processors = Register("s_processors", Environment.ProcessorCount.ToString(), CVarFlag.Numeric | CVarFlag.ReadOnly); // The number of processors the system has.
-            s_machinename = Register("s_machinename", Environment.MachineName, CVarFlag.Textual | CVarFlag.ReadOnly); // The name given to the computer.
-            // TODO: other system info
             // TODO: Other CVars
         }
 

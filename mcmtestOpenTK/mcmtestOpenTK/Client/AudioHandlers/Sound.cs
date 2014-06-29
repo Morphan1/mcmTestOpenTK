@@ -30,11 +30,15 @@ namespace mcmtestOpenTK.Client.AudioHandlers
         /// </summary>
         public static Sound Song = null;
 
+        public static bool SystemLoaded = false;
+
         /// <summary>
         /// Starts or restarts the sound system.
         /// </summary>
         public static void InitSoundSystem()
         {
+            // TODO: Linux compatible sound system!
+#if WINDOWS
             // Dispose existing sounds
             if (LoadedSounds != null)
             {
@@ -52,7 +56,11 @@ namespace mcmtestOpenTK.Client.AudioHandlers
             // Preload a few common sounds
             Click = GenerateClick();
             LoadedSounds.Add(Click);
+            SystemLoaded = true;
             Song = GetSound("common/song");
+#else
+            Click = new Sound();
+#endif
         }
 
         #region clicknonsense
@@ -146,6 +154,10 @@ namespace mcmtestOpenTK.Client.AudioHandlers
         /// <returns>The loaded sound, or null if it does not exist</returns>
         public static Sound LoadSound(string filename)
         {
+            if (!SystemLoaded)
+            {
+                return new Sound() { Name = filename };
+            }
             try
             {
                 filename = FileHandler.CleanFileName(filename);
@@ -182,6 +194,10 @@ namespace mcmtestOpenTK.Client.AudioHandlers
         /// </summary>
         public static void RecalculateChannels()
         {
+            if (!SystemLoaded)
+            {
+                return;
+            }
             for (int i = 0; i < FModChannels.Count; i += 1)
             {
                 FMOD.Channel chan = FModChannels[i];
@@ -234,6 +250,10 @@ namespace mcmtestOpenTK.Client.AudioHandlers
         /// </summary>
         public void Play()
         {
+            if (!SystemLoaded)
+            {
+                return;
+            }
             FMOD.Channel fmc = new FMOD.Channel();
             FModChannels.Add(fmc);
             FModSystem.playSound(FMOD.CHANNELINDEX.FREE, InternalSound, false, ref fmc);
