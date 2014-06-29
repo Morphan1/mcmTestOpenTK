@@ -54,6 +54,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public DebugMode Debug;
 
+        /// <summary>
+        /// Whether commands in the queue will parse tags.
+        /// </summary>
+        public bool ParseTags = true;
+
         public CommandQueue(CommandScript _script, List<CommandEntry> _commands, Commands _system)
         {
             Script = _script;

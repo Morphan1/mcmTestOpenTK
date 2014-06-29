@@ -161,7 +161,14 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 throw new ArgumentOutOfRangeException("Value must be greater than 0 and less than command input argument count");
             }
-            return Queue.CommandSystem.TagSystem.ParseTags(Arguments[place], TextStyle.Color_Simple, Queue.Variables, Queue.Debug);
+            if (Queue.ParseTags)
+            {
+                return Queue.CommandSystem.TagSystem.ParseTags(Arguments[place], TextStyle.Color_Simple, Queue.Variables, Queue.Debug);
+            }
+            else
+            {
+                return Arguments[place];
+            }
         }
 
         /// <summary>

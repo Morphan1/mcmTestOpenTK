@@ -186,6 +186,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new FunctionCommand());
             RegisterCommand(new IfCommand());
             RegisterCommand(new InsertCommand());
+            RegisterCommand(new ParsingCommand());
             RegisterCommand(new RepeatCommand());
             RegisterCommand(new RunCommand());
             RegisterCommand(new ScriptCacheCommand());
