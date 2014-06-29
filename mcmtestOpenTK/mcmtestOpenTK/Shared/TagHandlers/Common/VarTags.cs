@@ -39,7 +39,18 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
                     if (data.Variables[i].Name == modif)
                     {
                         data.Shrink();
-                        if (data.Input.Count > 0 && data.Input[0] == "exists")
+                        if (data.Input.Count == 0)
+                        {
+                            return data.Variables[i].Value;
+                        }
+                        // <--[tag]
+                        // @Name VariableTag.exists
+                        // @Group Variables
+                        // @ReturnType TextTag
+                        // @Returns whether the specified variable exists.
+                        // Specifically for the tag <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>.
+                        // -->
+                        if (data.Input[0] == "exists")
                         {
                             return new TextTag(true).Handle(data.Shrink());
                         }
@@ -51,14 +62,6 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
                 }
             }
             data.Shrink();
-            // <--[tag]
-            // @Name VariableTag.exists
-            // @Group Variables
-            // @ReturnType TextTag
-            // @Returns whether the specified variable exists.
-            // Specifically for the tags <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>
-            // and  <@link tag cvar[<TextTag>]><{cvar[<TextTag>]}><@/link>
-            // -->
             if (data.Input.Count > 0 && data.Input[0] == "exists")
             {
                 return new TextTag(false).Handle(data.Shrink());
