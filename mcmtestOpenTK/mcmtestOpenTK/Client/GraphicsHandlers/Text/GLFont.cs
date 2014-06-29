@@ -47,7 +47,12 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int family_priority = 0;
             for (int i = 0; i < families.Length; i++)
             {
-                if (family_priority < 10 && families[i].Name.ToLower() == "segoe ui")
+                if (family_priority < 20 && families[i].Name.ToLower() == "dejavu serif")
+                {
+                    family = families[i];
+                    family_priority = 20;
+                }
+                else if (family_priority < 10 && families[i].Name.ToLower() == "segoe ui")
                 {
                     family = families[i];
                     family_priority = 10;
@@ -325,6 +330,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <returns>The length of the character in pixels</returns>
         public float DrawSingleCharacter(char symbol, float X, float Y, bool flip)
         {
+            // NOTE: Adjust text downward to match what it used to be in early development
+            Y += 4;
             RectangleF rec = RectForSymbol(symbol);
             if (flip)
             {

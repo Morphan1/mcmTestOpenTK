@@ -48,7 +48,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// Default font size.
         /// TODO: HANDLE IN A CVAR
         /// </summary>
-        public static int FontSize = 12;
+        public static int FontSize = 10;
         
         /// <summary>
         /// How sensitive the mouse is.

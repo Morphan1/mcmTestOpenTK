@@ -48,6 +48,9 @@ namespace mcmtestOpenTK.Shared
                 }
                 if (twaiting.Length > 0)
                 {
+                    // TODO: Log file control! Option to change file name or disable entirely...
+                    // Also options to put a value like logs/%yyyy%/%mm%/%dd%.log
+                    FileHandler.AppendText("console.log", twaiting);
                     WriteInternal(twaiting);
                 }
                 Thread.Sleep(100);
