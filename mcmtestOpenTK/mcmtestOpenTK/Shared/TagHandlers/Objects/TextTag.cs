@@ -132,6 +132,14 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                 case "length":
                     return new TextTag(Text.Length).Handle(data.Shrink());
                 // <--[tag]
+                // @Name TextTag.not
+                // @Group Text Comparison
+                // @ReturnType TextTag
+                // @Returns the opposite of the tag - true and false are flipped.
+                // -->
+                case "not":
+                    return new TextTag(Text.ToLower() == "false").Handle(data.Shrink());
+                // <--[tag]
                 // @Name TextTag.equals[<TextTag>]
                 // @Group Text Comparison
                 // @ReturnType TextTag

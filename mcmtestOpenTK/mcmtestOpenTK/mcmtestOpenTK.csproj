@@ -181,6 +181,7 @@
     <Compile Include="ServerSystem\PlayerCommands\CommonCmds\NoclipCommand.cs" />
     <Compile Include="Shared\AccountFileSaver.cs" />
     <Compile Include="Shared\CommandSystem\CommandScript.cs" />
+    <Compile Include="Shared\CommandSystem\CommonCmds\ToggleCommand.cs" />
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\CallCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\BreakCommand.cs" />

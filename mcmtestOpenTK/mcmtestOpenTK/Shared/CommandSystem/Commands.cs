@@ -174,6 +174,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new CvarinfoCommand());
             RegisterCommand(new EchoCommand());
             RegisterCommand(new SetCommand());
+            RegisterCommand(new ToggleCommand());
 
             // Queue-related Commands
             RegisterCommand(new BreakCommand());
