@@ -79,5 +79,36 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         {
             return Normal.Dot(point) + D;
         }
+
+        /// <summary>
+        /// Determines the signs of a box to the plane.
+        /// If it returns 1, the box is above the plane.
+        /// If it returns -1, the box is below the plane.
+        /// If it returns 0, the box intersections with the plane.
+        /// </summary>
+        /// <param name="Mins">The mins of the box</param>
+        /// <param name="Maxs">The maxes of the box</param>
+        /// <returns>-1, 0, or 1</returns>
+        public int SignToPlane(Location Mins, Location Maxs)
+        {
+            Location[] locs = new Location[8];
+            locs[0] = new Location(Mins.X, Mins.Y, Mins.Z);
+            locs[1] = new Location(Mins.X, Mins.Y, Maxs.Z);
+            locs[2] = new Location(Mins.X, Maxs.Y, Mins.Z);
+            locs[3] = new Location(Mins.X, Maxs.Y, Maxs.Z);
+            locs[4] = new Location(Maxs.X, Mins.Y, Mins.Z);
+            locs[5] = new Location(Maxs.X, Mins.Y, Maxs.Z);
+            locs[6] = new Location(Maxs.X, Maxs.Y, Mins.Z);
+            locs[7] = new Location(Maxs.X, Maxs.Y, Maxs.Z);
+            int psign = Math.Sign(Distance(locs[0]));
+            for (int i = 1; i < locs.Length; i++)
+            {
+                if (Math.Sign(Distance(locs[i])) != psign)
+                {
+                    return 0;
+                }
+            }
+            return psign;
+        }
     }
 }

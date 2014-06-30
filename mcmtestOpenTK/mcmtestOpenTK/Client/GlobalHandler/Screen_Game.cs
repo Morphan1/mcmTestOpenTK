@@ -74,7 +74,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 MainGame.SpawnEntity(new Bullet()
                 {
-                    Position = NewCollision.Line(Player.player.Position + new Location(0, 0, 6), Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200)),
+                    Position = NewCollision.LineBox(Player.player.Position + new Location(0, 0, 6),
+                    Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200), new Location(-2, -2, -2), new Location(2, 2, 2)),
                     LifeTicks = 60 * 20
                 });
                 MainGame.SpawnEntity(new Bullet()

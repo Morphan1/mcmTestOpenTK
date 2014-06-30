@@ -57,6 +57,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             return Location.NaN;
         }
 
+        public virtual Location ClosestBox(Location mins, Location maxs, Location start, Location end)
+        {
+            return Location.NaN;
+        }
+
         /// <summary>
         /// Whether the entity should tick regularly.
         /// </summary>
