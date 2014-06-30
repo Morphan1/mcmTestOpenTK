@@ -153,7 +153,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location RealMaxs2 = start + Maxs2;
             double xInvEntry, yInvEntry, zInvEntry;
             double xInvExit, yInvExit, zInvExit;
-            if (end.X > start.X)
+            if (end.X >= start.X)
             {
                 xInvEntry = RealMins.X - RealMaxs2.X;
                 xInvExit = RealMaxs.X - RealMins2.X;
@@ -163,7 +163,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 xInvEntry = RealMaxs.X - RealMins2.X;
                 xInvExit = RealMins.X - RealMaxs2.X;
             }
-            if (end.Y > start.Y)
+            if (end.Y >= start.Y)
             {
                 yInvEntry = RealMins.Y - RealMaxs2.Y;
                 yInvExit = RealMaxs.Y - RealMins2.Y;
@@ -173,7 +173,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 yInvEntry = RealMaxs.Y - RealMins2.Y;
                 yInvExit = RealMins.Y - RealMaxs2.Y;
             }
-            if (end.Z > start.Z)
+            if (end.Z >= start.Z)
             {
                 zInvEntry = RealMins.Z - RealMaxs2.Z;
                 zInvExit = RealMaxs.Z - RealMins2.Z;
@@ -187,8 +187,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             double xExit, yExit, zExit;
             if (velocity.X == 0f)
             {
-                xEntry = double.MinValue;
-                xExit = double.MaxValue;
+                //xEntry = double.MinValue;
+                //xExit = double.MaxValue;
+                xEntry = xInvEntry / 0.0000000000001f;
+                xExit = xInvExit / 0.0000000000001f;
             }
             else
             {
@@ -197,8 +199,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (velocity.Y == 0f)
             {
-                yEntry = double.MinValue;
-                yExit = double.MaxValue;
+                //yEntry = double.MinValue;
+                //yExit = double.MaxValue;
+                yEntry = yInvEntry / 0.0000000000001f;
+                yExit = yInvExit / 0.0000000000001f;
             }
             else
             {
@@ -207,8 +211,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (velocity.Z == 0f)
             {
-                zEntry = double.MinValue;
-                zExit = double.MaxValue;
+                //zEntry = double.MinValue;
+                //zExit = double.MaxValue;
+                zEntry = zInvEntry / 0.0000000000001f;
+                zExit = zInvExit / 0.0000000000001f;
             }
             else
             {
@@ -217,7 +223,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             double entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
             double exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
-            if (entryTime > exitTime || xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f)
+            if (entryTime > exitTime || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f) || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f)
             {
                 normal = Location.NaN;
                 return Location.NaN;

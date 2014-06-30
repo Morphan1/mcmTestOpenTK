@@ -86,7 +86,45 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs)
         {
             Location Normal;
-            return LineBox(Start, Target, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            Location movement = Target - Start;
+            Location current = LineBox(Start, Start + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY XY: NO Z
+            movement.Z = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY YZ: NO X
+            movement.X = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY XZ: NO Y
+            movement.Y = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY X: NO YZ
+            movement.Y = 0;
+            movement.Z = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY Y: NO XZ
+            movement.X = 0;
+            movement.Z = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            movement = Target - current;
+            // TRY Z: NO XY
+            movement.X = 0;
+            movement.Y = 0;
+            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
+            // We got what we got
+            return current;
+            /*
+            Position = NewCollision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));*/
         }
     }
 }
