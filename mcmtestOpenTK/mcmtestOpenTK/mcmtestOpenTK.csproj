@@ -158,6 +158,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\GameplayHandlers\NewCollision.cs" />
+    <Compile Include="Client\GameplayHandlers\Plane.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />

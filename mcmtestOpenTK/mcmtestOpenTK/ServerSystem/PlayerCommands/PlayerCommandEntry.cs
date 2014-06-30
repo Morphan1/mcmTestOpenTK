@@ -43,5 +43,7 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
         {
             return Utilities.Concat(Arguments);
         }
+
+        // TODO: Entry.Output
     }
 }

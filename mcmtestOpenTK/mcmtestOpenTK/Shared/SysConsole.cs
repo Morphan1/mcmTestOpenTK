@@ -50,7 +50,8 @@ namespace mcmtestOpenTK.Shared
                 {
                     // TODO: Log file control! Option to change file name or disable entirely...
                     // Also options to put a value like logs/%yyyy%/%mm%/%dd%.log
-                    FileHandler.AppendText("console.log", twaiting);
+                    // TODO: Handle less terribly. Particular multiple-games-running logging
+                    // FileHandler.AppendText("console.log", twaiting);
                     WriteInternal(twaiting);
                 }
                 Thread.Sleep(100);

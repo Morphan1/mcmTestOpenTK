@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -58,6 +59,58 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             model.texture = Texture.GetTexture(texture);
             pos += 4;
+        }
+
+        public bool Point(Location spot)
+        {
+            Location lower = Position + Mins;
+            Location upper = Position + Maxs;
+            return lower.X <= spot.X && lower.Y <= spot.Y && lower.Z <= spot.Z &&
+                upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z;
+        }
+
+        public Plane[] CalculatePlanes()
+        {
+            Plane[] planes = new Plane[6];
+            // Y-
+            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(0, -1, 0));
+            // Y+
+            planes[1] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(0, 1, 0));
+            // X-
+            planes[2] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), new Location(-1, 0, 0));
+            // X+
+            planes[3] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(1, 0, 0));
+            // Z-
+            planes[4] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), new Location(0, 0, -1));
+            // Z+
+            planes[5] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(0, 0, 1));
+            return planes;
+        }
+
+        public override Location Closest(Location start, Location target)
+        {
+            return CollidePlanes(CalculatePlanes(), start, target);
+        }
+
+        public Location CollidePlanes(Plane[] planes, Location start, Location target)
+        {
+            float dist = (target - start).LengthSquared();
+            Location final = Location.NaN;
+            for (int i = 0; i < planes.Length; i++)
+            {
+                Plane plane = planes[i];
+                Location hit = plane.IntersectLine(start, target);
+                if (!hit.IsNaN())
+                {
+                    float newdist = (hit - start).LengthSquared();
+                    if (newdist < dist && Point(hit))
+                    {
+                        dist = newdist;
+                        final = hit;
+                    }
+                }
+            }
+            return final;
         }
     }
 }

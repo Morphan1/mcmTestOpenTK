@@ -52,6 +52,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <param name="data">Data from the network</param>
         public abstract void ReadBytes(byte[] data);
 
+        public virtual Location Closest(Location start, Location target)
+        {
+            return Location.NaN;
+        }
+
         /// <summary>
         /// Whether the entity should tick regularly.
         /// </summary>

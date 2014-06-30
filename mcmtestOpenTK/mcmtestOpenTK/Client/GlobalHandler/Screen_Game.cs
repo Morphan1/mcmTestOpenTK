@@ -69,6 +69,21 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 "\nVelocity: " + Player.player.Velocity.ToString() +
                 "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
                 "\nPing: " + (int)(NetworkBase.Ping * 1000);
+
+            if (MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Left) && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left))
+            {
+                MainGame.SpawnEntity(new Bullet()
+                {
+                    Position = NewCollision.Line(Player.player.Position + new Location(0, 0, 6), Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200)),
+                    LifeTicks = 60 * 20
+                });
+                MainGame.SpawnEntity(new Bullet()
+                {
+                    Position = Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200),
+                    texture = Texture.White,
+                    LifeTicks = 60 * 20
+                });
+            }
         }
 
         public override void Draw2D()

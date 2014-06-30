@@ -33,6 +33,11 @@ namespace mcmtestOpenTK.Shared
         public static Location UnitZ = new Location(0, 0, 1);
 
         /// <summary>
+        /// A location of (NaN, NaN, NaN).
+        /// </summary>
+        public static Location NaN = new Location(float.NaN, float.NaN, float.NaN);
+
+        /// <summary>
         /// The X coordinate of this location.
         /// </summary>
         public float X;
@@ -77,6 +82,25 @@ namespace mcmtestOpenTK.Shared
         public float Length()
         {
             return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+        }
+
+        /// <summary>
+        /// Returns whether the location is NaN.
+        /// </summary>
+        /// <returns>whether the location is NaN</returns>
+        public bool IsNaN()
+        {
+            return float.IsNaN(X) || float.IsNaN(Y) || float.IsNaN(Z);
+        }
+
+        /// <summary>
+        /// Returns the dot product of this and another location.
+        /// </summary>
+        /// <param name="two">The second location</param>
+        /// <returns>The dot product</returns>
+        public float Dot(Location two)
+        {
+            return X * two.X + Y * two.Y + Z * two.Z;
         }
 
         public override string ToString()
