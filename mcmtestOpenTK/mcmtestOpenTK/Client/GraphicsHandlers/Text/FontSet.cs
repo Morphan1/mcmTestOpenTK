@@ -204,8 +204,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
             int htrans = (int)(255 * transmod);
             int strans = (int)(255 * transmod);
             int utrans = (int)(255 * transmod);
-            float X = Position.X;
-            float Y = Position.Y;
+            double X = Position.X;
+            double Y = Position.Y;
             GLFont font = font_default;
             font.BaseTexture.Bind();
             Shader.ColorMultShader.Bind();
@@ -454,7 +454,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="jello">Whether to use a jello effect</param>
         /// <param name="obfu">Whether to randomize letters</param>
         /// <returns>The length of the rendered text in pixels</returns>
-        public static float RenderBaseText(float X, float Y, string text, GLFont font, int color,
+        public static double RenderBaseText(double X, double Y, string text, GLFont font, int color,
             int trans = 255, bool flip = false, bool pseudo = false, bool random = false, bool jello = false, bool obfu = false)
         {
             if (obfu || pseudo || random || jello)
@@ -580,7 +580,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="width">The width</param>
         /// <param name="height">The height</param>
         /// <param name="c">The color to use</param>
-        public static void DrawRectangle(float X, float Y, float width, float height, Color c)
+        public static void DrawRectangle(double X, double Y, float width, float height, Color c)
         {
             if (c != null) GL.Color4(c);
             GL.TexCoord2(2f / 1024f, 2 / 1024f);

@@ -50,9 +50,9 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             PasswordBox.Password = true;
             SaveBox = new MenuToggler("Save Username/Password", 0, 0);
             // Calculate widths for X-centering
-            float lwidth = LoginB.RenderSquare.PositionHigh.X + 10;
-            float pwidth = PlayOffB.RenderSquare.PositionHigh.X;
-            float ladjust = (MainGame.ScreenWidth / 2 - (lwidth + pwidth) / 2);
+            double lwidth = LoginB.RenderSquare.PositionHigh.X + 10;
+            double pwidth = PlayOffB.RenderSquare.PositionHigh.X;
+            double ladjust = (MainGame.ScreenWidth / 2 - (lwidth + pwidth) / 2);
             // Adjust their X locations (centering)
             LoginB.RenderSquare.PositionLow.X += ladjust;
             LoginB.RenderSquare.PositionHigh.X += ladjust;
@@ -69,16 +69,16 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             SaveBox.RenderSquare.PositionLow.X += ladjust;
             SaveBox.RenderSquare.PositionHigh.X += ladjust;
             // Calculate heights for Y-centering
-            float uheight = UsernameBox.RenderSquare.PositionHigh.Y + 10;
-            float ulheight = UsernameLabel.RenderSquare.PositionHigh.Y + 10;
-            float pheight = PasswordBox.RenderSquare.PositionHigh.Y + 10;
-            float plheight = PasswordLabel.RenderSquare.PositionHigh.Y + 10;
-            float lheight = LoginB.RenderSquare.PositionHigh.Y + 10;
-            float sheight = SaveBox.RenderSquare.PositionHigh.Y + 10;
-            float theight = uheight + pheight + lheight + ulheight + plheight + sheight;
+            double uheight = UsernameBox.RenderSquare.PositionHigh.Y + 10;
+            double ulheight = UsernameLabel.RenderSquare.PositionHigh.Y + 10;
+            double pheight = PasswordBox.RenderSquare.PositionHigh.Y + 10;
+            double plheight = PasswordLabel.RenderSquare.PositionHigh.Y + 10;
+            double lheight = LoginB.RenderSquare.PositionHigh.Y + 10;
+            double sheight = SaveBox.RenderSquare.PositionHigh.Y + 10;
+            double theight = uheight + pheight + lheight + ulheight + plheight + sheight;
             ladjust = MainGame.ScreenHeight / 2 - theight / 2;
             // Adjust their Y position (centering)
-            float lat = ladjust;
+            double lat = ladjust;
             UsernameLabel.RenderSquare.PositionLow.Y += lat;
             UsernameLabel.RenderSquare.PositionHigh.Y += lat;
             lat += ulheight;

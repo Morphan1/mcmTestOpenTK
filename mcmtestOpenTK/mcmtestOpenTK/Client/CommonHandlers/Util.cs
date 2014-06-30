@@ -58,7 +58,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
 
         public static Vector3 LocVec(Location loc)
         {
-            return new Vector3(loc.X, loc.Y, loc.Z);
+            return new Vector3((float)loc.X, (float)loc.Y, (float)loc.Z);
         }
     }
 }

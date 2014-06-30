@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// <summary>
         /// What angle to render at, if any.
         /// </summary>
-        public float Angle = 0;
+        public double Angle = 0;
 
         /// <summary>
         /// The texture to use.
@@ -79,9 +79,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 
             float TexH0 = 0;
             float TexV0 = 0;
-            float TexX1 = Scale.X / 10;
-            float TexY1 = Scale.Y / 10;
-            float TexZ1 = Scale.Z / 10;
+            double TexX1 = Scale.X / 10;
+            double TexY1 = Scale.Y / 10;
+            double TexZ1 = Scale.Z / 10;
 
             GL.Begin(PrimitiveType.Quads);
 

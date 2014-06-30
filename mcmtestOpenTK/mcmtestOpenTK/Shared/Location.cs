@@ -35,22 +35,36 @@ namespace mcmtestOpenTK.Shared
         /// <summary>
         /// A location of (NaN, NaN, NaN).
         /// </summary>
-        public static Location NaN = new Location(float.NaN, float.NaN, float.NaN);
+        public static Location NaN = new Location(double.NaN, double.NaN, double.NaN);
 
         /// <summary>
         /// The X coordinate of this location.
         /// </summary>
-        public float X;
+        public double X;
 
         /// <summary>
         /// The Y coordinate of this location.
         /// </summary>
-        public float Y;
+        public double Y;
 
         /// <summary>
         /// The Z coordinate of this location.
         /// </summary>
-        public float Z;
+        public double Z;
+
+        public Location(double _X, double _Y, double _Z)
+        {
+            X = _X;
+            Y = _Y;
+            Z = _Z;
+        }
+
+        public Location(double _Point)
+        {
+            X = _Point;
+            Y = _Point;
+            Z = _Point;
+        }
 
         public Location(float _X, float _Y, float _Z)
         {
@@ -65,12 +79,11 @@ namespace mcmtestOpenTK.Shared
             Y = _Point;
             Z = _Point;
         }
-
         /// <summary>
         /// Returns the full linear length of the vector location, squared for efficiency.
         /// </summary>
         /// <returns>The squared length</returns>
-        public float LengthSquared()
+        public double LengthSquared()
         {
             return X * X + Y * Y + Z * Z;
         }
@@ -79,7 +92,7 @@ namespace mcmtestOpenTK.Shared
         /// Returns the full linear length of the vector location, which goes through a square-root operation (inefficient).
         /// </summary>
         /// <returns>The square-rooted length</returns>
-        public float Length()
+        public double Length()
         {
             return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
         }
@@ -90,7 +103,7 @@ namespace mcmtestOpenTK.Shared
         /// <returns>whether the location is NaN</returns>
         public bool IsNaN()
         {
-            return float.IsNaN(X) || float.IsNaN(Y) || float.IsNaN(Z);
+            return double.IsNaN(X) || double.IsNaN(Y) || double.IsNaN(Z);
         }
 
         /// <summary>
@@ -98,7 +111,7 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         /// <param name="two">The second location</param>
         /// <returns>The dot product</returns>
-        public float Dot(Location two)
+        public double Dot(Location two)
         {
             return X * two.X + Y * two.Y + Z * two.Z;
         }
@@ -124,7 +137,7 @@ namespace mcmtestOpenTK.Shared
         /// <returns>A valid normal location</returns>
         public Location Normalize()
         {
-            float len = Length();
+            double len = Length();
             return new Location(X / len, Y / len, Z / len);
         }
 
@@ -146,9 +159,9 @@ namespace mcmtestOpenTK.Shared
         public byte[] ToBytes()
         {
             byte[] toret = new byte[12];
-            BitConverter.GetBytes(X).CopyTo(toret, 0);
-            BitConverter.GetBytes(Y).CopyTo(toret, 4);
-            BitConverter.GetBytes(Z).CopyTo(toret, 8);
+            BitConverter.GetBytes((float)X).CopyTo(toret, 0);
+            BitConverter.GetBytes((float)Y).CopyTo(toret, 4);
+            BitConverter.GetBytes((float)Z).CopyTo(toret, 8);
             return toret;
         }
 
@@ -212,6 +225,21 @@ namespace mcmtestOpenTK.Shared
         }
 
         public static Location operator /(Location v, float scale)
+        {
+            return new Location(v.X / scale, v.Y / scale, v.Z / scale);
+        }
+
+        public static Location operator *(Location v, double scale)
+        {
+            return new Location(v.X * scale, v.Y * scale, v.Z * scale);
+        }
+
+        public static Location operator *(double scale, Location v)
+        {
+            return new Location(v.X * scale, v.Y * scale, v.Z * scale);
+        }
+
+        public static Location operator /(Location v, double scale)
         {
             return new Location(v.X / scale, v.Y / scale, v.Z / scale);
         }

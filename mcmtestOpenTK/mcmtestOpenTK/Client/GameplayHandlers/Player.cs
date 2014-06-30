@@ -174,10 +174,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Velocity = new Location(movement.X * MoveSpeed, movement.Y * MoveSpeed, Velocity.Z);
                 Velocity.Z -= BaseGravity * MyDelta;
             }
-            float pZ = Position.Z;
+            double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
-            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            //Position = NewCollision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            //Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
                 // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White });
@@ -197,7 +197,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         {
                             Points.RemoveAt(0);
                         }
-                        NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, Direction.X, Direction.Y));
+                        NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, (float)Direction.X, (float)Direction.Y));
                     }
                 }
             }

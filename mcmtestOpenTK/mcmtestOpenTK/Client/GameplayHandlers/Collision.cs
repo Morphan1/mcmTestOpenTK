@@ -78,14 +78,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location Slide(Location Start, Location Target, float scale = 1)
         {
             Location advance = Target - Start;
-            float size = advance.Length() * scale;
+            double size = advance.Length() * scale;
             if (size == 0)
             {
                 return Start;
             }
             advance /= size;
             int ticks = (int)Math.Floor(size);
-            float extra = size - (float)ticks;
+            double extra = size - (double)ticks;
             ticks += 1;
             Location Nextpoint = Start;
             Location Jump;
@@ -165,14 +165,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs, float scale = 1)
         {
             Location advance = Target - Start;
-            float size = advance.Length() * scale;
+            double size = advance.Length() * scale;
             if (size == 0)
             {
                 return Start;
             }
             advance /= size;
             int ticks = (int)Math.Floor(size);
-            float extra = size - (float)ticks;
+            double extra = size - (double)ticks;
             ticks += 1;
             Location Nextpoint = Start;
             Location Jump;
@@ -250,14 +250,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location Line(Location Start, Location Target, float scale = 1)
         {
             Location advance = Target - Start;
-            float size = advance.Length() * scale;
+            double size = advance.Length() * scale;
             if (size == 0)
             {
                 return Start;
             }
             advance /= size;
             int ticks = (int)Math.Floor(size);
-            float extra = size - (float)ticks;
+            double extra = size - (double)ticks;
             ticks += 1;
             Location Nextpoint = Start;
             Location Jump;
@@ -291,14 +291,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location LineBox(Location Start, Location Target, Location Mins, Location Maxs, float scale = 1)
         {
             Location advance = Target - Start;
-            float size = advance.Length() * scale;
+            double size = advance.Length() * scale;
             if (size == 0)
             {
                 return Start;
             }
             advance /= size;
             int ticks = (int)Math.Floor(size);
-            float extra = size - (float)ticks;
+            double extra = size - (double)ticks;
             ticks += 1;
             Location Nextpoint = Start;
             Location Jump;

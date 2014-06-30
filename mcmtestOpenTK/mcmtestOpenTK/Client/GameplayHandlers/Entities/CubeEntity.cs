@@ -147,6 +147,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
         {
             Location velocity = end - start;
+            Location RealMins = Position + Mins;
+            Location RealMaxs = Position + Maxs;
+            Location RealMins2 = start + Mins2;
+            Location RealMaxs2 = start + Maxs2;
             Box b1 = new Box()
             {
                 x = start.X + Mins2.X,
@@ -171,44 +175,44 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 vy = 0,
                 vz = 0
             };
-            float xInvEntry, yInvEntry, zInvEntry;
-            float xInvExit, yInvExit, zInvExit;
-            if (b1.vx > 0.0f)
+            double xInvEntry, yInvEntry, zInvEntry;
+            double xInvExit, yInvExit, zInvExit;
+            if (end.X > start.X)
             {
-                xInvEntry = b2.x - (b1.x + b1.w);
-                xInvExit = (b2.x + b2.w) - b1.x;
+                xInvEntry = RealMins.X - RealMaxs2.X;
+                xInvExit = RealMaxs.X - RealMins2.X;
             }
             else
             {
-                xInvEntry = (b2.x + b2.w) - b1.x;
-                xInvExit = b2.x - (b1.x + b1.w);
+                xInvEntry = RealMaxs.X - RealMins2.X;
+                xInvExit = RealMins.X - RealMaxs2.X;
             }
-            if (b1.vy > 0.0f)
+            if (end.Y > start.Y)
             {
-                yInvEntry = b2.y - (b1.y + b1.h);
-                yInvExit = (b2.y + b2.h) - b1.y;
+                yInvEntry = RealMins.Y - RealMaxs2.Y;
+                yInvExit = RealMaxs.Y - RealMins2.Y;
             }
             else
             {
-                yInvEntry = (b2.y + b2.h) - b1.y;
-                yInvExit = b2.y - (b1.y + b1.h);
+                yInvEntry = RealMaxs.Y - RealMins2.Y;
+                yInvExit = RealMins.Y - RealMaxs2.Y;
             }
-            if (b1.vz > 0.0f)
+            if (end.Z > start.Z)
             {
-                zInvEntry = b2.z - (b1.z + b1.d);
-                zInvExit = (b2.z + b2.d) - b1.z;
+                zInvEntry = RealMins.Z - RealMaxs2.Z;
+                zInvExit = RealMaxs.Z - RealMins2.Z;
             }
             else
             {
-                zInvEntry = (b2.z + b2.d) - b1.z;
-                zInvExit = b2.z - (b1.z + b1.d);
+                zInvEntry = RealMaxs.Z - RealMins2.Z;
+                zInvExit = RealMins.Z - RealMaxs2.Z;
             }
-            float xEntry, yEntry, zEntry;
-            float xExit, yExit, zExit;
+            double xEntry, yEntry, zEntry;
+            double xExit, yExit, zExit;
             if (b1.vx == 0.0f)
             {
-                xEntry = float.NegativeInfinity;
-                xExit = float.PositiveInfinity;
+                xEntry = double.NegativeInfinity;
+                xExit = double.PositiveInfinity;
             }
             else
             {
@@ -217,8 +221,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (b1.vy == 0.0f)
             {
-                yEntry = float.NegativeInfinity;
-                yExit = float.PositiveInfinity;
+                yEntry = double.NegativeInfinity;
+                yExit = double.PositiveInfinity;
             }
             else
             {
@@ -227,16 +231,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (b1.vz == 0.0f)
             {
-                zEntry = float.NegativeInfinity;
-                zExit = float.PositiveInfinity;
+                zEntry = double.NegativeInfinity;
+                zExit = double.PositiveInfinity;
             }
             else
             {
                 zEntry = zInvEntry / b1.vz;
                 zExit = zInvExit / b1.vz;
             }
-            float entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
-            float exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
+            double entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
+            double exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
             if (entryTime > exitTime || xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f)
             {
                 normal = Location.NaN;
@@ -244,36 +248,39 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             else
             {
-                float normalx, normaly, normalz;
-                if (xEntry > yEntry)
+                if (zEntry >= xEntry && zEntry >= yEntry)
                 {
-                    if (xInvEntry < 0.0f)
+                    if (zInvEntry < 0)
                     {
-                        normalx = 1.0f;
-                        normaly = 0.0f;
+                        normal = new Location(0, 0, 1);
                     }
                     else
                     {
-                        normalx = -1.0f;
-                        normaly = 0.0f;
+                        normal = new Location(0, 0, -1);
+                    }
+                }
+                else if (xEntry >= zEntry && xEntry >= yEntry)
+                {
+                    if (xInvEntry < 0)
+                    {
+                        normal = new Location(1, 0, 0);
+                    }
+                    else
+                    {
+                        normal = new Location(-1, 0, 0);
                     }
                 }
                 else
                 {
-                    if (yInvEntry < 0.0f)
+                    if (yInvEntry < 0)
                     {
-                        normalx = 0.0f;
-                        normaly = 1.0f;
+                        normal = new Location(0, 1, 0);
                     }
                     else
                     {
-                        normalx = 0.0f;
-                        normaly = -1.0f;
+                        normal = new Location(0, -1, 0);
                     }
                 }
-                // TODO: CALCULATE NORMAL Z
-                normalz = 0;
-                normal = new Location(normalx, normaly, normalz);
                 Location res = start + (end - start) * entryTime;
                 return new Location(res.X, res.Y, res.Z);
             }
@@ -281,8 +288,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
     }
     public class Box
     {
-        public float x, y, z;
-        public float w, h, d;
-        public float vx, vy, vz;
+        public double x, y, z;
+        public double w, h, d;
+        public double vx, vy, vz;
     }
 }

@@ -189,12 +189,12 @@ namespace mcmtestOpenTK.Shared
         /// <param name="yaw">The yaw angle, in radians</param>
         /// <param name="pitch">The pitch angle, in radians</param>
         /// <returns></returns>
-        public static Location ForwardVector(float yaw, float pitch)
+        public static Location ForwardVector(double yaw, double pitch)
         {
-            float cp = (float)Math.Cos(pitch);
-            return new Location(-(cp * (float)Math.Cos((double)yaw)),
-                                -(cp * (float)Math.Sin((double)yaw)),
-                                ((float)Math.Sin((double)pitch)));
+            double cp = (float)Math.Cos(pitch);
+            return new Location(-(cp * Math.Cos(yaw)),
+                                -(cp * Math.Sin(yaw)),
+                                (Math.Sin(pitch)));
         }
 
         /// <summary>
@@ -203,10 +203,10 @@ namespace mcmtestOpenTK.Shared
         /// <param name="vec">The original vector</param>
         /// <param name="yaw">The yaw to rotate by</param>
         /// <returns>The rotated vector.</returns>
-        public static Location RotateVector(Location vec, float yaw)
+        public static Location RotateVector(Location vec, double yaw)
         {
-            float cos = (float)Math.Cos(yaw);
-            float sin = (float)Math.Sin(yaw);
+            double cos = (float)Math.Cos(yaw);
+            double sin = (float)Math.Sin(yaw);
             return new Location((vec.X * cos) - (vec.Y * sin), (vec.X * sin) + (vec.Y * cos), vec.Z);
         }
 
@@ -217,14 +217,14 @@ namespace mcmtestOpenTK.Shared
         /// <param name="yaw">The yaw to rotate by</param>
         /// <param name="pitch">The pitch to rotate by</param>
         /// <returns>The rotated vector</returns>
-        public static Location RotateVector(Location vec, float yaw, float pitch)
+        public static Location RotateVector(Location vec, double yaw, double pitch)
         {
-            float cosyaw = (float)Math.Cos(yaw);
-            float cospitch = (float)Math.Cos(pitch);
-            float sinyaw = (float)Math.Sin(yaw);
-            float sinpitch = (float)Math.Sin(pitch);
-            float bX = vec.Z * sinpitch + vec.X * cospitch;
-            float bZ = vec.Z * cospitch - vec.X * sinpitch;
+            double cosyaw = (float)Math.Cos(yaw);
+            double cospitch = (float)Math.Cos(pitch);
+            double sinyaw = (float)Math.Sin(yaw);
+            double sinpitch = (float)Math.Sin(pitch);
+            double bX = vec.Z * sinpitch + vec.X * cospitch;
+            double bZ = vec.Z * cospitch - vec.X * sinpitch;
             return new Location(bX * cosyaw - vec.Y * sinyaw, bX * sinyaw + vec.Y * cosyaw, bZ);
         }
 
@@ -248,11 +248,11 @@ namespace mcmtestOpenTK.Shared
             }
             else
             {
-                float yaw;
-                float pitch;
+                double yaw;
+                double pitch;
                 if (input.X != 0)
                 {
-                    yaw = (float)(Math.Atan2(input.Y, input.X) * 180 / Math.PI) + 180;
+                    yaw = (Math.Atan2(input.Y, input.X) * 180 / Math.PI) + 180;
                 }
                 else if (input.Y > 0)
                 {
@@ -262,7 +262,7 @@ namespace mcmtestOpenTK.Shared
                 {
                     yaw = 270;
                 }
-                pitch = (float)(Math.Atan2(input.Z, Math.Sqrt(input.X * input.X + input.Y * input.Y)) * 180 / Math.PI);
+                pitch = (Math.Atan2(input.Z, Math.Sqrt(input.X * input.X + input.Y * input.Y)) * 180 / Math.PI);
                 while (pitch < -180)
                 {
                     pitch += 360;

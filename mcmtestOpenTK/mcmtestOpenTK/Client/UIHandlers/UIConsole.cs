@@ -447,7 +447,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 // Cursor
                 if (keymark_add)
                 {
-                    float XAdd = FontSet.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing.set) - 1;
+                    double XAdd = FontSet.MeasureFancyText(Typing.Text.Substring(0, TypingCursor + 1), Typing.set) - 1;
                     if (Typing.Text.Length > TypingCursor + 1 && Typing.Text[TypingCursor] == '^'
                         && TextStyle.IsColorSymbol(Typing.Text[TypingCursor + 1]))
                     {

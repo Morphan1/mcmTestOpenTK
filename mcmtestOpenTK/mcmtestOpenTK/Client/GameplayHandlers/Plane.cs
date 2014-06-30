@@ -31,7 +31,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <summary>
         /// The distance from origin, in theory.
         /// </summary>
-        public float D;
+        public double D;
 
         public Plane(Location v1, Location v2, Location v3)
         {
@@ -60,9 +60,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public Location IntersectLine(Location start, Location end)
         {
             Location ba = end - start;
-            float nDotA = Normal.Dot(start);
-            float nDotBA = Normal.Dot(ba);
-            float t = -(nDotA + D) / (nDotBA);
+            double nDotA = Normal.Dot(start);
+            double nDotBA = Normal.Dot(ba);
+            double t = -(nDotA + D) / (nDotBA);
             if (t < 0)
             {
                 return Location.NaN;
@@ -75,7 +75,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         /// <param name="point">The point</param>
         /// <returns>The distance</returns>
-        public float Distance(Location point)
+        public double Distance(Location point)
         {
             return Normal.Dot(point) + D;
         }

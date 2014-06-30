@@ -328,7 +328,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="X">The X location to draw it at</param>
         /// <param name="Y">The Y location to draw it at</param>
         /// <returns>The length of the character in pixels</returns>
-        public float DrawSingleCharacter(char symbol, float X, float Y, bool flip)
+        public double DrawSingleCharacter(char symbol, double X, double Y, bool flip)
         {
             // NOTE: Adjust text downward to match what it used to be in early development
             Y += 4;
@@ -365,9 +365,9 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="X">The X location to draw it at</param>
         /// <param name="Y">The Y location to draw it at</param>
         /// <returns>The length of the string in pixels</returns>
-        public float DrawString(string str, float X, float Y, bool flip = false)
+        public double DrawString(string str, double X, double Y, bool flip = false)
         {
-            float nX = 0;
+            double nX = 0;
             for (int i = 0; i < str.Length; i++)
             {
                 if (str[i] == '\n')
@@ -388,7 +388,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <param name="X">The X location to draw it at</param>
         /// <param name="Y">The Y location to draw it at</param>
         /// <param name="c">The color to draw it in</param>
-        public void DrawStringFull(string str, float X, float Y, Color c)
+        public void DrawStringFull(string str, double X, double Y, Color c)
         {
             BaseTexture.Bind();
             Shader.ColorMultShader.Bind();

@@ -52,7 +52,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public virtual void Tick(float MyDelta, bool IsCustom)
         {
             Velocity.Z -= Gravity * MyDelta;
-            float pZ = Position.Z;
+            double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
             if (CheckCollision)
             {
