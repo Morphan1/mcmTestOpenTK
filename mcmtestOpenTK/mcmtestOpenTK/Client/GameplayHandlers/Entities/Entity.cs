@@ -57,8 +57,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             return Location.NaN;
         }
 
-        public virtual Location ClosestBox(Location mins, Location maxs, Location start, Location end)
+        public virtual Location ClosestBox(Location mins, Location maxs, Location start, Location end, out Location normal)
         {
+            normal = Location.NaN;
             return Location.NaN;
         }
 

@@ -177,6 +177,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             float pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            //Position = NewCollision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
                 // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White });
@@ -233,8 +234,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Update((float)Target, true);
                     ctime = Time;
                     // Apply changes
-                    Position += (pos - Position)/* / 2*/;
-                    Velocity += (vel - Velocity)/* / 2*/;
+                   // Position += (pos - Position)/* / 2*/;
+                   // Velocity += (vel - Velocity)/* / 2*/;
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {

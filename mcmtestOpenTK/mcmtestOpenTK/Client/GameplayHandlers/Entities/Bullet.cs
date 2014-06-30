@@ -6,6 +6,9 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -16,6 +19,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public int LifeTicks = 1000;
 
         public Texture texture = Texture.Console;
+
+        public Location start;
 
         public Bullet(): base()
         {
@@ -52,6 +57,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             model.Position = Position;
             model.Angle = Direction.X;
             model.Draw();
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color4(Color4.Green);
+            GL.Vertex3(Position.X, Position.Y, Position.Z);
+            GL.Vertex3(start.X, start.Y, start.Z);
+            GL.End();
         }
     }
 }

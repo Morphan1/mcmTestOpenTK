@@ -144,7 +144,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             return Location.NaN;
         }
 
-        public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end)
+        public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
         {
             Location velocity = end - start;
             Box b1 = new Box()
@@ -152,9 +152,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 x = start.X + Mins2.X,
                 y = start.Y + Mins2.Y,
                 z = start.Z + Mins2.Z,
-                w = Maxs2.X,
-                h = Maxs2.Y,
-                d = Maxs2.Z,
+                w = Maxs2.X - Mins2.X,
+                h = Maxs2.Y - Mins2.Y,
+                d = Maxs2.Z - Mins2.Z,
                 vx = velocity.X,
                 vy = velocity.Y,
                 vz = velocity.Z
@@ -164,18 +164,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 x = Position.X + Mins.X,
                 y = Position.Y + Mins.Y,
                 z = Position.Z + Mins.Z,
-                w = Maxs.X,
-                h = Maxs.Y,
-                d = Maxs.Z,
+                w = Maxs.X - Mins.X,
+                h = Maxs.Y - Mins.Y,
+                d = Maxs.Z - Mins.Z,
                 vx = 0,
                 vy = 0,
                 vz = 0
             };
-
-            float xInvEntry, yInvEntry;
-            float xInvExit, yInvExit;
-
-            // find the distance between the objects on the near and far sides for both x and y
+            float xInvEntry, yInvEntry, zInvEntry;
+            float xInvExit, yInvExit, zInvExit;
             if (b1.vx > 0.0f)
             {
                 xInvEntry = b2.x - (b1.x + b1.w);
@@ -186,7 +183,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 xInvEntry = (b2.x + b2.w) - b1.x;
                 xInvExit = b2.x - (b1.x + b1.w);
             }
-
             if (b1.vy > 0.0f)
             {
                 yInvEntry = b2.y - (b1.y + b1.h);
@@ -197,11 +193,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 yInvEntry = (b2.y + b2.h) - b1.y;
                 yInvExit = b2.y - (b1.y + b1.h);
             }
-
-            // find time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
+            if (b1.vz > 0.0f)
+            {
+                zInvEntry = b2.z - (b1.z + b1.d);
+                zInvExit = (b2.z + b2.d) - b1.z;
+            }
+            else
+            {
+                zInvEntry = (b2.z + b2.d) - b1.z;
+                zInvExit = b2.z - (b1.z + b1.d);
+            }
             float xEntry, yEntry, zEntry;
             float xExit, yExit, zExit;
-
             if (b1.vx == 0.0f)
             {
                 xEntry = float.NegativeInfinity;
@@ -212,7 +215,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 xEntry = xInvEntry / b1.vx;
                 xExit = xInvExit / b1.vx;
             }
-
             if (b1.vy == 0.0f)
             {
                 yEntry = float.NegativeInfinity;
@@ -223,21 +225,26 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 yEntry = yInvEntry / b1.vy;
                 yExit = yInvExit / b1.vy;
             }
-
-            // find the earliest/latest times of collision
-            float entryTime = Math.Max(xEntry, yEntry);
-            float exitTime = Math.Min(xExit, yExit);
-
-            // if there was no collision
-            if (entryTime > exitTime || xEntry < 0.0f && yEntry < 0.0f || xEntry > 1.0f || yEntry > 1.0f)
+            if (b1.vz == 0.0f)
             {
+                zEntry = float.NegativeInfinity;
+                zExit = float.PositiveInfinity;
+            }
+            else
+            {
+                zEntry = zInvEntry / b1.vz;
+                zExit = zInvExit / b1.vz;
+            }
+            float entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
+            float exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
+            if (entryTime > exitTime || xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f)
+            {
+                normal = Location.NaN;
                 return Location.NaN;
             }
-
-            else // if there was a collision
+            else
             {
                 float normalx, normaly, normalz;
-                // calculate normal of collided surface
                 if (xEntry > yEntry)
                 {
                     if (xInvEntry < 0.0f)
@@ -264,8 +271,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                         normaly = -1.0f;
                     }
                 }
-
-                // return the time of collision
+                // TODO: CALCULATE NORMAL Z
+                normalz = 0;
+                normal = new Location(normalx, normaly, normalz);
                 Location res = start + (end - start) * entryTime;
                 return new Location(res.X, res.Y, res.Z);
             }

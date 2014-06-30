@@ -54,7 +54,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 // Get the current solid in the loop.
                 Entity solid = MainGame.Solids[i];
                 // Find where it here
-                Location hit = solid.ClosestBox(Mins, Maxs, Start, Target);
+                Location normal;
+                Location hit = solid.ClosestBox(Mins, Maxs, Start, Target, out normal);
                 // NaN = no hit, ignore!
                 if (hit.IsNaN())
                 {
