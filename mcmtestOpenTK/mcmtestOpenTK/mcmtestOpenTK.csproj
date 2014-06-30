@@ -111,7 +111,6 @@
     <Compile Include="Client\CommandHandlers\UICmds\BindCommand.cs" />
     <Compile Include="Client\CommandHandlers\UICmds\CapturemouseCommand.cs" />
     <Compile Include="Client\CommandHandlers\UICmds\UnbindCommand.cs" />
-    <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Bullet.cs" />
     <Compile Include="Client\GlobalHandler\AbstractScreen.cs" />
     <Compile Include="Client\GlobalHandler\Screen_Servers.cs" />
@@ -158,7 +157,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\GameplayHandlers\NewCollision.cs" />
+    <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Plane.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />

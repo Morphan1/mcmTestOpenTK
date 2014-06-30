@@ -166,7 +166,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 if (up)
                 {
                     if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
-                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
+                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2)))
                     {
                         Velocity.Z = JumpPower;
                     }
@@ -176,11 +176,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
-            //Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Location ploc = Position;
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
-                // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White });
+                // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 Velocity.Z = (Position.Z - pZ) / MyDelta;
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
@@ -234,8 +234,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Update((float)Target, true);
                     ctime = Time;
                     // Apply changes
-                   // Position += (pos - Position)/* / 2*/;
-                   // Velocity += (vel - Velocity)/* / 2*/;
+                    Position += (pos - Position);
+                    Velocity += (vel - Velocity);
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {

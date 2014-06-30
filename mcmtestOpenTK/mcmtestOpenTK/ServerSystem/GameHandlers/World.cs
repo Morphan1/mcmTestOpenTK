@@ -32,6 +32,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         public List<Entity> Tickers;
 
         /// <summary>
+        /// All solid entities in the world.
+        /// </summary>
+        public List<Entity> Solids;
+
+        /// <summary>
         /// A list of all entities that serve as spawn points.
         /// </summary>
         public List<SpawnPoint> SpawnPoints;
@@ -42,6 +47,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             Players = new List<Player>();
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+            Solids = new List<Entity>();
             SpawnPoints = new List<SpawnPoint>();
         }
 
@@ -99,6 +105,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 SpawnPoints.Add((SpawnPoint)entity);
             }
+            if (entity.Solid)
+            {
+                Solids.Add(entity);
+            }
             if (entity.NetTransmit)
             {
                 for (int i = 0; i < Players.Count; i++)
@@ -126,6 +136,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             else if (ent is SpawnPoint)
             {
                 SpawnPoints.Remove((SpawnPoint)ent);
+            }
+            if (ent.Solid)
+            {
+                Solids.Remove(ent);
             }
             if (ent.TickMe)
             {

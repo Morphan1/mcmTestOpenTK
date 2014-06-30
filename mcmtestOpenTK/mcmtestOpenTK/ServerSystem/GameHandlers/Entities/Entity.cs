@@ -57,6 +57,42 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         }
 
         /// <summary>
+        /// Get the first collision of a box line.
+        /// </summary>
+        /// <param name="mins">The mins of the line</param>
+        /// <param name="maxs">The maxs of the line</param>
+        /// <param name="start">The start of the line</param>
+        /// <param name="end">The end of the line</param>
+        /// <param name="normal">The normal of the hit, or NaN if none</param>
+        /// <returns>The location of the hit, or NaN if none</returns>
+        public virtual Location ClosestBox(Location mins, Location maxs, Location start, Location end, out Location normal)
+        {
+            normal = Location.NaN;
+            return Location.NaN;
+        }
+
+        /// <summary>
+        /// Checks if a point is contained inside the entity.
+        /// </summary>
+        /// <param name="point">The point to check</param>
+        /// <returns>Whether it is contained</returns>
+        public virtual bool Point(Location point)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether a box intersects the entity.
+        /// </summary>
+        /// <param name="mins">The mins of the box</param>
+        /// <param name="maxs">The maxs of the box</param>
+        /// <returns>Whether it intersects
+        public virtual bool Box(Location mins, Location maxs)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Whether this entity needs to be ticked.
         /// </summary>
         public readonly bool TickMe;

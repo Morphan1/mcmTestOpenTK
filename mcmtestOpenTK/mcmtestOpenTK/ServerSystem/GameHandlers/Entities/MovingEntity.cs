@@ -38,7 +38,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <summary>
         /// How this entity moves.
         /// </summary>
-        public MovementType MoveType = MovementType.Line;
+        public MovementType MoveType = MovementType.LineBox;
 
         // TODO: Rotation velocity
 
@@ -58,14 +58,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 switch (MoveType)
                 {
-                    case MovementType.Line:
-                        Position = Collision.Line(Position, target);
-                        break;
                     case MovementType.LineBox:
-                        Position = Collision.LineBox(Position, target, Mins, Maxs);
-                        break;
-                    case MovementType.Slide:
-                        Position = Collision.Slide(Position, target);
+                        Location normal;
+                        Position = Collision.LineBox(Position, target, Mins, Maxs, out normal);
                         break;
                     case MovementType.SlideBox:
                         Position = Collision.SlideBox(Position, target, Mins, Maxs);
@@ -142,9 +137,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
     public enum MovementType
     {
-        Slide = 1,
-        SlideBox = 2,
-        Line = 3,
-        LineBox = 4,
+        SlideBox = 1,
+        LineBox = 2,
     }
 }

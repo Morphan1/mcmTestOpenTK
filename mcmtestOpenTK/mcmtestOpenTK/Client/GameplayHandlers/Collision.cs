@@ -2,33 +2,61 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Client.GlobalHandler;
-using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
     public class Collision
     {
-        /// <summary>
-        /// Returns whether there is something solid at the specified point.
-        /// </summary>
-        /// <param name="spot">The place to check</param>
-        /// <returns>Whether there is something solid there</returns>
-        public static bool Point(Location spot)
+        /*
+        public static Location Line(Location Start, Location Target)
         {
-            Entity ent;
-            Location lower;
-            Location upper;
+            // Watch the distance - we want the closest hit!
+            double distance = (Target - Start).LengthSquared();
+            // Keep track of what hit location we had
+            Location final = Target;
+            // Loop through all solids.
             for (int i = 0; i < MainGame.Solids.Count; i++)
             {
-                ent = MainGame.Solids[i];
-                if (ent.Solid)
+                // Get the current solid in the loop.
+                Entity solid = MainGame.Solids[i];
+                // Find where it here
+                Location hit = solid.Closest(Start, Target);
+                // NaN = no hit, ignore!
+                if (hit.IsNaN())
                 {
-                    lower = ent.Position + ent.Mins;
-                    upper = ent.Position + ent.Maxs;
-                    if (lower.X <= spot.X && lower.Y <= spot.Y && lower.Z <= spot.Z &&
-                        upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z)
+                    continue;
+                }
+                // Calculate how close it is.
+                double newdist = (hit - Start).LengthSquared();
+                // If the hit is closer than the previous hit
+                if (newdist < distance)
+                {
+                    // Make this the new best hit
+                    distance = newdist;
+                    final = hit;
+                }
+            }
+            // Loops over, return whatever we got!
+            return final;
+        }
+        */
+
+        /// <summary>
+        /// Checks for solids at a specific point.
+        /// </summary>
+        /// <param name="point">The point to check at</param>
+        /// <returns>Whether there is a solid there</returns>
+        public static bool Point(Location point)
+        {
+            for (int i = 0; i < MainGame.Solids.Count; i++)
+            {
+                Entity solid = MainGame.Solids[i];
+                if (solid.Solid)
+                {
+                    if (solid.Point(point))
                     {
                         return true;
                     }
@@ -38,28 +66,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         }
 
         /// <summary>
-        /// Returns whether there is something solid inside the specified box.
+        /// Checks for solids at a specific point with the specific bounding box.
         /// </summary>
-        /// <param name="spot">The place to check</param>
-        /// <param name="Mins">The minimum point of the collision box</param>
-        /// <param name="Maxs">The maximum point of the collision box</param>
-        /// <returns>Whether there is something solid there</returns>
-        public static bool Box(Location spot, Location Mins, Location Maxs)
+        /// <param name="point">The point to check at</param>
+        /// <param name="mins">The mins of the box</param>
+        /// <param name="maxs">The maxes of the box</param>
+        /// <returns>Whether there is a solid there</returns>
+        public static bool Box(Location point, Location mins, Location maxs)
         {
-            Entity ent;
-            Location Low = spot + Mins;
-            Location High = spot + Maxs;
-            Location elow;
-            Location ehigh;
+            Location realmins = point + mins;
+            Location realmaxs = point + maxs;
             for (int i = 0; i < MainGame.Solids.Count; i++)
             {
-                ent = MainGame.Solids[i];
-                if (ent.Solid)
+                Entity solid = MainGame.Solids[i];
+                if (solid.Solid)
                 {
-                    elow = ent.Position + ent.Mins;
-                    ehigh = ent.Position + ent.Maxs;
-                    if (Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
-                        High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z)
+                    if (solid.Box(realmins, realmaxs))
                     {
                         return true;
                     }
@@ -69,256 +91,221 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         }
 
         /// <summary>
-        /// Slides along the collision map towards a target.
+        /// Checks for collision along a line and returns where it hit.
         /// </summary>
-        /// <param name="Start">The starting location</param>
-        /// <param name="Target">The target location</param>
-        /// <param name="scale">The precision scale to use (for internal use)</param>
-        /// <returns>where the collision slid to</returns>
-        public static Location Slide(Location Start, Location Target, float scale = 1)
+        /// <param name="Start">The start of the line</param>
+        /// <param name="Target">The end of the line</param>
+        /// <param name="Mins">The mins of the line's box</param>
+        /// <param name="Maxs">The maxes of the line's box</param>
+        /// <param name="hitnormal">The normal of the hit, or NaN if none</param>
+        /// <returns>The end location of the linear movement</returns>
+        public static Location LineBox(Location Start, Location Target, Location Mins, Location Maxs, out Location hitnormal)
         {
-            Location advance = Target - Start;
-            double size = advance.Length() * scale;
-            if (size == 0)
+            if (Target == Start)
             {
-                return Start;
+                hitnormal = Location.NaN;
+                return Target;
             }
-            advance /= size;
-            int ticks = (int)Math.Floor(size);
-            double extra = size - (double)ticks;
-            ticks += 1;
-            Location Nextpoint = Start;
-            Location Jump;
-            for (int i = 0; i < ticks; i++)
+            // Watch the distance - we want the closest hit!
+            double distance = (Target - Start).LengthSquared();
+            // Keep track of what hit location we had
+            Location final = Target;
+            Location fnormal = Location.NaN;
+            // Loop through all solids.
+            for (int i = 0; i < MainGame.Solids.Count; i++)
             {
-                Jump = (i == ticks - 1 ? advance * extra: advance);
-                Nextpoint += Jump;
-                if (!Point(Nextpoint))
+                // Get the current solid in the loop.
+                Entity solid = MainGame.Solids[i];
+                if (solid.Solid)
                 {
-                    continue;
+                    // Find where it here
+                    Location normal;
+                    Location hit = solid.ClosestBox(Mins, Maxs, Start, Target, out normal);
+                    // NaN = no hit, ignore!
+                    if (hit.IsNaN())
+                    {
+                        continue;
+                    }
+                    // Calculate how close it is.
+                    double newdist = (hit - Start).LengthSquared();
+                    // If the hit is closer than the previous hit
+                    if (newdist < distance)
+                    {
+                        // Make this the new best hit
+                        distance = newdist;
+                        fnormal = normal;
+                        final = hit;
+                    }
                 }
-                // Try XY (no Z)
-                Nextpoint.Z -= Jump.Z;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Try XZ (no Y)
-                Nextpoint.Z += Jump.Z;
-                Nextpoint.Y -= Jump.Y;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Try YZ (no X)
-                Nextpoint.Y += Jump.Y;
-                Nextpoint.X -= Jump.X;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Try X (no YZ)
-                Nextpoint.X += Jump.X;
-                Nextpoint.Y -= Jump.Y;
-                Nextpoint.Z -= Jump.Z;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Try Y (no XZ)
-                Nextpoint.Y += Jump.Y;
-                Nextpoint.X -= Jump.X;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Try Z (no XY)
-                Nextpoint.Z += Jump.Z;
-                Nextpoint.Y -= Jump.Y;
-                if (!Point(Nextpoint))
-                {
-                    continue;
-                }
-                // Give up, do nothing!
-                Nextpoint.Z -= Jump.Z;
-                break;
             }
-            if (scale == 1 || scale == 10 || scale == 100)
-            {
-                return Slide(Nextpoint, Target, scale * 10);
-            }
-            else
-            {
-                return Nextpoint;
-            }
+            // Loops over, return whatever we got!
+            hitnormal = fnormal;
+            return final;
         }
 
         /// <summary>
-        /// Slides along the collision map towards a target.
+        /// Checks for collision along a line, and tries to slide past solids, and returns where it hit.
         /// </summary>
-        /// <param name="Start">The starting location</param>
-        /// <param name="Target">The target location</param>
-        /// <param name="Mins">The lowest point of the collision box</param>
-        /// <param name="Maxs">The highest point of the collision box</param>
-        /// <param name="scale">The precision scale to use (for internal use)</param>
-        /// <returns>where the collision slid to</returns>
-        public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs, float scale = 1)
+        /// <param name="Start">The start of the movement</param>
+        /// <param name="Target">The end of the movement</param>
+        /// <param name="Mins">The line's mins</param>
+        /// <param name="Maxs">The line's maxes</param>
+        /// <returns>Where the movement stopped</returns>
+        public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs)
         {
-            Location advance = Target - Start;
-            double size = advance.Length() * scale;
-            if (size == 0)
+            Location Normal;
+            Location current = Start;
+            for (int i = 0; i < 3; i++)
             {
-                return Start;
+                current = LineBox(current, Target, Mins, Maxs, out Normal);
+                if (Normal.IsNaN())
+                {
+                    return current;
+                }
+                current += Normal * 0.0001f;
+                if (Normal.X == 1 || Normal.X == -1)
+                {
+                    Target.X = current.X;
+                }
+                if (Normal.Y == 1 || Normal.Y == -1)
+                {
+                    Target.Y = current.Y;
+                }
+                if (Normal.Z == 1 || Normal.Z == -1)
+                {
+                    Target.Z = current.Z;
+                }
             }
-            advance /= size;
-            int ticks = (int)Math.Floor(size);
-            double extra = size - (double)ticks;
-            ticks += 1;
-            Location Nextpoint = Start;
-            Location Jump;
-            for (int i = 0; i < ticks; i++)
-            {
-                Jump = (i == ticks - 1 ? advance * extra : advance);
-                Nextpoint += Jump;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try XY (no Z)
-                Nextpoint.Z -= Jump.Z;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try XZ (no Y)
-                Nextpoint.Z += Jump.Z;
-                Nextpoint.Y -= Jump.Y;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try YZ (no X)
-                Nextpoint.Y += Jump.Y;
-                Nextpoint.X -= Jump.X;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try X (no YZ)
-                Nextpoint.X += Jump.X;
-                Nextpoint.Y -= Jump.Y;
-                Nextpoint.Z -= Jump.Z;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try Y (no XZ)
-                Nextpoint.Y += Jump.Y;
-                Nextpoint.X -= Jump.X;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Try Z (no XY)
-                Nextpoint.Z += Jump.Z;
-                Nextpoint.Y -= Jump.Y;
-                if (!Box(Nextpoint, Mins, Maxs))
-                {
-                    continue;
-                }
-                // Give up, do nothing!
-                Nextpoint.Z -= Jump.Z;
-                break;
-            }
-            if (scale == 1 || scale == 10 || scale == 100)
-            {
-                return SlideBox(Nextpoint, Target, Mins, Maxs, scale * 10);
-            }
-            else
-            {
-                return Nextpoint;
-            }
+            return current;
         }
 
         /// <summary>
-        /// Traces a straight line through the collision map, stopping immediately on collision.
+        /// Runs a collision check between two AABB objects.
         /// </summary>
-        /// <param name="Start">The starting location</param>
-        /// <param name="Target">The target location</param>
-        /// <param name="scale">The precision scale to use (for internal use)</param>
-        /// <returns>where the collision traced to</returns>
-        public static Location Line(Location Start, Location Target, float scale = 1)
+        /// <param name="Position">The block's position</param>
+        /// <param name="Mins">The block's mins</param>
+        /// <param name="Maxs">The block's maxs</param>
+        /// <param name="Mins2">The moving object's mins</param>
+        /// <param name="Maxs2">The moving object's maxs</param>
+        /// <param name="start">The starting location of the moving object</param>
+        /// <param name="end">The ending location of the moving object</param>
+        /// <param name="normal">The normal of the hit, or NaN if none</param>
+        /// <returns>The location of the hit, or NaN if none</returns>
+        public static Location AABBClosestBox(Location Position, Location Mins, Location Maxs, Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
         {
-            Location advance = Target - Start;
-            double size = advance.Length() * scale;
-            if (size == 0)
+            Location velocity = end - start;
+            Location RealMins = Position + Mins;
+            Location RealMaxs = Position + Maxs;
+            Location RealMins2 = start + Mins2;
+            Location RealMaxs2 = start + Maxs2;
+            double xInvEntry, yInvEntry, zInvEntry;
+            double xInvExit, yInvExit, zInvExit;
+            if (end.X >= start.X)
             {
-                return Start;
-            }
-            advance /= size;
-            int ticks = (int)Math.Floor(size);
-            double extra = size - (double)ticks;
-            ticks += 1;
-            Location Nextpoint = Start;
-            Location Jump;
-            for (int i = 0; i < ticks; i++)
-            {
-                Jump = (i == ticks - 1 ? advance * extra : advance);
-                Nextpoint += Jump;
-                if (Point(Nextpoint))
-                {
-                    Nextpoint -= Jump;
-                    break;
-                }
-            }
-            if (scale == 1 || scale == 10 || scale == 100)
-            {
-                return Line(Nextpoint, Target, scale * 10);
+                xInvEntry = RealMins.X - RealMaxs2.X;
+                xInvExit = RealMaxs.X - RealMins2.X;
             }
             else
             {
-                return Nextpoint;
+                xInvEntry = RealMaxs.X - RealMins2.X;
+                xInvExit = RealMins.X - RealMaxs2.X;
             }
-        }
-
-        /// <summary>
-        /// Traces a straight line of boxes through the collision map, stopping immediately on collision.
-        /// </summary>
-        /// <param name="Start">The starting location</param>
-        /// <param name="Target">The target location</param>
-        /// <param name="scale">The precision scale to use (for internal use)</param>
-        /// <returns>where the collision traced to</returns>
-        public static Location LineBox(Location Start, Location Target, Location Mins, Location Maxs, float scale = 1)
-        {
-            Location advance = Target - Start;
-            double size = advance.Length() * scale;
-            if (size == 0)
+            if (end.Y >= start.Y)
             {
-                return Start;
-            }
-            advance /= size;
-            int ticks = (int)Math.Floor(size);
-            double extra = size - (double)ticks;
-            ticks += 1;
-            Location Nextpoint = Start;
-            Location Jump;
-            for (int i = 0; i < ticks; i++)
-            {
-                Jump = (i == ticks - 1 ? advance * extra : advance);
-                Nextpoint += Jump;
-                if (Box(Nextpoint, Mins, Maxs))
-                {
-                    Nextpoint -= Jump;
-                    break;
-                }
-            }
-            if (scale == 1 || scale == 10 || scale == 100)
-            {
-                return LineBox(Nextpoint, Target, Mins, Maxs, scale * 10);
+                yInvEntry = RealMins.Y - RealMaxs2.Y;
+                yInvExit = RealMaxs.Y - RealMins2.Y;
             }
             else
             {
-                return Nextpoint;
+                yInvEntry = RealMaxs.Y - RealMins2.Y;
+                yInvExit = RealMins.Y - RealMaxs2.Y;
+            }
+            if (end.Z >= start.Z)
+            {
+                zInvEntry = RealMins.Z - RealMaxs2.Z;
+                zInvExit = RealMaxs.Z - RealMins2.Z;
+            }
+            else
+            {
+                zInvEntry = RealMaxs.Z - RealMins2.Z;
+                zInvExit = RealMins.Z - RealMaxs2.Z;
+            }
+            double xEntry, yEntry, zEntry;
+            double xExit, yExit, zExit;
+            if (velocity.X == 0f)
+            {
+                xEntry = xInvEntry / 0.00000000000000000000000000000001f;
+                xExit = xInvExit / 0.00000000000000000000000000000001f;
+            }
+            else
+            {
+                xEntry = xInvEntry / velocity.X;
+                xExit = xInvExit / velocity.X;
+            }
+            if (velocity.Y == 0f)
+            {
+                yEntry = yInvEntry / 0.00000000000000000000000000000001f;
+                yExit = yInvExit / 0.00000000000000000000000000000001f;
+            }
+            else
+            {
+                yEntry = yInvEntry / velocity.Y;
+                yExit = yInvExit / velocity.Y;
+            }
+            if (velocity.Z == 0f)
+            {
+                zEntry = zInvEntry / 0.00000000000000000000000000000001f;
+                zExit = zInvExit / 0.00000000000000000000000000000001f;
+            }
+            else
+            {
+                zEntry = zInvEntry / velocity.Z;
+                zExit = zInvExit / velocity.Z;
+            }
+            double entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
+            double exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
+            if (entryTime > exitTime || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f) || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f)
+            {
+                normal = Location.NaN;
+                return Location.NaN;
+            }
+            else
+            {
+                if (zEntry >= xEntry && zEntry >= yEntry)
+                {
+                    if (zInvEntry < 0)
+                    {
+                        normal = new Location(0, 0, 1);
+                    }
+                    else
+                    {
+                        normal = new Location(0, 0, -1);
+                    }
+                }
+                else if (xEntry >= zEntry && xEntry >= yEntry)
+                {
+                    if (xInvEntry < 0)
+                    {
+                        normal = new Location(1, 0, 0);
+                    }
+                    else
+                    {
+                        normal = new Location(-1, 0, 0);
+                    }
+                }
+                else
+                {
+                    if (yInvEntry < 0)
+                    {
+                        normal = new Location(0, 1, 0);
+                    }
+                    else
+                    {
+                        normal = new Location(0, -1, 0);
+                    }
+                }
+                Location res = start + (end - start) * entryTime;
+                return new Location(res.X, res.Y, res.Z);
             }
         }
     }

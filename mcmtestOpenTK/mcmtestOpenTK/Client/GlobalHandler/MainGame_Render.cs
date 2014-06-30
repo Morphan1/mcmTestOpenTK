@@ -151,7 +151,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 Location start = Player.player.Position + new Location(0, 0, 8);
                 Location target = start - Forward * 15;
-                target = Collision.Line(start, target) - Forward;
+                Location hitnormal;
+                target = Collision.LineBox(start, target, new Location(-1, -1, -1), new Location(1, 1, 1), out hitnormal) - Forward;
                 View = Matrix4.LookAt(Util.LocVec(target), Util.LocVec(start + Forward), new Vector3(0, 0, 1));
             }
             else

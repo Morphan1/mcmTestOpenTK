@@ -15,7 +15,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             CheckCollision = true;
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);
-            MoveType = MovementType.Line;
+            MoveType = MovementType.LineBox;
             Solid = false;
         }
 

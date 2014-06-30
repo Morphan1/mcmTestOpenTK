@@ -122,5 +122,26 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             ToReturn.Add(new Variable("texture_vshift", Texture_VShift.ToString()));
             return ToReturn;
         }
+
+        public override bool Point(Location spot)
+        {
+            Location lower = Position + Mins;
+            Location upper = Position + Maxs;
+            return lower.X <= spot.X && lower.Y <= spot.Y && lower.Z <= spot.Z &&
+                upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z;
+        }
+
+        public override bool Box(Location Low, Location High)
+        {
+            Location elow = Position + Mins;
+            Location ehigh = Position + Maxs;
+            return Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
+                        High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
+        }
+
+        public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
+        {
+            return Collision.AABBClosestBox(Position, Mins, Maxs, Mins2, Maxs2, start, end, out normal);
+        }
     }
 }

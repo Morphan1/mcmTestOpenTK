@@ -32,19 +32,22 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             IsValid = true;
         }
 
+        Location lastforced;
+        
         public override void Execute()
         {
             if (!IsValid)
             {
                 return;
             }
-            // MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600 });
+            // MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600, start = lastforced });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
             Player.player.ApplyMovement(position, velocity, time);
+            lastforced = position;
         }
     }
 }
