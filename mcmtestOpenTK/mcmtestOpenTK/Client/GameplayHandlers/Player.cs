@@ -178,6 +178,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location target = Position + Velocity * MyDelta;
             //Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             Position = NewCollision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = NewCollision.SlideBox(Position, new Location(Position.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
             if (!IsCustom)
             {
                 // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White });

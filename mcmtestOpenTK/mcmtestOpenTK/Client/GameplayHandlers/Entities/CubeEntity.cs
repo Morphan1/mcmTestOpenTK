@@ -151,30 +151,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location RealMaxs = Position + Maxs;
             Location RealMins2 = start + Mins2;
             Location RealMaxs2 = start + Maxs2;
-            Box b1 = new Box()
-            {
-                x = start.X + Mins2.X,
-                y = start.Y + Mins2.Y,
-                z = start.Z + Mins2.Z,
-                w = Maxs2.X - Mins2.X,
-                h = Maxs2.Y - Mins2.Y,
-                d = Maxs2.Z - Mins2.Z,
-                vx = velocity.X,
-                vy = velocity.Y,
-                vz = velocity.Z
-            };
-            Box b2 = new Box()
-            {
-                x = Position.X + Mins.X,
-                y = Position.Y + Mins.Y,
-                z = Position.Z + Mins.Z,
-                w = Maxs.X - Mins.X,
-                h = Maxs.Y - Mins.Y,
-                d = Maxs.Z - Mins.Z,
-                vx = 0,
-                vy = 0,
-                vz = 0
-            };
             double xInvEntry, yInvEntry, zInvEntry;
             double xInvExit, yInvExit, zInvExit;
             if (end.X > start.X)
@@ -209,35 +185,35 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             double xEntry, yEntry, zEntry;
             double xExit, yExit, zExit;
-            if (b1.vx == 0.0f)
+            if (velocity.X == 0f)
             {
                 xEntry = double.NegativeInfinity;
                 xExit = double.PositiveInfinity;
             }
             else
             {
-                xEntry = xInvEntry / b1.vx;
-                xExit = xInvExit / b1.vx;
+                xEntry = xInvEntry / velocity.X;
+                xExit = xInvExit / velocity.X;
             }
-            if (b1.vy == 0.0f)
+            if (velocity.Y == 0f)
             {
                 yEntry = double.NegativeInfinity;
                 yExit = double.PositiveInfinity;
             }
             else
             {
-                yEntry = yInvEntry / b1.vy;
-                yExit = yInvExit / b1.vy;
+                yEntry = yInvEntry / velocity.Y;
+                yExit = yInvExit / velocity.Y;
             }
-            if (b1.vz == 0.0f)
+            if (velocity.Z == 0f)
             {
                 zEntry = double.NegativeInfinity;
                 zExit = double.PositiveInfinity;
             }
             else
             {
-                zEntry = zInvEntry / b1.vz;
-                zExit = zInvExit / b1.vz;
+                zEntry = zInvEntry / velocity.Z;
+                zExit = zInvExit / velocity.Z;
             }
             double entryTime = Math.Max(Math.Max(xEntry, yEntry), zEntry);
             double exitTime = Math.Min(Math.Min(xExit, yExit), zExit);
@@ -285,11 +261,5 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 return new Location(res.X, res.Y, res.Z);
             }
         }
-    }
-    public class Box
-    {
-        public double x, y, z;
-        public double w, h, d;
-        public double vx, vy, vz;
     }
 }
