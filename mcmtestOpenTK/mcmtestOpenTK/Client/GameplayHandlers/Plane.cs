@@ -33,6 +33,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         public float D;
 
+        public Plane(Location v1, Location v2, Location v3)
+        {
+            vec1 = v1;
+            vec2 = v2;
+            vec3 = v3;
+            Normal = (v2 - v1).CrossProduct(v3 - v1).Normalize();
+            D = -(Normal.Dot(vec1));
+        }
+
         public Plane(Location v1, Location v2, Location v3, Location _normal)
         {
             vec1 = v1;

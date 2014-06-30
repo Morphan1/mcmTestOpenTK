@@ -119,6 +119,26 @@ namespace mcmtestOpenTK.Shared
         }
 
         /// <summary>
+        /// Returns a normal form of this location.
+        /// </summary>
+        /// <returns>A valid normal location</returns>
+        public Location Normalize()
+        {
+            float len = Length();
+            return new Location(X / len, Y / len, Z / len);
+        }
+
+        /// <summary>
+        /// Returns the cross product of this location with another.
+        /// </summary>
+        /// <param name="two">The second location vector</param>
+        /// <returns>The cross product of the two</returns>
+        public Location CrossProduct(Location two)
+        {
+            return new Location(Y * two.Z - two.Y * Z, two.X * Z - X * two.Z, X * two.Y - Y * two.X);
+        }
+
+        /// <summary>
         /// Converts the Location to a simple byte[] representation.
         /// Inverts .FromBytes()
         /// </summary>
