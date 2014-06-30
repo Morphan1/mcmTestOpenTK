@@ -214,6 +214,16 @@ namespace mcmtestOpenTK.Shared
             return new Location(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
+        public static Location operator *(Location v1, Location v2)
+        {
+            return new Location(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
+        }
+
+        public static Location operator /(Location v1, Location v2)
+        {
+            return new Location(v1.X / v2.X, v1.Y / v2.Y, v1.Z / v2.Z);
+        }
+
         public static Location operator *(Location v, float scale)
         {
             return new Location(v.X * scale, v.Y * scale, v.Z * scale);

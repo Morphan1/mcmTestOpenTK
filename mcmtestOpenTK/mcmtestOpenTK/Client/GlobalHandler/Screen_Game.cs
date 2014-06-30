@@ -81,6 +81,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     LifeTicks = 60 * 20,
                     start = Player.player.Position
                 });
+                MainGame.SpawnEntity(new Bullet()
+                {
+                    Position = hit + normal,
+                    LifeTicks = 60 * 20,
+                    start = hit
+                });
             }
         }
 

@@ -189,8 +189,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 //xEntry = double.MinValue;
                 //xExit = double.MaxValue;
-                xEntry = xInvEntry / 0.0000000000001f;
-                xExit = xInvExit / 0.0000000000001f;
+                xEntry = xInvEntry / 0.00000000000000000000000000000001f;
+                xExit = xInvExit / 0.00000000000000000000000000000001f;
             }
             else
             {
@@ -201,8 +201,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 //yEntry = double.MinValue;
                 //yExit = double.MaxValue;
-                yEntry = yInvEntry / 0.0000000000001f;
-                yExit = yInvExit / 0.0000000000001f;
+                yEntry = yInvEntry / 0.00000000000000000000000000000001f;
+                yExit = yInvExit / 0.00000000000000000000000000000001f;
             }
             else
             {
@@ -213,8 +213,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 //zEntry = double.MinValue;
                 //zExit = double.MaxValue;
-                zEntry = zInvEntry / 0.0000000000001f;
-                zExit = zInvExit / 0.0000000000001f;
+                zEntry = zInvEntry / 0.00000000000000000000000000000001f;
+                zExit = zInvExit / 0.00000000000000000000000000000001f;
             }
             else
             {

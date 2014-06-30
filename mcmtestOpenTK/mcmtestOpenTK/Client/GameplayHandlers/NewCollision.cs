@@ -46,14 +46,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         {
             if (Target == Start)
             {
-                hitnormal = new Location(0, 0, 1);
+                hitnormal = Location.NaN;
                 return Target;
             }
             // Watch the distance - we want the closest hit!
             double distance = (Target - Start).LengthSquared();
             // Keep track of what hit location we had
             Location final = Target;
-            Location fnormal = (Start - Target).Normalize();
+            Location fnormal = Location.NaN;
             // Loop through all solids.
             for (int i = 0; i < MainGame.Solids.Count; i++)
             {
@@ -86,45 +86,34 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs)
         {
             Location Normal;
-            Location movement = Target - Start;
-            Location current = LineBox(Start, Start + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY XY: NO Z
-            movement.Z = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY YZ: NO X
-            movement.X = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY XZ: NO Y
-            movement.Y = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY X: NO YZ
-            movement.Y = 0;
-            movement.Z = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY Y: NO XZ
-            movement.X = 0;
-            movement.Z = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            movement = Target - current;
-            // TRY Z: NO XY
-            movement.X = 0;
-            movement.Y = 0;
-            current = LineBox(current, current + movement, Mins, Maxs, out Normal) + Normal * 0.0001f;
-            // We got what we got
+            Location current = Start;
+            for (int i = 0; i < 3; i++)
+            {
+                current = LineBox(current, Target, Mins, Maxs, out Normal);
+                if (Normal.IsNaN())
+                {
+                    return current;
+                }
+                current += Normal * 0.0001f;
+                if (Normal.X == 1 || Normal.X == -1)
+                {
+                    Target.X = current.X;
+                }
+                if (Normal.Y == 1 || Normal.Y == -1)
+                {
+                    Target.Y = current.Y;
+                }
+                if (Normal.Z == 1 || Normal.Z == -1)
+                {
+                    Target.Z = current.Z;
+                }
+            }
             return current;
-            /*
-            Position = NewCollision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(target.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(target.X, Position.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(Position.X, target.Y, Position.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            Position = NewCollision.SlideBox(Position, new Location(Position.X, Position.Y, target.Z), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));*/
+        }
+
+        public static Location InverseNormal(Location normal)
+        {
+            return new Location(1 - normal.X, 1 - normal.Y, 1 - normal.Z);
         }
     }
 }
