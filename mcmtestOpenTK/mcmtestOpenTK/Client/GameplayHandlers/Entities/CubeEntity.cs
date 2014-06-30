@@ -187,8 +187,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             double xExit, yExit, zExit;
             if (velocity.X == 0f)
             {
-                xEntry = double.NegativeInfinity;
-                xExit = double.PositiveInfinity;
+                xEntry = double.MinValue;
+                xExit = double.MaxValue;
             }
             else
             {
@@ -197,8 +197,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (velocity.Y == 0f)
             {
-                yEntry = double.NegativeInfinity;
-                yExit = double.PositiveInfinity;
+                yEntry = double.MinValue;
+                yExit = double.MaxValue;
             }
             else
             {
@@ -207,8 +207,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (velocity.Z == 0f)
             {
-                zEntry = double.NegativeInfinity;
-                zExit = double.PositiveInfinity;
+                zEntry = double.MinValue;
+                zExit = double.MaxValue;
             }
             else
             {

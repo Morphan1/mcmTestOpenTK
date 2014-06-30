@@ -86,7 +86,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public static Location SlideBox(Location Start, Location Target, Location Mins, Location Maxs)
         {
             Location Normal;
-            return LineBox(Start, Target, Mins, Maxs, out Normal);
+            return LineBox(Start, Target, Mins, Maxs, out Normal) + Normal * 0.0001f;
         }
     }
 }
