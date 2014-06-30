@@ -59,12 +59,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <returns>A location of the hit, or NaN if none</returns>
         public Location IntersectLine(Location start, Location end)
         {
-            /*
-            Location ba = end - start;
-            float nDotA = Normal.Dot(start);
-            float nDotBA = Normal.Dot(ba);
-            return start + (((D - nDotA) / nDotBA) * ba);
-            */
             Location ba = end - start;
             float nDotA = Normal.Dot(start);
             float nDotBA = Normal.Dot(ba);
@@ -74,6 +68,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 return Location.NaN;
             }
             return start + t * ba;
+        }
+
+        /// <summary>
+        /// Returns the distance between a point and the plane.
+        /// </summary>
+        /// <param name="point">The point</param>
+        /// <returns>The distance</returns>
+        public float Distance(Location point)
+        {
+            return Normal.Dot(point) + D;
         }
     }
 }

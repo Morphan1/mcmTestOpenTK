@@ -89,28 +89,58 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override Location Closest(Location start, Location target)
         {
-            return CollidePlanes(CalculatePlanes(), start, target);
+            Plane[] planes = CalculatePlanes();
+            List<Plane> tplanes = new List<Plane>(3);
+            if (start.X < Position.X + Mins.X)
+            {
+                tplanes.Add(planes[2]);
+            }
+            else if (start.X > Position.X + Maxs.X)
+            {
+                tplanes.Add(planes[3]);
+            }
+            if (start.Y < Position.Y + Mins.Y)
+            {
+                tplanes.Add(planes[0]);
+            }
+            else if (start.Y > Position.Y + Maxs.Y)
+            {
+                tplanes.Add(planes[1]);
+            }
+            if (start.Z < Position.Z + Mins.Z)
+            {
+                tplanes.Add(planes[4]);
+            }
+            else if (start.Z > Position.Z + Maxs.Z)
+            {
+                tplanes.Add(planes[5]);
+            }
+            return CollidePlanes(tplanes, start, target);
         }
 
-        public Location CollidePlanes(Plane[] planes, Location start, Location target)
+        public Location CollidePlanes(List<Plane> planes, Location start, Location target)
         {
-            float dist = (target - start).LengthSquared();
-            Location final = Location.NaN;
-            for (int i = 0; i < planes.Length; i++)
+            //float dist = (target - start).LengthSquared();
+            //Location final = Location.NaN;
+            for (int i = 0; i < planes.Count; i++)
             {
                 Plane plane = planes[i];
                 Location hit = plane.IntersectLine(start, target);
                 if (!hit.IsNaN())
                 {
-                    float newdist = (hit - start).LengthSquared();
-                    if (newdist < dist && Point(hit))
+                    //float newdist = (hit - start).LengthSquared();
+                    if (/*newdist < dist && */Point(hit))
                     {
-                        dist = newdist;
-                        final = hit;
+                        //dist = newdist;
+                        //final = hit;
+                        SysConsole.Output(OutputType.INFO, "DISTANCE FROM HIT TO PLANE: " + plane.Distance(hit));
+                        SysConsole.Output(OutputType.INFO, "DISTANCE FROM PLAYER TO PLANE: " + plane.Distance(Player.player.Position));
+                        return hit;
                     }
                 }
             }
-            return final;
+            //return final;
+            return Location.NaN;
         }
     }
 }
