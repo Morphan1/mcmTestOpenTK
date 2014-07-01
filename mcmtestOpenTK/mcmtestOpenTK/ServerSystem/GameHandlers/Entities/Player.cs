@@ -311,14 +311,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 LastTick = Server.GlobalTickTime;
                 // TODO: Better player transmission - transmit move byte with time, in addition to position/vel/dir?
-                PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
+                /*PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
                 for (int i = 0; i < world.Players.Count; i++)
                 {
                     if (world.Players[i] != this)
                     {
                         world.Players[i].Send(pack);
                     }
-                }
+                }*/
             }
         }
 
@@ -354,6 +354,15 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             LastPacket = pack;
             // Apply the new movement packet.
             MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);
+            // Tell all other players of this player's movement
+            PlayerPositionPacketOut pout = new PlayerPositionPacketOut(this, Position, Velocity, Direction, pack.movement);
+            for (int i = 0; i < world.Players.Count; i++)
+            {
+                if (world.Players[i] != this)
+                {
+                    world.Players[i].Send(pout);
+                }
+            }
             // Tick back up to now.
             targetdelta = (float)(LastTick - MoveTime);
             while (targetdelta > 1d / 60d)
@@ -367,6 +376,19 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override void Kill()
         {
+        }
+
+        public void UpdateStatus()
+        {
+            byte[] data = new byte[] { Noclip ? (byte)1 : (byte)0 };
+            NewdataPacketOut pack = new NewdataPacketOut(this, data);
+            for (int i = 0; i < world.Players.Count; i++)
+            {
+                if (world.Players[i] != this)
+                {
+                    world.Players[i].Send(pack);
+                }
+            }
         }
 
         public override byte[] GetData()

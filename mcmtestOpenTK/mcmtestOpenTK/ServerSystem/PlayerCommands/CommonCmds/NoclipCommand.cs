@@ -25,6 +25,7 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands.CommonCmds
             entry.player.Send(new SetcvarPacketOut("g_noclip", entry.player.Noclip.ToString().ToLower()));
             // TODO: output on/off
             entry.player.SendMessage("Noclip toggled.");
+            entry.player.UpdateStatus();
         }
     }
 }

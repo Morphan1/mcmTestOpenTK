@@ -160,6 +160,8 @@
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Plane.cs" />
+    <Compile Include="Client\Networking\PacketsIn\NewdataPacketIn.cs" />
+    <Compile Include="Client\Networking\PacketsIn\PlayerPositionPacketIn.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\SaveCommand.cs" />
     <Compile Include="ServerSystem\CommandHandlers\WorldCmds\LoadCommand.cs" />
@@ -174,6 +176,8 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\SpawnPoint.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\MovementPacketIn.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\NewdataPacketOut.cs" />
+    <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PlayerPositionPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\PlaysoundPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\SetcvarPacketOut.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\YourPositionPacketOut.cs" />

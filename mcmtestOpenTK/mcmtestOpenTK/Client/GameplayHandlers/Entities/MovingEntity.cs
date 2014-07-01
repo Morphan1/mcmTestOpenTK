@@ -9,7 +9,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public abstract class MovingEntity: Entity
     {
-        public MovingEntity(): base(true)
+        public MovingEntity(EntityType type): base(true, type)
         {
         }
 

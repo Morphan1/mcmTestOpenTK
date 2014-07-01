@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public Location start;
 
-        public Bullet(): base()
+        public Bullet(): base(EntityType.BULLET)
         {
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);

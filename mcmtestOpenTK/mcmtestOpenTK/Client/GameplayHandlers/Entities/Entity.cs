@@ -36,9 +36,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// </summary>
         public ulong UniqueID;
 
-        public Entity(bool _TickMe)
+        public Entity(bool _TickMe, EntityType _type)
         {
             TickMe = _TickMe;
+            Type = _type;
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <summary>
         /// What type of entity this is.
         /// </summary>
-        public EntityType Type = EntityType.NUL;
+        public readonly EntityType Type;
 
         public static Entity FromType(EntityType type)
         {

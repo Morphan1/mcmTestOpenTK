@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public CubeModel model;
 
         public CubeEntity()
-            : base(false)
+            : base(false, EntityType.CUBE)
         {
             model = new CubeModel(Position, Location.One, null);
             Mins = new Location(0);

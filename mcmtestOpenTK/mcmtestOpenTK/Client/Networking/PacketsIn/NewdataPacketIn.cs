@@ -7,31 +7,25 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {
-    class SpawnPacketIn: AbstractPacketIn
+    class NewdataPacketIn: AbstractPacketIn
     {
-        EntityType type;
-        Location position;
-        ulong id;
-        byte[] LeftOver;
+        ulong eID;
+        byte[] data;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length < 21)
+            if (input.Length < 8)
             {
                 IsValid = false;
                 return;
             }
-            type = (EntityType)input[0];
-            id = BitConverter.ToUInt64(input, 1);
-            position = Location.FromBytes(input, 9);
-            LeftOver = new byte[input.Length - 21];
-            if (LeftOver.Length > 0)
-            {
-                Array.Copy(input, 21, LeftOver, 0, input.Length - 21);
-            }
+            eID = BitConverter.ToUInt64(input, 0);
+            data = new byte[input.Length - 8];
+            Array.Copy(input, 8, data, 0, input.Length - 8);
             IsValid = true;
         }
 
@@ -41,8 +35,15 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            SysConsole.Output(OutputType.INFO, type + " spawns at " + position + ", is ID " + id);
-            MainGame.SpawnEntity(type, id, position, LeftOver);
+            Entity ent = MainGame.GetEntity(eID);
+            if (ent == null)
+            {
+                UIConsole.WriteLine("Invalid newdata packet (bad ID), entity " + eID + "!");
+            }
+            else
+            {
+                ent.ReadBytes(data);
+            }
         }
     }
 }

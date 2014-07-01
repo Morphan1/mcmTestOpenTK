@@ -231,6 +231,10 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new SetcvarPacketIn(); break;
                 case 12:
                     Handler = new PlaysoundPacketIn(); break;
+                case 13:
+                    Handler = new PlayerPositionPacketIn(); break;
+                case 14:
+                    Handler = new NewdataPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
