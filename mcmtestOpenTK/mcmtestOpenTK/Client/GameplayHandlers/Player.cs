@@ -55,6 +55,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public const double JumpPower = 50;
         public const double AirSpeedMult = 0.05f;
 
+        public Location Maxs;
+
         /// <summary>
         /// Called to tick the default player.
         /// </summary>
@@ -143,6 +145,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     movement.X = -1;
                 }
             }
+            if (down)
+            {
+                Maxs = new Location(1.5f, 1.5f, 5);
+            }
+            else
+            {
+                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
+                {
+                    Maxs = new Location(1.5f, 1.5f, 8);
+                }
+                else
+                {
+                    down = true;
+                }
+            }
             if (ClientCVar.g_noclip.ValueB)
             {
                 if (movement.LengthSquared() > 0)
@@ -165,27 +182,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
-                if (down)
-                {
-                    Velocity.Z = 0;
-                    Position.Z = 20;
-                }
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (up && on_ground)
                 {
-                    Velocity.Z = JumpPower;
+                    Velocity.Z = JumpPower * (down ? 0.5: 1);
                 }
                 if (!IsCustom)
                 {
                     onground = on_ground;
                 }
-                Velocity.X += ((movement.X * MoveSpeed * (slow ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
-                Velocity.Y += ((movement.Y * MoveSpeed * (slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.X += ((movement.X * MoveSpeed * (slow || down ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed * (slow || down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
             }
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
-            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             if (!IsCustom)
             {

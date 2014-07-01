@@ -149,7 +149,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.MultMatrix(ref Perspective);
             if (ClientCVar.r_thirdperson.ValueB)
             {
-                Location start = Player.player.Position + new Location(0, 0, 8);
+                Location start = Player.player.Position + new Location(0, 0, Player.player.down ? 5: 8);
                 Location target = start - Forward * 15;
                 Location hitnormal;
                 target = Collision.LineBox(start, target, new Location(-1, -1, -1), new Location(1, 1, 1), out hitnormal) - Forward;
@@ -157,8 +157,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             else
             {
-                View = Matrix4.LookAt(Util.LocVec(Player.player.Position + new Location(0, 0, 6)),
-                    Util.LocVec(Player.player.Position + new Location(0, 0, 6) + Forward), new Vector3(0, 0, 1));
+                View = Matrix4.LookAt(Util.LocVec(Player.player.Position + new Location(0, 0, Player.player.down ? 4: 6)),
+                    Util.LocVec(Player.player.Position + new Location(0, 0, Player.player.down ? 4 : 6) + Forward), new Vector3(0, 0, 1));
             }
             GL.MultMatrix(ref View);
 

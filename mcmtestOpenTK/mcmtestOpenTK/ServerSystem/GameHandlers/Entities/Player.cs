@@ -246,6 +246,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     movement.X = -1;
                 }
             }
+            if (Down)
+            {
+                Maxs = new Location(1.5f, 1.5f, 5);
+            }
+            else
+            {
+                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
+                {
+                    Maxs = new Location(1.5f, 1.5f, 8);
+                }
+                else
+                {
+                    Down = true;
+                }
+            }
             if (Noclip)
             {
                 Gravity = 0;
@@ -270,23 +285,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
-                if (Down)
-                {
-                    Velocity.Z = 0;
-                    Position.Z = 20;
-                }
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (Up && on_ground)
                 {
-                    Velocity.Z = JumpPower;
+                    Velocity.Z = JumpPower * (Down ? 0.5 : 1);
                 }
-                Velocity.X += ((movement.X * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
-                Velocity.Y += ((movement.Y * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.X += ((movement.X * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= Gravity * MyDelta;
             }
             Location ploc = Position;
             Location target = Position + Velocity * MyDelta;
-            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             if (!isCustom)
             {
