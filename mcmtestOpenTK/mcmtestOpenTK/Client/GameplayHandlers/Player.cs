@@ -49,9 +49,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool up = false;
         public bool down = false;
 
-        public const float MoveSpeed = 30;
-        public const float BaseGravity = 100;
-        public const float JumpPower = 50;
+        public const double MoveSpeed = 35;
+        public const double BaseGravity = 100;
+        public const double JumpPower = 50;
+        public const double AirSpeedMult = 0.3f;
 
         /// <summary>
         /// Called to tick the default player.
@@ -163,15 +164,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Velocity.Z = 0;
                     Position.Z = 20;
                 }
-                if (up)
+                bool on_ground = Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
+                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                if (up && on_ground)
                 {
-                    if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
-                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2)))
-                    {
-                        Velocity.Z = JumpPower;
-                    }
+                    Velocity.Z = JumpPower;
                 }
-                Velocity = new Location(movement.X * MoveSpeed, movement.Y * MoveSpeed, Velocity.Z);
+                // Velocity += new Location(movement.X * MoveSpeed, movement.Y * MoveSpeed, 0);
+                // Speed += ((MoveDirection * MaximumSpeed) - Speed) * AccelerationFactor
+                Velocity.X += ((movement.X * MoveSpeed) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1: AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
             }
             double pZ = Position.Z;
@@ -200,6 +202,28 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, (float)Direction.X, (float)Direction.Y));
                     }
                 }
+            }
+        }
+
+        public double TowardsZero(double original, double change)
+        {
+            if (original > 0)
+            {
+                original -= change;
+                if (original < 0)
+                {
+                    return 0;
+                }
+                return original;
+            }
+            else
+            {
+                original += change;
+                if (original > 0)
+                {
+                    return 0;
+                }
+                return original;
             }
         }
 
@@ -234,8 +258,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Update((float)Target, true);
                     ctime = Time;
                     // Apply changes
-                    Position += (pos - Position);
-                    Velocity += (vel - Velocity);
+                   // Position += (pos - Position);
+                   // Velocity += (vel - Velocity);
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {
