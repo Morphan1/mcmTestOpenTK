@@ -88,15 +88,55 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public float Gravity = 100;
 
         /// <summary>
+        /// All keys saved on the user.
+        /// </summary>
+        public Dictionary<string, string> AccountKeys;
+
+        public List<string> permissions;
+
+        /// <summary>
+        /// Returns whether the player has the permission node, or a supernode of it.
+        /// </summary>
+        /// <param name="permission">The permission to check for</param>
+        /// <returns>Whether the user has the permission</returns>
+        public bool HasPermission(string permission)
+        {
+            // Only identified users have any permissions
+            if (!IsIdentified)
+            {
+                return false;
+            }
+            permission = permission.ToLower();
+            if (permissions.Contains(permission))
+            {
+                return true;
+            }
+            string[] blocks = permission.Split('.');
+            string construct = "";
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                if (permissions.Contains(construct + "*"))
+                {
+                    return true;
+                }
+                construct += blocks[i] + ".";
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Call when the user has fully identified, to let them into the server.
         /// </summary>
         public void Identified()
         {
+            // Don't double-identify
             if (IsIdentified)
             {
                 return;
             }
+            // announce
             SysConsole.Output(OutputType.INFO, "Client '" + Username + "' is now identified!");
+            // kick duplicate players
             string ulow = Username.ToLower();
             for (int i = 0; i < Server.MainWorld.Players.Count; i++)
             {
@@ -106,8 +146,54 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 }
             }
             IsIdentified = true;
+            // Load user file
+            AccountKeys = new Dictionary<string, string>();
+            if (FileHandler.Exists("users/" + ulow + ".cfg"))
+            {
+                string[] data = FileHandler.ReadText("users/" + ulow + ".cfg").Split('\n');
+                foreach (string str in data)
+                {
+                    if (str.Length > 0 && str.Contains(':'))
+                    {
+                        string[] split = str.Split(':');
+                        AccountKeys.Add(Unescape(split[0]), Unescape(split[1]));
+                    }
+                }
+            }
+            else
+            {
+                // USER JOINED FIRST TIME, DO SPECIAL WELCOME STUFF HERE
+                AccountKeys.Add("first_name", Username);
+                AccountKeys.Add("first_ip", Network.IP);
+                AccountKeys.Add("permissions", "basic.new_user");
+            }
+            // Establish permissions
+            permissions = new List<string>(AccountKeys["permissions"].Split(','));
+            // start the ping loop
             Send(new PingPacketOut(this));
+            // Spawn into world
             Spawn(Server.MainWorld);
+        }
+
+        public override void Kill()
+        {
+            SysConsole.Output(OutputType.INFO, "Saving client '" + Username + "'");
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, string> x in AccountKeys)
+            {
+                sb.Append(Escape(x.Key)).Append(":").Append(Escape(x.Value)).Append("\n");
+            }
+            FileHandler.WriteText("users/" + Username.ToLower() + ".cfg", sb.ToString());
+        }
+
+        public string Unescape(string input)
+        {
+            return input.Replace("&co;", ":").Replace("&nl;", "\n").Replace("&amp;", "&");
+        }
+
+        public string Escape(string input)
+        {
+            return input.Replace("&", "&amp;").Replace("\n", "&nl;").Replace(":", "&co;");
         }
 
         void Spawn(World world)
@@ -380,10 +466,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             Tick(targetdelta, true);
             Solid = WasSolid;
-        }
-
-        public override void Kill()
-        {
         }
 
         public void UpdateStatus()

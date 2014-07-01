@@ -14,7 +14,13 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
         /// <summary>
         /// A full list of all registered commands.
         /// </summary>
-        public static List<PlayerAbstractCommand> RegisteredCommands;
+        public static Dictionary<string, PlayerAbstractCommand> RegisteredCommands;
+
+        /// <summary>
+        /// A full list of all registered commands.
+        /// TODO: FOR CLEAN HELP FILE OUTPUT
+        /// </summary>
+        public static List<PlayerAbstractCommand> RegisteredCommandsList;
 
         /// <summary>
         /// Runs a command as a player.
@@ -36,18 +42,26 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
             entry.Arguments = arguments;
             SysConsole.Output(OutputType.INFO, player.Username + " issued command: /" + entry.CommandLine);
             string cmdlow = entry.Name.ToLower();
-            for (int i = 0; i < RegisteredCommands.Count; i++)
+            PlayerAbstractCommand cmd;
+            if (RegisteredCommands.TryGetValue(cmdlow, out cmd))
             {
-                if (RegisteredCommands[i].Name == cmdlow)
+                if (player.HasPermission("commands." + cmd.Name))
                 {
                     entry.Arguments.RemoveAt(0);
-                    entry.Command = RegisteredCommands[i];
-                    RegisteredCommands[i].Execute(entry);
-                    return;
+                    entry.Command = cmd;
+                    cmd.Execute(entry);
+                }
+                else
+                {
+                    SysConsole.Output(OutputType.INFO, "[Command Refused / No Permission]");
+                    player.SendMessage(TextStyle.Color_Error + "You do not have permission to use the command '" + TextStyle.Color_Separate + cmd.Name + TextStyle.Color_Error + "'.");
                 }
             }
-            SysConsole.Output(OutputType.INFO, "[Command Invalid / Unknown]");
-            player.SendMessage(TextStyle.Color_Error + "Unknown command '" + TextStyle.Color_Separate + arguments[0] + TextStyle.Color_Error + "'.");
+            else
+            {
+                SysConsole.Output(OutputType.INFO, "[Command Invalid / Unknown]");
+                player.SendMessage(TextStyle.Color_Error + "Unknown command '" + TextStyle.Color_Separate + arguments[0] + TextStyle.Color_Error + "'.");
+            }
         }
 
         /// <summary>
@@ -56,7 +70,8 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
         /// <param name="command">The command to register</param>
         public static void RegisterCommand(PlayerAbstractCommand command)
         {
-            RegisteredCommands.Add(command);
+            RegisteredCommands.Add(command.Name, command);
+            RegisteredCommandsList.Add(command);
         }
 
         /// <summary>
@@ -64,7 +79,8 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
         /// </summary>
         public static void Init()
         {
-            RegisteredCommands = new List<PlayerAbstractCommand>();
+            RegisteredCommands = new Dictionary<string, PlayerAbstractCommand>();
+            RegisteredCommandsList = new List<PlayerAbstractCommand>();
             RegisterCommand(new BulletCommand());
             RegisterCommand(new SayCommand());
             RegisterCommand(new NoclipCommand());
