@@ -11,14 +11,16 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
     class TeleportPacketIn: AbstractPacketIn
     {
         Location loc;
+        Location dir;
         double time;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length == 20)
+            if (input.Length == 32)
             {
                 loc = Location.FromBytes(input, 0);
-                time = BitConverter.ToDouble(input, 12);
+                dir = Location.FromBytes(input, 12);
+                time = BitConverter.ToDouble(input, 24);
                 IsValid = true;
             }
             else
@@ -35,6 +37,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             }
             MainGame.Spawned = true;
             Player.player.Position = loc;
+            Player.player.Direction = dir;
             Player.player.Velocity = Location.Zero;
             MainGame.GlobalTickTime = time;
         }

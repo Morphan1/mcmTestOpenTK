@@ -240,8 +240,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <summary>
         /// Finds a place to spawn a player at.
         /// </summary>
+        /// <param name="direction">The direction to face</param>
         /// <returns>A valid spawn location</returns>
-        public Location FindSpawnPoint()
+        public Location FindSpawnPoint(out Location direction)
         {
             // Make sure we have spawn points
             if (SpawnPoints.Count == 0)
@@ -255,11 +256,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 SpawnPoint sp = SpawnPoints[Utilities.random.Next(SpawnPoints.Count)];
                 if (!sp.IsBlocked())
                 {
+                    direction = sp.Direction;
                     return sp.Position;
                 }
             }
             // Oh dear! Most of them are blocked! Pick one at random and hope something horrible doesn't happen.
-            return SpawnPoints[Utilities.random.Next(SpawnPoints.Count)].Position;
+            int num = Utilities.random.Next(SpawnPoints.Count);
+            direction = SpawnPoints[num].Direction;
+            return SpawnPoints[num].Position;
         }
 
         /// <summary>

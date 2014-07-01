@@ -20,12 +20,19 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override List<Variable> GetSaveVars()
         {
-            return base.GetSaveVars();
+            List<Variable> ToReturn = base.GetSaveVars();
+            ToReturn.Add(new Variable("direction", Direction.ToSimpleString()));
+            return ToReturn;
         }
 
         public override void Kill()
         {
         }
+
+        /// <summary>
+        /// What direction the spawned player should face.
+        /// </summary>
+        public Location Direction;
 
         /// <summary>
         /// Returns whether the spawn point is blocked (and shouldn't be used for spawning).
@@ -38,7 +45,15 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override bool HandleVariable(string varname, string vardata)
         {
-            return base.HandleVariable(varname, vardata);
+            if (varname == "direction")
+            {
+                Direction = Location.FromString(vardata);
+            }
+            else
+            {
+                return base.HandleVariable(varname, vardata);
+            }
+            return true;
         }
 
         /// <summary>

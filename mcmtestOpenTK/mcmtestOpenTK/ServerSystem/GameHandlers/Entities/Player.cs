@@ -96,8 +96,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         void Spawn(World world)
         {
-            Position = world.FindSpawnPoint();
-            Teleport(Position);
+            Location dir;
+            Position = world.FindSpawnPoint(out dir);
+            Teleport(Position, dir);
             world.Spawn(this);
             NetStringManager.AnnounceAll(this);
             for (int i = 0; i < world.Entities.Count; i++)
@@ -150,13 +151,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// Teleports the player to the specified location.
         /// </summary>
         /// <param name="loc">The location to teleport to</param>
-        public void Teleport(Location loc)
+        /// <param name="direction">The direction to face</param>
+        public void Teleport(Location loc, Location direction)
         {
             Position = loc;
             LastMoveLoc = loc;
             Velocity = Location.Zero;
             LastVelocity = Location.Zero;
-            Send(new TeleportPacketOut(loc));
+            Send(new TeleportPacketOut(loc, direction));
         }
 
         /// <summary>
