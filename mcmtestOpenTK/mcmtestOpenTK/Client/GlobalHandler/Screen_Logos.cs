@@ -6,6 +6,8 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -17,6 +19,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void Init()
         {
+            Logo = new Square();
+            Logo.PositionLow = new Location(0, 0, 0);
+            Logo.PositionHigh = new Location(MainGame.ScreenWidth, MainGame.ScreenHeight, 0);
+            Logo.texture = Texture.GetTexture("splashes/logo");
+            Logo.shader = Shader.ColorMultShader;
             Initted = true;
         }
 
@@ -24,16 +31,18 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
-        double LogoTimer = 1f;
+        double LogoTimer = 2f;
 
         float red = 0;
 
         float redmod = 1;
 
+        public Square Logo;
+
         public override void Tick()
         {
             LogoTimer -= MainGame.Delta;
-            red += (float)MainGame.Delta * redmod * 3;
+            red += (float)MainGame.Delta * redmod;
             if (red >= 1)
             {
                 redmod = -1;
@@ -53,8 +62,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void Draw2D()
         {
-            GL.ClearColor(new Color4((byte)(red * 255), 0, 0, 255));
+            GL.ClearColor(red, 1f, 1f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Color4(red, 1f, 1f, 1f);
+            Logo.Draw();
         }
 
         public override void Draw3D()
