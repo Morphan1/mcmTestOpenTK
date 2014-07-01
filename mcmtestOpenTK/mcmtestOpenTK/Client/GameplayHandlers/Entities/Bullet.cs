@@ -54,7 +54,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override void Draw()
         {
             model.texture = texture;
-            model.Position = Position - Mins;
+            model.Position = Position + Mins;
             model.Angle = Direction.X;
             model.Draw();
             GL.Begin(PrimitiveType.Lines);
