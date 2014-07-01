@@ -16,6 +16,11 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
         bool ServerOnline;
         public override void FromBytes(byte[] input)
         {
+            if (NetworkBase.GotHello)
+            {
+                IsValid = false;
+                return;
+            }
             if (input.Length == 6 && input[0] == (byte)'H' &&
                 input[1] == (byte)'E' && input[2] == (byte)'L' && input[3] == (byte)'L' && input[4] == (byte)'O')
             {
@@ -49,7 +54,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 else
                 {
                     ClientCommands.Output.Bad("Logging in to global server...", DebugMode.MINIMAL);
-                    GlobalLoginRequest.RequestLogin(false, MainGame.Username, MainGame.Password);
+                    GlobalLoginRequest.RequestLogin(true, MainGame.Username, MainGame.Password);
                 }
             }
             else

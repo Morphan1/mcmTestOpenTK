@@ -36,6 +36,11 @@ namespace mcmtestOpenTK.Client.Networking
         public static bool IsActive = false;
 
         /// <summary>
+        /// Whether the server has sent the HELLO packet.
+        /// </summary>
+        public static bool GotHello = false;
+
+        /// <summary>
         /// Whether we need to login to continue networking.
         /// </summary>
         public static bool WaitingToIdentify = false;
@@ -281,6 +286,8 @@ namespace mcmtestOpenTK.Client.Networking
         public static void Disconnect(string reason)
         {
             IsActive = false;
+            GotHello = false;
+            MainGame.Spawned = false;
             MainGame.DestroyWorld();
             MainGame.SetScreen(ScreenMode.MainMenu);
             NetStringManager.Init();
