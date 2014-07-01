@@ -53,7 +53,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public const double MoveSpeed = 35;
         public const double BaseGravity = 100;
         public const double JumpPower = 50;
-        public const double AirSpeedMult = 0.3f;
+        public const double AirSpeedMult = 0.01f;
 
         /// <summary>
         /// Called to tick the default player.
@@ -178,16 +178,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Velocity.X += ((movement.X * MoveSpeed * (slow ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
-                if (on_ground && !up)
-                {
-                    Velocity.Z = 0;
-                }
             }
-            //double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            //Velocity.Z = (Position.Z - pZ) / MyDelta;
+            Velocity = (Position - ploc) / MyDelta;
             if (!IsCustom)
             {
                 MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });

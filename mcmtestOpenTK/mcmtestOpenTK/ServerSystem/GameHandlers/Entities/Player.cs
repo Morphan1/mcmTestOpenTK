@@ -186,7 +186,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public const double MoveSpeed = 35;
         public const double JumpPower = 50;
-        public const double AirSpeedMult = 0.3f;
+        public const double AirSpeedMult = 0.01f;
 
         public override void Tick(double MyDelta, bool isCustom)
         {
@@ -283,15 +283,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 Velocity.X += ((movement.X * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= Gravity * MyDelta;
-                if (on_ground && !Up)
-                {
-                    Velocity.Z = 0;
-                }
             }
-            //double pZ = Position.Z;
+            Location ploc = Position;
             Location target = Position + Velocity * MyDelta;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
-            //Velocity.Z = (Position.Z - pZ) / MyDelta;
+            Velocity = (Position - ploc) / MyDelta;
             if (!isCustom)
             {
                 LastTick = Server.GlobalTickTime;
