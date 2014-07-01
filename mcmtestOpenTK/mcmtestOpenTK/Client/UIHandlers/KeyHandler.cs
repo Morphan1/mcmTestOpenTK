@@ -28,19 +28,20 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void Init()
         {
             KeyPresses = new Queue<Key>();
-            HardBinds = new List<Key>[6];
+            HardBinds = new List<Key>[7];
             for (int i = 0; i < HardBinds.Length; i++)
             {
                 HardBinds[i] = new List<Key>();
             }
             Binds = new Dictionary<Key, CommandScript>();
-            BindKey(Key.ShiftLeft, "capturemouse");
+            BindKey(Key.LControl, "capturemouse");
             HardBinds[(int)KeyBind.FORWARD].Add(Key.W);
             HardBinds[(int)KeyBind.BACK].Add(Key.S);
             HardBinds[(int)KeyBind.LEFT].Add(Key.A);
             HardBinds[(int)KeyBind.RIGHT].Add(Key.D);
             HardBinds[(int)KeyBind.DOWN].Add(Key.C);
             HardBinds[(int)KeyBind.UP].Add(Key.Space);
+            HardBinds[(int)KeyBind.SLOW].Add(Key.LShift);
             namestokeys = new Dictionary<string, Key>();
             RegKey("a", Key.A); RegKey("b", Key.B); RegKey("c", Key.C);
             RegKey("d", Key.D); RegKey("e", Key.E); RegKey("f", Key.F);
@@ -376,6 +377,9 @@ namespace mcmtestOpenTK.Client.UIHandlers
                         case "+down":
                             HardBinds[(int)KeyBind.DOWN].Add(key);
                             break;
+                        case "+slow":
+                            HardBinds[(int)KeyBind.SLOW].Add(key);
+                            break;
                         default:
                             break;
                     }
@@ -497,6 +501,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         LEFT = 2,
         RIGHT = 3,
         UP = 4,
-        DOWN = 5
+        DOWN = 5,
+        SLOW = 6
     }
 }

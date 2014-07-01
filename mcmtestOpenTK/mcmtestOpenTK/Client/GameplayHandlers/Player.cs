@@ -48,6 +48,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool right = false;
         public bool up = false;
         public bool down = false;
+        public bool slow = false;
 
         public const double MoveSpeed = 35;
         public const double BaseGravity = 100;
@@ -108,6 +109,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 back = KeyHandler.KeyBindIsDown(KeyBind.BACK);
                 up = KeyHandler.KeyBindIsDown(KeyBind.UP);
                 down = KeyHandler.KeyBindIsDown(KeyBind.DOWN);
+                slow = KeyHandler.KeyBindIsDown(KeyBind.SLOW);
             }
             if (left)
             {
@@ -173,8 +175,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     Velocity.Z = JumpPower;
                 }
-                Velocity.X += ((movement.X * MoveSpeed) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
-                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.X += ((movement.X * MoveSpeed * (slow ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed * (slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
                 if (on_ground && !up)
                 {
@@ -189,7 +191,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             if (!IsCustom)
             {
                 MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
-                byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
+                byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
                 {

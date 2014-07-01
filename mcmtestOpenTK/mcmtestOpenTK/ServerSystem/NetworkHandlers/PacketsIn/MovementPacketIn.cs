@@ -68,6 +68,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             player.Right = (movement & 8) == 8;
             player.Up = (movement & 16) == 16;
             player.Down = (movement & 32) == 32;
+            player.Slow = (movement & 64) == 64;
             player.Direction.X = yaw;
             player.Direction.Y = pitch;
         }

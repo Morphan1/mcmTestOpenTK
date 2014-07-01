@@ -68,7 +68,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 "\nDirection: " + Player.player.Direction.ToString() +
                 "\nVelocity: " + Math.Round(Math.Sqrt(Player.player.Velocity.X * Player.player.Velocity.X + Player.player.Velocity.Y * Player.player.Velocity.Y)) + ", " + Player.player.Velocity.ToString() +
                 "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
-                "\nPing: " + (int)(NetworkBase.Ping * 1000);
+                "\nPing: " + (int)(NetworkBase.Ping * 1000) +
+                "\nSlow?: " + Player.player.slow;
 
             if (MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Left) && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left))
             {

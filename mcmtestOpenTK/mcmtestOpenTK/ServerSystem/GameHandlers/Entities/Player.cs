@@ -177,6 +177,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public bool Right = false;
         public bool Up = false;
         public bool Down = false;
+        public bool Slow = false;
 
         public override void Tick()
         {
@@ -279,8 +280,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 {
                     Velocity.Z = JumpPower;
                 }
-                Velocity.X += ((movement.X * MoveSpeed) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
-                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.X += ((movement.X * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed * (Slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= Gravity * MyDelta;
                 if (on_ground && !Up)
                 {

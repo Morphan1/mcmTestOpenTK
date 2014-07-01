@@ -7,9 +7,9 @@ namespace mcmtestOpenTK.Client.Networking.PacketsOut
 {
     class MovementPacketOut : AbstractPacketOut
     {
-        public static byte GetControlByte(bool Forward, bool Back, bool Left, bool Right, bool Up, bool Down)
+        public static byte GetControlByte(bool Forward, bool Back, bool Left, bool Right, bool Up, bool Down, bool Slow)
         {
-            return (byte)((Forward ? 1 : 0) | (Back ? 2 : 0) | (Left ? 4 : 0) | (Right ? 8 : 0) | (Up ? 16 : 0) | (Down ? 32 : 0));
+            return (byte)((Forward ? 1 : 0) | (Back ? 2 : 0) | (Left ? 4 : 0) | (Right ? 8 : 0) | (Up ? 16 : 0) | (Down ? 32 : 0) | (Slow ? 64: 0));
         }
 
         double Time;
