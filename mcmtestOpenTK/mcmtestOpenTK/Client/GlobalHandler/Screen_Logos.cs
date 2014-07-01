@@ -57,7 +57,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 MainGame.SetScreen(ScreenMode.Login);
             }
-            KeyHandler.GetKBState();
+            else if (KeyHandler.GetKBState().KeyboardString.Length > 0)
+            {
+                MainGame.SetScreen(ScreenMode.Login);
+            }
         }
 
         public override void Draw2D()
