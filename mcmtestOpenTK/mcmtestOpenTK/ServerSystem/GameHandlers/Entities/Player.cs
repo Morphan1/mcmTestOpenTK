@@ -97,6 +97,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 return;
             }
             SysConsole.Output(OutputType.INFO, "Client '" + Username + "' is now identified!");
+            string ulow = Username.ToLower();
+            for (int i = 0; i < Server.MainWorld.Players.Count; i++)
+            {
+                if (Server.MainWorld.Players[i].Username.ToLower() == ulow)
+                {
+                    Server.MainWorld.Players[i].Kick("Logged in from another location");
+                }
+            }
             IsIdentified = true;
             Send(new PingPacketOut(this));
             Spawn(Server.MainWorld);
