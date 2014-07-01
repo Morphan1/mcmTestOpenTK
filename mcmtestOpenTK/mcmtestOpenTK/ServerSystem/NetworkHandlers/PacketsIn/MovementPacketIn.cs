@@ -11,13 +11,13 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
     public class MovementPacketIn : AbstractPacketIn
     {
         public double Time;
-        public byte movement;
+        public ushort movement;
         public float yaw;
         public float pitch;
 
         public override void FromBytes(Player player, byte[] input)
         {
-            if (input.Length != 17)
+            if (input.Length != 18)
             {
                 IsValid = false;
             }
@@ -26,7 +26,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
                 Time = BitConverter.ToDouble(input, 0);
                 yaw = BitConverter.ToSingle(input, 8);
                 pitch = BitConverter.ToSingle(input, 12);
-                movement = input[16];
+                movement = BitConverter.ToUInt16(input, 16);
                 IsValid = true;
             }
         }
@@ -60,7 +60,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             player.ApplyNewMovement(Time, this);
         }
 
-        public static void ApplyPosition(Player player, byte movement, float yaw, float pitch)
+        public static void ApplyPosition(Player player, ushort movement, float yaw, float pitch)
         {
             player.Forward = (movement & 1) == 1;
             player.Back = (movement & 2) == 2;

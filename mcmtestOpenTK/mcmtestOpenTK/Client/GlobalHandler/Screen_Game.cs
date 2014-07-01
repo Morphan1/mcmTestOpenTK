@@ -55,7 +55,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Y = MainGame.PrimaryGameWindow.Mouse.Y;
 
             // Update player
-            Player.player.Update(MainGame.DeltaF, false);
+            Player.player.Update(MainGame.Delta, false);
 
             // Update world
             MainGame.TickWorld();

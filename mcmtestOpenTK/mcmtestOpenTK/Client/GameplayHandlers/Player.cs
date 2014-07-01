@@ -202,7 +202,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             if (!IsCustom)
             {
                 //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
-                byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down, slow);
+                ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
                 {
@@ -227,7 +227,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public BroadcastPoint CPoint()
         {
-            return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down);
+            return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down, slow);
         }
 
         List<BroadcastPoint> Points = new List<BroadcastPoint>(65);
@@ -281,7 +281,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         }
 
         int reps = 0;
-        byte lastMove = 0;
+        ushort lastMove = 0;
         Location lastdir = Location.Zero;
         Location lastvel = Location.Zero;
     }
@@ -298,8 +298,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool back;
         public bool up;
         public bool down;
+        public bool slow;
         public BroadcastPoint(double _time, Location _position, Location _velocity, Location _direction,
-            bool _forward, bool _back, bool _left, bool _right, bool _up, bool _down)
+            bool _forward, bool _back, bool _left, bool _right, bool _up, bool _down, bool _slow)
         {
             Direction = _direction;
             Time = _time;
@@ -311,6 +312,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             right = _right;
             up = _up;
             down = _down;
+            slow = _slow;
         }
         public void Apply(Player player)
         {

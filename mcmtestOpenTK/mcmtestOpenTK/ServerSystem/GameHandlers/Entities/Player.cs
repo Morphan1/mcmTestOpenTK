@@ -11,7 +11,7 @@ using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
-    public class Player: MovingEntity
+    public class Player: Entity
     {
         /// <summary>
         /// The default collision mins for a player.
@@ -23,21 +23,29 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
 
-        public Player(): base(EntityType.PLAYER, true)
+        public Player(): base(true, true, EntityType.PLAYER)
         {
             ToSend = new List<byte[]>();
             Solid = true;
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
-            PlayerGravity = 100;
-            CheckCollision = true;
-            MoveType = MovementType.SlideBox;
+            Gravity = 100;
         }
 
         /// <summary>
         /// The network Connection object for this player.
         /// </summary>
         public NewConnection Network;
+
+        /// <summary>
+        /// The movement velocity of the player.
+        /// </summary>
+        public Location Velocity;
+
+        /// <summary>
+        /// The direction the player is facing.
+        /// </summary>
+        public Location Direction;
 
         /// <summary>
         /// The current Ping ID, for networking.
@@ -75,9 +83,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public bool Noclip = false;
 
         /// <summary>
-        /// What the player's gravity is (Do not directly set Gravity!)
+        /// What the player's gravity strength is.
         /// </summary>
-        public float PlayerGravity = 100;
+        public float Gravity = 100;
 
         /// <summary>
         /// Call when the user has fully identified, to let them into the server.
@@ -183,14 +191,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override void Tick()
         {
-            Tick(Server.DeltaF, false);
+            Tick(Server.Delta, false);
         }
 
         public const double MoveSpeed = 35;
         public const double JumpPower = 50;
         public const double AirSpeedMult = 0.05f;
 
-        public override void Tick(double MyDelta, bool isCustom)
+        public void Tick(double MyDelta, bool isCustom)
         {
             if (MyDelta == 0)
             {
@@ -282,7 +290,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             else
             {
-                Gravity = PlayerGravity;
                 if (movement.LengthSquared() > 0)
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
@@ -376,10 +383,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public override List<Variable> GetSaveVars()
         {
             throw new InvalidOperationException("Tried to get variables of a Player entity!");
-        }
-
-        public override void Collide()
-        {
         }
     }
 }

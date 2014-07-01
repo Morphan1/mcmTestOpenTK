@@ -7,32 +7,32 @@ namespace mcmtestOpenTK.Client.Networking.PacketsOut
 {
     class MovementPacketOut : AbstractPacketOut
     {
-        public static byte GetControlByte(bool Forward, bool Back, bool Left, bool Right, bool Up, bool Down, bool Slow)
+        public static ushort GetControlShort(bool Forward, bool Back, bool Left, bool Right, bool Up, bool Down, bool Slow)
         {
-            return (byte)((Forward ? 1 : 0) | (Back ? 2 : 0) | (Left ? 4 : 0) | (Right ? 8 : 0) | (Up ? 16 : 0) | (Down ? 32 : 0) | (Slow ? 64: 0));
+            return (ushort)((Forward ? 1 : 0) | (Back ? 2 : 0) | (Left ? 4 : 0) | (Right ? 8 : 0) | (Up ? 16 : 0) | (Down ? 32 : 0) | (Slow ? 64: 0));
         }
 
         double Time;
-        byte Movement;
+        ushort Movement;
         float dir;
         float dirpitch;
 
-        public MovementPacketOut(double _time, byte controlbyte, float yaw, float pitch)
+        public MovementPacketOut(double _time, ushort controlshort, float yaw, float pitch)
         {
             ID = 4;
             Time = _time;
-            Movement = controlbyte;
+            Movement = controlshort;
             dir = yaw;
             dirpitch = pitch;
         }
 
         public override byte[] ToBytes()
         {
-            byte[] tosend = new byte[17];
+            byte[] tosend = new byte[18];
             BitConverter.GetBytes(Time).CopyTo(tosend, 0);
             BitConverter.GetBytes(dir).CopyTo(tosend, 8);
             BitConverter.GetBytes(dirpitch).CopyTo(tosend, 12);
-            tosend[16] = Movement;
+            BitConverter.GetBytes(Movement).CopyTo(tosend, 16);
             return tosend;
         }
     }
