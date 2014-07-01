@@ -27,7 +27,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <summary>
         /// All variables waiting in this tag's context.
         /// </summary>
-        public List<Variable> Variables = null;
+        public Dictionary<string, string> Variables = null;
 
         /// <summary>
         /// The tag system this tag data is used for.
@@ -39,7 +39,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// </summary>
         public string BaseColor = null;
 
-        public TagData(TagParser _system, List<string> _input, string _basecolor, List<Variable> _vars, DebugMode _mode)
+        public TagData(TagParser _system, List<string> _input, string _basecolor, Dictionary<string, string> _vars, DebugMode _mode)
         {
             TagSystem = _system;
             Input = _input;

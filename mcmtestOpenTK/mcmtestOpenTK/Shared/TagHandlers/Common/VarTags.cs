@@ -34,30 +34,28 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Common
             string modif = data.GetModifier(0).ToLower();
             if (data.Variables != null)
             {
-                for (int i = 0; i < data.Variables.Count; i++)
+                string value;
+                if (data.Variables.TryGetValue(modif, out value))
                 {
-                    if (data.Variables[i].Name == modif)
+                    data.Shrink();
+                    if (data.Input.Count == 0)
                     {
-                        data.Shrink();
-                        if (data.Input.Count == 0)
-                        {
-                            return data.Variables[i].Value;
-                        }
-                        // <--[tag]
-                        // @Name VariableTag.exists
-                        // @Group Variables
-                        // @ReturnType TextTag
-                        // @Returns whether the specified variable exists.
-                        // Specifically for the tag <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>.
-                        // -->
-                        if (data.Input[0] == "exists")
-                        {
-                            return new TextTag(true).Handle(data.Shrink());
-                        }
-                        else
-                        {
-                            return new TextTag(data.Variables[i].Value).Handle(data);
-                        }
+                        return value;
+                    }
+                    // <--[tag]
+                    // @Name VariableTag.exists
+                    // @Group Variables
+                    // @ReturnType TextTag
+                    // @Returns whether the specified variable exists.
+                    // Specifically for the tag <@link tag var[<TextTag>]><{var[<TextTag>]}><@/link>.
+                    // -->
+                    if (data.Input[0] == "exists")
+                    {
+                        return new TextTag(true).Handle(data.Shrink());
+                    }
+                    else
+                    {
+                        return new TextTag(value).Handle(data);
                     }
                 }
             }

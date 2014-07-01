@@ -24,7 +24,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 entry.Info("Listing <{color.emphasis}>" + entry.Output.CVarSys.CVars.Count + "<{color.base}> CVars...");
                 for (int i = 0; i < entry.Output.CVarSys.CVars.Count; i++)
                 {
-                    CVar cvar = entry.Output.CVarSys.CVars[i];
+                    CVar cvar = entry.Output.CVarSys.CVarList[i];
                     entry.Info("<{color.emphasis}>" + (i + 1).ToString() + "<{color.simple}>)<{color.emphasis}> " + TagParser.Escape(cvar.Info()));
                 }
             }
@@ -34,9 +34,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 List<CVar> cvars = new List<CVar>();
                 for (int i = 0; i < entry.Output.CVarSys.CVars.Count; i++)
                 {
-                    if (entry.Output.CVarSys.CVars[i].Name.StartsWith(target))
+                    if (entry.Output.CVarSys.CVarList[i].Name.StartsWith(target))
                     {
-                        cvars.Add(entry.Output.CVarSys.CVars[i]);
+                        cvars.Add(entry.Output.CVarSys.CVarList[i]);
                     }
                 }
                 if (cvars.Count == 0)

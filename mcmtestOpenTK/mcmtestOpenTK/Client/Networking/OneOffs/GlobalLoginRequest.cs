@@ -80,8 +80,9 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                     {
                         string[] errorsplit = Error.Split(new char[] { ':' }, 2);
                         string[] subdata = errorsplit[1].Split(new char[] { '/' }, 2);
-                        string mes = LanguageHandler.GetMessage("login.refused." + subdata[0],
-                            TextStyle.Color_Error, new List<Variable> { new Variable("error_data", subdata.Length == 2 ? subdata[1] : "") });
+                        Dictionary<string, string> vars = new Dictionary<string, string>();
+                        vars.Add("error_data", subdata.Length == 2 ? subdata[1] : "");
+                        string mes = LanguageHandler.GetMessage("login.refused." + subdata[0], TextStyle.Color_Error,  vars);
                         UIConsole.WriteLine(TextStyle.Color_Error + "Login was refused with message: " + mes);
                         Fail(mes);
                         MainGame.Username = Username;
@@ -94,9 +95,10 @@ namespace mcmtestOpenTK.Client.Networking.OneOffs
                         string[] subdata = sessplit[1].Split(new char[] { '/' }, 2);
                         if (ShouldAnnounce)
                         {
+                            Dictionary<string, string> vars = new Dictionary<string, string>();
+                            vars.Add("username", Username);
                             UIConsole.WriteLine(TextStyle.Color_Importantinfo + "Login was accepted with message: " +
-                                LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo,
-                                new List<Variable> { new Variable("username", Username) }));
+                                LanguageHandler.GetMessage("login.accepted.success", TextStyle.Color_Importantinfo, vars));
                             Pass();
                         }
                         MainGame.Username = subdata[0];

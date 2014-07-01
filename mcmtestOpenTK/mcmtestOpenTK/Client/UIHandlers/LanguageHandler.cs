@@ -113,7 +113,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <param name="base_color">The wrapping color, for messages that modify color</param>
         /// <param name="vars">Any variables to add</param>
         /// <returns>The message</returns>
-        public static string GetMessage(string name, string base_color, List<Variable> vars = null)
+        public static string GetMessage(string name, string base_color, Dictionary<string, string> vars = null)
         {
             string toret = Base.Get(name.ToLower());
             if (toret == null)
@@ -121,12 +121,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
                 toret = Base.Get("general.nomessage");
                 if (toret == null)
                 {
-                    toret = "(MISSING MESSAGE '<{COLOR_EMPHASIS}><{var[message]}><{COLOR_BASE}>' + MISSING GENERAL)";
+                    toret = "(MISSING MESSAGE '<{color.emphasis}><{var[message]}><{color.base}>' + MISSING GENERAL)";
                     if (vars == null)
                     {
-                        vars = new List<Variable>();
+                        vars = new Dictionary<string, string>();
                     }
-                    vars.Add(new Variable("message", name.ToLower()));
+                    vars.Add("message", name.ToLower());
                 }
             }
             return ClientCommands.CommandSystem.TagSystem.ParseTags(toret, base_color, vars, DebugMode.MINIMAL);

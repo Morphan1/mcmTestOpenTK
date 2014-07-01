@@ -17,7 +17,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// <summary>
         /// A list of all variables saved in this queue.
         /// </summary>
-        public List<Variable> Variables;
+        public Dictionary<string, string> Variables;
 
         /// <summary>
         /// Whether the queue can be delayed (EG, via a WAIT command).
@@ -64,7 +64,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             Script = _script;
             CommandList = _commands;
             CommandSystem = _system;
-            Variables = new List<Variable>();
+            Variables = new Dictionary<string, string>();
             Debug = DebugMode.FULL;
         }
 
@@ -158,15 +158,24 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public void SetVariable(string name, string value)
         {
             string namelow = name.ToLower();
-            for (int i = 0; i < Variables.Count; i++)
+            Variables.Remove(namelow);
+            Variables.Add(namelow, value);
+        }
+
+        /// <summary>
+        /// Gets the value of a variable saved on the queue.
+        /// </summary>
+        /// <param name="name">The name of the variable</param>
+        /// <returns>The variable's value</returns>
+        public string GetVariable(string name)
+        {
+            string namelow = name.ToLower();
+            string value;
+            if (Variables.TryGetValue(namelow, out value))
             {
-                if (Variables[i].Name == namelow)
-                {
-                    Variables[i].Value = value;
-                    return;
-                }
+                return value;
             }
-            Variables.Add(new Variable(namelow, value));
+            return null;
         }
     }
 

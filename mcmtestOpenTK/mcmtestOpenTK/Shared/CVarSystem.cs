@@ -11,7 +11,12 @@ namespace mcmtestOpenTK.Shared
         /// <summary>
         /// A list of all existent CVars.
         /// </summary>
-        public List<CVar> CVars;
+        public List<CVar> CVarList;
+
+        /// <summary>
+        /// A full map of all existent CVars.
+        /// </summary>
+        public Dictionary<string, CVar> CVars;
 
         /// <summary>
         /// The client/server outputter to use.
@@ -23,7 +28,8 @@ namespace mcmtestOpenTK.Shared
 
         public CVarSystem(Outputter _output)
         {
-            CVars = new List<CVar>();
+            CVars = new Dictionary<string, CVar>();
+            CVarList = new List<CVar>();
             Output = _output;
             Output.CVarSys = this;
 
@@ -50,7 +56,8 @@ namespace mcmtestOpenTK.Shared
         public CVar Register(string CVar, string value, CVarFlag flags)
         {
             CVar cvar = new CVar(CVar.ToLower(), value, flags, this);
-            CVars.Add(cvar);
+            CVars.Add(CVar, cvar);
+            CVarList.Add(cvar);
             return cvar;
         }
 
@@ -99,12 +106,10 @@ namespace mcmtestOpenTK.Shared
         public CVar Get(string CVar)
         {
             string cvlow = CVar.ToLower();
-            for (int i = 0; i < CVars.Count; i++)
+            CVar cvar;
+            if (CVars.TryGetValue(cvlow, out cvar))
             {
-                if (CVars[i].Name == cvlow)
-                {
-                    return CVars[i];
-                }
+                return cvar;
             }
             return null;
         }

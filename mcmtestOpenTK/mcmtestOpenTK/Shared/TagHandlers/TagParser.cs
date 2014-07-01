@@ -83,7 +83,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <param name="vars">Any variables in this tag's context</param>
         /// <param name="input">The tagged string</param>
         /// <returns>The string with tags parsed</returns>
-        public string ParseTags(string input, string base_color, List<Variable> vars, DebugMode mode)
+        public string ParseTags(string input, string base_color, Dictionary<string, string> vars, DebugMode mode)
         {
             if (input.IndexOf("<{") < 0)
             {
