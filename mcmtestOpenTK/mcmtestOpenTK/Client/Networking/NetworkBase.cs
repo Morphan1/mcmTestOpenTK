@@ -60,6 +60,11 @@ namespace mcmtestOpenTK.Client.Networking
         }
 
         /// <summary>
+        /// The address of the remove server.
+        /// </summary>
+        public static string Address = "";
+
+        /// <summary>
         /// Connects to a specified IP.
         /// </summary>
         /// <param name="IP">The IP to connect to</param>
@@ -68,6 +73,7 @@ namespace mcmtestOpenTK.Client.Networking
         {
             try
             {
+                Address = IP;
                 IPEndPoint target = NetworkUtil.StringToIP(IP);
                 if (target == null)
                 {
