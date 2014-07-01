@@ -28,11 +28,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
             {
                 if (loginscr.SaveBox.toggled)
                 {
-                    AccountFileSaver.SaveAccountData(loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText);
+                    AccountFileSaver.SaveAccountData(loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText, loginscr.AutoBox.toggled ? "true": "false");
                 }
                 else
                 {
-                    AccountFileSaver.SaveAccountData("", "");
+                    AccountFileSaver.SaveAccountData("", "", "");
                 }
                 GlobalLoginRequest.RequestLogin(true, loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText);
                 Menus.ShowNotice("Logging in...");

@@ -17,16 +17,16 @@ namespace mcmtestOpenTK.Shared
             }
             catch
             {
-                return new string[] { "", "" };
+                return new string[] { "", "", "" };
             }
         }
 
-        public static void SaveAccountData(string name, string pass)
+        public static void SaveAccountData(string name, string pass, string save)
         {
             try
             {
                 File.WriteAllBytes(Environment.CurrentDirectory + "/account.dat",
-                    FileHandler.GZip(FileHandler.encoding.GetBytes(name + "\n" + pass)));
+                    FileHandler.GZip(FileHandler.encoding.GetBytes(name + "\n" + pass + "\n" + save)));
             }
             catch
             {
