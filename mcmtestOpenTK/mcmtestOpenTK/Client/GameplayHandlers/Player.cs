@@ -201,7 +201,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Velocity = (Position - ploc) / MyDelta;
             if (!IsCustom)
             {
-                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
+                //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)

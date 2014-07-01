@@ -24,9 +24,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public Bullet(): base()
         {
-            model = new CubeModel(Position, new Location(1), Texture.Console);
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);
+            model = new CubeModel(Position - Mins, new Location(1), Texture.Console);
             CheckCollision = true;
             Solid = false;
         }
@@ -54,7 +54,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override void Draw()
         {
             model.texture = texture;
-            model.Position = Position;
+            model.Position = Position - Mins;
             model.Angle = Direction.X;
             model.Draw();
             GL.Begin(PrimitiveType.Lines);
