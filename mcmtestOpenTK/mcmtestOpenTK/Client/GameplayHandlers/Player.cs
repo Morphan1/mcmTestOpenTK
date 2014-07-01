@@ -57,8 +57,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// <summary>
         /// Called to tick the default player.
         /// </summary>
-        public void Update(float MyDelta, bool IsCustom)
+        public void Update(double MyDelta, bool IsCustom)
         {
+            if (MyDelta == 0)
+            {
+                return;
+            }
             // Don't move if not even spawned.
             if (!MainGame.Spawned)
             {
@@ -164,26 +168,27 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Velocity.Z = 0;
                     Position.Z = 20;
                 }
-                bool on_ground = Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
-                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (up && on_ground)
                 {
                     Velocity.Z = JumpPower;
                 }
-                // Velocity += new Location(movement.X * MoveSpeed, movement.Y * MoveSpeed, 0);
-                // Speed += ((MoveDirection * MaximumSpeed) - Speed) * AccelerationFactor
                 Velocity.X += ((movement.X * MoveSpeed) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
-                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1: AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
+                if (on_ground && !up)
+                {
+                    Velocity.Z = 0;
+                }
             }
-            double pZ = Position.Z;
+            //double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            //Velocity.Z = (Position.Z - pZ) / MyDelta;
             if (!IsCustom)
             {
-                // MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
-                Velocity.Z = (Position.Z - pZ) / MyDelta;
+                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 byte move = MovementPacketOut.GetControlByte(forward, back, left, right, up, down);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
@@ -202,28 +207,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, (float)Direction.X, (float)Direction.Y));
                     }
                 }
-            }
-        }
-
-        public double TowardsZero(double original, double change)
-        {
-            if (original > 0)
-            {
-                original -= change;
-                if (original < 0)
-                {
-                    return 0;
-                }
-                return original;
-            }
-            else
-            {
-                original += change;
-                if (original > 0)
-                {
-                    return 0;
-                }
-                return original;
             }
         }
 
@@ -250,16 +233,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     Velocity = Points[i].Velocity;
                     double ctime = Points[i].Time;
                     double Target = Time - ctime;
-                    while (Target > 1f / 60f)
+                    while (Target > 1d / 60d)
                     {
-                        Update(1f / 60f, true);
-                        Target -= 1f / 60f;
+                        Update(1d / 60d, true);
+                        Target -= 1d / 60d;
                     }
-                    Update((float)Target, true);
+                    Update(Target, true);
                     ctime = Time;
                     // Apply changes
-                   // Position += (pos - Position);
-                   // Velocity += (vel - Velocity);
+                    Position += (pos - Position);
+                    Velocity += (vel - Velocity);
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {
@@ -267,10 +250,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         Target = Points[x].Time - ctime;
                         while (Target > 1f / 60f)
                         {
-                            Update(1f / 60f, true);
-                            Target -= 1f / 60f;
+                            Update(1d / 60d, true);
+                            Target -= 1d / 60d;
                         }
-                        Update((float)Target, true);
+                        Update(Target, true);
                         // Apply this point for the next calculation
                         Points[x].Apply(this);
                         ctime = Points[x].Time;

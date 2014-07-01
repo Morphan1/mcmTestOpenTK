@@ -183,8 +183,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Tick(Server.DeltaF, false);
         }
 
-        public override void Tick(float MyDelta, bool isCustom)
+        public const double MoveSpeed = 35;
+        public const double JumpPower = 50;
+        public const double AirSpeedMult = 0.3f;
+
+        public override void Tick(double MyDelta, bool isCustom)
         {
+            if (MyDelta == 0)
+            {
+                return;
+            }
             if (!IsAlive || !Network.IsAlive)
             {
                 IsAlive = false;
@@ -266,17 +274,23 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     Velocity.Z = 0;
                     Position.Z = 20;
                 }
-                if (Up)
+                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                if (Up && on_ground)
                 {
-                    if (Velocity.Z < 0.0001f && Velocity.Z > -0.0001f
-                        && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.5f), new Location(1.5f, 1.5f, 2)))
-                    {
-                        Velocity.Z = 50;
-                    }
+                    Velocity.Z = JumpPower;
                 }
-                Velocity = new Location(movement.X * 30, movement.Y * 30, Velocity.Z);
+                Velocity.X += ((movement.X * MoveSpeed) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Y += ((movement.Y * MoveSpeed) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
+                Velocity.Z -= Gravity * MyDelta;
+                if (on_ground && !Up)
+                {
+                    Velocity.Z = 0;
+                }
             }
-            base.Tick(MyDelta, isCustom);
+            //double pZ = Position.Z;
+            Location target = Position + Velocity * MyDelta;
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8));
+            //Velocity.Z = (Position.Z - pZ) / MyDelta;
             if (!isCustom)
             {
                 LastTick = Server.GlobalTickTime;
@@ -300,11 +314,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Velocity = LastVelocity;
             MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
             // Tick from last known movement to new position.
-            float targetdelta = (float)(MoveTime - LastMovement);
-            while (targetdelta > 1f / 60f)
+            double targetdelta = MoveTime - LastMovement;
+            while (targetdelta > 1d / 60d)
             {
-                Tick(1f / 60f, true);
-                targetdelta -= 1f / 60f;
+                Tick(1d / 60d, true);
+                targetdelta -= 1d / 60d;
             }
             Tick(targetdelta, true);
             // Tell the player where they were at when the packet arrived.
@@ -317,10 +331,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);
             // Tick back up to now.
             targetdelta = (float)(LastTick - MoveTime);
-            while (targetdelta > 1f / 60f)
+            while (targetdelta > 1d / 60d)
             {
-                Tick(1f / 60f, true);
-                targetdelta -= 1f / 60f;
+                Tick(1d / 60d, true);
+                targetdelta -= 1d / 60d;
             }
             Tick(targetdelta, true);
             Solid = WasSolid;

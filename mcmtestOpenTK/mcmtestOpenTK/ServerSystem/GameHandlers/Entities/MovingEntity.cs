@@ -49,8 +49,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Tick(Server.DeltaF, false);
         }
 
-        public virtual void Tick(float MyDelta, bool IsCustom)
+        public virtual void Tick(double MyDelta, bool IsCustom)
         {
+            if (MyDelta == 0)
+            {
+                return;
+            }
             Velocity.Z -= Gravity * MyDelta;
             double pZ = Position.Z;
             Location target = Position + Velocity * MyDelta;
