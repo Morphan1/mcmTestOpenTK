@@ -186,7 +186,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public const double MoveSpeed = 35;
         public const double JumpPower = 50;
-        public const double AirSpeedMult = 0.01f;
+        public const double AirSpeedMult = 0.05f;
 
         public override void Tick(double MyDelta, bool isCustom)
         {

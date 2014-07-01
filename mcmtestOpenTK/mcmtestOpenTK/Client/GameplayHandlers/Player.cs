@@ -53,7 +53,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public const double MoveSpeed = 35;
         public const double BaseGravity = 100;
         public const double JumpPower = 50;
-        public const double AirSpeedMult = 0.01f;
+        public const double AirSpeedMult = 0.05f;
 
         /// <summary>
         /// Called to tick the default player.
@@ -175,6 +175,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     Velocity.Z = JumpPower;
                 }
+                if (!IsCustom)
+                {
+                    onground = on_ground;
+                }
                 Velocity.X += ((movement.X * MoveSpeed * (slow ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (slow ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
@@ -206,6 +210,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 }
             }
         }
+
+        public bool onground = false;
 
         public BroadcastPoint CPoint()
         {
