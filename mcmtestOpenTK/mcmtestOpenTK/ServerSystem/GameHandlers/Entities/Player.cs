@@ -303,6 +303,15 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             if (!isCustom)
             {
                 LastTick = Server.GlobalTickTime;
+                // TODO: Better player transmission - transmit move byte with time, in addition to position/vel/dir?
+                PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
+                for (int i = 0; i < world.Players.Count; i++)
+                {
+                    if (world.Players[i] != this)
+                    {
+                        world.Players[i].Send(pack);
+                    }
+                }
             }
         }
 

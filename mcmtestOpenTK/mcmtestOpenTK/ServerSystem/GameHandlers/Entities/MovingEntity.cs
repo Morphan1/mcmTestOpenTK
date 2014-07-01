@@ -90,13 +90,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 {
                     retrans = 0;
                     PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
-                    for (int i = 0; i < world.Players.Count; i++)
-                    {
-                        if (world.Players[i] != this)
-                        {
-                            world.Players[i].Send(pack);
-                        }
-                    }
+                    world.SendToAllPlayers(pack);
                 }
             }
             lastvel = Velocity;
