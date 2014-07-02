@@ -329,27 +329,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             if (Back)
             {
-                if (movement.Y != 0)
-                {
-                    movement.Y *= 0.5f;
-                    movement.X = 0.5f;
-                }
-                else
-                {
-                    movement.X = 1;
-                }
+                movement.X = 1;
             }
             if (Forward)
             {
-                if (movement.Y != 0)
-                {
-                    movement.Y *= 0.5f;
-                    movement.X = -0.5f;
-                }
-                else
-                {
-                    movement.X = -1;
-                }
+                movement.X = -1;
             }
             if (Down)
             {
@@ -387,7 +371,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             {
                 if (movement.LengthSquared() > 0)
                 {
-                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
+                    movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180).Normalize();
                 }
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (Up && on_ground && !Jumped)
