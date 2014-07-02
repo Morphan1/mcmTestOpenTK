@@ -282,6 +282,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public bool Up = false;
         public bool Down = false;
         public bool Slow = false;
+        public bool Jumped = false;
 
         public override void Tick()
         {
@@ -389,9 +390,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
-                if (Up && on_ground)
+                if (Up && on_ground && !Jumped)
                 {
                     Velocity.Z = JumpPower * (Down ? 0.5 : 1);
+                    Jumped = true;
+                }
+                else if (!Up && Jumped)
+                {
+                    Jumped = false;
                 }
                 Velocity.X += ((movement.X * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
@@ -421,6 +427,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         Location LastMoveLoc;
         Location LastVelocity;
         MovementPacketIn LastPacket;
+        public bool LastJumped = false;
 
         public List<MovementPacketIn> PacketsToApply = new List<MovementPacketIn>();
 
@@ -431,6 +438,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             // Apply last known position / movement.
             Position = LastMoveLoc;
             Velocity = LastVelocity;
+            Jumped = LastJumped;
             MovementPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.yaw, LastPacket.pitch);
             // Tick from last known movement to new position.
             double targetdelta = MoveTime - LastMovement;
@@ -444,7 +452,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             LastMoveLoc = Position;
             LastVelocity = Velocity;
             LastMovement = MoveTime;
-            Send(new YourPositionPacketOut(MoveTime, Position, Velocity));
+            LastJumped = Jumped;
+            Send(new YourPositionPacketOut(MoveTime, Position, Velocity, Jumped));
             LastPacket = pack;
             // Apply the new movement packet.
             MovementPacketIn.ApplyPosition(this, pack.movement, pack.yaw, pack.pitch);

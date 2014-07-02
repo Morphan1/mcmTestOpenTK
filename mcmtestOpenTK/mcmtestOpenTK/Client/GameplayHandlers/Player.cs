@@ -161,7 +161,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     down = true;
                 }
             }
-            bool justJumped = false;
             if (ClientCVar.g_noclip.ValueB)
             {
                 if (movement.LengthSquared() > 0)
@@ -188,13 +187,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 if (up && on_ground && !jumped)
                 {
                     Velocity.Z = JumpPower * (down ? 0.5 : 1);
-                    //jumped = true;
-                    //justJumped = true;
+                    jumped = true;
                 }
-                /*else if (!up && jumped)
+                else if (!up && jumped)
                 {
                     jumped = false;
-                }*/
+                }
                 if (!IsCustom)
                 {
                     onground = on_ground;
@@ -209,8 +207,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Velocity = (Position - ploc) / MyDelta;
             if (!IsCustom)
             {
-                //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
-                ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up && (!jumped || justJumped), down, slow);
+                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
+                ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
                 {
@@ -240,7 +238,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         List<BroadcastPoint> Points = new List<BroadcastPoint>(65);
 
-        public void ApplyMovement(Location pos, Location vel, double Time)
+        public void ApplyMovement(Location pos, Location vel, double Time, bool _jumped)
         {
             // Loop through all points in reverse
             for (int i = Points.Count - 1; i >= 0; i--)
@@ -251,7 +249,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     // Record our current point (probably not needed, just in case)
                     BroadcastPoint cpoint = CPoint();
                     // Apply the last point fully
-                    Points[i].Apply(this);
+                    Points[i].Apply(this, true);
                     Position = Points[i].Position;
                     Velocity = Points[i].Velocity;
                     double ctime = Points[i].Time;
@@ -266,6 +264,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     // Apply changes
                     Position += (pos - Position);
                     Velocity += (vel - Velocity);
+                    jumped = _jumped;
                     // Loop through all future points
                     for (int x = i + 1; x < Points.Count; x++)
                     {
@@ -278,11 +277,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         }
                         Update(Target, true);
                         // Apply this point for the next calculation
-                        Points[x].Apply(this);
+                        Points[x].Apply(this, false);
                         ctime = Points[x].Time;
                     }
                     // Restore our keys to what they should be (probably not needed, just in case)
-                    cpoint.Apply(this);
+                    cpoint.Apply(this, false);
                     break;
                 }
             }
@@ -324,7 +323,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             slow = _slow;
             jumped = _jumped;
         }
-        public void Apply(Player player)
+        public void Apply(Player player, bool dojump)
         {
             player.Direction = Direction;
             player.forward = forward;
@@ -333,7 +332,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             player.right = right;
             player.up = up;
             player.down = down;
-            player.jumped = jumped;
+            if (dojump)
+            {
+                player.jumped = jumped;
+            }
         }
     }
 }

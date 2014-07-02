@@ -18,10 +18,11 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
         Location position;
         Location velocity;
         double time;
+        bool jumped;
 
         public override void FromBytes(byte[] input)
         {
-            if (input.Length != 32)
+            if (input.Length != 33)
             {
                 IsValid = false;
                 return;
@@ -29,10 +30,11 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             time = BitConverter.ToDouble(input, 0);
             position = Location.FromBytes(input, 8);
             velocity = Location.FromBytes(input, 20);
+            jumped = input[32] == 1;
             IsValid = true;
         }
 
-        Location lastforced;
+        static Location lastforced;
         
         public override void Execute()
         {
@@ -40,13 +42,13 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            //MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600, start = lastforced });
+            MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600, start = lastforced });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
-            Player.player.ApplyMovement(position, velocity, time);
+            Player.player.ApplyMovement(position, velocity, time, jumped);
             lastforced = position;
         }
     }
