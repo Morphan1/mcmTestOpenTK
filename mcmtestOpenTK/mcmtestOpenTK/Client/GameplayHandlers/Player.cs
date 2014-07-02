@@ -42,6 +42,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// </summary>
         public Location Direction = Location.Zero;
 
+        public bool rforward = false;
+        public bool rback = false;
+        public bool rleft = false;
+        public bool rright = false;
+        public bool rup = false;
+        public bool rdown = false;
+        public bool rslow = false;
+
         public bool forward = false;
         public bool back = false;
         public bool left = false;
@@ -106,13 +114,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location movement = Location.Zero;
             if (!IsCustom)
             {
-                left = KeyHandler.KeyBindIsDown(KeyBind.LEFT);
-                right = KeyHandler.KeyBindIsDown(KeyBind.RIGHT);
-                forward = KeyHandler.KeyBindIsDown(KeyBind.FORWARD);
-                back = KeyHandler.KeyBindIsDown(KeyBind.BACK);
-                up = KeyHandler.KeyBindIsDown(KeyBind.UP);
-                down = KeyHandler.KeyBindIsDown(KeyBind.DOWN);
-                slow = KeyHandler.KeyBindIsDown(KeyBind.SLOW);
+                left = rleft;
+                right = rright;
+                forward = rforward;
+                back = rback;
+                up = rup;
+                down = rdown;
+                slow = rslow;
             }
             if (left)
             {
@@ -183,10 +191,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
-                bool on_ground = Velocity.Z < 0.0001f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (up && on_ground && !jumped)
                 {
-                    Velocity.Z = JumpPower * (down ? 0.5 : 1);
+                    Velocity.Z = JumpPower * (down ? 0.7 : 1);
                     jumped = true;
                 }
                 else if (!up && jumped)
@@ -227,7 +235,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (!IsCustom)
             {
-                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
+                //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)

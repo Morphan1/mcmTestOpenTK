@@ -182,7 +182,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     {
                         entry.Good("Foreach looping <{color.emphasis}>" + target + "<{color.base}> times...");
                         CommandEntry callback = new CommandEntry("foreach \0CALLBACK", null, entry,
-                            this, new List<string> { "\0CALLBACK" }, "foreach");
+                            this, new List<string> { "\0CALLBACK" }, "foreach", 0);
                         entry.Block.Add(callback);
                         entry.Queue.SetVariable("foreach_index", "1");
                         entry.Queue.SetVariable("foreach_total", target.ToString());

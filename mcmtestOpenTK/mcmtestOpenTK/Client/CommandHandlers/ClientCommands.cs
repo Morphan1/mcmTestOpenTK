@@ -7,6 +7,7 @@ using mcmtestOpenTK.Client.CommandHandlers.CommonCmds;
 using mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds;
 using mcmtestOpenTK.Client.CommandHandlers.NetworkCmds;
 using mcmtestOpenTK.Client.CommandHandlers.AudioCmds;
+using mcmtestOpenTK.Client.CommandHandlers.KeyLockCmds;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Client.CommandHandlers.TagHandlers.Common;
@@ -34,6 +35,15 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             Output = _output;
             CommandSystem.Output = Output;
             CommandSystem.Init();
+
+            // KeyLock Commands
+            CommandSystem.RegisterCommand(new ForwardCommand());
+            CommandSystem.RegisterCommand(new BackCommand());
+            CommandSystem.RegisterCommand(new LeftCommand());
+            CommandSystem.RegisterCommand(new RightCommand());
+            CommandSystem.RegisterCommand(new UpCommand());
+            CommandSystem.RegisterCommand(new DownCommand());
+            CommandSystem.RegisterCommand(new SlowCommand());
 
             // Common Commands
             CommandSystem.RegisterCommand(new HelpCommand());

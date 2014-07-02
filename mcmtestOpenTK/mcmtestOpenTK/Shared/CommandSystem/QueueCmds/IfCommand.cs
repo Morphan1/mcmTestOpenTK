@@ -41,7 +41,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     entry.Good("If is true, executing...");
                     entry.Result = 1;
                     entry.Block.Add(new CommandEntry("if \0CALLBACK", null, entry,
-                        this, new List<string> { "\0CALLBACK" }, "if"));
+                        this, new List<string> { "\0CALLBACK" }, "if", 0));
                     entry.Queue.AddCommandsNow(entry.Block);
                 }
                 else

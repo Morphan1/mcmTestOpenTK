@@ -392,7 +392,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
                 if (Up && on_ground && !Jumped)
                 {
-                    Velocity.Z = JumpPower * (Down ? 0.5 : 1);
+                    Velocity.Z = JumpPower * (Down ? 0.7 : 1);
                     Jumped = true;
                 }
                 else if (!Up && Jumped)

@@ -58,22 +58,38 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             {
                 return null;
             }
+            int marker = 0;
             string BaseCommand = args[0];
-            string BaseCommandLow = args[0].ToLower();
+            if (BaseCommand.StartsWith("+") && BaseCommand.Length > 1)
+            {
+                marker = 1;
+                BaseCommand = BaseCommand.Substring(1);
+            }
+            else if (BaseCommand.StartsWith("-") && BaseCommand.Length > 1)
+            {
+                marker = 2;
+                BaseCommand = BaseCommand.Substring(1);
+            }
+            else if (BaseCommand.StartsWith("!") && BaseCommand.Length > 1)
+            {
+                marker = 3;
+                BaseCommand = BaseCommand.Substring(1);
+            }
+            string BaseCommandLow = BaseCommand.ToLower();
             args.RemoveAt(0);
             AbstractCommand cmd;
             if (system.RegisteredCommands.TryGetValue(BaseCommandLow, out cmd))
             {
-                return new CommandEntry(command, _block, _owner, cmd, args, BaseCommand);
+                return new CommandEntry(command, _block, _owner, cmd, args, BaseCommand, marker);
             }
-            return CreateInvalidOutput(BaseCommand, _block, args, _owner, system, command);
+            return CreateInvalidOutput(BaseCommand, _block, args, _owner, system, command, marker);
         }
 
         public static CommandEntry CreateInvalidOutput(string name, List<CommandEntry> _block,
-            List<string> _arguments, CommandEntry _owner, Commands system, string line)
+            List<string> _arguments, CommandEntry _owner, Commands system, string line, int marker)
         {
             _arguments.Insert(0, name);
-            return new CommandEntry(line, _block, _owner, system.DebugInvalidCommand, _arguments, name);
+            return new CommandEntry(line, _block, _owner, system.DebugInvalidCommand, _arguments, name, marker);
                 
         }
 
@@ -93,7 +109,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public CommandEntry BlockOwner = null;
 
         public CommandEntry(string _commandline, List<CommandEntry> _block, CommandEntry _owner,
-            AbstractCommand _command, List<string> _arguments, string _name)
+            AbstractCommand _command, List<string> _arguments, string _name, int _marker)
         {
             CommandLine = _commandline;
             Block = _block;
@@ -101,6 +117,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             Command = _command;
             Arguments = _arguments;
             Name = _name;
+            Marker = _marker;
         }
 
         /// <summary>
@@ -149,6 +166,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// An object set by the command, if any.
         /// </summary>
         public Object obj = null;
+
+        /// <summary>
+        /// What marker was used. 0 = none, 1 = +, 2 = -, 3 = !
+        /// </summary>
+        public int Marker = 0;
 
         /// <summary>
         /// Gets an argument at a specified place, handling any tags.
@@ -253,6 +275,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             entry.Queue = Queue;
             entry.Result = Result;
             entry.obj = obj;
+            entry.Marker = Marker;
             return entry;
         }
     }

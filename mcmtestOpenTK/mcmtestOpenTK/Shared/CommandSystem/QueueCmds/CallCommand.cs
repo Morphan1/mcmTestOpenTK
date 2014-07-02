@@ -53,7 +53,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     entry.Good("Calling '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'...");
                     List<CommandEntry> block = script.GetEntries();
                     block.Add(new CommandEntry("call \0CALLBACK", null, entry,
-                            this, new List<string> { "\0CALLBACK" }, "call"));
+                            this, new List<string> { "\0CALLBACK" }, "call", 0));
                     entry.Queue.AddCommandsNow(block);
                 }
                 else

@@ -157,6 +157,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\BackCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\SlowCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\DownCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\UpCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\RightCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\LeftCommand.cs" />
+    <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Plane.cs" />

@@ -68,6 +68,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public Dictionary<string, CommandScript> Functions;
 
+        public CommandQueue PlaceholderQueue;
+
         /// <summary>
         /// Executes a command script.
         /// </summary>
@@ -162,6 +164,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public void Init()
         {
+            PlaceholderQueue = new CommandQueue(new CommandScript("PLACEHOLDER_QUEUE", new List<CommandEntry>()), new List<CommandEntry>(), this);
             RegisteredCommands = new Dictionary<string, AbstractCommand>(30);
             RegisteredCommandList = new List<AbstractCommand>(30);
             Scripts = new Dictionary<string, CommandScript>(30);

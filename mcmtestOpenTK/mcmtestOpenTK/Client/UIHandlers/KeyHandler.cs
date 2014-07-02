@@ -11,13 +11,12 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
     public class KeyHandler
     {
-        static List<Key>[] HardBinds;
-
         static Dictionary<Key, CommandScript> Binds;
 
         static Dictionary<string, Key> namestokeys;
@@ -28,20 +27,16 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void Init()
         {
             KeyPresses = new Queue<Key>();
-            HardBinds = new List<Key>[7];
-            for (int i = 0; i < HardBinds.Length; i++)
-            {
-                HardBinds[i] = new List<Key>();
-            }
+            KeyUps = new Queue<Key>();
             Binds = new Dictionary<Key, CommandScript>();
             BindKey(Key.LControl, "capturemouse");
-            HardBinds[(int)KeyBind.FORWARD].Add(Key.W);
-            HardBinds[(int)KeyBind.BACK].Add(Key.S);
-            HardBinds[(int)KeyBind.LEFT].Add(Key.A);
-            HardBinds[(int)KeyBind.RIGHT].Add(Key.D);
-            HardBinds[(int)KeyBind.DOWN].Add(Key.C);
-            HardBinds[(int)KeyBind.UP].Add(Key.Space);
-            HardBinds[(int)KeyBind.SLOW].Add(Key.LShift);
+            BindKey(Key.W, "+forward");
+            BindKey(Key.S, "+back");
+            BindKey(Key.A, "+left");
+            BindKey(Key.D, "+right");
+            BindKey(Key.C, "+down");
+            BindKey(Key.Space, "+up");
+            BindKey(Key.LShift, "+slow");
             namestokeys = new Dictionary<string, Key>();
             RegKey("a", Key.A); RegKey("b", Key.B); RegKey("c", Key.C);
             RegKey("d", Key.D); RegKey("e", Key.E); RegKey("f", Key.F);
@@ -134,6 +129,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
         static Object Locker = new Object();
 
         static Queue<Key> KeyPresses;
+
+        static Queue<Key> KeyUps;
 
         /// <summary>
         /// Called every time a key is pressed, adds to the Keyboard String.
@@ -270,6 +267,10 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     default:
                         break;
                 }
+                if (_BindsValid)
+                {
+                    KeyUps.Enqueue(e.Key);
+                }
             }
         }
 
@@ -292,35 +293,24 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     CommandScript script;
                     if (Binds.TryGetValue(key, out script))
                     {
-                        if (!IsHardBound(key))
+                        ClientCommands.CommandSystem.ExecuteScript(script);
+                    }
+                }
+                while (KeyUps.Count > 0)
+                {
+                    Key key = KeyUps.Dequeue();
+                    CommandScript script;
+                    if (Binds.TryGetValue(key, out script))
+                    {
+                        if (script.Commands.Count == 1 && script.Commands[0].Marker == 1)
                         {
-                            ClientCommands.CommandSystem.ExecuteScript(script);
+                            CommandEntry entry = script.Commands[0].Duplicate();
+                            entry.Marker = 2;
+                            ClientCommands.CommandSystem.ExecuteCommand(entry, ClientCommands.CommandSystem.PlaceholderQueue);
                         }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns whether a specific keybind is pressed.
-        /// </summary>
-        /// <param name="key">The keybind to check</param>
-        /// <returns>Whether it's pressed</returns>
-        public static bool KeyBindIsDown(KeyBind key)
-        {
-            if (!IsValid())
-            {
-                return false;
-            }
-            List<Key> keys = HardBinds[(int)key];
-            for (int i = 0; i < keys.Count; i++)
-            {
-                if (CurrentKeyboard.IsKeyDown(keys[i]))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public static Key GetKeyForName(string name)
@@ -341,64 +331,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void BindKey(Key key, string bind)
         {
                 Binds.Remove(key);
-                for (int i = 0; i < HardBinds.Length; i++)
-                {
-                    for (int x = 0; x < HardBinds[i].Count; x++)
-                    {
-                        if (HardBinds[i][x] == key)
-                        {
-                            HardBinds[i].RemoveAt(x--);
-                        }
-                    }
-                }
                 if (bind != null)
                 {
                     CommandScript script = CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem);
                     script.Debug = DebugMode.MINIMAL;
                     Binds.Add(key, script);
-                    string bindlow = bind.ToLower();
-                    switch (bindlow)
-                    {
-                        case "+forward":
-                            HardBinds[(int)KeyBind.FORWARD].Add(key);
-                            break;
-                        case "+back":
-                            HardBinds[(int)KeyBind.BACK].Add(key);
-                            break;
-                        case "+left":
-                            HardBinds[(int)KeyBind.LEFT].Add(key);
-                            break;
-                        case "+right":
-                            HardBinds[(int)KeyBind.RIGHT].Add(key);
-                            break;
-                        case "+up":
-                            HardBinds[(int)KeyBind.UP].Add(key);
-                            break;
-                        case "+down":
-                            HardBinds[(int)KeyBind.DOWN].Add(key);
-                            break;
-                        case "+slow":
-                            HardBinds[(int)KeyBind.SLOW].Add(key);
-                            break;
-                        default:
-                            break;
-                    }
                 }
-        }
-
-        static bool IsHardBound(Key key)
-        {
-            for (int i = 0; i < HardBinds.Length; i++)
-            {
-                for (int x = 0; x < HardBinds[i].Count; x++)
-                {
-                    if (HardBinds[i][x] == key)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>
@@ -492,16 +430,5 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// The number of times the RIGHT arrow was pressed minus the number of times the LEFT arrow was pressed.
         /// </summary>
         public int LeftRights = 0;
-    }
-
-    public enum KeyBind: int
-    {
-        FORWARD = 0,
-        BACK = 1,
-        LEFT = 2,
-        RIGHT = 3,
-        UP = 4,
-        DOWN = 5,
-        SLOW = 6
     }
 }

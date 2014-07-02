@@ -171,7 +171,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     {
                         entry.Good("Repeating <{color.emphasis}>" + target + "<{color.base}> times...");
                         CommandEntry callback = new CommandEntry("repeat \0CALLBACK", null, entry,
-                            this, new List<string> { "\0CALLBACK" }, "repeat");
+                            this, new List<string> { "\0CALLBACK" }, "repeat", 0);
                         entry.Block.Add(callback);
                         entry.Queue.SetVariable("repeat_index", "1");
                         entry.Queue.SetVariable("repeat_total", target.ToString());
