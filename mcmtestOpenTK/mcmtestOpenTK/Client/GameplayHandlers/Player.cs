@@ -205,6 +205,26 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location ploc = Position;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
+            // Climb steps
+            if (Position != target) // If we missed the target
+            {
+                // Try a flat target
+                target = new Location(target.X, target.Y, Position.Z);
+                // If the flat target is solid
+                if (Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                {
+                    // Raise the target by 2
+                    target.Z += 2;
+                    // If the higher target has room
+                    if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                    {
+                        // Move up and forward
+                        Position = Collision.SlideBox(Position + new Location(0, 0, 2), target + new Location(0, 0, 2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        // move back into place
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -2), new Location(-1.5f, -1.5f, 0), Maxs);
+                    }
+                }
+            }
             if (!IsCustom)
             {
                 MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });

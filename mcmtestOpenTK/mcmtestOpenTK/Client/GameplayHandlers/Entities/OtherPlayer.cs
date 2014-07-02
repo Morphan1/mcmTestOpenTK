@@ -48,6 +48,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public bool Up = false;
         public bool Down = false;
         public bool Slow = false;
+        public bool Jumped = false;
 
         public bool Noclip = false;
 
@@ -165,9 +166,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
                 bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
-                if (Up && on_ground)
+                if (Up && on_ground && !Jumped)
                 {
                     Velocity.Z = JumpPower * (Down ? 0.5 : 1);
+                    Jumped = true;
+                }
+                else if (!Up && Jumped)
+                {
+                    Jumped = false;
                 }
                 Velocity.X += ((movement.X * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (Slow || Down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
@@ -177,6 +183,26 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location target = Position + Velocity * MyDelta;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
+            // Climb steps
+            if (Position != target) // If we missed the target
+            {
+                // Try a flat target
+                target = new Location(target.X, target.Y, Position.Z);
+                // If the flat target is solid
+                if (Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                {
+                    // Raise the target by 2
+                    target.Z += 2;
+                    // If the higher target has room
+                    if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                    {
+                        // Move up and forward
+                        Position = Collision.SlideBox(Position + new Location(0, 0, 2), target + new Location(0, 0, 2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        // move back into place
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -2), new Location(-1.5f, -1.5f, 0), Maxs);
+                    }
+                }
+            }
             if (!isCustom)
             {
                 LastTick = MainGame.GlobalTickTime;
@@ -187,6 +213,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public double LastMovement;
         Location LastMoveLoc;
         Location LastVelocity;
+        public bool LastJumped = false;
         PlayerPositionPacketIn LastPacket;
 
         public void ApplyNewMovement(double MoveTime, PlayerPositionPacketIn pack)
@@ -196,6 +223,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             // Apply last known position / movement.
             Position = LastMoveLoc;
             Velocity = LastVelocity;
+            Jumped = LastJumped;
             PlayerPositionPacketIn.ApplyPosition(this, LastPacket.movement, LastPacket.direction.X, LastPacket.direction.Y);
             // Tick from last known movement to new position.
             double targetdelta = MoveTime - LastMovement;
@@ -212,6 +240,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             LastMoveLoc = Position;
             LastVelocity = Velocity;
             LastMovement = MoveTime;
+            LastJumped = Jumped;
             LastPacket = pack;
             // Apply the new movement packet.
             PlayerPositionPacketIn.ApplyPosition(this, pack.movement, pack.direction.X, pack.direction.Y);
