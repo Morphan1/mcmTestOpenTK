@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
-    public class Plane
+    public class Plane: Renderable
     {
         /// <summary>
         /// The normal of the plane.
@@ -27,6 +31,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// The third corner.
         /// </summary>
         public Location vec3;
+
+        public Texture texture = null;
 
         /// <summary>
         /// The distance from origin, in theory.
@@ -109,6 +115,27 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 }
             }
             return psign;
+        }
+
+        public override void Draw()
+        {
+            if (texture != null)
+            {
+                texture.Bind();
+            }
+            GL.Begin(PrimitiveType.Triangles);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(vec1.X, vec1.Y, vec1.Z);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(vec2.X, vec2.Y, vec2.Z);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(vec3.X, vec3.Y, vec3.Z);
+            GL.End();
+            Location middle = new Location((vec1.X + vec2.X + vec3.X) / 3, (vec1.Y + vec2.Y + vec3.Y) / 3, (vec1.Z + vec2.Z + vec3.Z) / 3);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(middle.X, middle.Y, middle.Z);
+            GL.Vertex3(middle.X + Normal.X * 3, middle.Y + Normal.Y * 3, middle.Z + Normal.Z * 3);
+            GL.End();
         }
     }
 }
