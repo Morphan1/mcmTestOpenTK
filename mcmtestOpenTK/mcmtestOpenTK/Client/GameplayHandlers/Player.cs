@@ -49,6 +49,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool up = false;
         public bool down = false;
         public bool slow = false;
+        public bool jumped = false;
 
         public const double MoveSpeed = 35;
         public const double BaseGravity = 100;
@@ -160,6 +161,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     down = true;
                 }
             }
+            bool justJumped = false;
             if (ClientCVar.g_noclip.ValueB)
             {
                 if (movement.LengthSquared() > 0)
@@ -182,11 +184,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
-                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
-                if (up && on_ground)
+                bool on_ground = Velocity.Z < 0.0001f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                if (up && on_ground && !jumped)
                 {
-                    Velocity.Z = JumpPower * (down ? 0.5: 1);
+                    Velocity.Z = JumpPower * (down ? 0.5 : 1);
+                    //jumped = true;
+                    //justJumped = true;
                 }
+                /*else if (!up && jumped)
+                {
+                    jumped = false;
+                }*/
                 if (!IsCustom)
                 {
                     onground = on_ground;
@@ -202,7 +210,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             if (!IsCustom)
             {
                 //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
-                ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
+                ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up && (!jumped || justJumped), down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
                 {
@@ -227,7 +235,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public BroadcastPoint CPoint()
         {
-            return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down, slow);
+            return new BroadcastPoint(MainGame.GlobalTickTime, Position, Velocity, Direction, forward, back, left, right, up, down, slow, jumped);
         }
 
         List<BroadcastPoint> Points = new List<BroadcastPoint>(65);
@@ -299,8 +307,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public bool up;
         public bool down;
         public bool slow;
+        public bool jumped;
         public BroadcastPoint(double _time, Location _position, Location _velocity, Location _direction,
-            bool _forward, bool _back, bool _left, bool _right, bool _up, bool _down, bool _slow)
+            bool _forward, bool _back, bool _left, bool _right, bool _up, bool _down, bool _slow, bool _jumped)
         {
             Direction = _direction;
             Time = _time;
@@ -313,6 +322,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             up = _up;
             down = _down;
             slow = _slow;
+            jumped = _jumped;
         }
         public void Apply(Player player)
         {
@@ -323,6 +333,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             player.right = right;
             player.up = up;
             player.down = down;
+            player.jumped = jumped;
         }
     }
 }

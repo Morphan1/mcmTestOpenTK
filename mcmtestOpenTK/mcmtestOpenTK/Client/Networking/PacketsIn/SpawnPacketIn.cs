@@ -41,7 +41,6 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            SysConsole.Output(OutputType.INFO, type + " spawns at " + position + ", is ID " + id);
             MainGame.SpawnEntity(type, id, position, LeftOver);
         }
     }
