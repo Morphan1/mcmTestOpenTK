@@ -28,6 +28,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader White;
 
         /// <summary>
+        /// A shader that makes everything black - for cartoons.
+        /// </summary>
+        public static Shader Black;
+
+        /// <summary>
         /// A common shader that simplifies colors to grayscale.
         /// </summary>
         public static Shader Grayscale;
@@ -73,6 +78,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedShaders.Add(Generic);
             White = CreateWhite("white");
             LoadedShaders.Add(White);
+            Black = CreateBlack("black");
+            LoadedShaders.Add(Black);
             ColorMultShader = CreateMultiplier("colormultiplier");
             LoadedShaders.Add(ColorMultShader);
             BlackRemoverShader = CreateBlackRemover("blackremover");
@@ -171,6 +178,20 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             string FS = "uniform sampler2D tex;void main()" +
             "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
             "gl_FragColor = vec4(1, 1, 1, color[3]);}";
+            return CreateShader(VS, FS, name);
+        }
+
+        /// <summary>
+        /// Creates a black shader object.
+        /// </summary>
+        /// <param name="name">The name of the shader</param>
+        /// <returns>A pitch-black shader object</returns>
+        public static Shader CreateBlack(string name)
+        {
+            string VS = "void main(){gl_FrontColor = gl_Color;gl_TexCoord[0] = gl_MultiTexCoord0;gl_Position = ftransform();}";
+            string FS = "uniform sampler2D tex;void main()" +
+            "{vec4 color = texture2D(tex,gl_TexCoord[0].st);" +
+            "gl_FragColor = vec4(0, 0, 0, color[3]);}";
             return CreateShader(VS, FS, name);
         }
 

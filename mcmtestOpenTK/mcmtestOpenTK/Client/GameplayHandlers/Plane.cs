@@ -7,6 +7,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
@@ -74,6 +75,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 return Location.NaN;
             }
             return start + t * ba;
+        }
+
+        public Plane FlipNormal()
+        {
+            return new Plane(vec3, vec2, vec1) { texture = texture };
         }
 
         /// <summary>

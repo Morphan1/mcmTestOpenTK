@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
@@ -151,5 +153,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// All loaded screens.
         /// </summary>
         public static AbstractScreen[] Screens;
+
+        /// <summary>
+        /// What face is currently being culled.
+        /// </summary>
+        public static CullFaceMode CullFace;
+
+        /// <summary>
+        /// The general shader models should use if they lack their own.
+        /// </summary>
+        public static Shader GeneralShader;
     }
 }

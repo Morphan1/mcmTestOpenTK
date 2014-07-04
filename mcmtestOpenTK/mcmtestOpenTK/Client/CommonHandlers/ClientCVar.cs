@@ -23,7 +23,7 @@ namespace mcmtestOpenTK.Client.CommonHandlers
 
         //Graphics/Renderer CVars
         public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson,
-            r_showwireframe, r_render3d, r_whitewireframe, r_crosshairscale;
+            r_showwireframe, r_render3d, r_whitewireframe, r_crosshairscale, r_cartoon, r_shader;
 
         /// <summary>
         /// Prepares the CVar system, generating default CVars.
@@ -54,7 +54,9 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             r_showwireframe = Register("r_showwireframe", "false", CVarFlag.Boolean); // Whether to show a wireframe of the 3D world.
             r_render3d = Register("r_render3d", "true", CVarFlag.Boolean); // Whether to render the 3D world - generally combined with showwireframe.
             r_whitewireframe = Register("r_whitewireframe", "true", CVarFlag.Boolean); // Whether wireframes are rendered pitched white.
-            r_crosshairscale = Register("r_crosshairscale", "1", CVarFlag.Numeric); // How big the crosshair is
+            r_crosshairscale = Register("r_crosshairscale", "1", CVarFlag.Numeric); // How big the crosshair is.
+            r_cartoon = Register("r_cartoon", "false", CVarFlag.Boolean); // Whether to render the world in a cartoony fashion.
+            r_shader = Register("r_shader", "generic", CVarFlag.Textual | CVarFlag.Delayed); // What shader to use for general rendering.
             // TODO: More graphics CVars
             // TODO: OpenGL info
             // TODO: Other CVars

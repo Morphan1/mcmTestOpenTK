@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -71,6 +72,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             if (shader != null)
             {
                 shader.Bind();
+            }
+            else
+            {
+                MainGame.GeneralShader.Bind();
             }
             GL.PushMatrix();
             GL.Translate(Position.X, Position.Y, Position.Z);

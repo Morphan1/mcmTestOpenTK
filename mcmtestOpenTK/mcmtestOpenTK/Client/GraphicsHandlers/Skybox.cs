@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Client.GameplayHandlers;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -22,10 +23,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 
         public override void Draw()
         {
-            GL.CullFace(CullFaceMode.Front);
+            GL.CullFace(MainGame.CullFace == CullFaceMode.Front ? CullFaceMode.Back: CullFaceMode.Front);
             model.Position = new Location(Player.player.Position.X - 500, Player.player.Position.Y - 500, Player.player.Position.Z - 500);
             model.Draw();
-            GL.CullFace(CullFaceMode.Back);
+            GL.CullFace(MainGame.CullFace);
         }
     }
 }

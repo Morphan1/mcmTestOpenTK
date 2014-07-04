@@ -35,7 +35,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            
+            if (model.shader != null)
+            {
+                model.shader.Bind();
+            }
+            else
+            {
+                MainGame.GeneralShader.Bind();
+            }
             model.texture.Bind();
             Plane[] tris = CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)

@@ -56,15 +56,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare text output / language related info
                 SysConsole.Output(OutputType.INIT, "Preparing text/languaging...");
                 LanguageHandler.Init();
-                // Handle some internal CVar-based graphics settings
-                SysConsole.Output(OutputType.INIT, "Preparing general graphics...");
-                ReloadGraphics();
                 // Prepare the shader system
                 SysConsole.Output(OutputType.INIT, "Preparing shaders...");
                 Shader.InitShaderSystem();
                 // Prepare the texture system
                 SysConsole.Output(OutputType.INIT, "Preparing textures...");
                 Texture.InitTextureSystem();
+                // Handle some internal CVar-based graphics settings
+                SysConsole.Output(OutputType.INIT, "Preparing general graphics...");
+                ReloadGraphics();
                 // Load text font data
                 SysConsole.Output(OutputType.INIT, "Preparing text...");
                 GLFont.Init();
@@ -161,6 +161,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             // Correct the viewport (screen size, fullscreen, etc. might affect)
             GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
+            // Set the general-use shader
+            GeneralShader = Shader.GetShader(ClientCVar.r_shader.Value);
+            if (GeneralShader == null)
+            {
+                GeneralShader = Shader.Generic;
+            }
         }
 
         public static void SetScreen(ScreenMode mode)

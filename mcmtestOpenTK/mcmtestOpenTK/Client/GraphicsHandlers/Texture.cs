@@ -42,6 +42,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static uint Bound_Texture = 0;
 
         /// <summary>
+        /// The currently bound texture object.
+        /// </summary>
+        public static Texture BoundText = null;
+
+        /// <summary>
         /// Starts or restarts the texture system.
         /// </summary>
         public static void InitTextureSystem()
@@ -250,6 +255,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public void Bind()
         {
+            BoundText = this;
             if (Internal_Texture != Bound_Texture)
             {
                 GL.BindTexture(TextureTarget.Texture2D, Internal_Texture);

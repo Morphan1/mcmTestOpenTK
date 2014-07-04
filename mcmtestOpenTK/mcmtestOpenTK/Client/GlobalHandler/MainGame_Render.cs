@@ -49,6 +49,25 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 GL.PushMatrix();
                 setup3D();
 
+                // Render cartoon lines
+                if (ClientCVar.r_cartoon.ValueB)
+                {
+                    Shader.Black.Bind();
+                    IsWireFrame = true;
+                    GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
+                    GL.LineWidth(4);
+                    GL.DepthFunc(DepthFunction.Lequal);
+                    CullFace = CullFaceMode.Front;
+                    GL.CullFace(CullFace);
+                    Standard3D();
+                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                    GL.LineWidth(1);
+                    GL.DepthFunc(DepthFunction.Less);
+                    IsWireFrame = false;
+                    CullFace = CullFaceMode.Back;
+                    GL.CullFace(CullFace);
+                }
+
                 // Render all 3D graphics
                 if (ClientCVar.r_render3d.ValueB)
                 {
@@ -120,6 +139,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             GL.LoadIdentity();
             GL.Ortho(0, ScreenWidth, ScreenHeight, 0, -50, 50);
             GL.Enable(EnableCap.Blend);
+            GL.Color4(1f, 1f, 1f, 1f);
         }
 
         /// <summary>
@@ -173,6 +193,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 Hue += MainGame.GraphicsDeltaF * HueMult;
             }
             GL.Color4(Util.HSVtoRGB(Hue, 1, 1, 1));
+            CullFace = CullFaceMode.Back;
+            GL.CullFace(CullFace);
         }
 
         public static float Hue = 0;
