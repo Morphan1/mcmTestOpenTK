@@ -43,6 +43,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 }
 
                 // Clear the current render buffer, should always be done before any rendering is handled.
+                GL.ClearColor(1, 0, 1, 1);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 // Set to 3D mode
