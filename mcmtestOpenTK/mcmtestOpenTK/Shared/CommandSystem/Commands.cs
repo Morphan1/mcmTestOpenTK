@@ -176,6 +176,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             // Common Commands
             RegisterCommand(new CvarinfoCommand());
             RegisterCommand(new EchoCommand());
+            RegisterCommand(new NoopCommand());
             RegisterCommand(new SetCommand());
             RegisterCommand(new ToggleCommand());
 
