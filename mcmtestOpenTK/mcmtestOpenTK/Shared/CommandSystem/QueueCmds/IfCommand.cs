@@ -8,6 +8,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
     class IfCommand: AbstractCommand
     {
+        // TODO: META
         public IfCommand()
         {
             Name = "if";

@@ -9,11 +9,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
     // <--[command]
     // @Name function
-    // @Arguments <name of function>/stop (quiet_fail)
+    // @Arguments stop/define [name of function] (quiet_fail)
     // @Short Creates a new function of the following command block, and adds it to the script cache.
     // @Updated 2014/06/23
     // @Authors mcmonkey
     // @Group Queue
+    // @Braces true
     // @Description
     // The function command will define the included command block to be a function which can be activated
     // by the <@link command call>call<@/link> command.
@@ -22,9 +23,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // TODO: Explain more!
     // @Example
     // // This example creates function "helloworld" which, when called, echos "hello world", then stops before it echos a "!"
-    // function helloworld
+    // function define helloworld
     // {
-    //     echo "<{var[repeat_index]}>/<{var[repeat_total]}>";
+    //     echo "hello world"
+    //     function stop
+    //     echo "!"
     // }
     // @Example
     // TODO: More examples!
@@ -34,7 +37,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public FunctionCommand()
         {
             Name = "function";
-            Arguments = "<name of function>/stop (quiet_fail)";
+            Arguments = "stop/define [name of function] (quiet_fail)";
             Description = "Creates a new function of the following command block, and adds it to the script cache.";
             IsFlow = true;
         }
@@ -46,8 +49,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 ShowUsage(entry);
                 return;
             }
-            string name = entry.GetArgument(0).ToLower();
-            if (name == "stop")
+            string type = entry.GetArgument(0).ToLower();
+            if (type == "stop")
             {
                 bool hasnext = false;
                 for (int i = 0; i < entry.Queue.CommandList.Count; i++)
@@ -77,26 +80,39 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 return;
             }
-            if (entry.Block == null)
+            else if (type == "define")
             {
-                entry.Bad("Function invalid: No block follows!");
-                return;
-            }
-            if (entry.Queue.CommandSystem.Functions.ContainsKey(name))
-            {
-                if (entry.Arguments.Count > 1 && entry.GetArgument(1).ToLower() == "quiet_fail")
+                if (entry.Arguments.Count < 2)
                 {
-                    entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' already exists!");
+                    ShowUsage(entry);
+                    return;
+                }
+                string name = entry.GetArgument(1).ToLower();
+                if (entry.Block == null)
+                {
+                    entry.Bad("Function invalid: No block follows!");
+                    return;
+                }
+                if (entry.Queue.CommandSystem.Functions.ContainsKey(name))
+                {
+                    if (entry.Arguments.Count > 1 && entry.GetArgument(1).ToLower() == "quiet_fail")
+                    {
+                        entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' already exists!");
+                    }
+                    else
+                    {
+                        entry.Bad("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' already exists!");
+                    }
                 }
                 else
                 {
-                    entry.Bad("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' already exists!");
+                    entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' defined.");
+                    entry.Queue.CommandSystem.Functions.Add(name, new CommandScript(name, CommandScript.DisOwn(entry.Block, entry)));
                 }
             }
             else
             {
-                entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' defined.");
-                entry.Queue.CommandSystem.Functions.Add(name, new CommandScript(name, CommandScript.DisOwn(entry.Block, entry)));
+                ShowUsage(entry);
             }
         }
     }

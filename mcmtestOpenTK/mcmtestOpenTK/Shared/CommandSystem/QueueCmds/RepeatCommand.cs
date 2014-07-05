@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // @Updated 2014/06/23
     // @Authors mcmonkey
     // @Group Queue
+    // @Braces true
     // @Description
     // The repeat command will loop the given number of times and execute the included command block
     // each time it loops.
