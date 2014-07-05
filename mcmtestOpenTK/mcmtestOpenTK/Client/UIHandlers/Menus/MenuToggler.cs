@@ -18,12 +18,14 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         Texture Label_Checked;
         Texture Label_Unchecked;
 
+        CVar cvar;
+
         /// <summary>
         /// Whether the checkbox is ticked or not.
         /// </summary>
         public bool toggled = false;
 
-        public MenuToggler(string _text, int X, int Y)
+        public MenuToggler(string _text, int X, int Y, CVar _cvar)
         {
             RenderSquare = new Square();
             RenderSquare.PositionLow = new Location(X, Y, 0);
@@ -35,6 +37,8 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             Label.PositionHigh = new Location(X + 32, Y + 37, 0);
             Label_Checked = Texture.GetTexture("menus/toggler_on");
             Label_Unchecked = Texture.GetTexture("menus/toggler_off");
+            cvar = _cvar;
+            toggled = cvar.ValueB;
         }
 
         public override void ClickOutside()
@@ -62,6 +66,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         public override void LeftClick(int X, int Y)
         {
             toggled = !toggled;
+            cvar.Set(toggled);
         }
 
         public override void RightClick()
@@ -70,6 +75,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
 
         public override void Tick()
         {
+        }
+
+        public override void Recalc()
+        {
+            toggled = cvar.ValueB;
         }
     }
 }

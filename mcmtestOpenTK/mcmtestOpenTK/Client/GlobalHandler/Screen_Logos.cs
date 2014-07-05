@@ -31,6 +31,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
+        public override void SwitchFrom()
+        {
+        }
+
         double LogoTimer = 2f;
 
         float red = 0;

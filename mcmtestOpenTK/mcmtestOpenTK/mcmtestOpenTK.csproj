@@ -132,8 +132,6 @@
     <Compile Include="Client\Networking\PacketsOut\MovementPacketOut.cs" />
     <Compile Include="Client\UIHandlers\Menus\AbstractMenuItem.cs" />
     <Compile Include="Client\UIHandlers\Menus\MenuToggler.cs" />
-    <Compile Include="Client\UIHandlers\Menus\Login\LoginBox.cs" />
-    <Compile Include="Client\UIHandlers\Menus\Login\PasswordBox.cs" />
     <Compile Include="Client\UIHandlers\Menus\MainMenu\ServersButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\MainMenu\ReloginButton.cs" />
     <Compile Include="Client\UIHandlers\Menus\NoticeOKButton.cs" />

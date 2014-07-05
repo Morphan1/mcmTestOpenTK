@@ -215,5 +215,16 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 NoticeOK.Draw();
             }
         }
+
+        /// <summary>
+        /// Recalculate all items.
+        /// </summary>
+        public void Recalculate()
+        {
+            for (int i = 0; i < MenuItems.Count; i++)
+            {
+                MenuItems[i].Recalc();
+            }
+        }
     }
 }

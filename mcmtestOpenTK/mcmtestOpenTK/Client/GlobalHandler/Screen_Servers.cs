@@ -41,6 +41,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
+        public override void SwitchFrom()
+        {
+        }
+
         public override void Init()
         {
             Initted = true;

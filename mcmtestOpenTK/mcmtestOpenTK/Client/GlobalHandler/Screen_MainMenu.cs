@@ -23,6 +23,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             // TODO: Clicky noises!
         }
 
+        public override void SwitchFrom()
+        {
+        }
+
         public override void Init()
         {
             // Create system

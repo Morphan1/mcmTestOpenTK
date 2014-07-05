@@ -10,32 +10,37 @@ using mcmtestOpenTK.Client.UIHandlers.Menus.Login;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
     class Screen_Login : AbstractScreen
     {
-        public MenuSystem Menus;
-
-        public LoginButton LoginB;
-
-        public TextBox UsernameBox;
-
-        public TextBox PasswordBox;
-
-        public MenuToggler SaveBox;
-
-        public MenuToggler AutoBox;
-
         public Screen_Login(): base(ScreenMode.Login)
         {
         }
 
+        public MenuSystem Menus;
+
         public override void SwitchTo()
         {
-            // Disable any popups
+            // Remove any notice
             Menus.Notice = null;
+            // Recalculate all items
+            Recalc();
+            Menus.Recalculate();
         }
+
+        public override void SwitchFrom()
+        {
+            ClientCVar.u_login_username.Set("");
+            ClientCVar.u_login_password.Set("");
+        }
+
+        TextBox UsernameBox;
+        TextBox PasswordBox;
+        MenuToggler AutoBox;
+        MenuToggler SaveBox;
 
         public override void Init()
         {
@@ -43,15 +48,17 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Menus = new MenuSystem();
             Menus.Init();
             // Create menu items
-            LoginB = new LoginButton(0, 0);
+            MenuButton LoginB = new LoginButton(0, 0);
             PlayOfflineButton PlayOffB = new PlayOfflineButton(0, 0);
             MenuLabel UsernameLabel = new MenuLabel("Username:", 0, 0);
             MenuLabel PasswordLabel = new MenuLabel("Password:", 0, 0);
-            UsernameBox = new LoginBox(MainGame.ScreenWidth / 2 - 260, 0, Texture.GetTexture("menus/textbox_back"), 500);
-            PasswordBox = new PasswordBox(MainGame.ScreenWidth / 2 - 260, 0, Texture.GetTexture("menus/textbox_back"), 500);
+            UsernameBox = new TextBox(MainGame.ScreenWidth / 2 - 260, 0,
+                Texture.GetTexture("menus/textbox_back"), 500, ClientCVar.u_login_username);
+            PasswordBox = new TextBox(MainGame.ScreenWidth / 2 - 260, 0,
+                Texture.GetTexture("menus/textbox_back"), 500, ClientCVar.u_login_password);
             PasswordBox.Password = true;
-            SaveBox = new MenuToggler("Save Username/Password", 0, 0);
-            AutoBox = new MenuToggler("AutoLogin", 0, 0);
+            SaveBox = new MenuToggler("Save Username/Password", 0, 0, ClientCVar.u_login_save);
+            AutoBox = new MenuToggler("AutoLogin", 0, 0, ClientCVar.u_login_auto);
             // Calculate widths for X-centering
             double lwidth = LoginB.RenderSquare.PositionHigh.X + 10;
             double pwidth = PlayOffB.RenderSquare.PositionHigh.X;
@@ -117,23 +124,32 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Menus.Add(PlayOffB);
             Menus.Add(SaveBox);
             Menus.Add(AutoBox);
-            // Set the current username/password
-            string[] namepass = AccountFileSaver.GetAccountData();
-            UsernameBox.TypingText = namepass[0];
-            PasswordBox.TypingText = namepass[1];
-            UsernameBox.FixCursor();
-            PasswordBox.FixCursor();
-            if (UsernameBox.TypingText.Length > 0)
-            {
-                SaveBox.toggled = true;
-            }
-            AutoBox.toggled = namepass[2] == "true";
+            Recalc();
             if (AutoBox.toggled)
             {
                 LoginB.LeftClick(0, 0);
             }
             // Done!
             Initted = true;
+        }
+
+        public void Recalc()
+        {
+            // Set the current username/password
+            string[] namepass = AccountFileSaver.GetAccountData();
+            UsernameBox.TypingText = namepass[0];
+            ClientCVar.u_login_username.Set(namepass[0]);
+            PasswordBox.TypingText = namepass[1];
+            ClientCVar.u_login_password.Set(namepass[1]);
+            UsernameBox.FixCursor();
+            PasswordBox.FixCursor();
+            if (UsernameBox.TypingText.Length > 0)
+            {
+                SaveBox.toggled = true;
+                ClientCVar.u_login_save.Set(true);
+            }
+            AutoBox.toggled = namepass[2] == "true";
+            ClientCVar.u_login_auto.Set(namepass[2] == "true");
         }
 
         public override void Tick()

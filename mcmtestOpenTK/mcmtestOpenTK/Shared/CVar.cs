@@ -107,6 +107,43 @@ namespace mcmtestOpenTK.Shared
         }
 
         /// <summary>
+        /// Sets the CVar to a new value.
+        /// </summary>
+        /// <param name="newvalue">The value to set the CVar to</param>
+        public void Set(bool value)
+        {
+            if (Flags.HasFlag(CVarFlag.ReadOnly))
+            {
+                return;
+            }
+            if (Flags.HasFlag(CVarFlag.InitOnly) && !system.Output.Initializing)
+            {
+                return;
+            }
+            if (Flags.HasFlag(CVarFlag.ServerControl))
+            {
+                return;
+            }
+            ValueB = value;
+            if (value)
+            {
+                Value = "true";
+                ValueI = 1;
+                ValueF = 1;
+                ValueL = 1;
+                ValueD = 1;
+            }
+            else
+            {
+                Value = "false";
+                ValueI = 0;
+                ValueF = 0;
+                ValueL = 0;
+                ValueD = 0;
+            }
+        }
+
+        /// <summary>
         /// Returns a human-readable list of flags.
         /// </summary>
         /// <returns>The flag list</returns>

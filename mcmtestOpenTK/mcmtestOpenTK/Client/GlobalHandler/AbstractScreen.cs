@@ -25,6 +25,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public abstract void Draw3D();
 
         public abstract void SwitchTo();
+
+        public abstract void SwitchFrom();
     }
 
     public enum ScreenMode

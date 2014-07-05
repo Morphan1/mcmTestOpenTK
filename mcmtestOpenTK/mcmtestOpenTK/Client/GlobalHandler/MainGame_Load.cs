@@ -171,6 +171,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public static void SetScreen(ScreenMode mode)
         {
+            if (Screen != null)
+            {
+                Screen.SwitchFrom();
+            }
             AbstractScreen screen = Screens[(int)mode];
             if (!screen.Initted)
             {

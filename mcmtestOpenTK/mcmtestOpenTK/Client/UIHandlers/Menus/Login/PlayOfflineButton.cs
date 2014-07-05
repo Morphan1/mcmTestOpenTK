@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
 {
@@ -18,15 +19,14 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
 
         public override void LeftClick(int x, int y)
         {
-            Screen_Login loginscr = (Screen_Login)MainGame.Screens[(int)ScreenMode.Login];
-            if (loginscr.UsernameBox.TypingText.Length < 6)
+            if (ClientCVar.u_login_username.Value.Length < 6 && ClientCVar.u_login_username.Value.Length < 20)
             {
                 Menus.ShowNotice("You must enter a username (it can be anything, as long as it is 6 letters or more)!");
             }
             else
             {
-                MainGame.Username = loginscr.UsernameBox.TypingText;
-                UIConsole.WriteLine("Playing offline as " + loginscr.UsernameBox.TypingText);
+                MainGame.Username = ClientCVar.u_login_username.Value;
+                UIConsole.WriteLine("Playing offline as " + ClientCVar.u_login_username.Value);
                 MainGame.SetScreen(ScreenMode.MainMenu);
             }
         }

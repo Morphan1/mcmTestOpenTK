@@ -59,5 +59,10 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         /// Draw the menu item.
         /// </summary>
         public abstract void Draw();
+
+        /// <summary>
+        /// Recalculate value from CVar.
+        /// </summary>
+        public abstract void Recalc();
     }
 }

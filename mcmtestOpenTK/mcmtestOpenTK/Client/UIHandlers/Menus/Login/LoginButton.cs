@@ -6,6 +6,7 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.Networking.OneOffs;
+using mcmtestOpenTK.Client.CommonHandlers;
 
 namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
 {
@@ -19,22 +20,22 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus.Login
 
         public override void LeftClick(int x, int y)
         {
-            Screen_Login loginscr = (Screen_Login)MainGame.Screens[(int)ScreenMode.Login];
-            if (loginscr.UsernameBox.TypingText.Length < 6 || loginscr.PasswordBox.TypingText.Length < 4)
+            if (ClientCVar.u_login_username.Value.Length < 6 || ClientCVar.u_login_password.Value.Length < 4
+                || ClientCVar.u_login_username.Value.Length > 20)
             {
                 Menus.ShowNotice("You must enter your username and password!");
             }
             else
             {
-                if (loginscr.SaveBox.toggled)
+                if (ClientCVar.u_login_save.ValueB)
                 {
-                    AccountFileSaver.SaveAccountData(loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText, loginscr.AutoBox.toggled ? "true": "false");
+                    AccountFileSaver.SaveAccountData(ClientCVar.u_login_username.Value, ClientCVar.u_login_password.Value, ClientCVar.u_login_auto.ValueB ? "true" : "false");
                 }
                 else
                 {
                     AccountFileSaver.SaveAccountData("", "", "");
                 }
-                GlobalLoginRequest.RequestLogin(true, loginscr.UsernameBox.TypingText, loginscr.PasswordBox.TypingText);
+                GlobalLoginRequest.RequestLogin(true, ClientCVar.u_login_username.Value, ClientCVar.u_login_password.Value);
                 Menus.ShowNotice("Logging in...");
             }
         }

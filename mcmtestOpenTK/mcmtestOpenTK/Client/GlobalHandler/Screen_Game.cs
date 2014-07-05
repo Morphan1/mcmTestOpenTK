@@ -31,6 +31,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
         }
 
+        public override void SwitchFrom()
+        {
+        }
+
         public override void Init()
         {
             debug = new PieceOfText("", new Location(5, MainGame.ScreenHeight / 5 * 3, 0));

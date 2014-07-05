@@ -21,9 +21,12 @@ namespace mcmtestOpenTK.Client.CommonHandlers
         // Text CVars
         public static CVar t_fastrender, t_sidetextfastrender, t_allowobfu, t_allowrandom, t_allowjello, t_betteremphasis, t_bettershadow;
 
-        //Graphics/Renderer CVars
+        // Graphics/Renderer CVars
         public static CVar r_vsync, r_fov, r_screenwidth, r_screenheight, r_fullscreen, r_thirdperson,
             r_showwireframe, r_render3d, r_whitewireframe, r_crosshairscale, r_cartoon, r_shader;
+
+        // User Interface CVars
+        public static CVar u_login_username, u_login_password, u_login_save, u_login_auto;
 
         /// <summary>
         /// Prepares the CVar system, generating default CVars.
@@ -57,6 +60,11 @@ namespace mcmtestOpenTK.Client.CommonHandlers
             r_crosshairscale = Register("r_crosshairscale", "1", CVarFlag.Numeric); // How big the crosshair is.
             r_cartoon = Register("r_cartoon", "false", CVarFlag.Boolean); // Whether to render the world in a cartoony fashion.
             r_shader = Register("r_shader", "generic", CVarFlag.Textual | CVarFlag.Delayed); // What shader to use for general rendering.
+            // User interface CVars
+            u_login_username = Register("u_login_username", "", CVarFlag.Textual); // The login screen username
+            u_login_password = Register("u_login_password", "", CVarFlag.Textual); // The login screen password
+            u_login_save = Register("u_login_save", "", CVarFlag.Boolean); // The login screen password
+            u_login_auto = Register("u_login_auto", "", CVarFlag.Boolean); // The login screen password
             // TODO: More graphics CVars
             // TODO: OpenGL info
             // TODO: Other CVars

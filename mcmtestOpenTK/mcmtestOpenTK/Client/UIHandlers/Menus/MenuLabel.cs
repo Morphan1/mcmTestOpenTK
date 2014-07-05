@@ -51,5 +51,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         public override void Tick()
         {
         }
+
+        public override void Recalc()
+        {
+        }
     }
 }

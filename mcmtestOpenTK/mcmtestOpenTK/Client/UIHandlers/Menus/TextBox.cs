@@ -32,7 +32,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         /// </summary>
         int MaxWidth;
 
-        public TextBox(int X, int Y, Texture _standText, int _width)
+        public CVar cvar;
+
+        public string text;
+
+        public TextBox(int X, int Y, Texture _standText, int _width, CVar _cvar)
         {
             StandardTexture = _standText;
             RenderSquare = new Square();
@@ -40,6 +44,9 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             RenderSquare.PositionLow = new Location(X, Y, 0);
             Text = new PieceOfText("", new Location(X + 10, Y, 0), FontSet.GetFont(GLFont.Standard.Name, (int)((float)GLFont.Standard.Size * 1.5f)));
             RenderSquare.PositionHigh = new Location(X + MaxWidth + 20, Y + Text.set.font_default.Height + 8, 0);
+            cvar = _cvar;
+            TypingText = cvar.Value;
+            FixCursor();
         }
 
         /// <summary>
@@ -125,6 +132,48 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
 
         public virtual void Enter()
         {
+            bool cansel = false;
+            for (int i = 0; i < Menus.MenuItems.Count; i++)
+            {
+                if (Menus.MenuItems[i] is TextBox)
+                {
+                    if (cansel)
+                    {
+                        ((TextBox)Menus.MenuItems[i]).selected = true;
+                        return;
+                    }
+                    else if (((TextBox)Menus.MenuItems[i]).selected)
+                    {
+                        ((TextBox)Menus.MenuItems[i]).selected = false;
+                        cansel = true;
+                    }
+                }
+                else if (Menus.MenuItems[i] is MenuToggler)
+                {
+                    if (cansel)
+                    {
+                        Menus.MenuItems[i].LeftClick(0, 0);
+                        return;
+                    }
+                }
+            }
+            if (!cansel)
+            {
+                return;
+            }
+            for (int i = 0; i < Menus.MenuItems.Count; i++)
+            {
+                if (Menus.MenuItems[i] is TextBox)
+                {
+                    ((TextBox)Menus.MenuItems[i]).selected = true;
+                    return;
+                }
+                else if (Menus.MenuItems[i] is MenuToggler)
+                {
+                    Menus.MenuItems[i].LeftClick(0, 0);
+                    return;
+                }
+            }
         }
 
         /// <summary>
@@ -269,6 +318,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 {
                     keymark_add -= 1f;
                 }
+                cvar.Set(TypingText);
             }
             else // !Selected
             {
@@ -284,6 +334,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 keymark_add = -1f;
                 Text.Text = ">" + restext;
             }
+        }
+        public override void Recalc()
+        {
+            TypingText = cvar.Value;
+            FixCursor();
         }
     }
 }
