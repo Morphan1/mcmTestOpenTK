@@ -27,6 +27,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static void Init()
         {
             KeyPresses = new Queue<Key>();
+            KeyPressList = new List<Key>();
             KeyUps = new Queue<Key>();
             Binds = new Dictionary<Key, CommandScript>();
             BindKey(Key.LControl, "capturemouse");
@@ -274,18 +275,20 @@ namespace mcmtestOpenTK.Client.UIHandlers
             }
         }
 
-        public static KeyboardState CurrentKeyboard;
-        public static KeyboardState PreviousKeyboard;
+        //public static KeyboardState CurrentKeyboard;
+        //public static KeyboardState PreviousKeyboard;
+        public static List<Key> KeyPressList;
 
         /// <summary>
         /// Updates the keyboard state.
         /// </summary>
         public static void Tick()
         {
-            PreviousKeyboard = CurrentKeyboard;
-            CurrentKeyboard = Keyboard.GetState();
+            //PreviousKeyboard = CurrentKeyboard;
+            //CurrentKeyboard = Keyboard.GetState();
             lock (Locker)
             {
+                KeyPressList.Clear();
                 _BindsValid = IsValid();
                 while (KeyPresses.Count > 0)
                 {
@@ -295,6 +298,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     {
                         ClientCommands.CommandSystem.ExecuteScript(script);
                     }
+                    KeyPressList.Add(key);
                 }
                 while (KeyUps.Count > 0)
                 {
@@ -348,6 +352,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             return MainGame.PrimaryGameWindow.Focused && !UIConsole.Open;
         }
 
+        /*
         /// <summary>
         /// Checks whether a key is pressed down.
         /// </summary>
@@ -357,6 +362,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         {
             return IsValid() && CurrentKeyboard.IsKeyDown(key);
         }
+        */
 
         /// <summary>
         /// Checks whether a key was just pressed this tick.
@@ -365,7 +371,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <returns>Whether it was just pressed</returns>
         public static bool IsPressed(Key key)
         {
-            return IsValid() && CurrentKeyboard.IsKeyDown(key) && !PreviousKeyboard.IsKeyDown(key);
+            //return IsValid() && CurrentKeyboard.IsKeyDown(key) && !PreviousKeyboard.IsKeyDown(key);
+            return IsValid() && KeyPressList.Contains(key);
         }
 
         /// <summary>

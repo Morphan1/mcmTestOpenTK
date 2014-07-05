@@ -55,8 +55,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 MouseHandler.Tick();
                 KeyHandler.Tick();
 
-                // Closeable yay
-                if (KeyHandler.CurrentKeyboard.IsKeyDown(Key.Escape))
+                // Ensure game is easily closeable
+                if (KeyHandler.IsPressed(Key.Escape))
                 {
                     Exit();
                 }
