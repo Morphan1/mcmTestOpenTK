@@ -164,8 +164,10 @@
     <Compile Include="Client\CommandHandlers\KeyLockCmds\LeftCommand.cs" />
     <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
+    <Compile Include="Client\GameplayHandlers\AABB.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\PolyPlanarEntity.cs" />
+    <Compile Include="Client\GameplayHandlers\Line.cs" />
     <Compile Include="Client\GameplayHandlers\RenderPlane.cs" />
     <Compile Include="Shared\Plane.cs" />
     <Compile Include="Client\Networking\PacketsIn\NewdataPacketIn.cs" />

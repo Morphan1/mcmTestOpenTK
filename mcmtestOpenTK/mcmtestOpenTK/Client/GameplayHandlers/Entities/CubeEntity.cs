@@ -12,6 +12,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     class CubeEntity : Entity
     {
+        public AABB CollisionModel;
+
         /// <summary>
         /// The render model this cube uses.
         /// </summary>
@@ -23,6 +25,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             model = new CubeModel(Position, Location.One, null);
             Mins = new Location(0);
             Solid = true;
+            CollisionModel = new AABB(Position, Mins, Maxs);
         }
 
         /// <summary>
@@ -44,7 +47,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 MainGame.GeneralShader.Bind();
             }
             model.texture.Bind();
-            RenderPlane[] tris = CalculateTriangles();
+            CollisionModel.Position = Position;
+            RenderPlane[] tris = CollisionModel.CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)
             {
                 tris[i].Draw();
@@ -75,134 +79,38 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             model.texture = Texture.GetTexture(texture);
             pos += 4;
-            RenderPlane[] Planes = CalculateTriangles();
+            CollisionModel.Position = Position;
+            CollisionModel.Mins = Mins;
+            CollisionModel.Maxs = Maxs;
+            /*
+            RenderPlane[] Planes = CollisionModel.CalculateTriangles();
             StringBuilder planestr = new StringBuilder(Planes.Length * 36);
             for (int i = 0; i < Planes.Length; i++)
             {
                 planestr.Append(Planes[i].Internal.ToString()).Append("_");
             }
             FileHandler.AppendText("test.log", "planes: " + planestr.ToString() + "\n\n");
+            */
         }
 
         public override bool Point(Location spot)
         {
-            Location lower = Position + Mins;
-            Location upper = Position + Maxs;
-            return lower.X <= spot.X && lower.Y <= spot.Y && lower.Z <= spot.Z &&
-                upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z;
+            return CollisionModel.Point(spot);
         }
 
-        public override bool Box(Location Low, Location High)
+        public override bool Box(AABB Box2)
         {
-            Location elow = Position + Mins;
-            Location ehigh = Position + Maxs;
-            return Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
-                        High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
-        }
-
-        
-        public Plane[] CalculatePlanes()
-        {
-            Plane[] planes = new Plane[6];
-            // Y-
-            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z)/*, new Location(0, -1, 0)*/);
-            // Y+
-            planes[1] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)/*, new Location(0, 1, 0)*/);
-            // X-
-            planes[2] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z)/*, new Location(-1, 0, 0)*/);
-            // X+
-            planes[3] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(1, 0, 0)*/);
-            // Z-
-            planes[4] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)/*, new Location(0, 0, -1)*/);
-            // Z+
-            planes[5] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(0, 0, 1)*/);
-            return planes;
-        }
-
-        public RenderPlane[] CalculateTriangles()
-        {
-            RenderPlane[] planes = new RenderPlane[12];
-            // Y-
-            planes[0] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z)));
-            planes[1] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)));
-            // Y+
-            planes[2] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)));
-            planes[3] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z)));
-            // X-
-            planes[4] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z)));
-            planes[5] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)));
-            // X+
-            planes[6] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)));
-            planes[7] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z)));
-            // Z-
-            planes[8] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)));
-            planes[9] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)));
-            // Z+
-            planes[10] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)));
-            planes[11] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)));
-            return planes;
+            return CollisionModel.Box(Box2);
         }
 
         public override Location Closest(Location start, Location target, out Location normal)
         {
-            Plane[] planes = CalculatePlanes();
-            List<Plane> tplanes = new List<Plane>(3);
-            if (start.X < Position.X + Mins.X)
-            {
-                tplanes.Add(planes[2]);
-            }
-            else if (start.X > Position.X + Maxs.X)
-            {
-                tplanes.Add(planes[3]);
-            }
-            if (start.Y < Position.Y + Mins.Y)
-            {
-                tplanes.Add(planes[0]);
-            }
-            else if (start.Y > Position.Y + Maxs.Y)
-            {
-                tplanes.Add(planes[1]);
-            }
-            if (start.Z < Position.Z + Mins.Z)
-            {
-                tplanes.Add(planes[4]);
-            }
-            else if (start.Z > Position.Z + Maxs.Z)
-            {
-                tplanes.Add(planes[5]);
-            }
-            return CollidePlanes(tplanes, start, target, out normal);
+            return CollisionModel.TraceLine(start, target, out normal);
         }
 
-
-        public Location CollidePlanes(List<Plane> planes, Location start, Location target, out Location normal)
+        public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            //float dist = (target - start).LengthSquared();
-            //Location final = Location.NaN;
-            for (int i = 0; i < planes.Count; i++)
-            {
-                Plane plane = planes[i];
-                Location hit = plane.IntersectLine(start, target);
-                if (!hit.IsNaN())
-                {
-                    //float newdist = (hit - start).LengthSquared();
-                    if (/*newdist < dist && */Point(hit))
-                    {
-                        //dist = newdist;
-                        //final = hit;
-                        normal = plane.Normal;
-                        return hit;
-                    }
-                }
-            }
-            //return final;
-            normal = Location.NaN;
-            return Location.NaN;
-        }
-
-        public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
-        {
-            return Collision.AABBClosestBox(Position, Mins, Maxs, Mins2, Maxs2, start, end, out normal);
+            return CollisionModel.TraceBox(Box2, start, end, out normal);
         }
     }
 }

@@ -21,14 +21,94 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Textures = new List<Texture>();
         }
 
-        public override bool Box(Location mins, Location maxs)
+        public override bool Box(AABB Box2)
         {
-            return base.Box(mins, maxs);
+            // Stupid brute force method
+            // TODO: Replace with nice SAT method
+            // Check if any points in the box are in the polygon: If so, collide!
+            Location[] bpoints = Box2.BoxPoints();
+            for (int i = 0; i < bpoints.Length; i++)
+            {
+                if (Point(bpoints[i]))
+                {
+                    return true;
+                }
+            }
+            // Check if any points on the triangle are inside the box: If so, collide!
+            for (int i = 0; i < Planes.Count; i++)
+            {
+                if (Box2.Point(Planes[i].Internal.vec1))
+                {
+                    return true;
+                }
+                if (Box2.Point(Planes[i].Internal.vec2))
+                {
+                    return true;
+                }
+                if (Box2.Point(Planes[i].Internal.vec3))
+                {
+                    return true;
+                }
+            }
+            // Check if any of the edges of polygon ray-trace into the box: If so, collide!
+            Location normal;
+            for (int i = 0; i < Planes.Count; i++)
+            {
+                // 1-2
+                if (!Box2.TraceLine(Planes[i].Internal.vec1, Planes[i].Internal.vec2, out normal).IsNaN())
+                {
+                    return true;
+                }
+                // 2-3
+                if (!Box2.TraceLine(Planes[i].Internal.vec2, Planes[i].Internal.vec3, out normal).IsNaN())
+                {
+                    return true;
+                }
+                // 3-1
+                if (!Box2.TraceLine(Planes[i].Internal.vec3, Planes[i].Internal.vec1, out normal).IsNaN())
+                {
+                    return true;
+                }
+            }
+            // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
+            /*
+            Line[] BoxLines = Box2.BoxLines();
+            for (int i = 0; i < BoxLines.Length; i++)
+            {
+                if (!Closest(BoxLines[i].Start, BoxLines[i].End, out normal).IsNaN())
+                {
+                    return true;
+                }
+            }*/
+            return false;
         }
 
-        public override Location ClosestBox(Location mins, Location maxs, Location start, Location end, out Location normal)
+        public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            return base.ClosestBox(mins, maxs, start, end, out normal);
+            Location movevec = end - start;
+            Location movnrm = movevec.Normalize();
+            AABB Box3 = new AABB(start, Box2.Mins, Box2.Maxs);
+            Location[] bpoints = Box3.BoxPoints();
+            Location final = Location.NaN;
+            Location fnormal = Location.NaN;
+            double dist = movevec.Length();
+            for (int i = 0; i < bpoints.Length; i++)
+            {
+                Location cnormal;
+                Location hit = Closest(bpoints[i], bpoints[i] + movevec, out cnormal);
+                if (!hit.IsNaN())
+                {
+                    double newdist = (hit - start).Length();
+                    if (newdist < dist && Box(new AABB(Location.Zero, Box3.Mins + movnrm * newdist, Box3.Maxs + movnrm * newdist)))
+                    {
+                        dist = newdist;
+                        final = hit;
+                        fnormal = cnormal;
+                    }
+                }
+            }
+            normal = fnormal;
+            return final;
         }
 
         public override bool Point(Location point)
