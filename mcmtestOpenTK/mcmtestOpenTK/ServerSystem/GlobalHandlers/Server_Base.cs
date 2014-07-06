@@ -23,6 +23,12 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         public static void ServerInit(List<string> arguments)
         {
             CMDArgs = arguments;
+            // Create the data saving thread
+            SysConsole.Output(OutputType.INIT, "Starting up save-irrelevant-data thread...");
+            Thread datathr = new Thread(new ThreadStart(SaveIrrelevantData));
+            datathr.Name = "SaveIrrelevantData";
+            Program.ThreadsToClose.Add(datathr);
+            datathr.Start();
             SysConsole.Output(OutputType.INIT, "Server starting...");
             if (!ServerLoad())
             {
@@ -85,6 +91,30 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
                 {
                     // Try to sleep for the target time - very imprecise, thus we deal with precision inside the tick code
                     Thread.Sleep(targettime);
+                }
+            }
+        }
+
+        static void SaveIrrelevantData()
+        {
+            while (true)
+            {
+                try
+                {
+                    Thread.Sleep(100);
+                    if (ConfigStr.Length > 0)
+                    {
+                        FileHandler.WriteText("serverconfig.cfg", ConfigStr);
+                        ConfigStr = "";
+                    }
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    SysConsole.Output(OutputType.ERROR, "Error handling irrelevant save data: " + ex.ToString());
                 }
             }
         }

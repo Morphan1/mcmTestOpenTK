@@ -36,5 +36,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         /// The current global time.
         /// </summary>
         public static double GlobalTickTime;
+
+        public static volatile string ConfigStr = "";
     }
 }

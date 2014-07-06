@@ -31,6 +31,11 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             PlayerCommandEngine.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
+            SysConsole.Output(OutputType.INIT, "Running default config...");
+            if (FileHandler.Exists("serverconfig.cfg"))
+            {
+                ServerCommands.ExecuteCommands(FileHandler.ReadText("serverconfig.cfg"));
+            }
             SysConsole.Output(OutputType.INIT, "Running command line arguments...");
             string args = Utilities.Concat(CMDArgs);
             if (args.StartsWith("+"))
