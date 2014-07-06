@@ -18,6 +18,11 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         public static Commands CommandSystem;
 
         /// <summary>
+        /// The event fired when a player runs a command.
+        /// </summary>
+        public static ScriptEvent PlayerCommandEvent;
+
+        /// <summary>
         /// Prepares the command system, registering all base commands.
         /// </summary>
         public static void Init(Outputter output)
@@ -25,6 +30,10 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
             CommandSystem = new Commands();
             CommandSystem.Output = output;
             CommandSystem.Init();
+
+            // Events
+            PlayerCommandEvent = new ScriptEvent(CommandSystem, "player command");
+            CommandSystem.RegisterEvent(PlayerCommandEvent);
 
             // Common Commands
             CommandSystem.RegisterCommand(new QuitCommand());

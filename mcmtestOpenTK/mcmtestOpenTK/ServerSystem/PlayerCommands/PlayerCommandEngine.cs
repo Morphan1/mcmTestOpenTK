@@ -6,6 +6,8 @@ using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.ServerSystem.PlayerCommands.CommonCmds;
+using mcmtestOpenTK.ServerSystem.CommandHandlers;
+using mcmtestOpenTK.Shared.TagHandlers.Objects;
 
 namespace mcmtestOpenTK.ServerSystem.PlayerCommands
 {
@@ -38,16 +40,38 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
             PlayerCommandEntry entry = new PlayerCommandEntry();
             entry.CommandLine = commandstring.ToString();
             entry.Name = arguments[0];
+            arguments.RemoveAt(0);
             entry.player = player;
             entry.Arguments = arguments;
             SysConsole.Output(OutputType.INFO, player.Username + " issued command: /" + entry.CommandLine);
             string cmdlow = entry.Name.ToLower();
             PlayerAbstractCommand cmd;
-            if (RegisteredCommands.TryGetValue(cmdlow, out cmd))
+            bool cmdExists = RegisteredCommands.TryGetValue(cmdlow, out cmd);
+            // <--[event]
+            // @Name player command
+            // @Group Commands
+            // @Triggers When a player inputs a command to the server.
+            // @Cancellable true
+            // @Warning This event can potentially fire very rapidly if the client uses a script.
+            // @Note This event won't fire for entirely clientside commands.
+            // @Note This event can be used to override existing commands or create new ones.
+            // Just listen for the command by name, cancel the event, and add your own handling.
+            // @Variables
+            // player: The username of the player that did the command.
+            // command: The command that was input.
+            // command_exists: whether the command is an existent registered command on the internal system.
+            // arguments: a list of all input arguments.
+            // -->
+            Dictionary<string, string> EventVars = new Dictionary<string,string>();
+            EventVars.Add("player", player.Username);
+            EventVars.Add("command", cmdlow);
+            EventVars.Add("command_exists", cmdExists ? "true": "false");
+            EventVars.Add("arguments", new ListTag(arguments).ToString());
+            bool cancelled = ServerCommands.PlayerCommandEvent.Call(EventVars);
+            if (cmdExists && !cancelled)
             {
                 if (player.HasPermission("commands." + cmd.Name))
                 {
-                    entry.Arguments.RemoveAt(0);
                     entry.Command = cmd;
                     cmd.Execute(entry);
                 }
@@ -57,10 +81,10 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
                     player.SendMessage(TextStyle.Color_Error + "You do not have permission to use the command '" + TextStyle.Color_Separate + cmd.Name + TextStyle.Color_Error + "'.");
                 }
             }
-            else
+            else if (!cancelled)
             {
                 SysConsole.Output(OutputType.INFO, "[Command Invalid / Unknown]");
-                player.SendMessage(TextStyle.Color_Error + "Unknown command '" + TextStyle.Color_Separate + arguments[0] + TextStyle.Color_Error + "'.");
+                player.SendMessage(TextStyle.Color_Error + "Unknown command '" + TextStyle.Color_Separate + cmdlow + TextStyle.Color_Error + "'.");
             }
         }
 

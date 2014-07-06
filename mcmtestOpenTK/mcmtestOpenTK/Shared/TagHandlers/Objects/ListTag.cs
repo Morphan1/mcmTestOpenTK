@@ -22,6 +22,15 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             ListEntries = new List<TemplateObject>(entries);
         }
 
+        public ListTag(List<string> entries)
+        {
+            ListEntries = new List<TemplateObject>();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                ListEntries.Add(new TextTag(entries[i]));
+            }
+        }
+
         public ListTag(string list)
         {
             string[] baselist = list.Split('|');

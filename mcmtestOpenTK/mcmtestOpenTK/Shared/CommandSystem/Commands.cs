@@ -68,15 +68,30 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public Dictionary<string, CommandScript> Functions;
 
+        /// <summary>
+        /// All script events this command system is aware of.
+        /// </summary>
+        public Dictionary<string, ScriptEvent> Events;
+
         public CommandQueue PlaceholderQueue;
 
         /// <summary>
         /// Executes a command script.
+        /// Returns the determined value.
         /// </summary>
         /// <param name="script">The script to execute</param>
-        public void ExecuteScript(CommandScript script)
+        public string ExecuteScript(CommandScript script, Dictionary<string, string> Variables)
         {
-            script.ToQueue(this).Execute();
+            CommandQueue queue = script.ToQueue(this);
+            if (Variables != null)
+            {
+                foreach (KeyValuePair<string, string> variable in Variables)
+                {
+                    queue.SetVariable(variable.Key, variable.Value);
+                }
+            }
+            queue.Execute();
+            return queue.Determination;
         }
 
         /// <summary>
@@ -159,6 +174,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisteredCommandList.Add(command);
         }
 
+        public void RegisterEvent(ScriptEvent newevent)
+        {
+            Events.Add(newevent.Name, newevent);
+        }
+
         /// <summary>
         /// Prepares the command system, registering all base commands.
         /// </summary>
@@ -169,6 +189,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisteredCommandList = new List<AbstractCommand>(30);
             Scripts = new Dictionary<string, CommandScript>(30);
             Functions = new Dictionary<string, CommandScript>(30);
+            Events = new Dictionary<string, ScriptEvent>(30);
             Queues = new List<CommandQueue>(20);
             TagSystem = new TagParser();
             TagSystem.Init(this);
@@ -185,7 +206,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new CallCommand());
             RegisterCommand(new DebugCommand());
             RegisterCommand(new DefineCommand());
+            RegisterCommand(new DetermineCommand());
             RegisterCommand(new ElseCommand());
+            RegisterCommand(new EventCommand());
             RegisterCommand(new ForeachCommand());
             RegisterCommand(new FunctionCommand());
             RegisterCommand(new IfCommand());

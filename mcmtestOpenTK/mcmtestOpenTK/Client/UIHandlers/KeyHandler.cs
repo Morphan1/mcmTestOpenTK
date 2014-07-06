@@ -38,6 +38,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             BindKey(Key.C, "+down");
             BindKey(Key.Space, "+up");
             BindKey(Key.LShift, "+slow");
+            BindKey(Key.F12, "screenshot");
             namestokeys = new Dictionary<string, Key>();
             RegKey("a", Key.A); RegKey("b", Key.B); RegKey("c", Key.C);
             RegKey("d", Key.D); RegKey("e", Key.E); RegKey("f", Key.F);
@@ -296,7 +297,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
                     CommandScript script;
                     if (Binds.TryGetValue(key, out script))
                     {
-                        ClientCommands.CommandSystem.ExecuteScript(script);
+                        ClientCommands.CommandSystem.ExecuteScript(script, null);
                     }
                     KeyPressList.Add(key);
                 }

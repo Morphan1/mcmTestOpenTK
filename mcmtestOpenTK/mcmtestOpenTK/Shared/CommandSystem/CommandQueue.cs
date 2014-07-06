@@ -59,6 +59,11 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         /// </summary>
         public bool ParseTags = true;
 
+        /// <summary>
+        /// What was returned by the determine command for this queue.
+        /// </summary>
+        public string Determination = null;
+
         public CommandQueue(CommandScript _script, List<CommandEntry> _commands, Commands _system)
         {
             Script = _script;

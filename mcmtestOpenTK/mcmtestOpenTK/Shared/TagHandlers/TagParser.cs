@@ -31,6 +31,10 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <returns>An escaped string</returns>
         public static string Escape(string input)
         {
+            if (input == null)
+            {
+                return "null";
+            }
             return input.Replace("<{", "\0TAGSTART").Replace("}>", "\0TAGEND");
         }
 
@@ -41,6 +45,10 @@ namespace mcmtestOpenTK.Shared.TagHandlers
         /// <returns>An unescaped string that may have tags</returns>
         public static string Unescape(string input)
         {
+            if (input == null)
+            {
+                return "null";
+            }
             return input.Replace("\0TAGSTART", "<{").Replace("\0TAGEND", "}>");
         }
 

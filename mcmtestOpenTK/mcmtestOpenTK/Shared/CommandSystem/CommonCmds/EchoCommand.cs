@@ -25,7 +25,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             else
             {
                 string args = entry.AllArguments();
-                entry.Output.WriteLine(args);
+                entry.Info(TextStyle.Color_Simple + args);
             }
         }
     }

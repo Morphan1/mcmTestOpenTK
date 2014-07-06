@@ -14,6 +14,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
             Name = "run";
             Arguments = "<script to run>";
             Description = "Runs a script file.";
+            // TODO: DEFINITION ARGS
             IsFlow = true;
         }
 
@@ -30,7 +31,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 if (script != null)
                 {
                     entry.Good("Running '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>'...");
-                    entry.Queue.CommandSystem.ExecuteScript(script);
+                    entry.Queue.CommandSystem.ExecuteScript(script, null);
                 }
                 else
                 {

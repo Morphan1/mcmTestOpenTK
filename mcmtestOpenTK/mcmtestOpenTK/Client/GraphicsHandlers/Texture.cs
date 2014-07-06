@@ -13,6 +13,24 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
     public class Texture
     {
+        public static Texture CreateNullTexture(int size_w, int size_h)
+        {
+            uint texture;
+            // load texture 
+            GL.GenTextures(1, out texture);
+
+            // Still required else TexImage2D will be applyed on the last bound texture
+            GL.BindTexture(TextureTarget.Texture2D, texture);
+
+            // generate null texture
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, size_w, size_h, 0,
+            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            return new Texture() { Internal_Texture = texture, Original_InternalID = texture, Width = size_w, Height = size_h };
+        }
+
         /// <summary>
         /// A full list of currently loaded textures.
         /// </summary>
@@ -234,10 +252,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         }
 
         /// <summary>
-        /// Saves the texture to a file.
+        /// Saves the texture to a bitmap.
         /// </summary>
-        /// <param name="filename">The name of the file to save to.</param>
-        public void SaveToFile(string filename)
+        /// <param name="flip">Whether to flip the Y</param>
+        public Bitmap SaveToBMP(bool flip = false)
         {
             GL.BindTexture(TextureTarget.Texture2D, Original_InternalID);
             Bound_Texture = Original_InternalID;
@@ -245,9 +263,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.GetTexImage(TextureTarget.Texture2D, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
             bmp.UnlockBits(data);
-            DataStream ds = new DataStream();
-            bmp.Save(ds, ImageFormat.Png);
-            FileHandler.WriteBytes(filename + ".png", ds.ToArray());
+            if (flip)
+            {
+                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            }
+            return bmp;
         }
 
         /// <summary>

@@ -95,7 +95,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 if (entry.Queue.CommandSystem.Functions.ContainsKey(name))
                 {
-                    if (entry.Arguments.Count > 1 && entry.GetArgument(1).ToLower() == "quiet_fail")
+                    if (entry.Arguments.Count > 2 && entry.GetArgument(2).ToLower() == "quiet_fail")
                     {
                         entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' already exists!");
                     }
@@ -106,8 +106,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 }
                 else
                 {
-                    entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' defined.");
                     entry.Queue.CommandSystem.Functions.Add(name, new CommandScript(name, CommandScript.DisOwn(entry.Block, entry)));
+                    entry.Good("Function '<{color.emphasis}>" + TagParser.Escape(name) + "<{color.base}>' defined.");
                 }
             }
             else

@@ -155,6 +155,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\CommandHandlers\GraphicsCmds\ScreenshotCommand.cs" />
     <Compile Include="Client\CommandHandlers\KeyLockCmds\BackCommand.cs" />
     <Compile Include="Client\CommandHandlers\KeyLockCmds\SlowCommand.cs" />
     <Compile Include="Client\CommandHandlers\KeyLockCmds\DownCommand.cs" />
@@ -197,11 +198,14 @@
     <Compile Include="Shared\CommandSystem\CommonCmds\DebugOutputInvalidCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\CallCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\BreakCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\DetermineCommand.cs" />
+    <Compile Include="Shared\CommandSystem\QueueCmds\EventCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ParsingCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\FunctionCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ForeachCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\DefineCommand.cs" />
     <Compile Include="Shared\CommandSystem\QueueCmds\ScriptCacheCommand.cs" />
+    <Compile Include="Shared\CommandSystem\ScriptEvent.cs" />
     <Compile Include="Shared\Location.cs" />
     <Compile Include="ServerSystem\GameHandlers\MapLoader.cs" />
     <Compile Include="ServerSystem\GameHandlers\World.cs" />
