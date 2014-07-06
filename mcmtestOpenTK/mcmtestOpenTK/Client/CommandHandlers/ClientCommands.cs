@@ -72,6 +72,7 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             CommandSystem.RegisterCommand(new RemaptextureCommand());
             CommandSystem.RegisterCommand(new ReplacefontCommand());
             CommandSystem.RegisterCommand(new SavetextureCommand());
+            CommandSystem.RegisterCommand(new ScreenshotCommand());
             CommandSystem.RegisterCommand(new ShaderlistCommand());
             CommandSystem.RegisterCommand(new TexturelistCommand());
 

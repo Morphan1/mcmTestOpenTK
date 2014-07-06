@@ -198,5 +198,21 @@ namespace mcmtestOpenTK.Shared
                 return output.ToArray();
             }
         }
+
+        /// <summary>
+        /// Returns a list of all filenames in a directory.
+        /// </summary>
+        /// <param name="dir">The directory to search</param>
+        /// <returns>All found files</returns>
+        public static List<string> AllFiles(string dir)
+        {
+            string[] strs = Directory.GetFiles(BaseDirectory + "/" + CleanFileName(dir));
+            List<string> files = new List<string>();
+            for (int i = 0; i < strs.Length; i++)
+            {
+                files.Add(strs[i].Substring(strs[i].IndexOf('/') + 1));
+            }
+            return files;
+        }
     }
 }

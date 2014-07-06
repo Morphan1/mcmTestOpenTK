@@ -54,7 +54,7 @@ namespace mcmtestOpenTK.Shared
         public static string Pad(string input, char padding, int length, bool left = true)
         {
             int targetlength = length - input.Length;
-            StringBuilder pad = new StringBuilder(targetlength);
+            StringBuilder pad = new StringBuilder(targetlength <= 0 ? 1: targetlength);
             for (int i = 0; i < targetlength; i++)
             {
                 pad.Append(padding);

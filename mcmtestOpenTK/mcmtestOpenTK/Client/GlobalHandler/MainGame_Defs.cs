@@ -163,5 +163,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// The general shader models should use if they lack their own.
         /// </summary>
         public static Shader GeneralShader;
+
+        /// <summary>
+        /// Whether to take a screenshot.
+        /// </summary>
+        public static bool Screenshot;
+
+        static Queue<Bitmap> Screenshots = new Queue<Bitmap>();
+
+        static Object ScreenshotLock = new Object();
     }
 }

@@ -9,6 +9,9 @@ using mcmtestOpenTK.Client.CommonHandlers;
 using System.Diagnostics;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
+using System.Threading;
+using mcmtestOpenTK.Client.GraphicsHandlers;
+using System.Drawing.Imaging;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -22,6 +25,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             // Fix the system console.
             SysConsole.FixTitle();
+            // Create the data saving thread
+            SysConsole.Output(OutputType.INIT, "Starting up save-irrelevant-data thread...");
+            Thread datathr = new Thread(new ThreadStart(SaveIrrelevantData));
+            datathr.Name = "SaveIrrelevantData";
+            Program.ThreadsToClose.Add(datathr);
+            datathr.Start();
             // Create the window and establish basic event info / settings
             PrimaryGameWindow = new GameWindow(ScreenWidth, ScreenHeight);
             PrimaryGameWindow.Title = WindowTitle;
@@ -36,6 +45,48 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             SysConsole.Output(OutputType.INIT, "Starting up main game window...");
             PrimaryGameWindow.Run(Target_cFPS, Target_gFPS);
             SysConsole.Output(OutputType.CLIENTINFO, "Game done running!");
+        }
+
+        static void SaveIrrelevantData()
+        {
+            while (true)
+            {
+                try
+                {
+                    Thread.Sleep(100);
+                    Bitmap shot = null;
+                    lock (ScreenshotLock)
+                    {
+                        if (Screenshots.Count > 0)
+                        {
+                            shot = Screenshots.Dequeue();
+                        }
+                    }
+                    if (shot != null)
+                    {
+                        List<string> files = FileHandler.AllFiles("screenshots");
+                        int shotnum = 0;
+                        string name = "screenshot" + Utilities.Pad(shotnum.ToString(), '0', 4);
+                        while (FileHandler.Exists("screenshots/" + name + ".png"))
+                        {
+                            shotnum++;
+                            name = "screenshot" + Utilities.Pad(shotnum.ToString(), '0', 4);
+                        }
+                        DataStream ds = new DataStream();
+                        shot.Save(ds, ImageFormat.Png);
+                        FileHandler.WriteBytes("screenshots/" + name + ".png", ds.ToArray());
+                        shot.Dispose();
+                    }
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    SysConsole.Output(OutputType.ERROR, "Error handling irrelevant save data: " + ex.ToString());
+                }
+            }
         }
     }
 }

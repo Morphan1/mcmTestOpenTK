@@ -8,6 +8,8 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared.TagHandlers;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {
@@ -33,7 +35,11 @@ namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
                 string fname = entry.GetArgument(1);
                 try
                 {
-                    start.SaveToFile(fname);
+                    Bitmap bmp = start.SaveToBMP();
+                    DataStream ds = new DataStream();
+                    bmp.Save(ds, ImageFormat.Png);
+                    FileHandler.WriteBytes(fname, ds.ToArray());
+                    bmp.Dispose();
                     entry.Good("Saved texture '<{color.emphasis}>" + TagParser.Escape(start.Name) +
                         "<{color.base}>' to file '<{color.emphasis}>" + TagParser.Escape(fname) + "<{color.base}>");
                 }

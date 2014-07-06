@@ -27,6 +27,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="e">Irrelevant</param>
         static void PrimaryGameWindow_RenderFrame(object sender, FrameEventArgs e)
         {
+            Texture shottext = null;
+            uint FBO = 0;
             try
             {
                 // Record delta: always first!
@@ -40,6 +42,19 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     gFPS = gticknumber;
                     gticknumber = 0;
                     gtickdelta = 0.0f;
+                }
+
+                // Handle screenshotting
+                if (Screenshot)
+                {
+                    shottext = Texture.CreateNullTexture(MainGame.ScreenWidth, MainGame.ScreenHeight);
+                    GL.Ext.GenFramebuffers(1, out FBO);
+                    GL.Ext.BindFramebuffer(FramebufferTarget.DrawFramebuffer, FBO);
+                    GL.Ext.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer,
+                        FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, shottext.Internal_Texture, 0);
+                    GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
+                    GL.Ext.BindFramebuffer(FramebufferTarget.DrawFramebuffer, FBO);
+                    Screenshot = false;
                 }
 
                 // Clear the current render buffer, should always be done before any rendering is handled.
@@ -123,6 +138,15 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 // Send the newly drawn code in, should always be done after all rendering is handled.
                 PrimaryGameWindow.SwapBuffers();
+
+                if (shottext != null)
+                {
+                    GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
+                    lock (ScreenshotLock)
+                    {
+                        Screenshots.Enqueue(shottext.SaveToBMP(true));
+                    }
+                }
             }
             catch (Exception ex)
             {
