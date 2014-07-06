@@ -48,7 +48,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 // Just ignore.
                 return;
             }
-            Player.player.ApplyMovement(position, velocity, time, jumped);
+            //Player.player.ApplyMovement(position, velocity, time, jumped);
             lastforced = position;
         }
     }

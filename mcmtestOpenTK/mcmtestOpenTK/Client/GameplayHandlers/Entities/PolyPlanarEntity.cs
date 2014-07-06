@@ -52,6 +52,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             // Check if any of the edges of polygon ray-trace into the box: If so, collide!
             Location normal;
+            /*
             for (int i = 0; i < Planes.Count; i++)
             {
                 // 1-2
@@ -70,8 +71,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     return true;
                 }
             }
+            */
             // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
-            /*
             Line[] BoxLines = Box2.BoxLines();
             for (int i = 0; i < BoxLines.Length; i++)
             {
@@ -79,7 +80,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 {
                     return true;
                 }
-            }*/
+            }
             return false;
         }
 
