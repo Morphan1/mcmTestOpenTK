@@ -470,6 +470,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                     world.Players[i].Send(pout);
                 }
             }
+            // TODO: Should it even be trying to tick back to now? Maybe old position is best!
+            // TODO: Test both in high-ping environment
             // Tick back up to now.
             targetdelta = (float)(LastTick - MoveTime);
             while (targetdelta > 1d / 60d)

@@ -10,20 +10,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 {
     public class Collision
     {
-        /*
-        public static Location Line(Location Start, Location Target)
+        public static Location Line(Location Start, Location Target, out Location normal)
         {
             // Watch the distance - we want the closest hit!
             double distance = (Target - Start).LengthSquared();
             // Keep track of what hit location we had
             Location final = Target;
+            Location fnormal = Location.NaN;
             // Loop through all solids.
             for (int i = 0; i < MainGame.Solids.Count; i++)
             {
                 // Get the current solid in the loop.
                 Entity solid = MainGame.Solids[i];
                 // Find where it here
-                Location hit = solid.Closest(Start, Target);
+                Location tnormal;
+                Location hit = solid.Closest(Start, Target, out tnormal);
                 // NaN = no hit, ignore!
                 if (hit.IsNaN())
                 {
@@ -35,14 +36,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 if (newdist < distance)
                 {
                     // Make this the new best hit
+                    fnormal = tnormal;
                     distance = newdist;
                     final = hit;
                 }
             }
             // Loops over, return whatever we got!
+            normal = fnormal;
             return final;
         }
-        */
 
         /// <summary>
         /// Checks for solids at a specific point.

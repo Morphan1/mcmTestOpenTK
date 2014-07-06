@@ -142,8 +142,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             planes[11] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)));
             return planes;
         }
-        /*
-        public override Location Closest(Location start, Location target)
+
+        public override Location Closest(Location start, Location target, out Location normal)
         {
             Plane[] planes = CalculatePlanes();
             List<Plane> tplanes = new List<Plane>(3);
@@ -171,11 +171,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 tplanes.Add(planes[5]);
             }
-            return CollidePlanes(tplanes, start, target);
+            return CollidePlanes(tplanes, start, target, out normal);
         }
-        */
-        /*
-        public Location CollidePlanes(List<Plane> planes, Location start, Location target)
+
+
+        public Location CollidePlanes(List<Plane> planes, Location start, Location target, out Location normal)
         {
             //float dist = (target - start).LengthSquared();
             //Location final = Location.NaN;
@@ -186,18 +186,19 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 if (!hit.IsNaN())
                 {
                     //float newdist = (hit - start).LengthSquared();
-                    if (/*newdist < dist && * /Point(hit))
+                    if (/*newdist < dist && */Point(hit))
                     {
                         //dist = newdist;
                         //final = hit;
+                        normal = plane.Normal;
                         return hit;
                     }
                 }
             }
             //return final;
+            normal = Location.NaN;
             return Location.NaN;
         }
-        */
 
         public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
         {

@@ -53,12 +53,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <param name="data">Data from the network</param>
         public abstract void ReadBytes(byte[] data);
 
-        /*
-        public virtual Location Closest(Location start, Location target)
+        public virtual Location Closest(Location start, Location target, out Location normal)
         {
+            normal = Location.NaN;
             return Location.NaN;
         }
-        */
+        
         /// <summary>
         /// Get the first collision of a box line.
         /// </summary>

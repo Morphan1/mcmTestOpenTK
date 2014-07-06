@@ -26,7 +26,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             Mins = new Location(-0.5f);
             Maxs = new Location(0.5f);
-            model = new CubeModel(Position - Mins, new Location(1), Texture.Console);
+            model = new CubeModel(Position + Mins, new Location(1), Texture.Console);
             CheckCollision = true;
             Solid = false;
         }

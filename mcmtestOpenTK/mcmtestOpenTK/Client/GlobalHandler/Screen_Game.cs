@@ -78,11 +78,12 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             if (MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Left) && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left))
             {
                 Location normal;
-                Location hit = Collision.LineBox(Player.player.Position + new Location(0, 0, 6),
-                    Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200), new Location(-0.5f), new Location(0.5f), out normal);
+                Location hit = Collision.Line(Player.player.Position + new Location(0, 0, 6),
+                    Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200)/*, new Location(-0.5f), new Location(0.5f)*/, out normal);
+                SysConsole.Output(OutputType.INFO, "Hit at " + hit);
                 MainGame.SpawnEntity(new Bullet()
                 {
-                    Position = hit,
+                    Position = hit + (normal.IsNaN() ? Location.Zero: normal),
                     LifeTicks = 60 * 20,
                     start = Player.player.Position
                 });
