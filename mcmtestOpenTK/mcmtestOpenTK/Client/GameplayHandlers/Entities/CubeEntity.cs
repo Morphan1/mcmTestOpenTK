@@ -75,6 +75,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             model.texture = Texture.GetTexture(texture);
             pos += 4;
+            RenderPlane[] Planes = CalculateTriangles();
+            StringBuilder planestr = new StringBuilder(Planes.Length * 36);
+            for (int i = 0; i < Planes.Length; i++)
+            {
+                planestr.Append(Planes[i].Internal.ToString()).Append("_");
+            }
+            FileHandler.AppendText("test.log", "planes: " + planestr.ToString() + "\n\n");
         }
 
         public override bool Point(Location spot)

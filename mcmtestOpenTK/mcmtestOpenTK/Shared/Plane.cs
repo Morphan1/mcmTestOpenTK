@@ -141,6 +141,10 @@ namespace mcmtestOpenTK.Shared
         public static Plane FromString(string input)
         {
             string[] data = input.Replace("[", "").Replace("]", "").Replace(" ", "").Split('/');
+            if (data.Length < 3)
+            {
+                return null;
+            }
             return new Plane(Location.FromString(data[0]), Location.FromString(data[1]), Location.FromString(data[2]));
         }
 

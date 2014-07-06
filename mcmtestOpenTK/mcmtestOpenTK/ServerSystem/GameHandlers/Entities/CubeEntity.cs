@@ -120,7 +120,39 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             ToReturn.Add(new Variable("texture_vscale", Texture_VScale.ToString()));
             ToReturn.Add(new Variable("texture_hshift", Texture_HShift.ToString()));
             ToReturn.Add(new Variable("texture_vshift", Texture_VShift.ToString()));
+            List<Variable> vars = base.GetSaveVars();
+            Plane[] Planes = CalculateTriangles();
+            StringBuilder planestr = new StringBuilder(Planes.Length * 36);
+            for (int i = 0; i < Planes.Length; i++)
+            {
+                planestr.Append(Planes[i].ToString()).Append("_");
+            }
+            ToReturn.Add(new Variable("planes", planestr.ToString()));
             return ToReturn;
+        }
+
+        public Plane[] CalculateTriangles()
+        {
+            Plane[] planes = new Plane[12];
+            // Y-
+            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z));
+            planes[1] = new Plane(Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z));
+            // Y+
+            planes[2] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z));
+            planes[3] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z));
+            // X-
+            planes[4] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z));
+            planes[5] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z));
+            // X+
+            planes[6] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z));
+            planes[7] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z));
+            // Z-
+            planes[8] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z));
+            planes[9] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z));
+            // Z+
+            planes[10] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z));
+            planes[11] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z));
+            return planes;
         }
 
         public override bool Point(Location spot)

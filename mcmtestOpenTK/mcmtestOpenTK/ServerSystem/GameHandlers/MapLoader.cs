@@ -83,6 +83,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 case "spawnpoint":
                     ent = new SpawnPoint();
                     break;
+                case "polyplanar":
+                    ent = new PolyPlanarEntity();
+                    break;
                 default:
                     ErrorHandler.HandleError("Error loading map '" + map + "': invalid entity type '" + type + "'.");
                     return;
@@ -155,6 +158,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                         break;
                     case EntityType.BULLET:
                         type = "bullet";
+                        break;
+                    case EntityType.SPAWNPOINT:
+                        type = "spawnpoint";
+                        break;
+                    case EntityType.POLYPLANAR:
+                        type = "polyplanar";
                         break;
                     default:
                         type = null;

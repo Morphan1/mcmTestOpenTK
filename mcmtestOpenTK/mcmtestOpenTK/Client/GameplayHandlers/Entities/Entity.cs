@@ -125,6 +125,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     return new CubeEntity();
                 case EntityType.BULLET:
                     return new Bullet();
+                case EntityType.POLYPLANAR:
+                    return new PolyPlanarEntity();
                 default:
                     return null;
             }

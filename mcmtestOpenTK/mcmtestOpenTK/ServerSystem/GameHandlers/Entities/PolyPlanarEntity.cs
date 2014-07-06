@@ -4,17 +4,20 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
     class PolyPlanarEntity: Entity
     {
         List<Plane> Planes;
+        List<string> Textures;
 
-        public PolyPlanarEntity(List<Plane> _planes)
+        public PolyPlanarEntity()
             : base(false, true, EntityType.POLYPLANAR)
         {
-            Planes = _planes;
+            Planes = new List<Plane>();
+            Textures = new List<string>();
         }
 
         public override bool Box(Shared.Location mins, Shared.Location maxs)
@@ -46,7 +49,18 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 string[] data = vardata.Split('_');
                 for (int i = 0; i < data.Length; i++)
                 {
-                    Planes.Add(Plane.FromString(data[i]));
+                    if (data[i].Length > 0)
+                    {
+                        Plane pl = Plane.FromString(data[i]);
+                        Planes.Add(pl);
+                    }
+                }
+            }
+            else if (varname == "texture")
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    Textures.Add(vardata);
                 }
             }
             else
@@ -58,10 +72,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override byte[] GetData()
         {
-            byte[] bytes = new byte[Planes.Count * 12 * 3];
+            byte[] bytes = new byte[Planes.Count * (36 + 4)];
             for (int i = 0; i < Planes.Count; i++)
             {
-                Planes[i].ToBytes().CopyTo(bytes, i * 36);
+                Planes[i].ToBytes().CopyTo(bytes, i * (36 + 4));
+                Plane plane2 = Plane.FromBytes(Planes[i].ToBytes());
+                BitConverter.GetBytes(NetStringManager.GetStringID(Textures[i])).CopyTo(bytes, (i + 1) * (36 + 4) - 4);
             }
             return bytes;
         }
