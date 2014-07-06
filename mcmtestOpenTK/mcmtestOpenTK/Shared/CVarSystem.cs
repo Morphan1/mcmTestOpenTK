@@ -23,8 +23,10 @@ namespace mcmtestOpenTK.Shared
         /// </summary>
         public Outputter Output;
 
+        public bool Modified = false;
+
         // System CVars
-        public static CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
+        public CVar s_filepath, s_osversion, s_user, s_dotnetversion, s_totalram, s_culture, s_processors, s_machinename;
 
         public CVarSystem(Outputter _output)
         {

@@ -17,9 +17,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
 {
     public class KeyHandler
     {
-        static Dictionary<Key, CommandScript> Binds;
+        public static Dictionary<Key, CommandScript> Binds;
 
         static Dictionary<string, Key> namestokeys;
+        public static Dictionary<Key, string> keystonames;
+
+        public static bool Modified = false;
 
         /// <summary>
         /// Prepare key handler.
@@ -40,6 +43,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             BindKey(Key.LShift, "+slow");
             BindKey(Key.F12, "screenshot");
             namestokeys = new Dictionary<string, Key>();
+            keystonames = new Dictionary<Key, string>();
             RegKey("a", Key.A); RegKey("b", Key.B); RegKey("c", Key.C);
             RegKey("d", Key.D); RegKey("e", Key.E); RegKey("f", Key.F);
             RegKey("g", Key.G); RegKey("h", Key.H); RegKey("i", Key.I);
@@ -77,6 +81,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         static void RegKey(string name, Key key)
         {
             namestokeys.Add(name, key);
+            keystonames.Add(key, name);
         }
 
         /// <summary>
@@ -335,13 +340,14 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <param name="bind">The command to bind to it (null to unbind)</param>
         public static void BindKey(Key key, string bind)
         {
-                Binds.Remove(key);
-                if (bind != null)
-                {
-                    CommandScript script = CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem);
-                    script.Debug = DebugMode.MINIMAL;
-                    Binds.Add(key, script);
-                }
+            Binds.Remove(key);
+            if (bind != null)
+            {
+                CommandScript script = CommandScript.SeparateCommands("BIND:" + key, bind, ClientCommands.CommandSystem);
+                script.Debug = DebugMode.MINIMAL;
+                Binds.Add(key, script);
+            }
+            Modified = true;
         }
 
         /// <summary>

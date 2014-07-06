@@ -129,7 +129,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                     Square sq = new Square();
                     sq.PositionLow = new Location(0, MainGame.ScreenHeight, 0);
                     sq.PositionHigh = new Location(MainGame.ScreenWidth, 0, 0);
-                    //SysConsole.Output(OutputType.INFO, "W:" + MainGame.ScreenWidth + ",RW:" + "0");
                     sq.texture = shottext;
                     sq.Draw();
                     lock (ScreenshotLock)

@@ -93,6 +93,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 LoadWorld();
                 SysConsole.Output(OutputType.INIT, "Preparing start screen...");
                 SetScreen(ScreenMode.Logos);
+                SysConsole.Output(OutputType.INIT, "Running default config...");
+                if (FileHandler.Exists("clientconfig.cfg"))
+                {
+                    ClientCommands.ExecuteCommands(FileHandler.ReadText("clientconfig.cfg"));
+                }
                 // Everything's loaded now... scrap the system console
                 SysConsole.Output(OutputType.INIT, "System prepared, hiding console and playing the game!");
                 // SysConsole.HideConsole();

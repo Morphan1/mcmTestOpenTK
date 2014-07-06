@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Shared.TagHandlers.Common;
 
 namespace mcmtestOpenTK.Shared.TagHandlers.Objects
 {
@@ -37,7 +38,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             ListEntries = new List<TemplateObject>();
             for (int i = 0; i < baselist.Length; i++)
             {
-                ListEntries.Add(new TextTag(baselist[i].Replace("&pipe", "|").Replace("&amp", "&")));
+                ListEntries.Add(new TextTag(UnescapeTags.Unescape(baselist[i])));
             }
         }
 
@@ -168,7 +169,7 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < ListEntries.Count; i++)
             {
-                sb.Append(ListEntries[i].ToString().Replace("&", "&amp").Replace("|", "&pipe"));
+                sb.Append(EscapeTags.Escape(ListEntries[i].ToString()));
                 if (i + 1 < ListEntries.Count)
                 {
                     sb.Append("|");

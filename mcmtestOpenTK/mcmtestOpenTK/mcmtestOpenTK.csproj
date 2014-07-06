@@ -268,6 +268,8 @@
     <Compile Include="Shared\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
+    <Compile Include="Shared\TagHandlers\Common\UnescapeTags.cs" />
+    <Compile Include="Shared\TagHandlers\Common\EscapeTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\UtilTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\TernaryTags.cs" />
     <Compile Include="Shared\TagHandlers\Common\CVarTags.cs" />

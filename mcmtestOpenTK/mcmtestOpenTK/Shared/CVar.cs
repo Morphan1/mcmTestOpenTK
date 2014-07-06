@@ -74,10 +74,10 @@ namespace mcmtestOpenTK.Shared
 
         public CVar(string newname, string newvalue, CVarFlag newflags, CVarSystem _system)
         {
+            system = _system;
             Name = newname;
             Set(newvalue);
             Flags = newflags;
-            system = _system;
         }
 
         /// <summary>
@@ -104,6 +104,7 @@ namespace mcmtestOpenTK.Shared
             ValueD = Utilities.StringToDouble(newvalue);
             ValueF = (float)ValueD;
             ValueB = newvalue.ToLower() == "true" || ValueF > 0f;
+            system.Modified = true;
         }
 
         /// <summary>
@@ -141,6 +142,7 @@ namespace mcmtestOpenTK.Shared
                 ValueL = 0;
                 ValueD = 0;
             }
+            system.Modified = true;
         }
 
         /// <summary>

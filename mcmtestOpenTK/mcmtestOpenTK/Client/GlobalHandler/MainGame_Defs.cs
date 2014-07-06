@@ -172,5 +172,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         static Queue<Bitmap> Screenshots = new Queue<Bitmap>();
 
         static Object ScreenshotLock = new Object();
+
+        static volatile string ConfigStr = "";
     }
 }

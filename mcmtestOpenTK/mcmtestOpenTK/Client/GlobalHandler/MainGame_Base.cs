@@ -77,6 +77,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                         FileHandler.WriteBytes("screenshots/" + name + ".png", ds.ToArray());
                         shot.Dispose();
                     }
+                    if (ConfigStr.Length > 0)
+                    {
+                        FileHandler.WriteText("clientconfig.cfg", ConfigStr);
+                        ConfigStr = "";
+                    }
                 }
                 catch (ThreadAbortException)
                 {
