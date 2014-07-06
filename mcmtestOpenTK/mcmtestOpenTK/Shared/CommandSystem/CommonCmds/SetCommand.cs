@@ -13,7 +13,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
         public SetCommand()
         {
             Name = "set";
-            Arguments = "<CVar to set> <new value> (force)";
+            Arguments = "<CVar to set> <new value> (force/remove)";
             Description = "Modifies the value of a specified CVar, or creates a new one.";
         }
 
@@ -27,7 +27,32 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             {
                 string target = entry.GetArgument(0);
                 string newvalue = entry.GetArgument(1);
-                bool force = (entry.Arguments.Count > 2 && entry.GetArgument(2) == "force");
+                string a2 = entry.Arguments.Count > 2 ? entry.GetArgument(2): "";
+                bool force = a2 == "force";
+                bool remove = a2 == "remove";
+                if (remove)
+                {
+                    CVar Cvar = entry.Output.CVarSys.Get(target);
+                    if (Cvar == null)
+                    {
+                        entry.Good("CVar '<{color.emphasis}>" + TagParser.Escape(target)
+                            + "<{color.base}>' cannot be removed, it doesn't exist!");
+                    }
+                    else if (!Cvar.Flags.HasFlag(CVarFlag.UserMade))
+                    {
+                        entry.Bad("CVar '<{color.emphasis}>" + TagParser.Escape(Cvar.Name)
+                            + "<{color.base}>' cannot be removed, it wasn't user made!");
+                    }
+                    else
+                    {
+                        Cvar.Set("");
+                        entry.Output.CVarSys.CVars.Remove(Cvar.Name);
+                        entry.Output.CVarSys.CVarList.Remove(Cvar);
+                        entry.Good("<{color.info}>CVar '<{color.emphasis}>" + TagParser.Escape(Cvar.Name) +
+                            "<{color.info}>' removed.");
+                    }
+                    return;
+                }
                 CVar cvar = entry.Output.CVarSys.AbsoluteSet(target, newvalue);
                 if (cvar.Flags.HasFlag(CVarFlag.ServerControl))
                 {
