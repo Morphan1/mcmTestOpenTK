@@ -31,6 +31,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             return toret;
         }
 
+        public override void Init()
+        {
+        }
+
         public override bool HandleVariable(string varname, string vardata)
         {
             return base.HandleVariable(varname, vardata);

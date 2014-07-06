@@ -25,6 +25,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             return ToReturn;
         }
 
+        public override void Init()
+        {
+        }
+
         public override void Kill()
         {
         }

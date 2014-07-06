@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.GraphicsHandlers;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using mcmtestOpenTK.Client.CommonHandlers;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers
+namespace mcmtestOpenTK.Shared
 {
-    public class Plane: Renderable
+    public class Plane
     {
         /// <summary>
         /// The normal of the plane.
@@ -32,8 +26,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         /// The third corner.
         /// </summary>
         public Location vec3;
-
-        public Texture texture = null;
 
         /// <summary>
         /// The distance from origin, in theory.
@@ -79,7 +71,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public Plane FlipNormal()
         {
-            return new Plane(vec3, vec2, vec1) { texture = texture };
+            return new Plane(vec3, vec2, vec1);
         }
 
         /// <summary>
@@ -123,25 +115,43 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             return psign;
         }
 
-        public override void Draw()
+        /// <summary>
+        /// Converts the plane to a 36-byte array for transmission.
+        /// </summary>
+        /// <returns>A byte array</returns>
+        public byte[] ToBytes()
         {
-            if (texture != null)
-            {
-                texture.Bind();
-            }
-            GL.Begin(PrimitiveType.Triangles);
-            GL.TexCoord2(0, 0);
-            GL.Vertex3(vec1.X, vec1.Y, vec1.Z);
-            GL.TexCoord2(0, 1);
-            GL.Vertex3(vec2.X, vec2.Y, vec2.Z);
-            GL.TexCoord2(1, 0);
-            GL.Vertex3(vec3.X, vec3.Y, vec3.Z);
-            GL.End();
-            Location middle = new Location((vec1.X + vec2.X + vec3.X) / 3, (vec1.Y + vec2.Y + vec3.Y) / 3, (vec1.Z + vec2.Z + vec3.Z) / 3);
-            GL.Begin(PrimitiveType.Lines);
-            GL.Vertex3(middle.X, middle.Y, middle.Z);
-            GL.Vertex3(middle.X + Normal.X * 3, middle.Y + Normal.Y * 3, middle.Z + Normal.Z * 3);
-            GL.End();
+            byte[] toret = new byte[36];
+            vec1.ToBytes().CopyTo(toret, 0);
+            vec2.ToBytes().CopyTo(toret, 12);
+            vec3.ToBytes().CopyTo(toret, 24);
+            return toret;
+        }
+
+        public override string ToString()
+        {
+            return "[" + vec1.ToString() + "/" + vec2.ToString() + "/" + vec3.ToString() + "]";
+        }
+
+        /// <summary>
+        /// Converts a string to a plane.
+        /// </summary>
+        /// <param name="input">The plane string</param>
+        /// <returns>A plane</returns>
+        public static Plane FromString(string input)
+        {
+            string[] data = input.Replace("[", "").Replace("]", "").Replace(" ", "").Split('/');
+            return new Plane(Location.FromString(data[0]), Location.FromString(data[1]), Location.FromString(data[2]));
+        }
+
+        /// <summary>
+        /// Converts a byte array to a plane.
+        /// </summary>
+        /// <param name="input">The byte array</param>
+        /// <returns>A plane</returns>
+        public static Plane FromBytes(byte[] input)
+        {
+            return new Plane(Location.FromBytes(input, 0), Location.FromBytes(input, 12), Location.FromBytes(input, 24));
         }
     }
 }

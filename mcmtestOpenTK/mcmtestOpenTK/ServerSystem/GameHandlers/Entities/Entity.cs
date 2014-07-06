@@ -138,6 +138,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public ulong UniqueID;
 
         /// <summary>
+        /// Called when the entity has finished loading variables.
+        /// </summary>
+        public abstract void Init();
+
+        /// <summary>
         /// What type of entity this is.
         /// </summary>
         public EntityType Type = EntityType.NUL;

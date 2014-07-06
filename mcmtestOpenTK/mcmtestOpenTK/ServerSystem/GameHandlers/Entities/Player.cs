@@ -266,7 +266,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <summary>
         /// Prepares the player.
         /// </summary>
-        public void Init()
+        public override void Init()
         {
             LastPacket = new MovementPacketIn();
             LastPacket.Time = Server.GlobalTickTime;

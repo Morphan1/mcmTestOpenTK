@@ -139,6 +139,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                         High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
         }
 
+        public override void Init()
+        {
+        }
+
         public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
         {
             return Collision.AABBClosestBox(Position, Mins, Maxs, Mins2, Maxs2, start, end, out normal);

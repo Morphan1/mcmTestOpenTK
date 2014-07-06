@@ -44,7 +44,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 MainGame.GeneralShader.Bind();
             }
             model.texture.Bind();
-            Plane[] tris = CalculateTriangles();
+            RenderPlane[] tris = CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)
             {
                 tris[i].Draw();
@@ -112,27 +112,27 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             return planes;
         }
 
-        public Plane[] CalculateTriangles()
+        public RenderPlane[] CalculateTriangles()
         {
-            Plane[] planes = new Plane[12];
+            RenderPlane[] planes = new RenderPlane[12];
             // Y-
-            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z)/*, new Location(0, -1, 0)*/);
-            planes[1] = new Plane(Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)/*, new Location(0, -1, 0)*/);
+            planes[0] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z)));
+            planes[1] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)));
             // Y+
-            planes[2] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)/*, new Location(0, 1, 0)*/);
-            planes[3] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z)/*, new Location(0, 1, 0)*/);
+            planes[2] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)));
+            planes[3] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z)));
             // X-
-            planes[4] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z)/*, new Location(-1, 0, 0)*/);
-            planes[5] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)/*, new Location(-1, 0, 0)*/);
+            planes[4] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z)));
+            planes[5] = new RenderPlane(new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)));
             // X+
-            planes[6] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(1, 0, 0)*/);
-            planes[7] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z)/*, new Location(1, 0, 0)*/);
+            planes[6] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)));
+            planes[7] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z)));
             // Z-
-            planes[8] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)/*, new Location(0, 0, -1)*/);
-            planes[9] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)/*, new Location(0, 0, -1)*/);
+            planes[8] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)));
+            planes[9] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)));
             // Z+
-            planes[10] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(0, 0, 1)*/);
-            planes[11] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)/*, new Location(0, 0, 1)*/);
+            planes[10] = new RenderPlane(new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)));
+            planes[11] = new RenderPlane(new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z)));
             return planes;
         }
         /*

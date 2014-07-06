@@ -165,7 +165,9 @@
     <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
-    <Compile Include="Client\GameplayHandlers\Plane.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\PolyPlanarEntity.cs" />
+    <Compile Include="Client\GameplayHandlers\RenderPlane.cs" />
+    <Compile Include="Shared\Plane.cs" />
     <Compile Include="Client\Networking\PacketsIn\NewdataPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\PlayerPositionPacketIn.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\SayCommand.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="ServerSystem\GameHandlers\Entities\Entity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\MovingEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\Player.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Entities\PolyPlanarEntity.cs" />
     <Compile Include="ServerSystem\GameHandlers\Entities\SpawnPoint.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\NetStringManager.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsIn\MovementPacketIn.cs" />

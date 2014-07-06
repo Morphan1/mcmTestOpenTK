@@ -12,5 +12,6 @@ namespace mcmtestOpenTK.Shared
         CUBE = 2,
         BULLET = 3,
         SPAWNPOINT = 4,
+        POLYPLANAR = 5,
     }
 }
