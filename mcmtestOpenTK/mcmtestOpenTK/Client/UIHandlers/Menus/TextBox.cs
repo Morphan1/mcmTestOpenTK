@@ -42,7 +42,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             RenderSquare = new Square();
             MaxWidth = _width > 0 ? _width: 1;
             RenderSquare.PositionLow = new Location(X, Y, 0);
-            Text = new PieceOfText("", new Location(X + 10, Y, 0), FontSet.GetFont(GLFont.Standard.Name, (int)((float)GLFont.Standard.Size * 1.5f)));
+            Text = new PieceOfText("", new Location(X + 10, Y + 4, 0), FontSet.GetFont(GLFont.Standard.Name, (int)((float)GLFont.Standard.Size * 1.5f)));
             RenderSquare.PositionHigh = new Location(X + MaxWidth + 20, Y + Text.set.font_default.Height + 8, 0);
             cvar = _cvar;
             TypingText = cvar.Value;
@@ -56,7 +56,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
             RenderSquare.texture = StandardTexture;
             RenderSquare.Draw();
-            Text.Position = new Location((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y, 0);
+            Text.Position = new Location((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y + 4, 0);
             FontSet.DrawColoredText(Text, int.MaxValue, 1, true);
             if (keymark_add > 0.5f)
             {

@@ -29,12 +29,12 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
             RenderSquare = new Square();
             RenderSquare.PositionLow = new Location(X, Y, 0);
-            Text = new PieceOfText(_text, new Location(X + 20, Y, 0), FontSet.GetFont(GLFont.Standard.Name, GLFont.Standard.Size * 2));
+            Text = new PieceOfText(_text, new Location(X + 20, Y + 4, 0), FontSet.GetFont(GLFont.Standard.Name, GLFont.Standard.Size * 2));
             Location Measured = FontSet.MeasureFancyLinesOfText(Text.Text, Text.set);
             RenderSquare.PositionHigh = new Location(X + Measured.X + 25, Y + Measured.Y, 0);
             Label = new Square();
-            Label.PositionLow = new Location(X, Y + 5, 0);
-            Label.PositionHigh = new Location(X + 32, Y + 37, 0);
+            Label.PositionLow = new Location(X, Y, 0);
+            Label.PositionHigh = new Location(X + 32, Y + 32, 0);
             Label_Checked = Texture.GetTexture("menus/toggler_on");
             Label_Unchecked = Texture.GetTexture("menus/toggler_off");
             cvar = _cvar;
@@ -47,11 +47,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
 
         public override void Draw()
         {
-            Label.PositionLow = new Location(RenderSquare.PositionLow.X, RenderSquare.PositionLow.Y + 5, 0);
-            Label.PositionHigh = new Location(RenderSquare.PositionLow.X + 32, RenderSquare.PositionLow.Y + 37, 0);
+            Label.PositionLow = new Location(RenderSquare.PositionLow.X, RenderSquare.PositionLow.Y, 0);
+            Label.PositionHigh = new Location(RenderSquare.PositionLow.X + 32, RenderSquare.PositionLow.Y + 32, 0);
             Label.texture = toggled ? Label_Checked : Label_Unchecked;
             Label.Draw();
-            Text.Position = new Location((int)RenderSquare.PositionLow.X + 25, (int)RenderSquare.PositionLow.Y, 0);
+            Text.Position = new Location((int)RenderSquare.PositionLow.X + 25, (int)RenderSquare.PositionLow.Y + 4, 0);
             FontSet.DrawColoredText(Text, int.MaxValue, 1, Hovered);
         }
 

@@ -115,6 +115,10 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 Tickers.Remove(e);
             }
+            if (e.Solid)
+            {
+                Solids.Remove(e);
+            }
         }
 
         /// <summary>

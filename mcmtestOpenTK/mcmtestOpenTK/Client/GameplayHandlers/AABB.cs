@@ -142,15 +142,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public Location[] BoxPoints()
         {
+            Location mins = Position + Mins;
+            Location maxs = Position + Maxs;
             Location[] points = new Location[8];
-            points[0] = new Location(Mins.X, Mins.Y, Mins.Z);
-            points[1] = new Location(Mins.X, Mins.Y, Maxs.Z);
-            points[2] = new Location(Mins.X, Maxs.Y, Mins.Z);
-            points[3] = new Location(Mins.X, Maxs.Y, Maxs.Z);
-            points[4] = new Location(Maxs.X, Mins.Y, Mins.Z);
-            points[5] = new Location(Maxs.X, Mins.Y, Maxs.Z);
-            points[6] = new Location(Maxs.X, Maxs.Y, Mins.Z);
-            points[7] = new Location(Maxs.X, Maxs.Y, Maxs.Z);
+            points[0] = new Location(mins.X, mins.Y, mins.Z);
+            points[1] = new Location(mins.X, mins.Y, maxs.Z);
+            points[2] = new Location(mins.X, maxs.Y, mins.Z);
+            points[3] = new Location(mins.X, maxs.Y, maxs.Z);
+            points[4] = new Location(maxs.X, mins.Y, mins.Z);
+            points[5] = new Location(maxs.X, mins.Y, maxs.Z);
+            points[6] = new Location(maxs.X, maxs.Y, mins.Z);
+            points[7] = new Location(maxs.X, maxs.Y, maxs.Z);
             return points;
         }
 

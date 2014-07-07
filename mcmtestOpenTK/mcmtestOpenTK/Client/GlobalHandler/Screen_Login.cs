@@ -24,8 +24,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void SwitchTo()
         {
-            // Remove any notice
-            Menus.Notice = null;
             // Recalculate all items
             Recalc();
             Menus.Recalculate();
@@ -35,6 +33,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         {
             ClientCVar.u_login_username.Set("");
             ClientCVar.u_login_password.Set("");
+            // Remove any notice
+            Menus.Notice = null;
         }
 
         TextBox UsernameBox;

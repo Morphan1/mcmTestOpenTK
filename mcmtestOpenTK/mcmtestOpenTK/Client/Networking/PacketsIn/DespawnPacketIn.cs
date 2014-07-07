@@ -36,6 +36,7 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             if (e == null)
             {
                 UIConsole.WriteLine("Tried and failed to remove entity " + id);
+                return;
             }
             MainGame.Destroy(e);
         }

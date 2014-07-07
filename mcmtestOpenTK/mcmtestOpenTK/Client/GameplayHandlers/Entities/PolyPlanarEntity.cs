@@ -100,7 +100,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 if (!hit.IsNaN())
                 {
                     double newdist = (hit - start).Length();
-                    if (newdist < dist && Box(new AABB(Location.Zero, Box3.Mins + movnrm * newdist, Box3.Maxs + movnrm * newdist)))
+                    if (newdist < dist/* && Box(new AABB(Location.Zero, Box3.Mins + movnrm * newdist, Box3.Maxs + movnrm * newdist))*/)
                     {
                         dist = newdist;
                         final = hit;

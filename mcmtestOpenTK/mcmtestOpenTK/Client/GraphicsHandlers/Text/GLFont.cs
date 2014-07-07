@@ -330,8 +330,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         /// <returns>The length of the character in pixels</returns>
         public double DrawSingleCharacter(char symbol, double X, double Y, bool flip)
         {
-            // NOTE: Adjust text downward to match what it used to be in early development
-            Y += 4;
             RectangleF rec = RectForSymbol(symbol);
             if (flip)
             {

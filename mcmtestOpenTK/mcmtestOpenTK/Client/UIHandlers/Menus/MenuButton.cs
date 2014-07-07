@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             StandardTexture = _standText;
             RenderSquare = new Square();
             RenderSquare.PositionLow = new Location(X, Y, 0);
-            Text = new PieceOfText(_text, new Location(X + 10, Y, 0), FontSet.GetFont(GLFont.Standard.Name, GLFont.Standard.Size * 2));
+            Text = new PieceOfText(_text, new Location(X + 10, Y + 4, 0), FontSet.GetFont(GLFont.Standard.Name, GLFont.Standard.Size * 2));
             RenderSquare.PositionHigh = new Location(X + FontSet.MeasureFancyText(Text.Text, Text.set) + 20, Y + Text.set.font_default.Height + 10, 0);
         }
 
@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         {
             RenderSquare.texture = Hovered ? HoverTexture : StandardTexture;
             RenderSquare.Draw();
-            Text.Position = new Location((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y, 0);
+            Text.Position = new Location((int)(RenderSquare.PositionLow.X + 10), (int)RenderSquare.PositionLow.Y + 4, 0);
             FontSet.DrawColoredText(Text, int.MaxValue, 1, Hovered);
         }
 
