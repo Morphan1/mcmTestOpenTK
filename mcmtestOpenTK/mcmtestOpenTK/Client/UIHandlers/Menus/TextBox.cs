@@ -60,11 +60,11 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             FontSet.DrawColoredText(Text, int.MaxValue, 1, true);
             if (keymark_add > 0.5f)
             {
-                float XAdd = FontSet.MeasureFancyText(Text.Text.Substring(0, TypingCursor + 1), Text.set) - 1;
-                if (Text.Text.Length > TypingCursor + 1 && Text.Text[TypingCursor] == '^'
-                    && TextStyle.IsColorSymbol(Text.Text[TypingCursor + 1]))
+                float XAdd = FontSet.MeasureFancyText(Text.Text.Substring(0, VisiCursor + 1), Text.set) - 1;
+                if (Text.Text.Length > VisiCursor + 1 && Text.Text[VisiCursor] == '^'
+                    && TextStyle.IsColorSymbol(Text.Text[VisiCursor + 1]))
                 {
-                    XAdd -= Text.set.font_default.MeasureString(Text.Text[TypingCursor].ToString());
+                    XAdd -= Text.set.font_default.MeasureString(Text.Text[VisiCursor].ToString());
                 }
                 PieceOfText SymText = new PieceOfText("|", new Location((int)(Text.Position.X + XAdd), (int)Text.Position.Y, 0), Text.set);
                 FontSet.DrawColoredText(SymText, int.MaxValue, 1, Hovered);
@@ -81,6 +81,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         public void FixCursor()
         {
             TypingCursor = TypingText.Length;
+            VisiCursor = TypingCursor;
         }
 
         /// <summary>
@@ -185,6 +186,7 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         /// The cursor location.
         /// </summary>
         int TypingCursor = 0;
+        int VisiCursor = 0;
 
         /// <summary>
         /// Whether to add a | symbol where the cursor is.
@@ -288,51 +290,56 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                     }
                     keymark_add = 0.5f;
                 }
-
-                string restext;
-                if (Password)
+            }
+            string restext;
+            if (Password)
+            {
+                restext = Utilities.CopyText("*", TypingText.Length);
+            }
+            else
+            {
+                restext = TypingText;
+            }
+            VisiCursor = TypingCursor;
+            string ftext = "";
+            int downs = 1;
+            int ups = 0;
+            bool flip = true;
+            VisiCursor = 0;
+            while (FontSet.MeasureFancyText(">" + ftext + "<", Text.set) < MaxWidth)
+            {
+                if (flip && TypingCursor - downs >= 0)
                 {
-                    restext = Utilities.CopyText("*", TypingText.Length);
+                    ftext = restext[TypingCursor - downs] + ftext;
+                    VisiCursor++;
+                    downs++;
                 }
-                else
+                else if (TypingCursor + ups < restext.Length)
                 {
-                    restext = TypingText;
+                    ftext = ftext + restext[TypingCursor + ups];
+                    ups++;
                 }
-                while (FontSet.MeasureFancyText(">" + restext + "<", Text.set) > MaxWidth)
+                else if (TypingCursor - downs < 0)
                 {
-                    if (TypingCursor == TypingText.Length)
-                    {
-                        TypingCursor--;
-                    }
-                    TypingText = TypingText.Substring(0, TypingText.Length - 1);
-                    restext = restext.Substring(0, restext.Length - 1);
+                    break;
                 }
+                flip = !flip;
+            }
+            restext = ftext;
+            Text.Text = ">" + restext;
+            if (selected)
+            {
                 // Update rendered text
                 if (keymark_add == -1f)
                 {
                     keymark_add = 0.5f;
                 }
                 keymark_add += MainGame.DeltaF;
-                Text.Text = ">" + restext;
                 if (keymark_add > 1f)
                 {
                     keymark_add -= 1f;
                 }
                 cvar.Set(TypingText);
-            }
-            else // !Selected
-            {
-                string restext;
-                if (Password)
-                {
-                    restext = Utilities.CopyText("*", TypingText.Length);
-                }
-                else
-                {
-                    restext = TypingText;
-                }
-                keymark_add = -1f;
-                Text.Text = ">" + restext;
             }
         }
         public override void Recalc()

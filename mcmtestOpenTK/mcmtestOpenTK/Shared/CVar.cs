@@ -86,6 +86,10 @@ namespace mcmtestOpenTK.Shared
         /// <param name="newvalue">The value to set the CVar to</param>
         public void Set(string newvalue, bool force = false)
         {
+            if (newvalue == Value)
+            {
+                return;
+            }
             if (Flags.HasFlag(CVarFlag.ReadOnly))
             {
                 return;
