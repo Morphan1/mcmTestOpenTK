@@ -79,6 +79,7 @@ namespace mcmtestOpenTK.Shared
             Y = _Point;
             Z = _Point;
         }
+
         /// <summary>
         /// Returns the full linear length of the vector location, squared for efficiency.
         /// </summary>

@@ -34,7 +34,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     return true;
                 }
             }
-            // Check if any points on the triangle are inside the box: If so, collide!
+            // Check if any points on the triangles are inside the box: If so, collide!
             for (int i = 0; i < Planes.Count; i++)
             {
                 if (Box2.Point(Planes[i].Internal.vec1))
@@ -73,6 +73,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             */
             // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
+            /*
             Line[] BoxLines = Box2.BoxLines();
             for (int i = 0; i < BoxLines.Length; i++)
             {
@@ -81,6 +82,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     return true;
                 }
             }
+            */
             return false;
         }
 
