@@ -112,25 +112,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public Location CollidePlanes(List<Plane> planes, Location start, Location target, out Location normal)
         {
-            //float dist = (target - start).LengthSquared();
-            //Location final = Location.NaN;
+            double dist = (target - start).LengthSquared();
             for (int i = 0; i < planes.Count; i++)
             {
                 Plane plane = planes[i];
                 Location hit = plane.IntersectLine(start, target);
                 if (!hit.IsNaN())
                 {
-                    //float newdist = (hit - start).LengthSquared();
-                    if (/*newdist < dist && */Point(hit))
+                    double newdist = (hit - start).LengthSquared();
+                    if (newdist < dist && Point(hit))
                     {
-                        //dist = newdist;
-                        //final = hit;
                         normal = plane.Normal;
                         return hit;
                     }
                 }
             }
-            //return final;
             normal = Location.NaN;
             return Location.NaN;
         }
@@ -172,6 +168,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Lines[10] = new Line(new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z));
             Lines[11] = new Line(new Location(Mins.X, Mins.Y, Maxs.Z), new Location(Mins.X, Maxs.Y, Maxs.Z));
             return Lines;
+        }
+
+        public override string ToString()
+        {
+            return "(BOX:" + Position + ",Min:" + Mins + ",Max:" + Maxs + ")";
         }
     }
 }

@@ -52,26 +52,28 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             // Check if any of the edges of polygon ray-trace into the box: If so, collide!
             Location normal;
-            /*
+            Location hit;
             for (int i = 0; i < Planes.Count; i++)
             {
                 // 1-2
-                if (!Box2.TraceLine(Planes[i].Internal.vec1, Planes[i].Internal.vec2, out normal).IsNaN())
+                hit = Box2.TraceLine(Planes[i].Internal.vec1, Planes[i].Internal.vec2, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].Internal.vec2)
                 {
                     return true;
                 }
                 // 2-3
-                if (!Box2.TraceLine(Planes[i].Internal.vec2, Planes[i].Internal.vec3, out normal).IsNaN())
+                hit = Box2.TraceLine(Planes[i].Internal.vec2, Planes[i].Internal.vec3, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].Internal.vec3)
                 {
                     return true;
                 }
                 // 3-1
-                if (!Box2.TraceLine(Planes[i].Internal.vec3, Planes[i].Internal.vec1, out normal).IsNaN())
+                hit = Box2.TraceLine(Planes[i].Internal.vec3, Planes[i].Internal.vec1, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].Internal.vec1)
                 {
                     return true;
                 }
             }
-            */
             // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
             /*
             Line[] BoxLines = Box2.BoxLines();
