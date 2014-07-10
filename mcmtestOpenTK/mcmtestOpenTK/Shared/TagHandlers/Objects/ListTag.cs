@@ -159,6 +159,56 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                         }
                         return ListEntries[number].Handle(data.Shrink());
                     }
+                // <--[tag]
+                // @Name ListTag.range[<TextTag>,<TextTag>]
+                // @Group List Attributes
+                // @ReturnType ListTag<Dynamic>
+                // @Returns the specified set of entries in the list.
+                // Note that indices are one-based.
+                // EG, "one|two|three|four" .range[2,3] gets "two|three".
+                // "one|two|three" .range[2,1] gets an empty list.
+                // "one|two|three" .range[2,2] gets "two".
+                // -->
+                case "range":
+                    {
+                        string[] split = data.GetModifier(0).Split(',');
+                        if (split.Length != 2)
+                        {
+                            return new TextTag("&null").Handle(data.Shrink());
+                        }
+                        if (ListEntries.Count == 0)
+                        {
+                            return new TextTag("&null").Handle(data.Shrink());
+                        }
+                        int number = Utilities.StringToInt(split[0]) - 1;
+                        int number2 = Utilities.StringToInt(split[1]) - 1;
+                        if (number < 0)
+                        {
+                            number = 0;
+                        }
+                        if (number2 < 0)
+                        {
+                            number2 = 0;
+                        }
+                        if (number >= ListEntries.Count)
+                        {
+                            number = ListEntries.Count - 1;
+                        }
+                        if (number2 >= ListEntries.Count)
+                        {
+                            number2 = ListEntries.Count - 1;
+                        }
+                        if (number2 < number)
+                        {
+                            return new ListTag("").Handle(data.Shrink());
+                        }
+                        List<TemplateObject> Entries = new List<TemplateObject>();
+                        for (int i = number; i <= number2; i++)
+                        {
+                            Entries.Add(ListEntries[i]);
+                        }
+                        return new ListTag(Entries).Handle(data.Shrink());
+                    }
                 default:
                     return new TextTag(ToString()).Handle(data);
             }

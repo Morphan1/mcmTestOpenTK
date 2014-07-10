@@ -118,7 +118,6 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                         }
                         if (num2 < num1)
                         {
-                            num2 = num1;
                             return new TextTag("").Handle(data.Shrink());
                         }
                         return new TextTag(Text.Substring(num1, (num2 - num1) + 1)).Handle(data.Shrink());
