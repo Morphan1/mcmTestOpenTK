@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
-    public class PolyPlanarEntity: Entity
+    public class PolyPlanarEntity : Entity
     {
         public List<RenderPlane> Planes;
         public List<Texture> Textures;
@@ -149,27 +149,29 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
             if (!hit.IsNaN())
             {
+//#if CHEAT_COLLISION
+#if true
                 hit = PreciseCollideBox(Box2, hit, end);
                 if (hit == end)
                 {
                     return Location.NaN;
                 }
                 return hit;
-            }
-            return Location.NaN;
+#endif
 #if TEST_NEW_COLLISION
-            AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
-            mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
-            Location anormal;
-            Location hit = mink.RayTrace(Location.Zero, end - start, out anormal);
-            if (!hit.IsNaN())
-            {
-                SysConsole.Output(OutputType.INFO, "From " + start + " hits " + hit + " with normal " + anormal);
-                hit = start - hit;
-                anormal = -anormal;
-            }
-            normal = anormal;
-            return hit;
+//#if true
+                AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+                mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
+                Location anormal;
+                Location got = mink.RayTrace(Location.Zero, end - start, out anormal);
+                if (!got.IsNaN())
+                {
+                    SysConsole.Output(OutputType.INFO, "From " + start + " hits " + got + " with normal " + anormal);
+                    got = start - got;
+                    anormal = -anormal;
+                }
+                normal = anormal;
+                return got;
 #endif
 #if USE_BAD_OLD_COLLISION
             Location movevec = end - start;
@@ -197,6 +199,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             normal = fnormal;
             return final;
 #endif
+            }
+            return Location.NaN;
         }
 
         public override bool Point(Location point)

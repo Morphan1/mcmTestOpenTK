@@ -100,10 +100,18 @@ namespace mcmtestOpenTK.Shared
             }
             // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
             // Irrelevant for our use case ~ would induce looping
+            Line[] BoxLines = Box2.BoxLines();
+            for (int i = 0; i < BoxLines.Length; i++)
+            {
+                if (!RayTrace(BoxLines[i].Start, BoxLines[i].End, out normal, false).IsNaN())
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
-        public Location RayTrace(Location start, Location target, out Location normal)
+        public Location RayTrace(Location start, Location target, out Location normal, bool box = true)
         {
             double dist = (target - start).LengthSquared();
             Location final = Location.NaN;
@@ -115,7 +123,7 @@ namespace mcmtestOpenTK.Shared
                 if (!hit.IsNaN())
                 {
                     double newdist = (hit - start).LengthSquared();
-                    bool check = Box(new AABB(hit, new Location(-1f), new Location(1f)));
+                    bool check = box ? Box(new AABB(hit, new Location(-1f), new Location(1f))) : Point(hit);
                     if (newdist < dist && check)
                     {
                         dist = newdist;
