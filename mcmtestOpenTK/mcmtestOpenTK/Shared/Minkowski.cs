@@ -45,6 +45,64 @@ namespace mcmtestOpenTK.Shared
             return true;
         }
 
+        public bool Box(AABB Box2)
+        {
+            // Stupid brute force method
+            // TODO: Replace with nice SAT method
+            // Check if any points in the box are in the polygon: If so, collide!
+            Location[] bpoints = Box2.BoxPoints();
+            for (int i = 0; i < bpoints.Length; i++)
+            {
+                if (Point(bpoints[i]))
+                {
+                    return true;
+                }
+            }
+            // Check if any points on the triangles are inside the box: If so, collide!
+            for (int i = 0; i < Planes.Count; i++)
+            {
+                if (Box2.Point(Planes[i].vec1))
+                {
+                    return true;
+                }
+                if (Box2.Point(Planes[i].vec2))
+                {
+                    return true;
+                }
+                if (Box2.Point(Planes[i].vec3))
+                {
+                    return true;
+                }
+            }
+            // Check if any of the edges of polygon ray-trace into the box: If so, collide!
+            Location normal;
+            Location hit;
+            for (int i = 0; i < Planes.Count; i++)
+            {
+                // 1-2
+                hit = Box2.TraceLine(Planes[i].vec1, Planes[i].vec2, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec2)
+                {
+                    return true;
+                }
+                // 2-3
+                hit = Box2.TraceLine(Planes[i].vec2, Planes[i].vec3, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec3)
+                {
+                    return true;
+                }
+                // 3-1
+                hit = Box2.TraceLine(Planes[i].vec3, Planes[i].vec1, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec1)
+                {
+                    return true;
+                }
+            }
+            // Check if any of the edges of the box ray-trace into the polygon: If so, collide!
+            // Irrelevant for our use case ~ would induce looping
+            return false;
+        }
+
         public Location RayTrace(Location start, Location target, out Location normal)
         {
             double dist = (target - start).LengthSquared();
@@ -57,7 +115,8 @@ namespace mcmtestOpenTK.Shared
                 if (!hit.IsNaN())
                 {
                     double newdist = (hit - start).LengthSquared();
-                    if (newdist < dist && Point(hit))
+                    bool check = Box(new AABB(hit, new Location(-0.01f), new Location(0.01f)));
+                    if (newdist < dist && check)
                     {
                         dist = newdist;
                         final = hit;

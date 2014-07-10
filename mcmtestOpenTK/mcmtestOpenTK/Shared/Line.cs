@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Shared;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers
+namespace mcmtestOpenTK.Shared
 {
     public class Line
     {

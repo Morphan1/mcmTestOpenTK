@@ -48,10 +48,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             model.texture.Bind();
             CollisionModel.Position = Position;
-            RenderPlane[] tris = CollisionModel.CalculateTriangles();
+            Plane[] tris = CollisionModel.CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)
             {
-                tris[i].Draw();
+                new RenderPlane(tris[i]).Draw();
             }
             
             model.Position = Position;
