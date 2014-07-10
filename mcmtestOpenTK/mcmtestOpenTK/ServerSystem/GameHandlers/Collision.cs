@@ -22,7 +22,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             {
                 // Get the current solid in the loop.
                 Entity solid = MainGame.Solids[i];
-                // Find where it here
+                // Find where it hit
                 Location hit = solid.Closest(Start, Target);
                 // NaN = no hit, ignore!
                 if (hit.IsNaN())
