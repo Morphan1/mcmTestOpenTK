@@ -183,6 +183,7 @@
     <Compile Include="Shared\MIConvexHull\Triangulation\TriangulationCell.cs" />
     <Compile Include="Shared\MIConvexHull\Triangulation\VoronoiEdge.cs" />
     <Compile Include="Shared\MIConvexHull\Triangulation\VoronoiMesh.cs" />
+    <Compile Include="Shared\Minkowski.cs" />
     <Compile Include="Shared\Plane.cs" />
     <Compile Include="Client\Networking\PacketsIn\NewdataPacketIn.cs" />
     <Compile Include="Client\Networking\PacketsIn\PlayerPositionPacketIn.cs" />

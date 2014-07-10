@@ -5,6 +5,9 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.Networking;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -86,8 +89,35 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             return false;
         }
 
+        public List<Location> Vertices()
+        {
+            List<Location> toret = new List<Location>(Planes.Count * 3);
+            for (int i = 0; i < Planes.Count; i++)
+            {
+                toret.Add(Planes[i].Internal.vec1);
+                toret.Add(Planes[i].Internal.vec2);
+                toret.Add(Planes[i].Internal.vec3);
+            }
+            return toret;
+        }
+
+        Minkowski mink = null;
+
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
+            AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+            mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
+            Location anormal;
+            Location hit = mink.RayTrace(end - start, out anormal);
+            if (!hit.IsNaN())
+            {
+                SysConsole.Output(OutputType.INFO, "From " + start + " hits " + hit + " with normal " + anormal);
+                hit = start - hit;
+                anormal = -anormal;
+            }
+            normal = anormal;
+            return hit;
+#if USE_BAD_OLD_COLLISION
             Location movevec = end - start;
             Location movnrm = movevec.Normalize();
             AABB Box3 = new AABB(start, Box2.Mins, Box2.Maxs);
@@ -112,6 +142,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             normal = fnormal;
             return final;
+#endif
         }
 
         public override bool Point(Location point)
@@ -184,6 +215,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 Textures[i].Bind();
                 Planes[i].Draw();
+            }
+            if (mink != null)
+            {
+                for (int i = 0; i < mink.Planes.Count; i++)
+                {
+                    new RenderPlane(mink.Planes[i]).Draw();
+                }
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color4(Color4.Green);
+                GL.Vertex3(0f, 0f, 0f);
+                GL.Vertex3(mink.Planes[0].vec1.X, mink.Planes[0].vec1.Y, mink.Planes[0].vec1.Z);
+                GL.End();
             }
         }
     }

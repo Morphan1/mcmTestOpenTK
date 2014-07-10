@@ -5,8 +5,25 @@ using System.Text;
 
 namespace mcmtestOpenTK.Shared
 {
-    public struct Location: IEquatable<Location>
+    public struct Location: IEquatable<Location>, MIConvexHull.IVertex
     {
+        /// <summary>
+        /// The location as an array of doubles, for MIConvexHull.
+        /// </summary>
+        public double[] Position
+        {
+            get
+            {
+                return new double[] {X, Y, Z};
+            }
+            set
+            {
+                X = value[0];
+                Y = value[1];
+                Z = value[2];
+            }
+        }
+
         /// <summary>
         /// A Location of (0, 0, 0).
         /// </summary>
