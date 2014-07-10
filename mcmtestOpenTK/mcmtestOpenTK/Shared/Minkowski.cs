@@ -115,7 +115,7 @@ namespace mcmtestOpenTK.Shared
                 if (!hit.IsNaN())
                 {
                     double newdist = (hit - start).LengthSquared();
-                    bool check = Box(new AABB(hit, new Location(-0.01f), new Location(0.01f)));
+                    bool check = Box(new AABB(hit, new Location(-1f), new Location(1f)));
                     if (newdist < dist && check)
                     {
                         dist = newdist;

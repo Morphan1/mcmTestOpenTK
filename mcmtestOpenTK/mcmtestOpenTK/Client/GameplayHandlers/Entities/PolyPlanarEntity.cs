@@ -16,16 +16,23 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public List<RenderPlane> Planes;
         public List<Texture> Textures;
 
+        public AABB BroadCollideBox;
+
         public PolyPlanarEntity()
             : base(false, EntityType.POLYPLANAR)
         {
             Solid = true;
             Planes = new List<RenderPlane>();
             Textures = new List<Texture>();
+            BroadCollideBox = new AABB(Location.Zero, Location.Zero, Location.Zero);
         }
 
         public override bool Box(AABB Box2)
         {
+            if (!BroadCollideBox.Box(Box2))
+            {
+                return false;
+            }
             // Stupid brute force method
             // TODO: Replace with nice SAT method
             // Check if any points in the box are in the polygon: If so, collide!
@@ -105,6 +112,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
+            return BroadCollideBox.TraceBox(Box2, start, end, out normal);
+#if TEST_NEW_COLLISION
             AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
             mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
             Location anormal;
@@ -117,6 +126,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             normal = anormal;
             return hit;
+#endif
 #if USE_BAD_OLD_COLLISION
             Location movevec = end - start;
             Location movnrm = movevec.Normalize();
@@ -147,6 +157,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override bool Point(Location point)
         {
+            if (!BroadCollideBox.Point(point))
+            {
+                return false;
+            }
             for (int i = 0; i < Planes.Count; i++)
             {
                 int sign = Math.Sign(Planes[i].Internal.Distance(point));
@@ -166,16 +180,28 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     Location.FromBytes(data, i * (36 + 4) + 12), Location.FromBytes(data, i * (36 + 4) + 24))));
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
-            StringBuilder planestr = new StringBuilder(Planes.Count * 36);
+            //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
             for (int i = 0; i < Planes.Count; i++)
             {
-                planestr.Append(Planes[i].Internal.ToString()).Append("_");
+                //planestr.Append(Planes[i].Internal.ToString()).Append("_");
+                BroadCollideBox.Include(Planes[i].Internal.vec1);
+                BroadCollideBox.Include(Planes[i].Internal.vec2);
+                BroadCollideBox.Include(Planes[i].Internal.vec3);
             }
         }
 
         public override Location Closest(Location start, Location target, out Location normal)
         {
-            return CollidePlanes(start, target, out normal);
+            Location nor;
+            if (!BroadCollideBox.TraceLine(start, target, out nor).IsNaN())
+            {
+                return CollidePlanes(start, target, out normal);
+            }
+            else
+            {
+                normal = Location.NaN;
+                return Location.NaN;
+            }
         }
 
 
@@ -220,6 +246,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures[i].Bind();
                 Planes[i].Draw();
             }
+            /*
             if (mink != null)
             {
                 Texture.GetTexture("skylands/wall1").Bind();
@@ -232,7 +259,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 GL.Vertex3(0f, 0f, 0f);
                 GL.Vertex3(mink.Planes[0].vec1.X, mink.Planes[0].vec1.Y, mink.Planes[0].vec1.Z);
                 GL.End();
-            }
+            }*/
         }
     }
 }

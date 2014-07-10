@@ -199,6 +199,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Position = target;
             }*/
+            //Location normal;
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps

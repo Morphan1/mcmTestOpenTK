@@ -18,6 +18,34 @@ namespace mcmtestOpenTK.Shared
             Maxs = _Maxs;
         }
 
+        public void Include(Location point)
+        {
+            if (point.X < Mins.X)
+            {
+                Mins.X = point.X;
+            }
+            if (point.Y < Mins.Y)
+            {
+                Mins.Y = point.Y;
+            }
+            if (point.Z < Mins.Z)
+            {
+                Mins.Z = point.Z;
+            }
+            if (point.X > Maxs.X)
+            {
+                Maxs.X = point.X;
+            }
+            if (point.Y > Maxs.Y)
+            {
+                Maxs.Y = point.Y;
+            }
+            if (point.Z > Maxs.Z)
+            {
+                Maxs.Z = point.Z;
+            }
+        }
+
         public Plane[] CalculatePlanes()
         {
             Plane[] planes = new Plane[6];
