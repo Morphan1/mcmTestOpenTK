@@ -110,9 +110,53 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         Minkowski mink = null;
 
+        Location PreciseCollideBox(AABB Box2, Location Start, Location Target, float scale = 1)
+        {
+            Location advance = Target - Start;
+            double size = advance.Length() * scale;
+            if (size == 0)
+            {
+                return Start;
+            }
+            advance /= size;
+            int ticks = (int)Math.Floor(size);
+            double extra = size - (double)ticks;
+            ticks += 1;
+            Location Nextpoint = Start;
+            Location Jump;
+            for (int i = 0; i < ticks; i++)
+            {
+                Jump = (i == ticks - 1 ? advance * extra : advance);
+                Nextpoint += Jump;
+                if (Box(new AABB(Nextpoint, Mins, Maxs)))
+                {
+                    Nextpoint -= Jump;
+                    break;
+                }
+            }
+            if (scale == 1 || scale == 10 || scale == 100)
+            {
+                return PreciseCollideBox(new AABB(Location.Zero, Mins, Maxs), Nextpoint, Target, scale * 10);
+            }
+            else
+            {
+                return Nextpoint;
+            }
+        }
+
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            return BroadCollideBox.TraceBox(Box2, start, end, out normal);
+            Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
+            if (!hit.IsNaN())
+            {
+                hit = PreciseCollideBox(Box2, hit, end);
+                if (hit == end)
+                {
+                    return Location.NaN;
+                }
+                return hit;
+            }
+            return Location.NaN;
 #if TEST_NEW_COLLISION
             AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
             mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
