@@ -108,7 +108,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
             mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
             Location anormal;
-            Location hit = mink.RayTrace(end - start, out anormal);
+            Location hit = mink.RayTrace(Location.Zero, end - start, out anormal);
             if (!hit.IsNaN())
             {
                 SysConsole.Output(OutputType.INFO, "From " + start + " hits " + hit + " with normal " + anormal);
@@ -200,6 +200,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                     }
                 }
             }
+            if (final == Location.NaN && mink != null)
+            {
+                return mink.RayTrace(start, target, out normal);
+            }
             normal = fnormal;
             return final;
             //return Location.NaN;
@@ -218,6 +222,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (mink != null)
             {
+                Texture.GetTexture("skylands/wall1").Bind();
                 for (int i = 0; i < mink.Planes.Count; i++)
                 {
                     new RenderPlane(mink.Planes[i]).Draw();

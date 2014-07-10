@@ -165,6 +165,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                     return current;
                 }
                 current += Normal * 0.0001f;
+                //return current;
                 if (Normal.X == 1 || Normal.X == -1)
                 {
                     Target.X = current.X;

@@ -45,18 +45,18 @@ namespace mcmtestOpenTK.Shared
             return true;
         }
 
-        public Location RayTrace(Location target, out Location normal)
+        public Location RayTrace(Location start, Location target, out Location normal)
         {
-            double dist = (target).LengthSquared();
+            double dist = (target - start).LengthSquared();
             Location final = Location.NaN;
             Location fnormal = Location.NaN;
             for (int i = 0; i < Planes.Count; i++)
             {
                 Plane plane = Planes[i];
-                Location hit = plane.IntersectLine(Location.Zero, target);
+                Location hit = plane.IntersectLine(start, target);
                 if (!hit.IsNaN())
                 {
-                    double newdist = hit.LengthSquared();
+                    double newdist = (hit - start).LengthSquared();
                     if (newdist < dist && Point(hit))
                     {
                         dist = newdist;
