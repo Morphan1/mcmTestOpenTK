@@ -149,8 +149,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
             if (!hit.IsNaN())
             {
-//#if CHEAT_COLLISION
-#if true
+#if CHEAT_COLLISION
+//#if true
                 hit = PreciseCollideBox(Box2, hit, end);
                 if (hit == end)
                 {
@@ -158,12 +158,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
                 return hit;
 #endif
-#if TEST_NEW_COLLISION
-//#if true
+//#if TEST_NEW_COLLISION
+#if true
                 AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
                 mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
                 Location anormal;
-                Location got = mink.RayTrace(Location.Zero, end - start, out anormal);
+                Location got = mink.RayTrace(Location.Zero, start - end, out anormal);
                 if (!got.IsNaN())
                 {
                     SysConsole.Output(OutputType.INFO, "From " + start + " hits " + got + " with normal " + anormal);
