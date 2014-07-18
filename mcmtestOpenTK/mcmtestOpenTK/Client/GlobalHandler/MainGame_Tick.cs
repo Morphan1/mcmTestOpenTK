@@ -18,6 +18,8 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared.TagHandlers.Common;
+using mcmtestOpenTK.Shared.Game;
+using mcmtestOpenTK.Shared.Util;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

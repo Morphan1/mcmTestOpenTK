@@ -7,6 +7,7 @@ using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
+using mcmtestOpenTK.Shared.Game;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {

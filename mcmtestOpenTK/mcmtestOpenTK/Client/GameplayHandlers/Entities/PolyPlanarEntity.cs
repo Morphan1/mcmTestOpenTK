@@ -10,6 +10,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
+using mcmtestOpenTK.Shared.Game;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
