@@ -284,7 +284,7 @@
     <Compile Include="Shared\CVar.cs" />
     <Compile Include="Shared\CVarSystem.cs" />
     <Compile Include="Shared\Util\DataStream.cs" />
-    <Compile Include="Shared\EntityType.cs" />
+    <Compile Include="Shared\Game\EntityType.cs" />
     <Compile Include="Shared\Util\FileHandler.cs" />
     <Compile Include="Shared\Program.cs" />
     <Compile Include="Shared\SysConsole.cs" />
@@ -299,7 +299,7 @@
     <Compile Include="Shared\Util\UnknownFileException.cs" />
     <Compile Include="Shared\Util\Utilities.cs" />
     <Compile Include="Shared\TextStyle.cs" />
-    <Compile Include="Shared\ErrorHandler.cs" />
+    <Compile Include="Shared\Util\ErrorHandler.cs" />
     <Compile Include="Shared\CommandSystem\AbstractCommand.cs" />
     <Compile Include="Shared\CommandSystem\Commands.cs" />
     <Compile Include="Shared\TagHandlers\Common\ColorTags.cs" />

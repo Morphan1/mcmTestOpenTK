@@ -11,6 +11,7 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
+using mcmtestOpenTK.Shared.Game;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

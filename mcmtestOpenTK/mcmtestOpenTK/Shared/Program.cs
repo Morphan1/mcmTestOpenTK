@@ -18,7 +18,7 @@ namespace mcmtestOpenTK.Shared
         /// <summary>
         /// The name of the game.
         /// </summary>
-        public static string Title = "mcmTestOpenTK v0.01";
+        public static string Title = "mcmTestOpenTK v0.02";
 
         /// <summary>
         /// The process the game is running in.
