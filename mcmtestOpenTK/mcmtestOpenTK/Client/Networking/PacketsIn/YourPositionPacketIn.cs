@@ -10,6 +10,8 @@ using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {

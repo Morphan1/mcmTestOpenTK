@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace mcmtestOpenTK.Shared
+namespace mcmtestOpenTK.Shared.Util
 {
     public class NetworkUtil
     {

@@ -5,6 +5,8 @@ using System.Text;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {

@@ -11,6 +11,8 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.CommandHandlers;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared.TagHandlers;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {

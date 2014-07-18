@@ -10,6 +10,8 @@ using mcmtestOpenTK.Shared.CommandSystem;
 using mcmtestOpenTK.Shared.TagHandlers;
 using System.Drawing;
 using System.Drawing.Imaging;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {

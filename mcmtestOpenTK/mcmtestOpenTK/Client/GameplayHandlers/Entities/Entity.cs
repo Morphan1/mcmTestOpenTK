@@ -6,6 +6,8 @@ using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {

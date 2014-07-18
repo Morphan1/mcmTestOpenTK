@@ -12,6 +12,8 @@ using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GameplayHandlers.Entities;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {

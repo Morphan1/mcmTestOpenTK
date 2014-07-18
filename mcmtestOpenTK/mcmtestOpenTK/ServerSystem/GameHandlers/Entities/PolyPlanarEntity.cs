@@ -5,6 +5,8 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.ServerSystem.NetworkHandlers;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 {
@@ -20,7 +22,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Textures = new List<string>();
         }
 
-        public override bool Box(Shared.Location mins, Shared.Location maxs)
+        public override bool Box(Location mins, Location maxs)
         {
             return base.Box(mins, maxs);
         }

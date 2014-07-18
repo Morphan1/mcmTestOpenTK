@@ -16,6 +16,8 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

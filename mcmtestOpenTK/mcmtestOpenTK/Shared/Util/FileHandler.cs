@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 
-namespace mcmtestOpenTK.Shared
+namespace mcmtestOpenTK.Shared.Util
 {
     public class FileHandler
     {

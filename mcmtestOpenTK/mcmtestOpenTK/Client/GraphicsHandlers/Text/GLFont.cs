@@ -11,6 +11,8 @@ using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.CommonHandlers;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
 {

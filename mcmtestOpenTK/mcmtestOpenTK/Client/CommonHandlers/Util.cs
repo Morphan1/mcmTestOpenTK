@@ -5,6 +5,8 @@ using System.Text;
 using System.Drawing;
 using mcmtestOpenTK.Shared;
 using OpenTK;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.CommonHandlers
 {

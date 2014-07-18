@@ -8,6 +8,8 @@ using OpenTK.Graphics;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

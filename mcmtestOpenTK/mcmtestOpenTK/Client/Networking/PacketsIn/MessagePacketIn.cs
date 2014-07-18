@@ -8,6 +8,8 @@ using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Client.UIHandlers;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.Networking.PacketsIn
 {

@@ -11,6 +11,8 @@ using mcmtestOpenTK.Shared;
 using System.Security.Cryptography;
 using mcmtestOpenTK.Shared.TagHandlers;
 using mcmtestOpenTK.Client.GlobalHandler;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.Networking.OneOffs
 {

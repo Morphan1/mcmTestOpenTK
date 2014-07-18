@@ -7,6 +7,8 @@ using System.Drawing.Imaging;
 using mcmtestOpenTK.Client.CommonHandlers;
 using mcmtestOpenTK.Shared;
 using System.Runtime.InteropServices;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.AudioHandlers
 {

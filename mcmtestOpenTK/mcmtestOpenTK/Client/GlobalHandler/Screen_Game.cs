@@ -18,6 +18,8 @@ using mcmtestOpenTK.Client.CommandHandlers;
 using mcmtestOpenTK.Client.Networking;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {

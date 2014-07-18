@@ -6,6 +6,8 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.Networking.OneOffs;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.NetworkCmds
 {

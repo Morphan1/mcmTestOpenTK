@@ -7,6 +7,8 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.UIHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
 using mcmtestOpenTK.Shared.CommandSystem;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.GraphicsCmds
 {

@@ -7,6 +7,8 @@ using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Client.GraphicsHandlers.Text;
+using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.UIHandlers.Menus
 {
