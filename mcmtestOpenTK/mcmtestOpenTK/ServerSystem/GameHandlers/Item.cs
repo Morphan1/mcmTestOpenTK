@@ -150,6 +150,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             // Description
             Desc.CopyTo(toret, pos);
             pos += Desc.Length;
+            return toret;
         }
     }
 }
