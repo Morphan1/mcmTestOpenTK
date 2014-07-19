@@ -164,9 +164,17 @@
     <Compile Include="Client\CommandHandlers\KeyLockCmds\LeftCommand.cs" />
     <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Inventory.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Items\ItemApple.cs" />
     <Compile Include="Shared\Collision\AABB.cs" />
     <Compile Include="Client\GameplayHandlers\Collision.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\PolyPlanarEntity.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Item.cs" />
+    <Compile Include="ServerSystem\GameHandlers\ItemRegistry.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Items\ItemFood.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Items\ItemIronSword.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Items\ItemSword.cs" />
+    <Compile Include="ServerSystem\GameHandlers\Items\ItemWeapon.cs" />
     <Compile Include="Shared\Util\Line.cs" />
     <Compile Include="Client\GameplayHandlers\RenderPlane.cs" />
     <Compile Include="Shared\MIConvexHull\Constants.cs" />

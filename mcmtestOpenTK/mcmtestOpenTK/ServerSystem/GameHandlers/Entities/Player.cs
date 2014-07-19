@@ -26,6 +26,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
 
+        /// <summary>
+        /// How many slots a default player inventory has.
+        /// </summary>
+        public static int DefaultSlots = 10;
+
         public Player(): base(true, true, EntityType.PLAYER)
         {
             ToSend = new List<byte[]>();
@@ -33,6 +38,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
             Gravity = 100;
+            inventory = new Inventory(DefaultSlots);
         }
 
         /// <summary>
@@ -94,6 +100,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// All keys saved on the user.
         /// </summary>
         public Dictionary<string, string> AccountKeys;
+
+        /// <summary>
+        /// The player's inventory.
+        /// </summary>
+        public Inventory inventory;
 
         public List<string> permissions;
 
