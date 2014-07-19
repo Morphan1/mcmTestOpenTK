@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.Client.Networking;
+using mcmtestOpenTK.Shared.Util;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
@@ -59,6 +61,62 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Description = null;
             Quantity = 1;
             CanThrow = true;
+        }
+
+        /// <summary>
+        /// Converts a byte array to an item.
+        /// </summary>
+        /// <param name="data">The byte array</param>
+        /// <returns>A valid item</returns>
+        public static Item FromBytes(byte[] data)
+        {
+            if (data.Length < 4 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + 4)
+            {
+                return null;
+            }
+            int pos = 0;
+            // Name (int)
+            int name = BitConverter.ToInt32(data, pos);
+            Item toret = new Item(NetStringManager.GetStringForID(name));
+            pos += 4;
+            // Weight (float)
+            toret.Weight = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            // Volume (float)
+            toret.Volume = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            // Texture (int)
+            toret.Texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            if (toret.Texture == "")
+            {
+                toret.Texture = null;
+            }
+            pos += 4;
+            // Shader (int)
+            toret.Shader = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            if (toret.Shader == "")
+            {
+                toret.Shader = null;
+            }
+            pos += 4;
+            // Quantity (int)
+            toret.Volume = BitConverter.ToInt32(data, pos);
+            pos += 4;
+            // CanThrow (byte)
+            toret.CanThrow = data[pos] == 1;
+            pos += 1;
+            // Displayname length (int)
+            int dnameLength = BitConverter.ToInt32(data, pos);
+            pos += 4;
+            // displayname
+            toret.DisplayName = FileHandler.encoding.GetString(data, pos, dnameLength);
+            pos += dnameLength;
+            // Description length (int)
+            int descLength = BitConverter.ToInt32(data, pos);
+            pos += 4;
+            // Description
+            toret.DisplayName = FileHandler.encoding.GetString(data, pos, descLength);
+            return toret;
         }
     }
 }

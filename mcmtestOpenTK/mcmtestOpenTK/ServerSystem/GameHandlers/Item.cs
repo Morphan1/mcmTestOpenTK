@@ -127,10 +127,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             BitConverter.GetBytes(Volume).CopyTo(toret, pos);
             pos += 4;
             // Texture (int)
-            BitConverter.GetBytes(NetStringManager.GetStringID(Texture)).CopyTo(toret, pos);
+            BitConverter.GetBytes(NetStringManager.GetStringID(Texture == null ? "": Texture)).CopyTo(toret, pos);
             pos += 4;
             // Shader (int)
-            BitConverter.GetBytes(NetStringManager.GetStringID(Shader)).CopyTo(toret, pos);
+            BitConverter.GetBytes(NetStringManager.GetStringID(Shader == null ? "": Shader)).CopyTo(toret, pos);
             pos += 4;
             // Quantity (int)
             BitConverter.GetBytes(Quantity).CopyTo(toret, pos);
@@ -149,7 +149,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             pos += 4;
             // Description
             Desc.CopyTo(toret, pos);
-            pos += Desc.Length;
             return toret;
         }
     }
