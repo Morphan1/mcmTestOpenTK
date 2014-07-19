@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers;
+using mcmtestOpenTK.Shared.Util;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers
 {
@@ -59,7 +62,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
 
         public Item(string _name)
         {
-            Name = _name;
+            Name = _name.ToLower();
             DisplayName = null;
             Description = null;
             Quantity = 1;
@@ -70,21 +73,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <summary>
         /// Called when the item is 'used'.
         /// </summary>
-        public virtual void OnUse()
+        public virtual void OnUse(Player player)
         {
         }
 
         /// <summary>
         /// Called when the item is 'clicked'.
         /// </summary>
-        public virtual void OnClick()
+        public virtual void OnClick(Player player)
         {
         }
 
         /// <summary>
         /// Called when the item is thrown.
         /// </summary>
-        public virtual void OnThrow()
+        public virtual void OnThrow(Player player)
         {
         }
 
@@ -96,6 +99,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         {
             Item item = it == null ? it : new Item(Name);
             item.Inheritance = new List<Item>(Inheritance);
+            item.Name = Name;
             item.DisplayName = DisplayName;
             item.Description = Description;
             item.Quantity = Quantity;
@@ -105,6 +109,47 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             item.Weight = Weight;
             item.Volume = Volume;
             return item;
+        }
+
+        public byte[] GetBytes()
+        {
+            byte[] DName = FileHandler.encoding.GetBytes(DisplayName);
+            byte[] Desc = FileHandler.encoding.GetBytes(Description);
+            byte[] toret = new byte[4 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + DName.Length + 4 + Desc.Length];
+            // Name (int)
+            int pos = 0;
+            BitConverter.GetBytes(NetStringManager.GetStringID(Name)).CopyTo(toret, pos);
+            pos += 4;
+            // Weight (float)
+            BitConverter.GetBytes(Weight).CopyTo(toret, pos);
+            pos += 4;
+            // Volume (float)
+            BitConverter.GetBytes(Volume).CopyTo(toret, pos);
+            pos += 4;
+            // Texture (int)
+            BitConverter.GetBytes(NetStringManager.GetStringID(Texture)).CopyTo(toret, pos);
+            pos += 4;
+            // Shader (int)
+            BitConverter.GetBytes(NetStringManager.GetStringID(Shader)).CopyTo(toret, pos);
+            pos += 4;
+            // Quantity (int)
+            BitConverter.GetBytes(Quantity).CopyTo(toret, pos);
+            pos += 4;
+            // CanThrow (byte)
+            toret[pos] = (byte)(CanThrow ? 1 : 0);
+            pos += 1;
+            // Displayname length (int)
+            BitConverter.GetBytes(DName.Length).CopyTo(toret, pos);
+            pos += 4;
+            // displayname
+            DName.CopyTo(toret, pos);
+            pos += DName.Length;
+            // Description length (int)
+            BitConverter.GetBytes(Desc.Length).CopyTo(toret, pos);
+            pos += 4;
+            // Description
+            Desc.CopyTo(toret, pos);
+            pos += Desc.Length;
         }
     }
 }

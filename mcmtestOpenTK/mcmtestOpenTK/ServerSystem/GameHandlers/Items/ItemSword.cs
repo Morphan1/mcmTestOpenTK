@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
 {
@@ -20,6 +21,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
             Damage = 5f;
             LuckyDamage = 1f;
             Luck = 0.5f;
+        }
+
+        public override void OnUse(Player player)
+        {
+            // TODO: Block
+        }
+
+        public override void OnClick(Player player)
+        {
+            // TODO: Swing
         }
     }
 }

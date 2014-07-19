@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 
 namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
 {
@@ -41,6 +42,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
             item.HealthValue = HealthValue;
             item.PoisonChance = PoisonChance;
             return item;
+        }
+
+        public override void OnUse(Player player)
+        {
+            // TODO: Eat
+        }
+
+        public override void OnClick(Player player)
+        {
+            // TODO: Bash
         }
     }
 }
