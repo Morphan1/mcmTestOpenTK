@@ -109,12 +109,20 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             int dnameLength = BitConverter.ToInt32(data, pos);
             pos += 4;
             // displayname
+            if (data.Length < pos + dnameLength)
+            {
+                return null;
+            }
             toret.DisplayName = FileHandler.encoding.GetString(data, pos, dnameLength);
             pos += dnameLength;
             // Description length (int)
             int descLength = BitConverter.ToInt32(data, pos);
             pos += 4;
             // Description
+            if (data.Length < pos + descLength)
+            {
+                return null;
+            }
             toret.DisplayName = FileHandler.encoding.GetString(data, pos, descLength);
             return toret;
         }

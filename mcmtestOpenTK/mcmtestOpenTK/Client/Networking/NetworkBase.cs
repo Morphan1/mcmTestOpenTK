@@ -237,6 +237,7 @@ namespace mcmtestOpenTK.Client.Networking
                     Handler = new PlayerPositionPacketIn(); break;
                 case 14:
                     Handler = new NewdataPacketIn(); break;
+                case 15:
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
