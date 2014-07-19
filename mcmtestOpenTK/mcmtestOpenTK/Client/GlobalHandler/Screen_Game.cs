@@ -20,6 +20,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
+using mcmtestOpenTK.Client.Networking.PacketsIn;
 
 namespace mcmtestOpenTK.Client.GlobalHandler
 {
@@ -75,6 +76,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 "\nVelocity: " + Math.Round(Math.Sqrt(Player.player.Velocity.X * Player.player.Velocity.X + Player.player.Velocity.Y * Player.player.Velocity.Y)) + ", " + Player.player.Velocity.ToString() +
                 "\nNow: " + Utilities.DateTimeToString(DateTime.Now) +
                 "\nPing: " + (int)(NetworkBase.Ping * 1000) +
+                "\nItem: " + GiveItemPacketIn.LastItem +
                 "\nOn Ground: " + Player.player.onground;
 
             if (MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Left) && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left))

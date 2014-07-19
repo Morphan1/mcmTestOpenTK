@@ -11,14 +11,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <summary>
         /// All items registered.
         /// </summary>
-        public Dictionary<string, Item> Items = new Dictionary<string, Item>();
+        public static Dictionary<string, Item> Items = new Dictionary<string, Item>();
 
         /// <summary>
         /// Gets the item corresponding to an item name.
         /// </summary>
         /// <param name="name">The name of the item</param>
         /// <returns>A valid item, or null if none</returns>
-        public Item GetItemFor(string name)
+        public static Item GetItemFor(string name)
         {
             Item item;
             if (Items.TryGetValue(name.ToLower(), out item))
@@ -32,7 +32,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// Registers a new item type.
         /// </summary>
         /// <param name="item">The item type to register</param>
-        public void Register(Item item)
+        public static void Register(Item item)
         {
             Items.Add(item.Name.ToLower(), item);
         }
@@ -40,7 +40,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <summary>
         /// Prepares the system, registering all known item types.
         /// </summary>
-        public void Init()
+        public static void Init()
         {
             Register(new ItemSword());
             Register(new ItemIronSword());

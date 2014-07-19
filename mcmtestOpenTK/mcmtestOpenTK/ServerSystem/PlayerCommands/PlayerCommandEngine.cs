@@ -106,6 +106,7 @@ namespace mcmtestOpenTK.ServerSystem.PlayerCommands
             RegisteredCommands = new Dictionary<string, PlayerAbstractCommand>();
             RegisteredCommandsList = new List<PlayerAbstractCommand>();
             RegisterCommand(new BulletCommand());
+            RegisterCommand(new ItemCommand());
             RegisterCommand(new SayCommand());
             RegisterCommand(new NoclipCommand());
         }

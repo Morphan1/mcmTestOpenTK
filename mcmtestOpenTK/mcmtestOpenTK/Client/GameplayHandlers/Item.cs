@@ -63,6 +63,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             CanThrow = true;
         }
 
+        public override string ToString()
+        {
+            return "ITEM:{name:" + Name + ",weight:" + Weight + ",volume:" + Volume + ",quantity:" + Quantity
+                + ",texture:" + Texture + ",shader:" + Shader + ",displayname:" + DisplayName + ",description:" + Description + "}";
+        }
+
         /// <summary>
         /// Converts a byte array to an item.
         /// </summary>

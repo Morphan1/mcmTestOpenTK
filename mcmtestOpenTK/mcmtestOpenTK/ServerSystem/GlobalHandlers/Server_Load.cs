@@ -33,6 +33,8 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
             PlayerCommandEngine.Init();
             SysConsole.Output(OutputType.INIT, "Preparing console listener...");
             ConsoleHandler.Init();
+            SysConsole.Output(OutputType.INIT, "Preparing item system...");
+            ItemRegistry.Init();
             SysConsole.Output(OutputType.INIT, "Running default config...");
             if (FileHandler.Exists("serverconfig.cfg"))
             {

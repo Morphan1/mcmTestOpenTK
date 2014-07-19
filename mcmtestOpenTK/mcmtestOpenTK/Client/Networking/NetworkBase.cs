@@ -238,6 +238,7 @@ namespace mcmtestOpenTK.Client.Networking
                 case 14:
                     Handler = new NewdataPacketIn(); break;
                 case 15:
+                    Handler = new GiveItemPacketIn(); break;
                 case 255:
                     Handler = new DisconnectPacketIn(); break;
                 default:
