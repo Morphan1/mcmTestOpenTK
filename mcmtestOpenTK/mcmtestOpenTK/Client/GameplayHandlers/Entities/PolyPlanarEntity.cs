@@ -110,7 +110,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
                 if (!toret.Contains(Planes[i].Internal.vec2))
                 {
-                toret.Add(Planes[i].Internal.vec2);
+                    toret.Add(Planes[i].Internal.vec2);
                 }
                 if (!toret.Contains(Planes[i].Internal.vec3))
                 {
@@ -122,56 +122,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         Minkowski mink = null;
 
-        Location PreciseCollideBox(AABB Box2, Location Start, Location Target, float scale = 1)
-        {
-            Location advance = Target - Start;
-            double size = advance.Length() * scale;
-            if (size == 0)
-            {
-                return Start;
-            }
-            advance /= size;
-            int ticks = (int)Math.Floor(size);
-            double extra = size - (double)ticks;
-            ticks += 1;
-            Location Nextpoint = Start;
-            Location Jump;
-            for (int i = 0; i < ticks; i++)
-            {
-                Jump = (i == ticks - 1 ? advance * extra : advance);
-                Nextpoint += Jump;
-                if (Box(new AABB(Nextpoint, Mins, Maxs)))
-                {
-                    Nextpoint -= Jump;
-                    break;
-                }
-            }
-            if (scale == 1 || scale == 10 || scale == 100)
-            {
-                return PreciseCollideBox(new AABB(Location.Zero, Mins, Maxs), Nextpoint, Target, scale * 10);
-            }
-            else
-            {
-                return Nextpoint;
-            }
-        }
-
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
             if (!hit.IsNaN())
             {
-#if CHEAT_COLLISION
-//#if true
-                hit = PreciseCollideBox(Box2, hit, end);
-                if (hit == end)
-                {
-                    return Location.NaN;
-                }
-                return hit;
-#endif
-//#if TEST_NEW_COLLISION
-#if true
                 AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
                 mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
                 Location anormal;
@@ -183,33 +138,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
                 normal = anormal;
                 return got;
-#endif
-#if USE_BAD_OLD_COLLISION
-            Location movevec = end - start;
-            Location movnrm = movevec.Normalize();
-            AABB Box3 = new AABB(start, Box2.Mins, Box2.Maxs);
-            Location[] bpoints = Box3.BoxPoints();
-            Location final = Location.NaN;
-            Location fnormal = Location.NaN;
-            double dist = movevec.Length();
-            for (int i = 0; i < bpoints.Length; i++)
-            {
-                Location cnormal;
-                Location hit = Closest(bpoints[i], bpoints[i] + movevec, out cnormal);
-                if (!hit.IsNaN())
-                {
-                    double newdist = (hit - start).Length();
-                    if (newdist < dist/* && Box(new AABB(Location.Zero, Box3.Mins + movnrm * newdist, Box3.Maxs + movnrm * newdist))*/)
-                    {
-                        dist = newdist;
-                        final = hit;
-                        fnormal = cnormal;
-                    }
-                }
-            }
-            normal = fnormal;
-            return final;
-#endif
             }
             return Location.NaN;
         }
@@ -222,7 +150,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             for (int i = 0; i < Planes.Count; i++)
             {
-                int sign = Math.Sign(Planes[i].Internal.Distance(point));
+                double dist = Planes[i].Internal.Distance(point);
+                int sign = double.IsNaN(dist) ? 0: Math.Sign(dist);
                 if (sign == 1)
                 {
                     return false;
