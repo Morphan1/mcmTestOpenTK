@@ -144,18 +144,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Maxs = new Location(1.5f, 1.5f, 5);
             }
-            else if (!ClientCVar.g_noclip.ValueB)
-            {
-                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
-                {
-                    Maxs = new Location(1.5f, 1.5f, 8);
-                }
-                else
-                {
-                    down = true;
-                    Maxs = new Location(1.5f, 1.5f, 5);
-                }
-            }
             if (ClientCVar.g_noclip.ValueB)
             {
                 if (movement.LengthSquared() > 0)
@@ -195,6 +183,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Velocity.X += ((movement.X * MoveSpeed * (slow || down ? 0.5: 1)) - Velocity.X) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Y += ((movement.Y * MoveSpeed * (slow || down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
+            }
+            if (!down)
+            {
+                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
+                {
+                    Maxs = new Location(1.5f, 1.5f, 8);
+                }
+                else
+                {
+                    Maxs = new Location(1.5f, 1.5f, 5);
+                    down = true;
+                }
             }
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
