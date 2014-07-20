@@ -162,11 +162,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public void Draw(Location loc, Location rot, Location scale)
         {
             GL.PushMatrix();
+            GL.Translate(loc.X, loc.Y, loc.Z);
             GL.Scale(scale.X, scale.Y, scale.Z);
             GL.Rotate(rot.X, 0, 0, 1);
             GL.Rotate(rot.Y, 0, 1, 0);
             GL.Rotate(rot.Z, 1, 0, 0);
-            GL.Translate(loc.X, loc.Y, loc.Z);
             for (int i = 0; i < Meshes.Count; i++)
             {
                 for (int x = 0; x < Meshes[i].Faces.Count; x++)

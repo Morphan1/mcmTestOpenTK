@@ -11,6 +11,7 @@ using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
 using mcmtestOpenTK.Shared.Game;
+using mcmtestOpenTK.Client.GlobalHandler;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
@@ -232,6 +233,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
         }
 
+        double yaw = 0;
+        double scale = 1;
+        int scalesign = 1;
         public override void Draw()
         {
             for (int i = 0; i < Planes.Count; i++)
@@ -239,7 +243,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures[i].Bind();
                 SimpleRenderer.RenderPlane(Planes[i]);
             }
-            model.Draw(Position, Location.Zero, Location.One);
+            yaw += MainGame.GraphicsDelta * 5;
+            scale += MainGame.GraphicsDelta * scalesign;
+            if (scale > 2 || scale < 1)
+            {
+                scalesign *= -1;
+            }
+            model.Draw(Position, new Location(yaw, 0, 0), new Location(scale));
             /*
             if (mink != null)
             {
