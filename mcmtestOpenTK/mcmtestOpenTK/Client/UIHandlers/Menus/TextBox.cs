@@ -203,7 +203,15 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
             if (selected)
             {
                 // Grab and clear the keyboard state
-                KeyHandlerState KeyState = KeyHandler.GetKBState();
+                KeyHandlerState KeyState;
+                if (KeyHandler.IsValid())
+                {
+                    KeyState = KeyHandler.GetKBState();
+                }
+                else
+                {
+                    KeyState = new KeyHandlerState();
+                }
                 // Handle backspaces presses
                 if (KeyState.InitBS > 0)
                 {

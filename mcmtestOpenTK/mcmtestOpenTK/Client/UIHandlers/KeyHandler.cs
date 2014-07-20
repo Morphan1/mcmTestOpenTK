@@ -444,5 +444,21 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// The number of times the RIGHT arrow was pressed minus the number of times the LEFT arrow was pressed.
         /// </summary>
         public int LeftRights = 0;
+
+        /// <summary>
+        /// Defaults the keyboard state.
+        /// </summary>
+        public void Clear()
+        {
+            Pages = 0;
+            Scrolls = 0;
+            LeftRights = 0;
+            TogglerPressed = false;
+            CopyPressed = false;
+            ControlDown = false;
+            EndDelete = 0;
+            InitBS = 0;
+            KeyboardString = "";
+        }
     }
 }

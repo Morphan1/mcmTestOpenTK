@@ -120,6 +120,13 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
                 && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left);
             bool pressedright = MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Right)
                 && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Right);
+            if (!KeyHandler.IsValid())
+            {
+                mx = 0;
+                my = 0;
+                pressedleft = false;
+                pressedright = false;
+            }
             if (Notice != null)
             {
                 TickItem(NoticeLabel, mx, my, pressedleft, pressedright);
