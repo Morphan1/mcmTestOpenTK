@@ -115,19 +115,18 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                         currentMesh.Vertices.Add(new Location(Utilities.StringToDouble(args[1]),
                             Utilities.StringToDouble(args[2]), Utilities.StringToDouble(args[3])));
                         break;
+                    case "vt":
+                        currentMesh.TextureCoords.Add(new Location(Utilities.StringToDouble(args[1]),
+                            Utilities.StringToDouble(args[2]), 0));
+                        break;
                     case "f":
-                        if (args.Length == 4)
-                        {
-                            currentMesh.Faces.Add(new ModelFace(Utilities.StringToInt(args[1]),
-                                Utilities.StringToInt(args[2]), Utilities.StringToInt(args[3])));
-                        }
-                        else
-                        {
-                            currentMesh.Faces.Add(new ModelFace(Utilities.StringToInt(args[1]),
-                                Utilities.StringToInt(args[2]), Utilities.StringToInt(args[3])));
-                            currentMesh.Faces.Add(new ModelFace(Utilities.StringToInt(args[3]),
-                                Utilities.StringToInt(args[4]), Utilities.StringToInt(args[1])));
-                        }
+                        string[] a1s = args[1].Split('/');
+                        string[] a2s = args[2].Split('/');
+                        string[] a3s = args[3].Split('/');
+                        currentMesh.Faces.Add(new ModelFace(Utilities.StringToInt(a1s[0]),
+                            Utilities.StringToInt(a2s[0]), Utilities.StringToInt(a3s[0]),
+                            Utilities.StringToInt(a1s[1]), Utilities.StringToInt(a2s[1]),
+                            Utilities.StringToInt(a3s[1])));
                         break;
                     default:
                         SysConsole.Output(OutputType.WARNING, "Invalid model key '" + args[0] + "'");
@@ -169,11 +168,23 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.Rotate(rot.Z, 1, 0, 0);
             for (int i = 0; i < Meshes.Count; i++)
             {
+                GL.Begin(PrimitiveType.Triangles);
                 for (int x = 0; x < Meshes[i].Faces.Count; x++)
                 {
-                    SimpleRenderer.RenderCustomPlane(Meshes[i].Vertices[Meshes[i].Faces[x].L1 - 1],
-                        Meshes[i].Vertices[Meshes[i].Faces[x].L2 - 1], Meshes[i].Vertices[Meshes[i].Faces[x].L3 - 1]);
+                    Location vec1 = Meshes[i].Vertices[Meshes[i].Faces[x].L1 - 1];
+                    Location tex1 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T1 - 1];
+                    GL.TexCoord2(tex1.X, tex1.Y);
+                    GL.Vertex3(vec1.X, vec1.Y, vec1.Z);
+                    Location vec2 = Meshes[i].Vertices[Meshes[i].Faces[x].L2 - 1];
+                    Location tex2 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T2 - 1];
+                    GL.TexCoord2(tex2.X, tex2.Y);
+                    GL.Vertex3(vec2.X, vec2.Y, vec2.Z);
+                    Location vec3 = Meshes[i].Vertices[Meshes[i].Faces[x].L3 - 1];
+                    Location tex3 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T3 - 1];
+                    GL.TexCoord2(tex3.X, tex3.Y);
+                    GL.Vertex3(vec3.X, vec3.Y, vec3.Z);
                 }
+                GL.End();
             }
             GL.PopMatrix();
         }
@@ -190,6 +201,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         {
             Name = _name;
             Vertices = new List<Location>();
+            TextureCoords = new List<Location>();
             Faces = new List<ModelFace>();
         }
 
@@ -199,6 +211,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public List<Location> Vertices;
 
         /// <summary>
+        /// Alll the mesh's texture coords.
+        /// </summary>
+        public List<Location> TextureCoords;
+
+        /// <summary>
         /// All the mesh's faces.
         /// </summary>
         public List<ModelFace> Faces;
@@ -206,15 +223,22 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 
     public class ModelFace
     {
-        public ModelFace(int _l1, int _l2, int _l3)
+        public ModelFace(int _l1, int _l2, int _l3, int _t1, int _t2, int _t3)
         {
             L1 = _l1;
             L2 = _l2;
             L3 = _l3;
+            T1 = _t1;
+            T2 = _t2;
+            T3 = _t3;
         }
 
         public int L1;
         public int L2;
         public int L3;
+
+        public int T1;
+        public int T2;
+        public int T3;
     }
 }
