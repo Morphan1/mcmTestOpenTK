@@ -114,7 +114,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                     if (!ent.HandleVariable(varname, vardatastr))
                     {
                         ErrorHandler.HandleError("Error loading map '" + map +
-                            "': invalid variable '" + vardatastr + "' for entity type '" + type + "'.");
+                            "': invalid variable '" + varname + "' for entity type '" + type + "'.");
                     }
                     varname = "";
                     invar = false;

@@ -83,13 +83,13 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             {
                 Location normal;
                 Location hit = Collision.LineBox(Player.player.Position + new Location(0, 0, 6),
-                    Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200), new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8f), out normal);
+                    Player.player.Position + new Location(0, 0, 6) + (MainGame.Forward * 200), new Location(-0.5f), new Location(-0.5f), out normal);
                 SysConsole.Output(OutputType.INFO, "Hit at " + hit);
                 MainGame.SpawnEntity(new Bullet()
                 {
-                    Position = hit + (normal.IsNaN() ? Location.Zero: normal),
+                    Position = hit,
                     LifeTicks = 60 * 20,
-                    start = Player.player.Position
+                    start = hit + (normal.IsNaN() ? Location.Zero : normal * 20)
                 });
             }
         }
