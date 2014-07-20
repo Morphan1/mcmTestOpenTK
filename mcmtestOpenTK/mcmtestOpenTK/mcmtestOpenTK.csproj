@@ -165,6 +165,7 @@
     <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Item.cs" />
+    <Compile Include="Client\GraphicsHandlers\SimpleRenderer.cs" />
     <Compile Include="Client\Networking\PacketsIn\GiveItemPacketIn.cs" />
     <Compile Include="ServerSystem\GameHandlers\Inventory.cs" />
     <Compile Include="ServerSystem\GameHandlers\Items\ItemApple.cs" />
@@ -180,7 +181,6 @@
     <Compile Include="ServerSystem\GameHandlers\Items\ItemSword.cs" />
     <Compile Include="ServerSystem\GameHandlers\Items\ItemWeapon.cs" />
     <Compile Include="Shared\Util\Line.cs" />
-    <Compile Include="Client\GameplayHandlers\RenderPlane.cs" />
     <Compile Include="Shared\Collision\MIConvexHull\Constants.cs" />
     <Compile Include="Shared\Collision\MIConvexHull\ConvexHull\Collections.cs" />
     <Compile Include="Shared\Collision\MIConvexHull\ConvexHull\ConvexFace.cs" />

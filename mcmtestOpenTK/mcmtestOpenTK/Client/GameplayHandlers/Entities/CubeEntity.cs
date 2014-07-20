@@ -17,15 +17,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
     {
         public AABB CollisionModel;
 
-        /// <summary>
-        /// The render model this cube uses.
-        /// </summary>
-        public CubeModel model;
+        public Texture texture;
+        public Shader shader = null;
+        public float Texture_HScale;
+        public float Texture_VScale;
+        public float Texture_HShift;
+        public float Texture_VShift;
 
         public CubeEntity()
             : base(false, EntityType.CUBE)
         {
-            model = new CubeModel(Position, Location.One, null);
             Mins = new Location(0);
             Solid = true;
             CollisionModel = new AABB(Position, Mins, Maxs);
@@ -41,24 +42,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            if (model.shader != null)
+            if (shader != null)
             {
-                model.shader.Bind();
+                shader.Bind();
             }
             else
             {
                 MainGame.GeneralShader.Bind();
             }
-            model.texture.Bind();
+            texture.Bind();
             CollisionModel.Position = Position;
             Plane[] tris = CollisionModel.CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)
             {
-                new RenderPlane(tris[i]).Draw();
+                SimpleRenderer.RenderPlane(tris[i]);
             }
-            
-            model.Position = Position;
-           // model.Draw();
         }
 
         public override void ReadBytes(byte[] data)
@@ -68,19 +66,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 throw new ArgumentException("Binary network data for CUBE entity is invalid!");
             }
             int pos = 0;
-            model.Scale = Location.FromBytes(data, pos);
+            Maxs = Location.FromBytes(data, pos);
             pos += 12;
-            Maxs = model.Scale;
-            model.Texture_HScale = BitConverter.ToSingle(data, pos);
+            Texture_HScale = BitConverter.ToSingle(data, pos);
             pos += 4;
-            model.Texture_VScale = BitConverter.ToSingle(data, pos);
+            Texture_VScale = BitConverter.ToSingle(data, pos);
             pos += 4;
-            model.Texture_HShift = BitConverter.ToSingle(data, pos);
+            Texture_HShift = BitConverter.ToSingle(data, pos);
             pos += 4;
-            model.Texture_VShift = BitConverter.ToSingle(data, pos);
+            Texture_VShift = BitConverter.ToSingle(data, pos);
             pos += 4;
-            string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
-            model.texture = Texture.GetTexture(texture);
+            string texturestr = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            texture = Texture.GetTexture(texturestr);
             pos += 4;
             CollisionModel.Position = Position;
             CollisionModel.Mins = Mins;

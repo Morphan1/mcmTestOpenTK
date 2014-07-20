@@ -16,7 +16,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
     public class PolyPlanarEntity : Entity
     {
-        public List<RenderPlane> Planes;
+        public List<Plane> Planes;
         public List<Texture> Textures;
 
         public AABB BroadCollideBox;
@@ -25,7 +25,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             : base(false, EntityType.POLYPLANAR)
         {
             Solid = true;
-            Planes = new List<RenderPlane>();
+            Planes = new List<Plane>();
             Textures = new List<Texture>();
             BroadCollideBox = new AABB(Location.Zero, Location.Zero, Location.Zero);
         }
@@ -50,15 +50,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             // Check if any points on the triangles are inside the box: If so, collide!
             for (int i = 0; i < Planes.Count; i++)
             {
-                if (Box2.Point(Planes[i].Internal.vec1))
+                if (Box2.Point(Planes[i].vec1))
                 {
                     return true;
                 }
-                if (Box2.Point(Planes[i].Internal.vec2))
+                if (Box2.Point(Planes[i].vec2))
                 {
                     return true;
                 }
-                if (Box2.Point(Planes[i].Internal.vec3))
+                if (Box2.Point(Planes[i].vec3))
                 {
                     return true;
                 }
@@ -69,20 +69,20 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             for (int i = 0; i < Planes.Count; i++)
             {
                 // 1-2
-                hit = Box2.TraceLine(Planes[i].Internal.vec1, Planes[i].Internal.vec2, out normal);
-                if (!hit.IsNaN() && hit != Planes[i].Internal.vec2)
+                hit = Box2.TraceLine(Planes[i].vec1, Planes[i].vec2, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec2)
                 {
                     return true;
                 }
                 // 2-3
-                hit = Box2.TraceLine(Planes[i].Internal.vec2, Planes[i].Internal.vec3, out normal);
-                if (!hit.IsNaN() && hit != Planes[i].Internal.vec3)
+                hit = Box2.TraceLine(Planes[i].vec2, Planes[i].vec3, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec3)
                 {
                     return true;
                 }
                 // 3-1
-                hit = Box2.TraceLine(Planes[i].Internal.vec3, Planes[i].Internal.vec1, out normal);
-                if (!hit.IsNaN() && hit != Planes[i].Internal.vec1)
+                hit = Box2.TraceLine(Planes[i].vec3, Planes[i].vec1, out normal);
+                if (!hit.IsNaN() && hit != Planes[i].vec1)
                 {
                     return true;
                 }
@@ -104,17 +104,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             List<Location> toret = new List<Location>(Planes.Count * 3);
             for (int i = 0; i < Planes.Count; i++)
             {
-                if (!toret.Contains(Planes[i].Internal.vec1))
+                if (!toret.Contains(Planes[i].vec1))
                 {
-                    toret.Add(Planes[i].Internal.vec1);
+                    toret.Add(Planes[i].vec1);
                 }
-                if (!toret.Contains(Planes[i].Internal.vec2))
+                if (!toret.Contains(Planes[i].vec2))
                 {
-                    toret.Add(Planes[i].Internal.vec2);
+                    toret.Add(Planes[i].vec2);
                 }
-                if (!toret.Contains(Planes[i].Internal.vec3))
+                if (!toret.Contains(Planes[i].vec3))
                 {
-                    toret.Add(Planes[i].Internal.vec3);
+                    toret.Add(Planes[i].vec3);
                 }
             }
             return toret;
@@ -150,7 +150,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             for (int i = 0; i < Planes.Count; i++)
             {
-                double dist = Planes[i].Internal.Distance(point);
+                double dist = Planes[i].Distance(point);
                 int sign = double.IsNaN(dist) ? 0: Math.Sign(dist);
                 if (sign == 1)
                 {
@@ -164,18 +164,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             for (int i = 0; i < data.Length / (36 + 4); i++)
             {
-                Planes.Add(new RenderPlane(new Plane(Position + Location.FromBytes(data, i * (36 + 4)),
-                    Position + Location.FromBytes(data, i * (36 + 4) + 12), Position + Location.FromBytes(data, i * (36 + 4) + 24))));
+                Planes.Add(new Plane(Position + Location.FromBytes(data, i * (36 + 4)),
+                    Position + Location.FromBytes(data, i * (36 + 4) + 12), Position + Location.FromBytes(data, i * (36 + 4) + 24)));
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
-            BroadCollideBox.Position = Planes[0].Internal.vec1;
+            BroadCollideBox.Position = Planes[0].vec1;
             for (int i = 0; i < Planes.Count; i++)
             {
-                //planestr.Append(Planes[i].Internal.ToString()).Append("_");
-                BroadCollideBox.Include(Planes[i].Internal.vec1);
-                BroadCollideBox.Include(Planes[i].Internal.vec2);
-                BroadCollideBox.Include(Planes[i].Internal.vec3);
+                //planestr.Append(Planes[i].ToString()).Append("_");
+                BroadCollideBox.Include(Planes[i].vec1);
+                BroadCollideBox.Include(Planes[i].vec2);
+                BroadCollideBox.Include(Planes[i].vec3);
             }
         }
 
@@ -201,7 +201,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Location fnormal = Location.NaN;
             for (int i = 0; i < Planes.Count; i++)
             {
-                Plane plane = Planes[i].Internal;
+                Plane plane = Planes[i];
                 Location hit = plane.IntersectLine(start, target);
                 if (!hit.IsNaN())
                 {
@@ -233,7 +233,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             for (int i = 0; i < Planes.Count; i++)
             {
                 Textures[i].Bind();
-                Planes[i].Draw();
+                SimpleRenderer.RenderPlane(Planes[i]);
             }
             /*
             if (mink != null)

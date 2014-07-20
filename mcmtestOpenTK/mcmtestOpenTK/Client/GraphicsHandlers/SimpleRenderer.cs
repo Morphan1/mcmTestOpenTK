@@ -2,37 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.GraphicsHandlers;
+using mcmtestOpenTK.Shared.Collision;
+using mcmtestOpenTK.Shared.Util;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using mcmtestOpenTK.Shared.Util;
-using mcmtestOpenTK.Shared.Collision;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers
+namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
-    public class RenderPlane: Renderable
+    public class SimpleRenderer
     {
-        public Plane Internal;
-
-        public Texture texture = null;
-
-        public RenderPlane(Plane _internal)
+        /// <summary>
+        /// Renders a plane.
+        /// </summary>
+        /// <param name="plane">The plane to render</param>
+        public static void RenderPlane(Plane plane)
         {
-            Internal = _internal;
-        }
-
-        public override void Draw()
-        {
-            if (texture != null)
-            {
-                texture.Bind();
-            }
-            Location vec1 = Internal.vec1;
-            Location vec2 = Internal.vec2;
-            Location vec3 = Internal.vec3;
-            Location Normal = Internal.Normal;
+            Location vec1 = plane.vec1;
+            Location vec2 = plane.vec2;
+            Location vec3 = plane.vec3;
+            Location Normal = plane.Normal;
             GL.Begin(PrimitiveType.Triangles);
             GL.TexCoord2(0, 0);
             GL.Vertex3(vec1.X, vec1.Y, vec1.Z);
