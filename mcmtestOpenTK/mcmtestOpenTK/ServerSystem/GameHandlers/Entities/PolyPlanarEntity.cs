@@ -61,10 +61,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             else if (varname == "texture")
             {
-                for (int i = 0; i < 12; i++)
-                {
-                    Textures.Add(vardata);
-                }
+                string[] textures = vardata.Split('|');
+                Textures.AddRange(textures);
             }
             else
             {
