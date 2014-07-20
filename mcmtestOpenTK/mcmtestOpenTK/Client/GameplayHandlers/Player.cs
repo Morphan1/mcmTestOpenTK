@@ -144,7 +144,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Maxs = new Location(1.5f, 1.5f, 5);
             }
-            else
+            else if (!ClientCVar.g_noclip.ValueB)
             {
                 if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
                 {
@@ -153,6 +153,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 else
                 {
                     down = true;
+                    Maxs = new Location(1.5f, 1.5f, 5);
                 }
             }
             if (ClientCVar.g_noclip.ValueB)
@@ -204,6 +205,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location normal;
             //Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Position = Collision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs, out normal);
+            if (!normal.IsNaN())
+            {
+                SysConsole.Output(OutputType.INFO, "Normal: " + normal);
+                Position += normal * 0.01f;
+            }
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
             if (Position != target && false) // If we missed the target

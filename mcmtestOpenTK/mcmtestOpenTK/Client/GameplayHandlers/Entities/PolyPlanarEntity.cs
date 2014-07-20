@@ -135,6 +135,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 {
                     got = start - got;
                     anormal = -anormal;
+                    SysConsole.Output(OutputType.INFO, "Collide at " + got + " with normal " + anormal);
                 }
                 normal = anormal;
                 return got;
