@@ -21,6 +21,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public AABB BroadCollideBox;
 
+        Model model;
+
         public PolyPlanarEntity()
             : base(false, EntityType.POLYPLANAR)
         {
@@ -28,6 +30,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Planes = new List<Plane>();
             Textures = new List<Texture>();
             BroadCollideBox = new AABB(Location.Zero, Location.Zero, Location.Zero);
+            model = Model.GetModel("test");
         }
 
         public override bool Box(AABB Box2)
@@ -236,6 +239,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures[i].Bind();
                 SimpleRenderer.RenderPlane(Planes[i]);
             }
+            model.Draw(Position, Location.Zero, Location.One);
             /*
             if (mink != null)
             {

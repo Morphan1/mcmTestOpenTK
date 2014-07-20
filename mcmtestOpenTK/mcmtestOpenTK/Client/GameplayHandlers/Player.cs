@@ -207,7 +207,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Position = Collision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs, out normal);
             if (!normal.IsNaN())
             {
-                SysConsole.Output(OutputType.INFO, "Normal: " + normal);
                 Position += normal * 0.01f;
             }
             Velocity = (Position - ploc) / MyDelta;

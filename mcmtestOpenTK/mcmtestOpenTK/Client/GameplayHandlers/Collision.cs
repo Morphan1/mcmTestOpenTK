@@ -139,7 +139,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         distance = newdist;
                         fnormal = normal;
                         final = hit;
-                        SysConsole.Output(OutputType.INFO, "TC AT " + final + " n:" + normal);
                     }
                 }
             }

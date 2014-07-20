@@ -165,6 +165,7 @@
     <Compile Include="Client\CommandHandlers\KeyLockCmds\ForwardCommand.cs" />
     <Compile Include="Client\CommandHandlers\NetworkCmds\ReconnectCommand.cs" />
     <Compile Include="Client\GameplayHandlers\Item.cs" />
+    <Compile Include="Client\GraphicsHandlers\Model.cs" />
     <Compile Include="Client\GraphicsHandlers\SimpleRenderer.cs" />
     <Compile Include="Client\Networking\PacketsIn\GiveItemPacketIn.cs" />
     <Compile Include="ServerSystem\GameHandlers\Inventory.cs" />

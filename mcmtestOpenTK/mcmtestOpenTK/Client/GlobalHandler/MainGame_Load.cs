@@ -64,6 +64,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 // Prepare the texture system
                 SysConsole.Output(OutputType.INIT, "Preparing textures...");
                 Texture.InitTextureSystem();
+                SysConsole.Output(OutputType.INIT, "Preparing models...");
+                Model.Init();
                 // Handle some internal CVar-based graphics settings
                 SysConsole.Output(OutputType.INIT, "Preparing general graphics...");
                 ReloadGraphics();
