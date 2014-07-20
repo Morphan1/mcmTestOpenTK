@@ -42,7 +42,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// </summary>
         public static void Init()
         {
-            Register(new ItemSword());
             Register(new ItemIronSword());
             Register(new ItemApple());
         }

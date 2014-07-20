@@ -8,7 +8,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
 {
     public class ItemSword: ItemWeapon
     {
-        public ItemSword(): base("sword")
+        public ItemSword(string name): base(name)
         {
             Texture = "items/weapons/iron_sword";
             Shader = null;

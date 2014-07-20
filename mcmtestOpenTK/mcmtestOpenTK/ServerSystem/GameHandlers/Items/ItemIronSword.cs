@@ -7,10 +7,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
 {
     public class ItemIronSword: ItemSword
     {
-        public ItemIronSword()
-            : base()
+        public ItemIronSword(string name = "iron_sword")
+            : base(name)
         {
-            Name = "iron_sword";
             Texture = "items/weapons/iron_sword";
             DisplayName = "Iron Sword";
             Description = "A common iron sword, swings for 8-10 damage.";

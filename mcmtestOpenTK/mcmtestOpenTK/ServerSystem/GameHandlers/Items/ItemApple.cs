@@ -7,8 +7,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
 {
     public class ItemApple: ItemFood
     {
-        public ItemApple()
-            : base("apple")
+        public ItemApple(string name = "apple")
+            : base(name)
         {
             Texture = "items/food/apple";
             Shader = null;

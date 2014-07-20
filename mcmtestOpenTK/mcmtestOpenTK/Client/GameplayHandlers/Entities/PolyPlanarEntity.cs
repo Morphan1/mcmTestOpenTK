@@ -104,9 +104,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             List<Location> toret = new List<Location>(Planes.Count * 3);
             for (int i = 0; i < Planes.Count; i++)
             {
-                toret.Add(Planes[i].Internal.vec1);
+                if (!toret.Contains(Planes[i].Internal.vec1))
+                {
+                    toret.Add(Planes[i].Internal.vec1);
+                }
+                if (!toret.Contains(Planes[i].Internal.vec2))
+                {
                 toret.Add(Planes[i].Internal.vec2);
-                toret.Add(Planes[i].Internal.vec3);
+                }
+                if (!toret.Contains(Planes[i].Internal.vec3))
+                {
+                    toret.Add(Planes[i].Internal.vec3);
+                }
             }
             return toret;
         }
@@ -169,7 +178,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Location got = mink.RayTrace(Location.Zero, start - end, out anormal);
                 if (!got.IsNaN())
                 {
-                    SysConsole.Output(OutputType.INFO, "From " + start + " hits " + got + " with normal " + anormal);
                     got = start - got;
                     anormal = -anormal;
                 }
@@ -232,6 +240,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
+            BroadCollideBox.Position = Planes[0].Internal.vec1;
             for (int i = 0; i < Planes.Count; i++)
             {
                 //planestr.Append(Planes[i].Internal.ToString()).Append("_");
