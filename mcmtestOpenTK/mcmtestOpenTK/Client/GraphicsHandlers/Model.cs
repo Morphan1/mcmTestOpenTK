@@ -117,7 +117,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                         break;
                     case "vt":
                         result.TextureCoords.Add(new Location(Utilities.StringToDouble(args[1]),
-                            Utilities.StringToDouble(args[2]), 0));
+                            -Utilities.StringToDouble(args[2]), 0));
                         break;
                     case "f":
                         string[] a1s = args[1].Split('/');

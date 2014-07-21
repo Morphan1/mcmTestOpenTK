@@ -109,9 +109,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
         public override void Draw3D()
         {
-            // Correct clear color in case 3D isn't rendered blockingly
-            GL.ClearColor(new Color4(0, 0, 0, 255));
-
             // Draw everything in the world
             MainGame.DrawWorld();
 
