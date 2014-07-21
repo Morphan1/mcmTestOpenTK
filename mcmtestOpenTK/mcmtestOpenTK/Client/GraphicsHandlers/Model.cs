@@ -112,11 +112,11 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                         result.Meshes.Add(currentMesh);
                         break;
                     case "v":
-                        currentMesh.Vertices.Add(new Location(Utilities.StringToDouble(args[1]),
+                        result.Vertices.Add(new Location(Utilities.StringToDouble(args[1]),
                             Utilities.StringToDouble(args[2]), Utilities.StringToDouble(args[3])));
                         break;
                     case "vt":
-                        currentMesh.TextureCoords.Add(new Location(Utilities.StringToDouble(args[1]),
+                        result.TextureCoords.Add(new Location(Utilities.StringToDouble(args[1]),
                             Utilities.StringToDouble(args[2]), 0));
                         break;
                     case "f":
@@ -140,6 +140,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         {
             Name = _name;
             Meshes = new List<ModelMesh>();
+            Vertices = new List<Location>();
+            TextureCoords = new List<Location>();
         }
 
         /// <summary>
@@ -171,16 +173,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 GL.Begin(PrimitiveType.Triangles);
                 for (int x = 0; x < Meshes[i].Faces.Count; x++)
                 {
-                    Location vec1 = Meshes[i].Vertices[Meshes[i].Faces[x].L1 - 1];
-                    Location tex1 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T1 - 1];
+                    Location vec1 = Vertices[Meshes[i].Faces[x].L1 - 1];
+                    Location tex1 = TextureCoords[Meshes[i].Faces[x].T1 - 1];
                     GL.TexCoord2(tex1.X, tex1.Y);
                     GL.Vertex3(vec1.X, vec1.Y, vec1.Z);
-                    Location vec2 = Meshes[i].Vertices[Meshes[i].Faces[x].L2 - 1];
-                    Location tex2 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T2 - 1];
+                    Location vec2 = Vertices[Meshes[i].Faces[x].L2 - 1];
+                    Location tex2 = TextureCoords[Meshes[i].Faces[x].T2 - 1];
                     GL.TexCoord2(tex2.X, tex2.Y);
                     GL.Vertex3(vec2.X, vec2.Y, vec2.Z);
-                    Location vec3 = Meshes[i].Vertices[Meshes[i].Faces[x].L3 - 1];
-                    Location tex3 = Meshes[i].TextureCoords[Meshes[i].Faces[x].T3 - 1];
+                    Location vec3 = Vertices[Meshes[i].Faces[x].L3 - 1];
+                    Location tex3 = TextureCoords[Meshes[i].Faces[x].T3 - 1];
                     GL.TexCoord2(tex3.X, tex3.Y);
                     GL.Vertex3(vec3.X, vec3.Y, vec3.Z);
                 }
@@ -188,6 +190,16 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             }
             GL.PopMatrix();
         }
+
+        /// <summary>
+        /// Alll the mesh's vertices.
+        /// </summary>
+        public List<Location> Vertices;
+
+        /// <summary>
+        /// Alll the mesh's texture coords.
+        /// </summary>
+        public List<Location> TextureCoords;
     }
 
     public class ModelMesh
@@ -200,20 +212,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public ModelMesh(string _name)
         {
             Name = _name;
-            Vertices = new List<Location>();
-            TextureCoords = new List<Location>();
             Faces = new List<ModelFace>();
         }
-
-        /// <summary>
-        /// Alll the mesh's vertices.
-        /// </summary>
-        public List<Location> Vertices;
-
-        /// <summary>
-        /// Alll the mesh's texture coords.
-        /// </summary>
-        public List<Location> TextureCoords;
 
         /// <summary>
         /// All the mesh's faces.
