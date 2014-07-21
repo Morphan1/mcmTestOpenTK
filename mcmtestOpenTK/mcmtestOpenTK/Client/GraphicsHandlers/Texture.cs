@@ -57,11 +57,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Graphics GenericGraphicsObject = null;
 
         /// <summary>
-        /// The currently bound texture.
-        /// </summary>
-        public static uint Bound_Texture = 0;
-
-        /// <summary>
         /// The currently bound texture object.
         /// </summary>
         public static Texture BoundText = null;
@@ -90,7 +85,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             LoadedTextures.Add(White);
             Black = GenerateForColor(Color.Black, "black");
             LoadedTextures.Add(Black);
-            Bound_Texture = 0;
             // Preload a few common textures
             Test = GetTexture("common/test");
             Console = GetTexture("common/console");
@@ -260,7 +254,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public Bitmap SaveToBMP(bool flip = false)
         {
             GL.BindTexture(TextureTarget.Texture2D, Original_InternalID);
-            Bound_Texture = Original_InternalID;
             Bitmap bmp = new Bitmap(Width, Height);
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.GetTexImage(TextureTarget.Texture2D, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
@@ -278,10 +271,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public void Bind()
         {
             BoundText = this;
-            if (Internal_Texture != Bound_Texture)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, Internal_Texture);
-            }
+            GL.BindTexture(TextureTarget.Texture2D, Internal_Texture);
         }
     }
 }

@@ -7,6 +7,7 @@ using mcmtestOpenTK.Shared;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using mcmtestOpenTK.Shared.Collision;
 
 namespace mcmtestOpenTK.Client.GraphicsHandlers
 {
@@ -133,10 +134,13 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                         string[] a1s = args[1].Split('/');
                         string[] a2s = args[2].Split('/');
                         string[] a3s = args[3].Split('/');
-                        currentMesh.Faces.Add(new ModelFace(Utilities.StringToInt(a1s[0]),
-                            Utilities.StringToInt(a2s[0]), Utilities.StringToInt(a3s[0]),
+                        int v1 = Utilities.StringToInt(a1s[0]);
+                        int v2 = Utilities.StringToInt(a2s[0]);
+                        int v3 = Utilities.StringToInt(a3s[0]);
+                        Plane plane = new Plane(result.Vertices[v1 - 1], result.Vertices[v2 - 1], result.Vertices[v3 - 1]);
+                        currentMesh.Faces.Add(new ModelFace(v1, v2, v3,
                             Utilities.StringToInt(a1s[1]), Utilities.StringToInt(a2s[1]),
-                            Utilities.StringToInt(a3s[1])));
+                            Utilities.StringToInt(a3s[1]), plane.Normal));
                         break;
                     default:
                         SysConsole.Output(OutputType.WARNING, "Invalid model key '" + args[0] + "'");
@@ -183,6 +187,8 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                 GL.Begin(PrimitiveType.Triangles);
                 for (int x = 0; x < Meshes[i].Faces.Count; x++)
                 {
+                    Location normal = Meshes[i].Faces[x].Normal;
+                    GL.Normal3(normal.X, normal.Y, normal.Z);
                     Location vec1 = Vertices[Meshes[i].Faces[x].L1 - 1];
                     Location tex1 = TextureCoords[Meshes[i].Faces[x].T1 - 1];
                     GL.TexCoord2(tex1.X, tex1.Y);
@@ -233,7 +239,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
 
     public class ModelFace
     {
-        public ModelFace(int _l1, int _l2, int _l3, int _t1, int _t2, int _t3)
+        public ModelFace(int _l1, int _l2, int _l3, int _t1, int _t2, int _t3, Location _normal)
         {
             L1 = _l1;
             L2 = _l2;
@@ -241,7 +247,10 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             T1 = _t1;
             T2 = _t2;
             T3 = _t3;
+            Normal = _normal;
         }
+
+        public Location Normal;
 
         public int L1;
         public int L2;

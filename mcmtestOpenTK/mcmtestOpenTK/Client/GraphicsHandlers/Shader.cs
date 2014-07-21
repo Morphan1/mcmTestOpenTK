@@ -55,11 +55,6 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         public static Shader Skyt;
 
         /// <summary>
-        /// The current bound shader program.
-        /// </summary>
-        public static int Bound_Program = 0;
-
-        /// <summary>
         /// Starts or restarts the shader system.
         /// </summary>
         public static void InitShaderSystem()
@@ -323,10 +318,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             {
                 return;
             }
-            if (Internal_Program != Bound_Program)
-            {
-                GL.UseProgram(Internal_Program);
-            }
+            GL.UseProgram(Internal_Program);
         }
     }
 }
