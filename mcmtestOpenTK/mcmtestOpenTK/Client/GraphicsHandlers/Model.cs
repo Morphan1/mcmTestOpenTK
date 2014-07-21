@@ -17,13 +17,24 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
         /// </summary>
         public static List<Model> LoadedModels;
 
+        public static Model Cube;
+
         /// <summary>
         /// Prepares the model system.
         /// </summary>
         public static void Init()
         {
             LoadedModels = new List<Model>();
+            Cube = FromString("cube", CubeData);
+            LoadedModels.Add(Cube);
         }
+
+        static string CubeData = "o Cube\nv 1.000000 0.000000 -1.000000\nv 1.000000 0.000000 0.000000\nv -0.000000 0.000000 -0.000000\n" +
+            "v 0.000000 0.000000 -1.000000\nv 1.000000 1.000000 -1.000000\nv 1.000000 1.000000 0.000000\nv -0.000000 1.000000 -0.000000\n" +
+            "v 0.000000 1.000000 -1.000000\nvt 0.000000 0.000000\nvt 1.000000 0.000000\nvt 1.000000 1.000000\nvt 0.00 1.00\n" + 
+            "vt -0.00 1.000000\nvt 0.000000 1.000000\nvt 0.000000 1.0\nvt 0.00 1.000000\ns off\nf 2/1 3/2 4/3\nf 8/1 7/4 6/3\n" +
+            "f 1/1 5/5 6/3\nf 2/1 6/6 7/3\nf 7/1 8/7 4/3\nf 1/1 4/2 8/3\nf 1/1 2/8 4/3\nf 5/1 8/2 6/3\nf 2/1 1/2 6/3\nf 3/1 2/2 7/3\n" +
+            "f 3/1 7/2 4/3\nf 5/1 1/6 8/3\n";
 
         public static Model LoadModel(string filename)
         {
@@ -65,8 +76,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             Model Loaded = LoadModel(modelname);
             if (Loaded == null)
             {
-                Loaded = new Model(modelname);
-                // TODO: Default (cube or origin mark) model!
+                Loaded = Model.FromString(modelname, CubeData);
             }
             LoadedModels.Add(Loaded);
             return Loaded;
