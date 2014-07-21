@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Shared.Util;
+using mcmtestOpenTK.Client.GraphicsHandlers;
 
 namespace mcmtestOpenTK.Client.GameplayHandlers
 {
@@ -35,14 +36,19 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public int Quantity;
 
         /// <summary>
-        /// What texture this item uses.
+        /// What texture to use when rendering this item.
         /// </summary>
-        public string Texture;
+        public Texture texture;
 
         /// <summary>
         /// What shader to use when rendering this item.
         /// </summary>
-        public string Shader;
+        public Shader shader;
+
+        /// <summary>
+        /// What model to use when rendering this item.
+        /// </summary>
+        public Model model;
 
         /// <summary>
         /// How heavy this item is.
@@ -65,8 +71,24 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
 
         public override string ToString()
         {
-            return "ITEM:{name:" + Name + ",weight:" + Weight + ",volume:" + Volume + ",quantity:" + Quantity
-                + ",texture:" + Texture + ",shader:" + Shader + ",displayname:" + DisplayName + ",description:" + Description + "}";
+            string sname = shader == null ? "null" : shader.Name;
+            return "ITEM:{name:" + Name + ",weight:" + Weight + ",volume:" + Volume + ",quantity:" + Quantity + ",model:" + model.Name
+                + ",texture:" + texture.Name + ",shader:" + sname + ",displayname:" + DisplayName + ",description:" + Description + "}";
+        }
+
+        /// <summary>
+        /// Draws the item at a given location with a given rotation.
+        /// </summary>
+        /// <param name="loc">The location to draw it at</param>
+        /// <param name="rot">The rotation to draw it with</param>
+        public void Draw(Location loc, Location rot)
+        {
+            texture.Bind();
+            if (shader != null)
+            {
+                shader.Bind();
+            }
+            model.Draw(loc, rot, Location.One * 0.1f);
         }
 
         /// <summary>
@@ -92,17 +114,36 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             toret.Volume = BitConverter.ToSingle(data, pos);
             pos += 4;
             // Texture (int)
-            toret.Texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
-            if (toret.Texture == "")
+            string texture = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            if (texture == "")
             {
-                toret.Texture = null;
+                toret.texture = null;
+            }
+            else
+            {
+                toret.texture = Texture.GetTexture(texture);
             }
             pos += 4;
             // Shader (int)
-            toret.Shader = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
-            if (toret.Shader == "")
+            string shader = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            if (shader == "")
             {
-                toret.Shader = null;
+                toret.shader = null;
+            }
+            else
+            {
+                toret.shader = Shader.GetShader(shader);
+            }
+            pos += 4;
+            // Model (int)
+            string model = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
+            if (model == "")
+            {
+                toret.model = null;
+            }
+            else
+            {
+                toret.model = Model.GetModel(model);
             }
             pos += 4;
             // Quantity (int)

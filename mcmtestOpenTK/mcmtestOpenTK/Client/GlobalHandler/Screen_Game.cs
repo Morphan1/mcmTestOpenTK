@@ -114,6 +114,14 @@ namespace mcmtestOpenTK.Client.GlobalHandler
 
             // Draw everything in the world
             MainGame.DrawWorld();
+
+            // Draw the player's held item
+            if (GiveItemPacketIn.LastItem != null)
+            {
+                Location Forward = Utilities.ForwardVector((Player.player.Direction.X - 20) * Utilities.PI180, 0) * 2f;
+                GiveItemPacketIn.LastItem.Draw(Player.player.Position + new Location(0, 0, 4.5f)
+                    + Forward, new Location(Player.player.Direction.X, -30 + (Player.player.Direction.Y / 2), 0));
+            }
         }
     }
 }

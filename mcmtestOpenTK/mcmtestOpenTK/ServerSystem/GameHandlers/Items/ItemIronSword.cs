@@ -12,6 +12,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
         {
             Texture = "items/weapons/iron_sword";
             DisplayName = "Iron Sword";
+            Model = "items/weapons/common_sword";
             Description = "A common iron sword, swings for 8-10 damage.";
             Inheritance.Add(this);
             Weight = 11;

@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
             Texture = "items/food/apple";
             Shader = null;
             DisplayName = "Common Apple";
+            Model = "items/weapons/common_sword";
             CanThrow = true;
             Description = "A common apple. Restores 10 health.";
             Inheritance.Add(this);

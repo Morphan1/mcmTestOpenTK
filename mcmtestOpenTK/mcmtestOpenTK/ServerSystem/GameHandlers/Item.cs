@@ -41,7 +41,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         public int Quantity;
 
         /// <summary>
-        /// What texture this item uses.
+        /// What texture to use when rendering this item.
         /// </summary>
         public string Texture;
 
@@ -49,6 +49,11 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// What shader to use when rendering this item.
         /// </summary>
         public string Shader;
+
+        /// <summary>
+        /// What model to use when rendering this item.
+        /// </summary>
+        public string Model;
 
         /// <summary>
         /// How heavy this item is.
@@ -115,7 +120,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         {
             byte[] DName = FileHandler.encoding.GetBytes(DisplayName);
             byte[] Desc = FileHandler.encoding.GetBytes(Description);
-            byte[] toret = new byte[4 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + DName.Length + 4 + Desc.Length];
+            byte[] toret = new byte[4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + DName.Length + 4 + Desc.Length];
             // Name (int)
             int pos = 0;
             BitConverter.GetBytes(NetStringManager.GetStringID(Name)).CopyTo(toret, pos);
@@ -131,6 +136,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             pos += 4;
             // Shader (int)
             BitConverter.GetBytes(NetStringManager.GetStringID(Shader == null ? "": Shader)).CopyTo(toret, pos);
+            pos += 4;
+            // Model (int)
+            BitConverter.GetBytes(NetStringManager.GetStringID(Model == null ? "" : Model)).CopyTo(toret, pos);
             pos += 4;
             // Quantity (int)
             BitConverter.GetBytes(Quantity).CopyTo(toret, pos);

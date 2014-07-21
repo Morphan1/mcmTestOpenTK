@@ -13,6 +13,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Items
             Texture = "items/weapons/iron_sword";
             Shader = null;
             DisplayName = "Common Sword";
+            Model = "items/weapons/common_sword";
             CanThrow = true;
             Description = "A common sword, made of common iron.";
             Inheritance.Add(this);
