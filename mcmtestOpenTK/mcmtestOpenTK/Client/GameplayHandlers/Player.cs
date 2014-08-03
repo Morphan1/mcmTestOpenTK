@@ -235,7 +235,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (!IsCustom)
             {
-                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
+                //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
