@@ -161,13 +161,24 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Location current = Start;
             for (int i = 0; i < 3; i++)
             {
+                Location pcurrent = current;
                 current = LineBox(current, Target, Mins, Maxs, out Normal);
                 if (Normal.IsNaN())
                 {
                     return current;
                 }
+                if (current.IsNaN())
+                {
+                    return pcurrent;
+                }
+                // Jump back a tiny bit
                 current += Normal * 0.0001f;
-                //return current;
+                /*
+                if ((pcurrent - current).LengthSquared() > 0.000001f)
+                {
+                    current += (pcurrent - current).Normalize() * 0.0001f;
+                }
+                */
                 if (Normal.X == 1 || Normal.X == -1)
                 {
                     Target.X = current.X;

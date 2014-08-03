@@ -15,7 +15,11 @@ namespace mcmtestOpenTK.Shared.Collision
             {
                 for (int x = 0; x < Vertices2.Count; x++)
                 {
-                    Total.Add(Vertices1[i] - Vertices2[x]);
+                    Location vert = Vertices1[i] - Vertices2[x];
+                    if (!Total.Contains(vert))
+                    {
+                        Total.Add(vert);
+                    }
                 }
             }
             return new Minkowski(Total);

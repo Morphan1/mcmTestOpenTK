@@ -202,16 +202,18 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Position = target;
             }*/
-            Location normal;
-            //Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
+            //Location normal;
+            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
+            /*
             Position = Collision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs, out normal);
             if (!normal.IsNaN())
             {
                 Position += normal * 0.01f;
             }
+            */
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
-            if (Position != target && false) // If we missed the target
+            if (Position != target && onground) // If we missed the target and are on the ground
             {
                 // Try a flat target
                 target = new Location(target.X, target.Y, Position.Z);
