@@ -59,16 +59,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             return ToReturn;
         }
 
+        public virtual Location Closest(Location start, Location target, out Location normal)
+        {
+            normal = Location.NaN;
+            return Location.NaN;
+        }
+        
         /// <summary>
         /// Get the first collision of a box line.
         /// </summary>
-        /// <param name="mins">The mins of the line</param>
-        /// <param name="maxs">The maxs of the line</param>
+        /// <param name="Box2">The box to trace against</param>
         /// <param name="start">The start of the line</param>
         /// <param name="end">The end of the line</param>
         /// <param name="normal">The normal of the hit, or NaN if none</param>
         /// <returns>The location of the hit, or NaN if none</returns>
-        public virtual Location ClosestBox(Location mins, Location maxs, Location start, Location end, out Location normal)
+        public virtual Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             normal = Location.NaN;
             return Location.NaN;
@@ -87,10 +92,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <summary>
         /// Checks whether a box intersects the entity.
         /// </summary>
-        /// <param name="mins">The mins of the box</param>
-        /// <param name="maxs">The maxs of the box</param>
+        /// <param name="Box2">The box to intersect with</param>
         /// <returns>Whether it intersects
-        public virtual bool Box(Location mins, Location maxs)
+        public virtual bool Box(AABB Box2)
         {
             return false;
         }

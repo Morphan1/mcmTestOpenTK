@@ -213,6 +213,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             */
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
+            // TODO: Make less stupid and more tick-independent
             if (Position != target && onground) // If we missed the target and are on the ground
             {
                 // Try a flat target
@@ -234,7 +235,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (!IsCustom)
             {
-                //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
+                MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
                 reps++;
                 if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)

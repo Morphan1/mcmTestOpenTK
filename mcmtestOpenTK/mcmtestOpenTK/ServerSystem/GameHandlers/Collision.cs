@@ -76,14 +76,13 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         /// <returns>Whether there is a solid there</returns>
         public static bool Box(Location point, Location mins, Location maxs)
         {
-            Location realmins = point + mins;
-            Location realmaxs = point + maxs;
+            AABB Box2 = new AABB(point, mins, maxs);
             for (int i = 0; i < Server.MainWorld.Solids.Count; i++)
             {
                 Entity solid = Server.MainWorld.Solids[i];
                 if (solid.Solid)
                 {
-                    if (solid.Box(realmins, realmaxs))
+                    if (solid.Box(Box2))
                     {
                         return true;
                     }
@@ -113,6 +112,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             // Keep track of what hit location we had
             Location final = Target;
             Location fnormal = Location.NaN;
+            AABB Box2 = new AABB(Location.Zero, Mins, Maxs);
             // Loop through all solids.
             for (int i = 0; i < Server.MainWorld.Solids.Count; i++)
             {
@@ -122,7 +122,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
                 {
                     // Find where it here
                     Location normal;
-                    Location hit = solid.ClosestBox(Mins, Maxs, Start, Target, out normal);
+                    Location hit = solid.ClosestBox(Box2, Start, Target, out normal);
                     // NaN = no hit, ignore!
                     if (hit.IsNaN())
                     {

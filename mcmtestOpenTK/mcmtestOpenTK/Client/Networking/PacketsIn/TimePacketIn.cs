@@ -33,6 +33,14 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
                 return;
             }
             double timedif = servertime - MainGame.GlobalTickTime;
+            if (timedif < -5f)
+            {
+                MainGame.GlobalTickTime -= 1f;
+            }
+            if (timedif > 5f)
+            {
+                MainGame.GlobalTickTime += 1f;
+            }
             if (timedif < -1f)
             {
                 MainGame.GlobalTickTime -= 0.1f;

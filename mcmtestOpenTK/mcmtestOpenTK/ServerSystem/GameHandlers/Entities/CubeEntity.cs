@@ -166,10 +166,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z;
         }
 
-        public override bool Box(Location Low, Location High)
+        public override bool Box(AABB Box2)
         {
             Location elow = Position + Mins;
             Location ehigh = Position + Maxs;
+            Location Low = Box2.Position + Box2.Mins;
+            Location High = Box2.Position + Box2.Maxs;
             return Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
                         High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
         }
@@ -178,9 +180,9 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         {
         }
 
-        public override Location ClosestBox(Location Mins2, Location Maxs2, Location start, Location end, out Location normal)
+        public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            return Collision.AABBClosestBox(Position, Mins, Maxs, Mins2, Maxs2, start, end, out normal);
+            return Collision.AABBClosestBox(Position, Mins, Maxs, Box2.Mins, Box2.Maxs, start, end, out normal);
         }
     }
 }

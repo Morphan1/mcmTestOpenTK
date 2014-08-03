@@ -32,6 +32,8 @@ namespace mcmtestOpenTK.Shared
 
         public static List<Thread> ThreadsToClose = new List<Thread>();
 
+        public static bool ClientActive = false;
+
         public static Thread MainThread;
 
         /// <summary>
@@ -66,6 +68,7 @@ namespace mcmtestOpenTK.Shared
             }
 #if !SERVER_ONLY
             SysConsole.Output(OutputType.INIT, "Preparing client...");
+            ClientActive = true;
             MainGame.Client_Main(system_arguments);
             return;
 #endif

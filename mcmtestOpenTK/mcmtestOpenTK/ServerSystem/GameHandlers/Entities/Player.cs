@@ -191,7 +191,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override void Kill()
         {
-            SysConsole.Output(OutputType.INFO, "Saving client '" + Username + "'");
+            // SysConsole.Output(OutputType.INFO, "Saving client '" + Username + "'");
             StringBuilder sb = new StringBuilder();
             foreach (KeyValuePair<string, string> x in AccountKeys)
             {
@@ -406,6 +406,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
+            // TODO: Make less stupid and more tick-independent
             if (Position != target) // If we missed the target
             {
                 // Try a flat target

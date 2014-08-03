@@ -44,13 +44,13 @@ namespace mcmtestOpenTK.Client.Networking.PacketsIn
             {
                 return;
             }
-            //MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600, start = lastforced });
+            MainGame.SpawnEntity(new Bullet() { Position = position, LifeTicks = 600, start = lastforced });
             if (time > MainGame.GlobalTickTime)
             {
                 // Just ignore.
                 return;
             }
-            //Player.player.ApplyMovement(position, velocity, time, jumped);
+            Player.player.ApplyMovement(position, velocity, time, jumped);
             lastforced = position;
         }
     }

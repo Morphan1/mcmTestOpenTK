@@ -116,7 +116,7 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
                         break; // TODO: Maybe enable materials?
                     case "usemtl":
                         break;
-                    case "s": // TODO: What is this?
+                    case "s": // TODO: use 'smooth shading'?
                         break;
                     case "o":
                         currentMesh = new ModelMesh(args[1]);

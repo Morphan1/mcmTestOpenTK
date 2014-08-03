@@ -169,8 +169,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             for (int i = 0; i < data.Length / (36 + 4); i++)
             {
-                Planes.Add(new Plane(Position + Location.FromBytes(data, i * (36 + 4)),
-                    Position + Location.FromBytes(data, i * (36 + 4) + 12), Position + Location.FromBytes(data, i * (36 + 4) + 24)));
+                Planes.Add(new Plane(/*Position + */Location.FromBytes(data, i * (36 + 4)),
+                    /*Position + */Location.FromBytes(data, i * (36 + 4) + 12), /*Position + */Location.FromBytes(data, i * (36 + 4) + 24)));
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
@@ -200,7 +200,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
         }
 
-
         public Location CollidePlanes(Location start, Location target, out Location normal)
         {
             double dist = (target - start).LengthSquared();
@@ -221,10 +220,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                         //return hit;
                     }
                 }
-            }
-            if (final == Location.NaN && mink != null)
-            {
-                return mink.RayTrace(start, target, out normal);
             }
             normal = fnormal;
             return final;
