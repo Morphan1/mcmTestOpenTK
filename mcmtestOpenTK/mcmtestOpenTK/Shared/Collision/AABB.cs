@@ -21,29 +21,29 @@ namespace mcmtestOpenTK.Shared.Collision
 
         public void Include(Location point)
         {
-            if (point.X < Mins.X)
+            if (point.X < Position.X + Mins.X)
             {
-                Mins.X = point.X;
+                Mins.X = point.X - Position.X;
             }
-            if (point.Y < Mins.Y)
+            if (point.Y < Position.Y + Mins.Y)
             {
-                Mins.Y = point.Y;
+                Mins.Y = point.Y - Position.Y;
             }
-            if (point.Z < Mins.Z)
+            if (point.Z < Position.Z + Mins.Z)
             {
-                Mins.Z = point.Z;
+                Mins.Z = point.Z - Position.Z;
             }
-            if (point.X > Maxs.X)
+            if (point.X > Position.X + Maxs.X)
             {
-                Maxs.X = point.X;
+                Maxs.X = point.X - Position.X;
             }
-            if (point.Y > Maxs.Y)
+            if (point.Y > Position.Y + Maxs.Y)
             {
-                Maxs.Y = point.Y;
+                Maxs.Y = point.Y - Position.Y;
             }
-            if (point.Z > Maxs.Z)
+            if (point.Z > Position.Z + Maxs.Z)
             {
-                Maxs.Z = point.Z;
+                Maxs.Z = point.Z - Position.Z;
             }
         }
 

@@ -129,9 +129,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
-            if (!hit.IsNaN())
+            AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+            if (!hit.IsNaN() || BroadCollideBox.Box(Box3))
             {
-                AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+                //return hit;
                 mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
                 Location anormal;
                 Location got = mink.RayTrace(Location.Zero, start - end, out anormal);
@@ -139,7 +140,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 {
                     got = start - got;
                     anormal = -anormal;
-                    SysConsole.Output(OutputType.INFO, "Collide at " + got + " with normal " + anormal);
                 }
                 normal = anormal;
                 return got;
@@ -175,6 +175,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
             BroadCollideBox.Position = Planes[0].vec1;
+            BroadCollideBox.Mins = Location.Zero;
+            BroadCollideBox.Maxs = Location.Zero;
             for (int i = 0; i < Planes.Count; i++)
             {
                 //planestr.Append(Planes[i].ToString()).Append("_");
@@ -256,14 +258,16 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Texture.GetTexture("skylands/wall1").Bind();
                 for (int i = 0; i < mink.Planes.Count; i++)
                 {
-                    new RenderPlane(mink.Planes[i]).Draw();
+                    SimpleRenderer.RenderPlane(mink.Planes[i]);
                 }
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color4(Color4.Green);
                 GL.Vertex3(0f, 0f, 0f);
                 GL.Vertex3(mink.Planes[0].vec1.X, mink.Planes[0].vec1.Y, mink.Planes[0].vec1.Z);
                 GL.End();
-            }*/
+            }
+            */
+            //SimpleRenderer.RenderAABB(BroadCollideBox);
         }
     }
 }

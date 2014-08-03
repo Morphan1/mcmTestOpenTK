@@ -50,5 +50,18 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers
             GL.Vertex3(vec3.X, vec3.Y, vec3.Z);
             GL.End();
         }
+
+        /// <summary>
+        /// Renders an AABB (box).
+        /// </summary>
+        /// <param name="Box">The AABB to render</param>
+        public static void RenderAABB(AABB Box)
+        {
+            Plane[] planes = Box.CalculateTriangles();
+            for (int i = 0; i < planes.Length; i++)
+            {
+                RenderPlane(planes[i]);
+            }
+        }
     }
 }
