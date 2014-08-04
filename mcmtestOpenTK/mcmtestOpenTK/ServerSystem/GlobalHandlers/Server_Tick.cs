@@ -25,7 +25,7 @@ namespace mcmtestOpenTK.ServerSystem.GlobalHandlers
         public static void OncePerSecondTick()
         {
             // Tell all players what time it is
-            NetworkBase.SendToAllPlayers(new TimePacketOut());
+            NetworkBase.SendToAllPlayers(new TimePacketOut(false));
         }
 
         /// <summary>

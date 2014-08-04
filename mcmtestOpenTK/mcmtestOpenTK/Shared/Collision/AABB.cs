@@ -109,33 +109,7 @@ namespace mcmtestOpenTK.Shared.Collision
 
         public Location TraceLine(Location start, Location target, out Location normal)
         {
-            Plane[] planes = CalculatePlanes();
-            List<Plane> tplanes = new List<Plane>(3);
-            if (start.X < Position.X + Mins.X)
-            {
-                tplanes.Add(planes[2]);
-            }
-            else if (start.X > Position.X + Maxs.X)
-            {
-                tplanes.Add(planes[3]);
-            }
-            if (start.Y < Position.Y + Mins.Y)
-            {
-                tplanes.Add(planes[0]);
-            }
-            else if (start.Y > Position.Y + Maxs.Y)
-            {
-                tplanes.Add(planes[1]);
-            }
-            if (start.Z < Position.Z + Mins.Z)
-            {
-                tplanes.Add(planes[4]);
-            }
-            else if (start.Z > Position.Z + Maxs.Z)
-            {
-                tplanes.Add(planes[5]);
-            }
-            return CollidePlanes(tplanes, start, target, out normal);
+            return AABBClosestBox(Position, Mins, Maxs, Location.Zero, Location.Zero, start, target, out normal);
         }
 
         public Location CollidePlanes(List<Plane> planes, Location start, Location target, out Location normal)

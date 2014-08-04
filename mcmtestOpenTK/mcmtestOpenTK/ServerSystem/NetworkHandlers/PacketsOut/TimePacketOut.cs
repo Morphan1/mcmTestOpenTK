@@ -10,15 +10,19 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut
 {
     public class TimePacketOut: AbstractPacketOut
     {
-        public TimePacketOut()
+        bool force;
+        public TimePacketOut(bool _force)
         {
+            force = _force;
             ID = 8;
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Server.GlobalTickTime);
-            // TODO: Include all player movement keys?
+            byte[] bytes = new byte[9];
+            BitConverter.GetBytes(Server.GlobalTickTime).CopyTo(bytes, 0);
+            bytes[8] = (byte)(force ? 1: 0);
+            return bytes;
         }
     }
 }

@@ -78,7 +78,14 @@ namespace MIConvexHull
             SingularVertices = new HashSet<VertexWrap>();
             BeyondBuffer = new VertexBuffer();
 
-            ConnectorTable = Enumerable.Range(0, ConnectorTableSize).Select(_ => new ConnectorList()).ToArray();           
+            // monkey -> optimize
+            ConnectorTable = new ConnectorList[ConnectorTableSize];
+            for (int i = 0; i < ConnectorTableSize; i++)
+            {
+                ConnectorTable[i] = new ConnectorList();
+            }
+            //ConnectorTable = Enumerable.Range(0, ConnectorTableSize).Select(_ => new ConnectorList()).ToArray();
+            // end monkey
         }
 
         /// <summary>

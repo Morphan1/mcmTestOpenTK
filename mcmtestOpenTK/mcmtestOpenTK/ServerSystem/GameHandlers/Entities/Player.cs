@@ -286,7 +286,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             LastPacket.Time = Server.GlobalTickTime;
             LastMovement = Server.GlobalTickTime;
             Send(new HelloPacketOut());
-            Send(new TimePacketOut());
+            Send(new TimePacketOut(true));
         }
 
         public bool Forward = false;

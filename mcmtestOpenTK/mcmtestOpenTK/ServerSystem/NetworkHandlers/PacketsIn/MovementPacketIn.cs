@@ -5,6 +5,7 @@ using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.ServerSystem.GameHandlers.Entities;
 using mcmtestOpenTK.ServerSystem.GlobalHandlers;
+using mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsOut;
 
 namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
 {
@@ -39,10 +40,12 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             }
             if (Time > Server.GlobalTickTime)
             {
-                if (Time > Server.GlobalTickTime + 0.5)
+                if (Time > Server.GlobalTickTime + 1)
                 {
+                    // TODO: if (debug)
                     SysConsole.Output(OutputType.WARNING, player.Username +
                         " is cheating?: moving in the future ~ " + (float)Time + " vs " + (float)Server.GlobalTickTime);
+                    player.Send(new TimePacketOut(true));
                     return;
                 }
                 player.PacketsToApply.Add(this);
@@ -50,10 +53,12 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             }
             if (Time < player.LastMovement)
             {
-                if (Time < player.LastMovement - 0.5)
+                if (Time < player.LastMovement - 1)
                 {
+                    // TODO: if (debug)
                     SysConsole.Output(OutputType.WARNING, player.Username +
                         " is cheating?: moving in the past ~ " + (float)Time + " vs " + (float)player.LastMovement);
+                    player.Send(new TimePacketOut(true));
                 }
                 return;
             }
