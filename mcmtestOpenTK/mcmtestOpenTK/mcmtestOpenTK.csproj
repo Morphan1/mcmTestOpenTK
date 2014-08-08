@@ -168,7 +168,6 @@
     <Compile Include="Client\GraphicsHandlers\Model.cs" />
     <Compile Include="Client\GraphicsHandlers\SimpleRenderer.cs" />
     <Compile Include="Client\Networking\PacketsIn\GiveItemPacketIn.cs" />
-    <Compile Include="ServerSystem\GameHandlers\Inventory.cs" />
     <Compile Include="ServerSystem\GameHandlers\Items\ItemApple.cs" />
     <Compile Include="ServerSystem\NetworkHandlers\PacketsOut\GiveItemPacketOut.cs" />
     <Compile Include="ServerSystem\PlayerCommands\CommonCmds\ItemCommand.cs" />

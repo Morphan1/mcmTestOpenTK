@@ -26,11 +26,6 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// </summary>
         public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
 
-        /// <summary>
-        /// How many slots a default player inventory has.
-        /// </summary>
-        public static int DefaultSlots = 10;
-
         public Player(): base(true, true, EntityType.PLAYER)
         {
             ToSend = new List<byte[]>();
@@ -38,7 +33,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
             Gravity = 100;
-            inventory = new Inventory(DefaultSlots);
+            Inventory = new List<Item>();
+            QuickInventory = new List<Item>();
         }
 
         /// <summary>
@@ -102,9 +98,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public Dictionary<string, string> AccountKeys;
 
         /// <summary>
-        /// The player's inventory.
+        /// The player's main inventory.
         /// </summary>
-        public Inventory inventory;
+        public List<Item> Inventory;
+
+        /// <summary>
+        /// The player's "quick" inventory.
+        /// </summary>
+        public List<Item> QuickInventory;
 
         public List<string> permissions;
 
@@ -177,6 +178,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             else
             {
                 // USER JOINED FIRST TIME, DO SPECIAL WELCOME STUFF HERE
+                // TODO: Script event
                 AccountKeys.Add("first_name", Username);
                 AccountKeys.Add("first_ip", Network.IP);
                 AccountKeys.Add("permissions", "basic.new_user");
