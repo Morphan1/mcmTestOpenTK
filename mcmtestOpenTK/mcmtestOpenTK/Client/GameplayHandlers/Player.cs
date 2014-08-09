@@ -142,8 +142,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (down)
             {
-                Maxs = new Location(1.5f, 1.5f, 7); // Due to unknown reasons, below 7 = bugs with collision D:
+                Maxs = new Location(3f, 3f, 10);
             }
+            else
+            {
+                if (!Collision.Box(Position, new Location(-3f, -3f, 0), new Location(3f, 3f, 16)))
+                {
+                    Maxs = new Location(3f, 3f, 16);
+                }
+                else
+                {
+                    Maxs = new Location(3f, 3f, 10);
+                    down = true;
+                }
+            }
+            bool on_ground = false;
             if (ClientCVar.g_noclip.ValueB)
             {
                 if (movement.LengthSquared() > 0)
@@ -166,7 +179,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180).Normalize();
                 }
-                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-3f, -3f, -0.01f), new Location(3f, 3f, 2));
                 if (up && on_ground && !jumped)
                 {
                     Velocity.Z = JumpPower * (down ? 0.7 : 1);
@@ -184,18 +197,6 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Velocity.Y += ((movement.Y * MoveSpeed * (slow || down ? 0.5 : 1)) - Velocity.Y) * MyDelta * 8 * (on_ground ? 1 : AirSpeedMult);
                 Velocity.Z -= BaseGravity * MyDelta;
             }
-            if (!down)
-            {
-                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
-                {
-                    Maxs = new Location(1.5f, 1.5f, 8);
-                }
-                else
-                {
-                    Maxs = new Location(1.5f, 1.5f, 5);
-                    down = true;
-                }
-            }
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
             /*if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0f), Maxs))
@@ -203,7 +204,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 Position = target;
             }*/
             //Location normal;
-            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
+            Position = Collision.SlideBox(Position, target, new Location(-3f, -3f, 0), Maxs);
             /*
             Position = Collision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs, out normal);
             if (!normal.IsNaN())
@@ -214,22 +215,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
             // TODO: Make less stupid and more tick-independent
-            if (Position != target && onground) // If we missed the target and are on the ground
+            if (Position != target && on_ground) // If we missed the target and are on the ground
             {
                 // Try a flat target
                 target = new Location(target.X, target.Y, Position.Z);
                 // If the flat target is solid
-                if (Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                if (Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                 {
-                    // Raise the target by 2
-                    target.Z += 2;
+                    // Raise the target by 4
+                    target.Z += 4;
                     // If the higher target has room
-                    if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                    if (!Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                     {
                         // Move up and forward
-                        Position = Collision.SlideBox(Position + new Location(0, 0, 2), target + new Location(0, 0, 2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position + new Location(0, 0, 4), target + new Location(0, 0, 4), new Location(-3f, -3f, 0), Maxs);
                         // move back into place
-                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -4), new Location(-3f, -3f, 0), Maxs);
                     }
                 }
             }
@@ -237,23 +238,23 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 //MainGame.SpawnEntity(new Bullet() { Position = Position, LifeTicks = 600, texture = Texture.White, start = ploc });
                 ushort move = MovementPacketOut.GetControlShort(forward, back, left, right, up, down, slow);
-                reps++;
-                if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
+                //reps++;
+                //if (move != lastMove || Direction != lastdir || Velocity != lastvel || reps > 0)
+                //{
+                lastMove = move;
+                lastdir = Location.Zero;
+                lastvel = Velocity;
+                //reps = 0;
+                if (NetworkBase.IsActive)
                 {
-                    lastMove = move;
-                    lastdir = Location.Zero;
-                    lastvel = Velocity;
-                    reps = 0;
-                    if (NetworkBase.IsActive)
+                    Points.Add(CPoint());
+                    if (Points.Count > 60)
                     {
-                        Points.Add(CPoint());
-                        if (Points.Count > 60)
-                        {
-                            Points.RemoveAt(0);
-                        }
-                        NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, (float)Direction.X, (float)Direction.Y));
+                        Points.RemoveAt(0);
                     }
+                    NetworkBase.Send(new MovementPacketOut(MainGame.GlobalTickTime, move, (float)Direction.X, (float)Direction.Y));
                 }
+                //}
             }
         }
 
@@ -315,7 +316,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
         }
 
-        int reps = 0;
+        //int reps = 0;
         ushort lastMove = 0;
         Location lastdir = Location.Zero;
         Location lastvel = Location.Zero;

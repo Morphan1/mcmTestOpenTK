@@ -134,6 +134,11 @@ namespace mcmtestOpenTK.Shared.Util
             return X * two.X + Y * two.Y + Z * two.Z;
         }
 
+        /// <summary>
+        /// Returns the location as a string in the form: (X, Y, Z)
+        /// Inverts .FromString()
+        /// </summary>
+        /// <returns>The location string</returns>
         public override string ToString()
         {
             return "(" + X + ", " + Y + ", " + Z + ")";

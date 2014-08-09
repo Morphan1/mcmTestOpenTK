@@ -267,7 +267,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 scalesign *= -1;
             }
             model.Draw(Position, new Location(yaw, 0, 0), new Location(scale));
-            
+            /*
             if (mink != null)
             {
                 Texture.GetTexture("skylands/wall1").Bind();
@@ -281,7 +281,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 GL.Vertex3(mink.Planes[0].vec1.X, mink.Planes[0].vec1.Y, mink.Planes[0].vec1.Z);
                 GL.End();
             }
-            
+            */
             //SimpleRenderer.RenderAABB(BroadCollideBox);
         }
     }

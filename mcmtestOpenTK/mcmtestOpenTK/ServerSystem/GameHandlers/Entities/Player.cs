@@ -19,12 +19,17 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <summary>
         /// The default collision mins for a player.
         /// </summary>
-        public static Location DefaultMins = new Location(-1.5f, -1.5f, 0);
+        public static Location DefaultMins = new Location(-3f, -3f, 0);
 
         /// <summary>
         /// The default collision maxes for a player.
         /// </summary>
-        public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
+        public static Location DefaultMaxes = new Location(3f, 3f, 16f);
+
+        /// <summary>
+        /// The default gravity value for a player.
+        /// </summary>
+        public static double DefaultGravity = 100;
 
         public Player(): base(true, true, EntityType.PLAYER)
         {
@@ -32,7 +37,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             Solid = true;
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
-            Gravity = 100;
+            Gravity = DefaultGravity;
             Inventory = new List<Item>();
             QuickInventory = new List<Item>();
         }
@@ -90,7 +95,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <summary>
         /// What the player's gravity strength is.
         /// </summary>
-        public float Gravity = 100;
+        public double Gravity = DefaultGravity;
 
         /// <summary>
         /// All keys saved on the user.
@@ -353,19 +358,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             if (Down)
             {
-                Maxs = new Location(1.5f, 1.5f, 7);
+                Maxs = new Location(3f, 3f, 10);
             }
             else
             {
-                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
+                if (!Collision.Box(Position, new Location(-3f, -3f, 0), new Location(3f, 3f, 8)))
                 {
-                    Maxs = new Location(1.5f, 1.5f, 8);
+                    Maxs = new Location(3f, 3f, 16);
                 }
                 else
                 {
+                    Maxs = new Location(3f, 3f, 10);
                     Down = true;
                 }
             }
+            bool on_ground = false;
             if (Noclip)
             {
                 Gravity = 0;
@@ -385,11 +392,12 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             else
             {
+                Gravity = DefaultGravity;
                 if (movement.LengthSquared() > 0)
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180).Normalize();
                 }
-                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-3f, -3f, -0.01f), new Location(3f, 3f, 2));
                 if (Up && on_ground && !Jumped)
                 {
                     Velocity.Z = JumpPower * (Down ? 0.7 : 1);
@@ -405,41 +413,32 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             Location ploc = Position;
             Location target = Position + Velocity * MyDelta;
-            Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
+            Position = Collision.SlideBox(Position, target, new Location(-3f, -3f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
             // TODO: Make less stupid and more tick-independent
-            if (Position != target) // If we missed the target
+            if (Position != target && on_ground) // If we missed the target
             {
                 // Try a flat target
                 target = new Location(target.X, target.Y, Position.Z);
                 // If the flat target is solid
-                if (Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                if (Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                 {
-                    // Raise the target by 2
-                    target.Z += 2;
+                    // Raise the target by 4
+                    target.Z += 4;
                     // If the higher target has room
-                    if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                    if (!Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                     {
                         // Move up and forward
-                        Position = Collision.SlideBox(Position + new Location(0, 0, 2), target + new Location(0, 0, 2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position + new Location(0, 0, 4), target + new Location(0, 0, 4), new Location(-3f, -3f, 0), Maxs);
                         // move back into place
-                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -4), new Location(-3f, -3f, 0), Maxs);
                     }
                 }
             }
             if (!isCustom)
             {
                 LastTick = Server.GlobalTickTime;
-                // TODO: Better player transmission - transmit move byte with time, in addition to position/vel/dir?
-                /*PositionPacketOut pack = new PositionPacketOut(this, Position, Velocity, Direction);
-                for (int i = 0; i < world.Players.Count; i++)
-                {
-                    if (world.Players[i] != this)
-                    {
-                        world.Players[i].Send(pack);
-                    }
-                }*/
             }
         }
 

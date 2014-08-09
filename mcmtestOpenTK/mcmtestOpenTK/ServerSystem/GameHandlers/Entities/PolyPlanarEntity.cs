@@ -199,6 +199,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override List<Variable> GetSaveVars()
         {
+            Position = Location.Zero;
             List<Variable> vars = base.GetSaveVars();
             StringBuilder planestr = new StringBuilder(Planes.Count * 36);
             for (int i = 0; i < Planes.Count; i++)
@@ -206,6 +207,16 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
                 planestr.Append(Planes[i].ToString()).Append("_");
             }
             vars.Add(new Variable("planes", planestr.ToString()));
+            StringBuilder textures = new StringBuilder();
+            for (int i = 0; i < Textures.Count; i++)
+            {
+                textures.Append(Textures[i]);
+                if (i + 1 < Textures.Count)
+                {
+                    textures.Append("|");
+                }
+            }
+            vars.Add(new Variable("texture", textures.ToString()));
             return vars;
         }
 

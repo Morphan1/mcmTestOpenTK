@@ -123,14 +123,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             ToReturn.Add(new Variable("texture_vscale", Texture_VScale.ToString()));
             ToReturn.Add(new Variable("texture_hshift", Texture_HShift.ToString()));
             ToReturn.Add(new Variable("texture_vshift", Texture_VShift.ToString()));
-            List<Variable> vars = base.GetSaveVars();
+            /*
             Plane[] Planes = CalculateTriangles();
             StringBuilder planestr = new StringBuilder(Planes.Length * 36);
             for (int i = 0; i < Planes.Length; i++)
             {
                 planestr.Append(Planes[i].ToString()).Append("_");
             }
-            ToReturn.Add(new Variable("planes", planestr.ToString()));
+            ToReturn.Add(new Variable("planes", planestr.ToString()));*/
             return ToReturn;
         }
 
@@ -182,7 +182,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            return Collision.AABBClosestBox(Position, Mins, Maxs, Box2.Mins, Box2.Maxs, start, end, out normal);
+            return AABB.AABBClosestBox(Position, Mins, Maxs, Box2.Mins, Box2.Maxs, start, end, out normal);
         }
     }
 }
