@@ -353,7 +353,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
             }
             if (Down)
             {
-                Maxs = new Location(1.5f, 1.5f, 5);
+                Maxs = new Location(1.5f, 1.5f, 7);
             }
             else
             {

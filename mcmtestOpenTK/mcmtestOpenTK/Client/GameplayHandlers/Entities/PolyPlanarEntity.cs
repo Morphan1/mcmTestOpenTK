@@ -141,6 +141,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             else
             {
                 mi = Minkowski.From(Vertices(), box.BoxPoints().ToList());
+                SysConsole.Output(OutputType.INFO, "Create a minko for " + box.Mins + " x " + box.Maxs);
                 Minkos.Add(box, mi);
                 return mi;
             }
@@ -155,11 +156,11 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 mink = getMinko(Box2);
                 Location anormal;
                 Location got = mink.RayTrace(start, end, out anormal);
-                if (!got.IsNaN())
-                {
+                //if (!got.IsNaN())
+                //{
                     //got = start - got;
                     //anormal = -anormal;
-                }
+                //}
                 normal = anormal;
                 return got;
             }

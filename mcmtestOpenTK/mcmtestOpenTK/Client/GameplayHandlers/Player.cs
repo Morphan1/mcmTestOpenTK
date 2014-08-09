@@ -142,7 +142,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             if (down)
             {
-                Maxs = new Location(1.5f, 1.5f, 5);
+                Maxs = new Location(1.5f, 1.5f, 7); // Due to unknown reasons, below 7 = bugs with collision D:
             }
             if (ClientCVar.g_noclip.ValueB)
             {
