@@ -126,20 +126,39 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         Minkowski mink = null;
 
+        Dictionary<AABB, Minkowski> Minkos = new Dictionary<AABB, Minkowski>();
+
+        public Minkowski getMinko(AABB box)
+        {
+            //box.Mins += box.Position;
+            //box.Maxs += box.Position;
+            box.Position = Location.Zero;
+            Minkowski mi;
+            if (Minkos.TryGetValue(box, out mi))
+            {
+                return mi;
+            }
+            else
+            {
+                mi = Minkowski.From(Vertices(), box.BoxPoints().ToList());
+                Minkos.Add(box, mi);
+                return mi;
+            }
+        }
+
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
             AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
             if (!hit.IsNaN() || BroadCollideBox.Box(Box3))
             {
-                //return hit;
-                mink = Minkowski.From(Box3.BoxPoints().ToList(), Vertices());
+                mink = getMinko(Box2);
                 Location anormal;
-                Location got = mink.RayTrace(Location.Zero, start - end, out anormal);
+                Location got = mink.RayTrace(start, end, out anormal);
                 if (!got.IsNaN())
                 {
-                    got = start - got;
-                    anormal = -anormal;
+                    //got = start - got;
+                    //anormal = -anormal;
                 }
                 normal = anormal;
                 return got;
@@ -247,7 +266,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 scalesign *= -1;
             }
             model.Draw(Position, new Location(yaw, 0, 0), new Location(scale));
-            /*
+            
             if (mink != null)
             {
                 Texture.GetTexture("skylands/wall1").Bind();
@@ -261,7 +280,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 GL.Vertex3(mink.Planes[0].vec1.X, mink.Planes[0].vec1.Y, mink.Planes[0].vec1.Z);
                 GL.End();
             }
-            */
+            
             //SimpleRenderer.RenderAABB(BroadCollideBox);
         }
     }

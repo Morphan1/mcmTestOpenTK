@@ -306,5 +306,15 @@ namespace mcmtestOpenTK.Shared.Collision
                 return new Location(res.X, res.Y, res.Z);
             }
         }
+
+        public override int GetHashCode()
+        {
+            return Mins.GetHashCode() + Maxs.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is AABB && Mins == ((AABB)obj).Mins && Maxs == ((AABB)obj).Maxs && Position == ((AABB)obj).Position;
+        }
     }
 }
