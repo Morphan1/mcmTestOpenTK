@@ -221,6 +221,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new ScriptCacheCommand());
             RegisterCommand(new StopCommand());
             RegisterCommand(new WaitCommand());
+            RegisterCommand(new WhileCommand());
 
             // Register debug command
             DebugInvalidCommand = new DebugOutputInvalidCommand();
