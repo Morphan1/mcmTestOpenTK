@@ -26,7 +26,17 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers.PacketsIn
             {
                 Time = BitConverter.ToDouble(input, 0);
                 yaw = BitConverter.ToSingle(input, 8);
+                if (yaw < 0 || yaw > 360)
+                {
+                    IsValid = false;
+                    return;
+                }
                 pitch = BitConverter.ToSingle(input, 12);
+                if (pitch < -89.9f || pitch > 89.9f)
+                {
+                    IsValid = false;
+                    return;
+                }
                 movement = BitConverter.ToUInt16(input, 16);
                 IsValid = true;
             }

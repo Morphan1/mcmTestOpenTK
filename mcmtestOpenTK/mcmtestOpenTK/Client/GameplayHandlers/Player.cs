@@ -100,13 +100,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             {
                 Direction.X -= 360;
             }
-            if (Direction.Y > 80)
+            if (Direction.Y > 89.9f)
             {
-                Direction.Y = 80;
+                Direction.Y = 89.9f;
             }
-            if (Direction.Y < -80)
+            if (Direction.Y < -89.9f)
             {
-                Direction.Y = -80;
+                Direction.Y = -89.9f;
             }
             if (!IsCustom)
             {
