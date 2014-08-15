@@ -27,7 +27,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
             {
                 string target = entry.GetArgument(0);
                 string newvalue = entry.GetArgument(1);
-                string a2 = entry.Arguments.Count > 2 ? entry.GetArgument(2): "";
+                string a2 = entry.Arguments.Count > 2 ? entry.GetArgument(2).ToLower(): "";
                 bool force = a2 == "force";
                 bool remove = a2 == "remove";
                 if (remove)
