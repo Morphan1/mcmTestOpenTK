@@ -124,6 +124,19 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
                     }
                     return ListEntries[0].Handle(data.Shrink());
                 // <--[tag]
+                // @Name ListTag.random
+                // @Group List Attributes
+                // @ReturnType Dynamic
+                // @Returns a random entry from the list
+                // EG, "one|two|three" gets "one", "two", or "three".
+                // -->
+                case "random":
+                    if (ListEntries.Count == 0)
+                    {
+                        return new TextTag("&null").Handle(data.Shrink());
+                    }
+                    return ListEntries[Utilities.random.Next(ListEntries.Count)].Handle(data.Shrink());
+                // <--[tag]
                 // @Name ListTag.last
                 // @Group List Attributes
                 // @ReturnType Dynamic
