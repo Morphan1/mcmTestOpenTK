@@ -291,7 +291,7 @@
     <Compile Include="Shared\Util\NetworkUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSystem\CommandHandlers\CommonCmds\QuitCommand.cs" />
-    <Compile Include="ServerSystem\GlobalHandlers\ConsoleHandler.cs" />
+    <Compile Include="Shared\ConsoleHandler.cs" />
     <Compile Include="ServerSystem\GlobalHandlers\Server_Base.cs" />
     <Compile Include="Shared\CVar.cs" />
     <Compile Include="Shared\CVarSystem.cs" />

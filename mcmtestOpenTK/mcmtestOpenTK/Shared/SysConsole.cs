@@ -16,6 +16,8 @@ namespace mcmtestOpenTK.Shared
 
         static Object ConsoleLock;
 
+        static Object WriteLock;
+
         static Thread ConsoleOutputThread;
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace mcmtestOpenTK.Shared
             Console.WriteLine("Preparing console...");
             Console.WriteLine("Starting system...");
             ConsoleLock = new Object();
+            WriteLock = new Object();
             ConsoleOutputThread = new Thread(new ThreadStart(ConsoleLoop));
             Program.ThreadsToClose.Add(ConsoleOutputThread);
             ConsoleOutputThread.Start();
@@ -54,7 +57,10 @@ namespace mcmtestOpenTK.Shared
                     // Also options to put a value like logs/%yyyy%/%mm%/%dd%.log
                     // TODO: Handle less terribly. Particular multiple-games-running logging
                     // FileHandler.AppendText("console.log", twaiting);
-                    WriteInternal(twaiting);
+                    lock (WriteLock)
+                    {
+                        WriteInternal(twaiting);
+                    }
                 }
                 Thread.Sleep(100);
             }
@@ -116,6 +122,7 @@ namespace mcmtestOpenTK.Shared
 
         static void WriteInternal(string text)
         {
+            Console.SetCursorPosition(0, Console.CursorTop);
             StringBuilder outme = new StringBuilder();
             for (int i = 0; i < text.Length; i++)
             {
@@ -184,6 +191,9 @@ namespace mcmtestOpenTK.Shared
             {
                 Console.Write(outme);
             }
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(">" + ConsoleHandler.read);
         }
 
         /// <summary>
