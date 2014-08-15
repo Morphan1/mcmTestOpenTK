@@ -216,6 +216,20 @@ namespace mcmtestOpenTK.Shared.TagHandlers.Objects
             }
         }
 
+        /// <summary>
+        /// Converts the ListTag to a list of strings.
+        /// </summary>
+        /// <returns>A list of strings</returns>
+        public List<string> ToStringList()
+        {
+            List<string> list = new List<string>(ListEntries.Count);
+            for (int i = 0; i < ListEntries.Count; i++)
+            {
+                list.Add(ListEntries[i].ToString());
+            }
+            return list;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

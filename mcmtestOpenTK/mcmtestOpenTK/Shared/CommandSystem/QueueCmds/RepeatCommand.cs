@@ -58,6 +58,19 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // repeat_index TextTag
     // repeat_total TextTag
     // -->
+    class RepeatCommandData : AbstractCommandEntryData
+    {
+        public int Index;
+        public int Total;
+        public override AbstractCommandEntryData Duplicate()
+        {
+            RepeatCommandData toret = new RepeatCommandData();
+            toret.Index = Index;
+            toret.Total = Total;
+            return toret;
+        }
+    }
+
     class RepeatCommand : AbstractCommand
     {
         public RepeatCommand()
@@ -82,16 +95,17 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     if (entry.BlockOwner.Command.Name == "repeat" || entry.BlockOwner.Block == null || entry.BlockOwner.Block.Count == 0
                         || entry.BlockOwner.Block[entry.BlockOwner.Block.Count - 1] != entry)
                     {
-                        entry.BlockOwner.Index++;
-                        if (entry.BlockOwner.Index > entry.BlockOwner.Result)
+                        RepeatCommandData data = (RepeatCommandData)entry.BlockOwner.Data;
+                        data.Index++;
+                        if (data.Index > data.Total)
                         {
                             entry.Good("Repeating ending, reached target.");
                         }
                         else
                         {
-                            entry.Good("Repeating at index <{color.emphasis}>" + entry.BlockOwner.Index + "/" + entry.BlockOwner.Result + "<{color.base}>...");
-                            entry.Queue.SetVariable("repeat_index", entry.BlockOwner.Index.ToString());
-                            entry.Queue.SetVariable("repeat_total", entry.BlockOwner.Result.ToString());
+                            entry.Good("Repeating at index <{color.emphasis}>" + data.Index + "/" + data.Total + "<{color.base}>...");
+                            entry.Queue.SetVariable("repeat_index", data.Index.ToString());
+                            entry.Queue.SetVariable("repeat_total", data.Total.ToString());
                             entry.Queue.AddCommandsNow(entry.BlockOwner.Block);
                         }
                     }
@@ -163,13 +177,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     if (target <= 0)
                     {
                         entry.Good("Not repeating.");
+                        return;
                     }
-                    if (entry.Result > 0)
-                    {
-                        entry.Block.RemoveAt(entry.Block.Count - 1);
-                    }
-                    entry.Result = target;
-                    entry.Index = 1;
+                    RepeatCommandData data = new RepeatCommandData();
+                    data.Total = target;
+                    data.Index = 1;
+                    entry.Data = data;
                     if (entry.Block != null)
                     {
                         entry.Good("Repeating <{color.emphasis}>" + target + "<{color.base}> times...");

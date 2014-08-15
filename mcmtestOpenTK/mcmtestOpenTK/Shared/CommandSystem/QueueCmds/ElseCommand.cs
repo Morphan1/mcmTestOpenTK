@@ -12,7 +12,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
         public ElseCommand()
         {
             Name = "else";
-            Arguments = "[if <true/false>]";
+            Arguments = "[if true/false]";
             Description = "Executes the following block of commands only if the previous if failed, "
             + "and optionally if additional requirements are met.";
             IsFlow = true;
@@ -20,7 +20,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Result = 0;
+            IfCommandData data = new IfCommandData();
+            data.Result = 0;
+            entry.Data = data;
             CommandEntry IfEntry = null;
             CommandEntry Holder = entry.Queue.LastCommand;
             while (IfEntry == null && Holder != null)
@@ -40,7 +42,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 entry.Bad("Else invalid: IF command did not preceed!");
                 return;
             }
-            if (IfEntry.Result == 1)
+            if (((IfCommandData)IfEntry.Data).Result == 1)
             {
                 entry.Good("Else continuing, IF passed.");
                 return;
@@ -62,7 +64,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                         if (success)
                         {
                             entry.Good("Else if is true, executing...");
-                            entry.Result = 1;
+                            data.Result = 1;
                             entry.Queue.AddCommandsNow(entry.Block);
                         }
                         else
@@ -77,7 +79,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 if (entry.Block != null)
                 {
                     entry.Good("Else is valid, executing...");
-                    entry.Result = 1;
+                    data.Result = 1;
                     entry.Queue.AddCommandsNow(entry.Block);
                 }
                 else

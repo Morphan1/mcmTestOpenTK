@@ -62,6 +62,19 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
     // foreach_value TextTag
     // foreach_list TextTag
     // -->
+    class ForeachCommandData : AbstractCommandEntryData
+    {
+        public List<string> List;
+        public int Index;
+        public override AbstractCommandEntryData Duplicate()
+        {
+            ForeachCommandData toret = new ForeachCommandData();
+            toret.List = new List<string>(List);
+            toret.Index = Index;
+            return toret;
+        }
+    }
+
     class ForeachCommand : AbstractCommand
     {
         public ForeachCommand()
@@ -86,19 +99,19 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     if (entry.BlockOwner.Command.Name == "foreach" || entry.BlockOwner.Block == null || entry.BlockOwner.Block.Count == 0
                         || entry.BlockOwner.Block[entry.BlockOwner.Block.Count - 1] != entry)
                     {
-                        entry.BlockOwner.Index++;
-                        if (entry.BlockOwner.Index > entry.BlockOwner.Result)
+                        ForeachCommandData data = (ForeachCommandData)entry.BlockOwner.Data;
+                        data.Index++;
+                        if (data.Index > data.List.Count)
                         {
                             entry.Good("Foreach loop ending, reached target.");
                         }
                         else
                         {
-                            entry.Good("Foreach loop continuing at index <{color.emphasis}>" + entry.BlockOwner.Index + "/" + entry.BlockOwner.Result + "<{color.base}>...");
-                            entry.Queue.SetVariable("foreach_index", entry.BlockOwner.Index.ToString());
-                            entry.Queue.SetVariable("foreach_total", entry.BlockOwner.Result.ToString());
-                            ListTag list = (ListTag)entry.BlockOwner.obj;
-                            entry.Queue.SetVariable("foreach_value", list.ListEntries[entry.BlockOwner.Index - 1].ToString());
-                            entry.Queue.SetVariable("foreach_list", list.ToString());
+                            entry.Good("Foreach loop continuing at index <{color.emphasis}>" + data.Index + "/" + data.List.Count + "<{color.base}>...");
+                            entry.Queue.SetVariable("foreach_index", data.Index.ToString());
+                            entry.Queue.SetVariable("foreach_total", data.List.Count.ToString());
+                            entry.Queue.SetVariable("foreach_value", data.List[data.Index - 1].ToString());
+                            entry.Queue.SetVariable("foreach_list", new ListTag(data.List).ToString());
                             entry.Queue.AddCommandsNow(entry.BlockOwner.Block);
                         }
                     }
@@ -171,14 +184,12 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                     if (target <= 0)
                     {
                         entry.Good("Not looping.");
+                        return;
                     }
-                    if (entry.Result > 0)
-                    {
-                        entry.Block.RemoveAt(entry.Block.Count - 1);
-                    }
-                    entry.Result = target;
-                    entry.Index = 1;
-                    entry.obj = list;
+                    ForeachCommandData data = new ForeachCommandData();
+                    data.Index = 1;
+                    data.List = list.ToStringList();
+                    entry.Data = data;
                     if (entry.Block != null)
                     {
                         entry.Good("Foreach looping <{color.emphasis}>" + target + "<{color.base}> times...");

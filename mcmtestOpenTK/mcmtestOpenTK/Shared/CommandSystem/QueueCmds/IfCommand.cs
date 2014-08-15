@@ -6,20 +6,33 @@ using mcmtestOpenTK.Shared;
 
 namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
 {
+    class IfCommandData : AbstractCommandEntryData
+    {
+        public int Result;
+        public override AbstractCommandEntryData Duplicate()
+        {
+            IfCommandData toret = new IfCommandData();
+            toret.Result = Result;
+            return toret;
+        }
+    }
+
     class IfCommand: AbstractCommand
     {
         // TODO: META
         public IfCommand()
         {
             Name = "if";
-            Arguments = "<true/false>";
+            Arguments = "true/false";
             Description = "Executes the following block of commands only if the input is true.";
             IsFlow = true;
         }
 
         public override void Execute(CommandEntry entry)
         {
-            entry.Result = 0;
+            IfCommandData data = new IfCommandData();
+            data.Result = 0;
+            entry.Data = data;
             if (entry.Arguments.Count < 1)
             {
                 ShowUsage(entry);
@@ -40,7 +53,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem.QueueCmds
                 if (success)
                 {
                     entry.Good("If is true, executing...");
-                    entry.Result = 1;
+                    data.Result = 1;
                     entry.Block.Add(new CommandEntry("if \0CALLBACK", null, entry,
                         this, new List<string> { "\0CALLBACK" }, "if", 0));
                     entry.Queue.AddCommandsNow(entry.Block);

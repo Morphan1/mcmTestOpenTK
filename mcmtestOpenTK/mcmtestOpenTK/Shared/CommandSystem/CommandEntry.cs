@@ -155,19 +155,9 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public Outputter Output = null;
 
         /// <summary>
-        /// A result set by the command, if any.
-        /// </summary>
-        public int Result = 0;
-
-        /// <summary>
-        /// An index set by the command, if any.
-        /// </summary>
-        public int Index = 0;
-
-        /// <summary>
         /// An object set by the command, if any.
         /// </summary>
-        public Object obj = null;
+        public AbstractCommandEntryData Data;
 
         /// <summary>
         /// What marker was used. 0 = none, 1 = +, 2 = -, 3 = !
@@ -206,6 +196,25 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             for (int i = index; i < Arguments.Count; i++)
             {
                 result.Append(GetArgument(i));
+                if (i + 1 < Arguments.Count)
+                {
+                    result.Append(" ");
+                }
+            }
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Gets all arguments (without parsing) piled together into a string.
+        /// </summary>
+        /// <param name="index">The index to start at</param>
+        /// <returns>The combined string</returns>
+        public string AllOriginalArguments(int index = 0)
+        {
+            StringBuilder result = new StringBuilder(CommandLine.Length);
+            for (int i = index; i < Arguments.Count; i++)
+            {
+                result.Append(Arguments[i]);
                 if (i + 1 < Arguments.Count)
                 {
                     result.Append(" ");
@@ -271,12 +280,17 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             entry.BlockOwner = NewOwner;
             entry.Command = Command;
             entry.CommandLine = CommandLine;
-            entry.Index = Index;
             entry.Name = Name;
             entry.Output = Output;
             entry.Queue = Queue;
-            entry.Result = Result;
-            entry.obj = obj;
+            if (Data != null)
+            {
+                entry.Data = Data.Duplicate();
+            }
+            else
+            {
+                entry.Data = null;
+            }
             entry.Marker = Marker;
             return entry;
         }
