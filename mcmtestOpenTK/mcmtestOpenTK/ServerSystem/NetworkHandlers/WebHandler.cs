@@ -59,7 +59,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             else if (Request[0] == "POST")
             {
                 // TODO
-                Page = btos("Cannot post currently...");
+                Page = stob("Cannot post currently...");
             }
         }
 
@@ -86,7 +86,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
             if (page == "/")
             {
                 // TODO
-                Page = btos("SERVER: " + HTMLEscape(ServerCVar.v_name.Value) + "\n<br>TODO: MORE INFO");
+                Page = stob("SERVER: " + HTMLEscape(ServerCVar.v_name.Value) + "\n<br>TODO: MORE INFO");
                 Status = 200;
                 return;
             }
@@ -95,7 +95,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 // TODO
             }
             Status = 404;
-            Page = btos("TODO: 404 page!");
+            Page = stob("TODO: 404 page!");
         }
 
         string HTMLEscape(string input)
@@ -105,12 +105,15 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
 
         void Redirect(string page)
         {
-            Page = btos("Redirecting...");
-            AdditionalHeaders = "\r\nLocation: " + page;
+            Page = stob("Redirecting...");
+            AdditionalHeaders += "\r\nLocation: " + page;
             Status = 302;
         }
 
-        byte[] btos(string input)
+        /// <summary>
+        /// String to bytes.
+        /// </summary>
+        byte[] stob(string input)
         {
             return FileHandler.encoding.GetBytes(input);
         }
@@ -151,7 +154,7 @@ namespace mcmtestOpenTK.ServerSystem.NetworkHandlers
                 fpage = FileHandler.GZip(Page);
                 AdditionalHeaders += "\r\nContent-Encoding: gzip";
             }
-            byte[] Header = btos("HTTP/1.1 " + StatusString()
+            byte[] Header = stob("HTTP/1.1 " + StatusString()
                 + "\r\nContent-Length: " + fpage.Length
                 + "\r\nContent-Type: " + ContentType
                 + "\r\nConnection: close"
