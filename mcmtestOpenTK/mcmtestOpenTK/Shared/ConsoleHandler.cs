@@ -87,6 +87,12 @@ namespace mcmtestOpenTK.Shared
                 {
                     pos = read.Length;
                 }
+                else if ((pressed.Key >= ConsoleKey.F1 && pressed.Key <= ConsoleKey.F24)
+                    || pressed.Key == ConsoleKey.Escape)
+                {
+                    // Do nothing
+                }
+                // TODO: Up/Down arrows
                 // TODO: Other special keys
                 else
                 {
@@ -103,7 +109,7 @@ namespace mcmtestOpenTK.Shared
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(">" + read + " ");
-            // TODO: Replace this nonsense with scrolling!
+            // TODO: Replace this nonsense with scrolling, or multi-line working
             if (pos + 1 >= Console.BufferWidth)
             {
                 Console.SetBufferSize(Console.BufferWidth + 1, Console.BufferHeight);
