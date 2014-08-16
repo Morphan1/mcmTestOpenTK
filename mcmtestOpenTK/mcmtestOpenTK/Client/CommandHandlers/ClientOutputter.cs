@@ -18,11 +18,6 @@ namespace mcmtestOpenTK.Client.CommandHandlers
             UIConsole.WriteLine(text);
         }
 
-        public override void Write(string text)
-        {
-            UIConsole.Write(text);
-        }
-
         public override void Good(string tagged_text, DebugMode mode)
         {
             string text = ClientCommands.CommandSystem.TagSystem.ParseTags(tagged_text, TextStyle.Color_Outgood, null, mode);

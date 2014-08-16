@@ -14,12 +14,6 @@ namespace mcmtestOpenTK.Shared.CommandSystem
         public abstract void WriteLine(string text);
 
         /// <summary>
-        /// Writes text to the console.
-        /// </summary>
-        /// <param name="text">The text to write</param>
-        public abstract void Write(string text);
-
-        /// <summary>
         /// Used to output a failure message.
         /// </summary>
         /// <param name="tagged_text">The text to output, with tags included</param>

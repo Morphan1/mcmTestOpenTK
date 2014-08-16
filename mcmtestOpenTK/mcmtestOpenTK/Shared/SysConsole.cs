@@ -112,7 +112,7 @@ namespace mcmtestOpenTK.Shared
         /// Writes some colored text to the system console.
         /// </summary>
         /// <param name="text">The text to write</param>
-        public static void Write(string text)
+        private static void Write(string text)
         {
             lock (ConsoleLock)
             {

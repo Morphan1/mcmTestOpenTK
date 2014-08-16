@@ -14,10 +14,6 @@ namespace mcmtestOpenTK.ServerSystem.CommandHandlers
         {
             SysConsole.Output(OutputType.INFO, text);
         }
-        public override void Write(string text)
-        {
-            SysConsole.Write(text);
-        }
 
         public override void Good(string tagged_text, DebugMode mode)
         {
