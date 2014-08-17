@@ -20,12 +20,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// <summary>
         /// The default collision mins for a player.
         /// </summary>
-        public static Location DefaultMins = new Location(-1.5f, -1.5f, 0);
+        public static Location DefaultMins = new Location(-3f, -3f, 0);
 
         /// <summary>
         /// The default collision maxes for a player.
         /// </summary>
-        public static Location DefaultMaxes = new Location(1.5f, 1.5f, 8f);
+        public static Location DefaultMaxes = new Location(3f, 3f, 16f);
 
         CubeModel model;
 
@@ -61,7 +61,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public OtherPlayer(): base(true, EntityType.PLAYER)
         {
-            model = new CubeModel(Location.Zero, new Location(3, 3, 8), Texture.Test);
+            model = new CubeModel(Location.Zero, new Location(6, 6, 16), Texture.Test);
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
             Solid = true;
@@ -132,19 +132,21 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             }
             if (Down)
             {
-                Maxs = new Location(1.5f, 1.5f, 5);
+                Maxs = new Location(3f, 3f, 10);
             }
             else
             {
-                if (!Collision.Box(Position, new Location(-1.5f, -1.5f, 0), new Location(1.5f, 1.5f, 8)))
+                if (!Collision.Box(Position, new Location(-3f, -3f, 0), new Location(3f, 3f, 16)))
                 {
-                    Maxs = new Location(1.5f, 1.5f, 8);
+                    Maxs = new Location(3f, 3f, 16);
                 }
                 else
                 {
+                    Maxs = new Location(3f, 3f, 10);
                     Down = true;
                 }
             }
+            bool on_ground = false;
             if (Noclip)
             {
                 Gravity = 0;
@@ -160,7 +162,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 {
                     movement.Z -= 1;
                 }
-                Velocity = movement * 30;
+                Velocity = movement * MoveSpeed;
             }
             else
             {
@@ -168,7 +170,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180);
                 }
-                bool on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-1.5f, -1.5f, -0.01f), new Location(1.5f, 1.5f, 2));
+                on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-3f, -3f, -0.01f), new Location(3f, 3f, 2));
                 if (Up && on_ground && !Jumped)
                 {
                     Velocity.Z = JumpPower * (Down ? 0.5 : 1);
@@ -187,22 +189,22 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Position = Collision.SlideBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs);
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
-            if (Position != target) // If we missed the target
+            if (Position != target && on_ground) // If we missed the target
             {
                 // Try a flat target
                 target = new Location(target.X, target.Y, Position.Z);
                 // If the flat target is solid
-                if (Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                if (Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                 {
-                    // Raise the target by 2
-                    target.Z += 2;
+                    // Raise the target by 4
+                    target.Z += 4;
                     // If the higher target has room
-                    if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0), Maxs))
+                    if (!Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
                     {
                         // Move up and forward
-                        Position = Collision.SlideBox(Position + new Location(0, 0, 2), target + new Location(0, 0, 2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position + new Location(0, 0, 4), target + new Location(0, 0, 4), new Location(-3f, -3f, 0), Maxs);
                         // move back into place
-                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -2), new Location(-1.5f, -1.5f, 0), Maxs);
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -4), new Location(-3f, -3f, 0), Maxs);
                     }
                 }
             }
@@ -260,7 +262,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            model.Position = new Location(Position.X - 1.5f, Position.Y - 1.5f, Position.Z);
+            model.Position = new Location(Position.X - model.Scale.X / 2, Position.Y - model.Scale.Y / 2, Position.Z);
             model.Draw();
             GL.Begin(PrimitiveType.Lines);
             GL.Color4(Color4.Green);

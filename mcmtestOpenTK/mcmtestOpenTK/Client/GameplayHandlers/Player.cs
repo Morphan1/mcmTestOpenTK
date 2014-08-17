@@ -199,19 +199,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             Location target = Position + Velocity * MyDelta;
             Location ploc = Position;
-            /*if (!Collision.Box(target, new Location(-1.5f, -1.5f, 0f), Maxs))
-            {
-                Position = target;
-            }*/
-            //Location normal;
             Position = Collision.SlideBox(Position, target, new Location(-3f, -3f, 0), Maxs);
-            /*
-            Position = Collision.LineBox(Position, target, new Location(-1.5f, -1.5f, 0), Maxs, out normal);
-            if (!normal.IsNaN())
-            {
-                Position += normal * 0.01f;
-            }
-            */
             Velocity = (Position - ploc) / MyDelta;
             // Climb steps
             // TODO: Make less stupid and more tick-independent
@@ -230,7 +218,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                         // Move up and forward
                         Position = Collision.SlideBox(Position + new Location(0, 0, 4), target + new Location(0, 0, 4), new Location(-3f, -3f, 0), Maxs);
                         // move back into place
-                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -4), new Location(-3f, -3f, 0), Maxs);
+                        Position = Collision.SlideBox(Position, target + new Location(0, 0, -4), new Location(-3f, -3f, 0), Maxs); // TODO: Mins var
                     }
                 }
             }
