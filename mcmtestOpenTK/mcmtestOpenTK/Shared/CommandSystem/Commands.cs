@@ -220,6 +220,7 @@ namespace mcmtestOpenTK.Shared.CommandSystem
             RegisterCommand(new RunCommand());
             RegisterCommand(new ScriptCacheCommand());
             RegisterCommand(new StopCommand());
+            RegisterCommand(new UndefineCommand());
             RegisterCommand(new WaitCommand());
             RegisterCommand(new WhileCommand());
 

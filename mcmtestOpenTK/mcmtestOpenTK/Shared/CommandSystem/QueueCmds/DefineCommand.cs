@@ -48,8 +48,8 @@ namespace mcmtestOpenTK.Shared.CommandSystem.CommonCmds
                 string target = entry.GetArgument(0);
                 string newvalue = entry.GetArgument(1);
                 entry.Queue.SetVariable(target, newvalue);
-                entry.Good("<{color.info}>Queue variable '<{color.emphasis}>" + TagParser.Escape(target) +
-                    "<{color.info}>' set to '<{color.emphasis}>" + TagParser.Escape(newvalue) + "<{color.info}>'.");
+                entry.Good("Queue variable '<{color.emphasis}>" + TagParser.Escape(target.ToLower()) +
+                    "<{color.base}>' set to '<{color.emphasis}>" + TagParser.Escape(newvalue) + "<{color.base}>'.");
             }
         }
     }
