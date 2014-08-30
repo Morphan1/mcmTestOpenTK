@@ -146,7 +146,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
             }
             else
             {
-                if (!Collision.Box(Position, new Location(-3f, -3f, 0), new Location(3f, 3f, 16)))
+                if (!Collision.Box(new Location(-3f, -3f, 0) + Position, new Location(3f, 3f, 16) + Position))
                 {
                     Maxs = new Location(3f, 3f, 16);
                 }
@@ -179,7 +179,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 {
                     movement = Utilities.RotateVector(movement, Direction.X * Utilities.PI180).Normalize();
                 }
-                on_ground = Velocity.Z < 0.01f && Collision.Box(Position, new Location(-3f, -3f, -0.01f), new Location(3f, 3f, 2));
+                on_ground = Velocity.Z < 0.01f && Collision.Box(new Location(-3f, -3f, -0.01f) + Position, new Location(3f, 3f, 2) + Position);
                 if (up && on_ground && !jumped)
                 {
                     Velocity.Z = JumpPower * (down ? 0.7 : 1);
@@ -208,12 +208,12 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
                 // Try a flat target
                 target = new Location(target.X, target.Y, Position.Z);
                 // If the flat target is solid
-                if (Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
+                if (Collision.Box(new Location(-3f, -3f, 0) + target, Maxs + target))
                 {
                     // Raise the target by 4
                     target.Z += 4;
                     // If the higher target has room
-                    if (!Collision.Box(target, new Location(-3f, -3f, 0), Maxs))
+                    if (!Collision.Box(new Location(-3f, -3f, 0) + target, Maxs + target))
                     {
                         // Move up and forward
                         Position = Collision.SlideBox(Position + new Location(0, 0, 4), target + new Location(0, 0, 4), new Location(-3f, -3f, 0), Maxs);

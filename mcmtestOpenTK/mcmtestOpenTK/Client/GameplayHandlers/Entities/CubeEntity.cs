@@ -23,13 +23,15 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public float Texture_VScale;
         public float Texture_HShift;
         public float Texture_VShift;
+        Location pPosition;
 
         public CubeEntity()
             : base(false, EntityType.CUBE)
         {
             Mins = new Location(0);
             Solid = true;
-            CollisionModel = new AABB(Position, Mins, Maxs);
+            CollisionModel = new AABB(Mins + Position, Maxs + Position);
+            pPosition = Position;
         }
 
         /// <summary>
@@ -51,7 +53,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 MainGame.GeneralShader.Bind();
             }
             texture.Bind();
-            CollisionModel.Position = Position;
+            CollisionModel.Maxs += Position - pPosition;
+            CollisionModel.Mins += Position - pPosition;
             Plane[] tris = CollisionModel.CalculateTriangles();
             for (int i = 0; i < tris.Length; i++)
             {
@@ -61,12 +64,14 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void ReadBytes(byte[] data)
         {
-            if (data.Length < 12 + 4 * 4 + 1)
+            if (data.Length < 12 + 12 + 4 * 4 + 1)
             {
                 throw new ArgumentException("Binary network data for CUBE entity is invalid!");
             }
             int pos = 0;
             Maxs = Location.FromBytes(data, pos);
+            pos += 12;
+            Mins = Location.FromBytes(data, pos);
             pos += 12;
             Texture_HScale = BitConverter.ToSingle(data, pos);
             pos += 4;
@@ -79,9 +84,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             string texturestr = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             texture = Texture.GetTexture(texturestr);
             pos += 4;
-            CollisionModel.Position = Position;
-            CollisionModel.Mins = Mins;
-            CollisionModel.Maxs = Maxs;
+            CollisionModel.Mins = Mins + Position;
+            CollisionModel.Maxs = Maxs + Position;
             /*
             RenderPlane[] Planes = CollisionModel.CalculateTriangles();
             StringBuilder planestr = new StringBuilder(Planes.Length * 36);

@@ -62,11 +62,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override byte[] GetData()
         {
-            byte[] scalebytes = Scale.ToBytes();
-            byte[] toret = new byte[scalebytes.Length + 4 * 4 + 4];
+            byte[] maxbytes = Maxs.ToBytes();
+            byte[] minbytes = Mins.ToBytes();
+            byte[] toret = new byte[maxbytes.Length + minbytes.Length + 4 * 4 + 4];
             int pos = 0;
-            scalebytes.CopyTo(toret, pos);
-            pos += scalebytes.Length;
+            maxbytes.CopyTo(toret, pos);
+            pos += maxbytes.Length;
+            minbytes.CopyTo(toret, pos);
+            pos += minbytes.Length;
             BitConverter.GetBytes(Texture_HScale).CopyTo(toret, pos);
             pos += 4;
             BitConverter.GetBytes(Texture_VScale).CopyTo(toret, pos);
@@ -82,10 +85,21 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override bool HandleVariable(string varname, string vardata)
         {
-            if (varname == "scale")
+            if (varname == "mins")
+            {
+                Mins = Location.FromString(vardata);
+            }
+            else if (varname == "maxs")
             {
                 Scale = Location.FromString(vardata);
                 Maxs = Scale;
+            }
+            else if (varname == "scale")
+            {
+                Scale = Location.FromString(vardata);
+                Maxs = Scale + Position;
+                Mins = Position;
+                Position = Location.Zero;
             }
             else if (varname == "texture")
             {
@@ -117,7 +131,8 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         public override List<Variable> GetSaveVars()
         {
             List<Variable> ToReturn = base.GetSaveVars();
-            ToReturn.Add(new Variable("scale", Scale.ToSimpleString()));
+            ToReturn.Add(new Variable("mins", Mins.ToSimpleString()));
+            ToReturn.Add(new Variable("maxs", Maxs.ToSimpleString()));
             ToReturn.Add(new Variable("texture", texture));
             ToReturn.Add(new Variable("texture_hscale", Texture_HScale.ToString()));
             ToReturn.Add(new Variable("texture_vscale", Texture_VScale.ToString()));
@@ -168,10 +183,10 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
 
         public override bool Box(AABB Box2)
         {
-            Location elow = Position + Mins;
-            Location ehigh = Position + Maxs;
-            Location Low = Box2.Position + Box2.Mins;
-            Location High = Box2.Position + Box2.Maxs;
+            Location elow = Mins;
+            Location ehigh = Maxs;
+            Location Low = Box2.Mins;
+            Location High = Box2.Maxs;
             return Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
                         High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
         }

@@ -47,7 +47,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers.Entities
         /// <returns>Whether this is blocked</returns>
         public bool IsBlocked()
         {
-            return Collision.Box(Position, Player.DefaultMins, Player.DefaultMaxes);
+            return Collision.Box(Player.DefaultMins + Position, Player.DefaultMaxes + Position);
         }
 
         public override bool HandleVariable(string varname, string vardata)

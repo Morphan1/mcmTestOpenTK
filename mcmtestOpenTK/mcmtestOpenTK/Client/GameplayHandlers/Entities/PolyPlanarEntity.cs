@@ -30,7 +30,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Solid = true;
             Planes = new List<Plane>();
             Textures = new List<Texture>();
-            BroadCollideBox = new AABB(Location.Zero, Location.Zero, Location.Zero);
+            BroadCollideBox = new AABB(Location.Zero, Location.Zero);
             model = Model.GetModel("test");
         }
 
@@ -132,7 +132,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             //box.Mins += box.Position;
             //box.Maxs += box.Position;
-            box.Position = Location.Zero;
+            // TODO?: box.Position = Location.Zero;
             Minkowski mi;
             if (Minkos.TryGetValue(box, out mi))
             {
@@ -150,7 +150,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
-            AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+            AABB Box3 = new AABB(Box2.Mins + start, Box2.Maxs + start);
             if (!hit.IsNaN() || BroadCollideBox.Box(Box3))
             {
                 mink = getMinko(Box2);
@@ -194,9 +194,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
-            BroadCollideBox.Position = Planes[0].vec1;
-            BroadCollideBox.Mins = Location.Zero;
-            BroadCollideBox.Maxs = Location.Zero;
+            BroadCollideBox.Mins = Planes[0].vec1;
+            BroadCollideBox.Maxs = Planes[0].vec1;
             for (int i = 0; i < Planes.Count; i++)
             {
                 //planestr.Append(Planes[i].ToString()).Append("_");
