@@ -17,6 +17,62 @@ namespace mcmtestOpenTK.Shared.Collision
             Maxs = _Maxs;
         }
 
+        /// <summary>
+        /// Finds the center of the AABB.
+        /// </summary>
+        public Location Center()
+        {
+            return Mins + (Maxs - Mins) / 2;
+        }
+
+        /// <summary>
+        /// Finds the extent of the AABB.
+        /// </summary>
+        public Location Extent()
+        {
+            return (Maxs - Mins) / 2;
+        }
+
+        /// <summary>
+        /// Changes the center of the AABB.
+        /// </summary>
+        /// <param name="loc">The new center</param>
+        public void Recenter(Location loc)
+        {
+            Location adjust = loc - Center();
+            Mins += adjust;
+            Maxs += adjust;
+        }
+
+        /// <summary>
+        /// Calculates the radius of the box in the direction towards a point.
+        /// </summary>
+        /// <param name="point2">The point that is the target of the radius calculation</param>
+        public Location Radius(Location point2)
+        {
+            Location topfrontleft = Maxs;
+            Location backbottomright = Mins;
+            Location externpt = point2;
+            Location middle = Maxs / 2 + backbottomright / 2;
+            topfrontleft -= middle;
+            backbottomright -= middle;
+            externpt -= middle;
+            externpt /= topfrontleft;
+            Location mag = new Location(Math.Abs(externpt.X), Math.Abs(externpt.Y), Math.Abs(externpt.Z));
+            double max = Math.Max(mag.X, Math.Max(mag.Y, mag.Z));
+            if (max < 1)
+            {
+                max = 1;
+            }
+            externpt /= max;
+            externpt = externpt * topfrontleft + middle;
+            return externpt - Center();
+        }
+
+        /// <summary>
+        /// Expands the AABB to include a point.
+        /// </summary>
+        /// <param name="point">The point to include</param>
         public void Include(Location point)
         {
             if (point.X < Mins.X)

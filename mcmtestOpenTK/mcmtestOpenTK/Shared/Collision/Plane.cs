@@ -52,7 +52,7 @@ namespace mcmtestOpenTK.Shared.Collision
         }
 
         /// <summary>
-        /// Finds where a line hits the line, if anywhere.
+        /// Finds where a line hits the plane, if anywhere.
         /// </summary>
         /// <param name="start">The start of the line</param>
         /// <param name="end">The end of the line</param>
@@ -157,6 +157,16 @@ namespace mcmtestOpenTK.Shared.Collision
         public static Plane FromBytes(byte[] input)
         {
             return new Plane(Location.FromBytes(input, 0), Location.FromBytes(input, 12), Location.FromBytes(input, 24));
+        }
+
+        /// <summary>
+        /// Returns whether the plane intersects the box.
+        /// </summary>
+        /// <param name="Box">The box to intersect with</param>
+        public bool Box(AABB Box)
+        {
+            // TODO
+            return false;
         }
     }
 }
