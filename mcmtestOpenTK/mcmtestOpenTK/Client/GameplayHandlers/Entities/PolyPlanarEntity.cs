@@ -170,15 +170,13 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 AABB box3 = new AABB(Box2.Mins + start, Box2.Maxs + start);
                 for (int i = 0; i < Planes.Count; i++)
                 {
-                    Location rad = box3.Radius(-Planes[i].Normal * (box3.Extent().X + box3.Extent().Y + box3.Extent().Z));
-                    hit = Planes[i].IntersectLine(box3.Center() - rad, end - rad) + rad;
+                    Location rad = box3.Radius(Planes[i].Normal * (box3.Extent().X + box3.Extent().Y + box3.Extent().Z));
+                    hit = Planes[i].IntersectLine(box3.Center() + rad, end + rad) - rad;
                     AABB box4 = new AABB(box3.Mins - new Location(0.1f), Box3.Maxs + new Location(0.1f));
-                    AABB box5 = new AABB(box3.Mins + new Location(0.1f), Box3.Maxs - new Location(0.1f));
                     box4.Recenter(hit);
                     if (!hit.IsNaN()
                         && (current.IsNaN() || (hit - box3.Center()).LengthSquared() < (current - box3.Center()).LengthSquared())
-                        && Box(box4)
-                        && !Box(box5))
+                        && Box(box4))
                     {
                         cnormal = Planes[i].Normal;
                         current = hit;
