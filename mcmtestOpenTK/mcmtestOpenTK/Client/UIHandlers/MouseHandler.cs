@@ -7,6 +7,7 @@ using OpenTK;
 using OpenTK.Input;
 using mcmtestOpenTK.Client.GlobalHandler;
 using mcmtestOpenTK.Shared;
+using mcmtestOpenTK.Shared.Util;
 
 namespace mcmtestOpenTK.Client.UIHandlers
 {
@@ -20,7 +21,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
         /// <summary>
         /// How much the mouse has moved this tick.
         /// </summary>
-        public static Vector2 MouseDelta = new Vector2();
+        public static Location MouseDelta = new Location();
 
         /// <summary>
         /// The current mouse state for this tick.
@@ -87,7 +88,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             {
                 double MoveX = (((MainGame.ScreenWidth / 2) - MouseX()) * MainGame.Delta * MainGame.MouseSensitivity);
                 double MoveY = (((MainGame.ScreenHeight / 2) - MouseY()) * MainGame.Delta * MainGame.MouseSensitivity);
-                MouseDelta = new Vector2((float)MoveX, (float)MoveY);
+                MouseDelta = new Location((float)MoveX, (float)MoveY, 0);
                 CenterMouse();
                 PreviousMouse = CurrentMouse;
                 CurrentMouse = Mouse.GetState();
@@ -97,7 +98,7 @@ namespace mcmtestOpenTK.Client.UIHandlers
             }
             else
             {
-                MouseDelta = new Vector2(0, 0);
+                MouseDelta = Location.Zero;
             }
             if (MainGame.PrimaryGameWindow.Focused && !MouseCaptured)
             {
