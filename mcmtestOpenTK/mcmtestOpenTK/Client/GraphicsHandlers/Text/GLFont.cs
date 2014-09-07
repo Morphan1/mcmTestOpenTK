@@ -86,7 +86,15 @@ namespace mcmtestOpenTK.Client.GraphicsHandlers.Text
         public static void LoadTextFile()
         {
             textfile = "";
-            string[] datas = FileHandler.ReadText("info/characters.dat").Replace("\r", "").Split('\n');
+            string[] datas;
+            if (FileHandler.Exists("info/characters.dat"))
+            {
+                datas = FileHandler.ReadText("info/characters.dat").Replace("\r", "").Split('\n');
+            }
+            else
+            {
+                datas = new string[] { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=~`[]{};:'\",./<>?\\| " } ;
+            }
             for (int i = 0; i < datas.Length; i++)
             {
                 if (datas[i].Length > 0 && !datas[i].StartsWith("//"))
