@@ -68,15 +68,14 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
         }
 
         /// <summary>
-        /// Checks for solids at a specific point with the specific bounding box.
+        /// Checks for solids within a specified bounding box.
         /// </summary>
-        /// <param name="point">The point to check at</param>
         /// <param name="mins">The mins of the box</param>
         /// <param name="maxs">The maxes of the box</param>
         /// <returns>Whether there is a solid there</returns>
-        public static bool Box(Location point, Location mins, Location maxs)
+        public static bool Box(Location mins, Location maxs)
         {
-            AABB Box2 = new AABB(point, mins, maxs);
+            AABB Box2 = new AABB(mins, maxs);
             for (int i = 0; i < Server.MainWorld.Solids.Count; i++)
             {
                 Entity solid = Server.MainWorld.Solids[i];
@@ -112,7 +111,7 @@ namespace mcmtestOpenTK.ServerSystem.GameHandlers
             // Keep track of what hit location we had
             Location final = Target;
             Location fnormal = Location.NaN;
-            AABB Box2 = new AABB(Location.Zero, Mins, Maxs);
+            AABB Box2 = new AABB(Mins, Maxs);
             // Loop through all solids.
             for (int i = 0; i < Server.MainWorld.Solids.Count; i++)
             {

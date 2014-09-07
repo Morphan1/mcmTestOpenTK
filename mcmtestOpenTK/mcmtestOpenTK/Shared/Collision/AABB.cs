@@ -8,42 +8,96 @@ namespace mcmtestOpenTK.Shared.Collision
 {
     public class AABB
     {
-        public Location Position;
         public Location Mins;
         public Location Maxs;
 
-        public AABB(Location _Position, Location _Mins, Location _Maxs)
+        public AABB(Location _Mins, Location _Maxs)
         {
-            Position = _Position;
             Mins = _Mins;
             Maxs = _Maxs;
         }
 
+        /// <summary>
+        /// Finds the center of the AABB.
+        /// </summary>
+        public Location Center()
+        {
+            return Mins + (Maxs - Mins) / 2;
+        }
+
+        /// <summary>
+        /// Finds the extent of the AABB.
+        /// </summary>
+        public Location Extent()
+        {
+            return (Maxs - Mins) / 2;
+        }
+
+        /// <summary>
+        /// Changes the center of the AABB.
+        /// </summary>
+        /// <param name="loc">The new center</param>
+        public void Recenter(Location loc)
+        {
+            Location adjust = loc - Center();
+            Mins += adjust;
+            Maxs += adjust;
+        }
+
+        /// <summary>
+        /// Calculates the radius of the box in the direction towards a point.
+        /// </summary>
+        /// <param name="point2">The point that is the target of the radius calculation</param>
+        public Location Radius(Location point2)
+        {
+            Location topfrontleft = Maxs;
+            Location backbottomright = Mins;
+            Location externpt = point2;
+            Location middle = Maxs / 2 + backbottomright / 2;
+            topfrontleft -= middle;
+            backbottomright -= middle;
+            externpt -= middle;
+            externpt /= topfrontleft;
+            Location mag = new Location(Math.Abs(externpt.X), Math.Abs(externpt.Y), Math.Abs(externpt.Z));
+            double max = Math.Max(mag.X, Math.Max(mag.Y, mag.Z));
+            if (max < 1)
+            {
+                max = 1;
+            }
+            externpt /= max;
+            externpt = externpt * topfrontleft + middle;
+            return externpt - Center();
+        }
+
+        /// <summary>
+        /// Expands the AABB to include a point.
+        /// </summary>
+        /// <param name="point">The point to include</param>
         public void Include(Location point)
         {
-            if (point.X < Position.X + Mins.X)
+            if (point.X < Mins.X)
             {
-                Mins.X = point.X - Position.X;
+                Mins.X = point.X;
             }
-            if (point.Y < Position.Y + Mins.Y)
+            if (point.Y < Mins.Y)
             {
-                Mins.Y = point.Y - Position.Y;
+                Mins.Y = point.Y;
             }
-            if (point.Z < Position.Z + Mins.Z)
+            if (point.Z < Mins.Z)
             {
-                Mins.Z = point.Z - Position.Z;
+                Mins.Z = point.Z;
             }
-            if (point.X > Position.X + Maxs.X)
+            if (point.X > Maxs.X)
             {
-                Maxs.X = point.X - Position.X;
+                Maxs.X = point.X;
             }
-            if (point.Y > Position.Y + Maxs.Y)
+            if (point.Y > Maxs.Y)
             {
-                Maxs.Y = point.Y - Position.Y;
+                Maxs.Y = point.Y;
             }
-            if (point.Z > Position.Z + Maxs.Z)
+            if (point.Z > Maxs.Z)
             {
-                Maxs.Z = point.Z - Position.Z;
+                Maxs.Z = point.Z;
             }
         }
 
@@ -51,17 +105,17 @@ namespace mcmtestOpenTK.Shared.Collision
         {
             Plane[] planes = new Plane[6];
             // Y-
-            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z)/*, new Location(0, -1, 0)*/);
+            planes[0] = new Plane(new Location(Mins.X, Mins.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Maxs.Z)/*, new Location(0, -1, 0)*/);
             // Y+
-            planes[1] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z)/*, new Location(0, 1, 0)*/);
+            planes[1] = new Plane(new Location(Mins.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Mins.Z)/*, new Location(0, 1, 0)*/);
             // X-
-            planes[2] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z)/*, new Location(-1, 0, 0)*/);
+            planes[2] = new Plane(new Location(Mins.X, Maxs.Y, Mins.Z), new Location(Mins.X, Mins.Y, Mins.Z), new Location(Mins.X, Maxs.Y, Maxs.Z)/*, new Location(-1, 0, 0)*/);
             // X+
-            planes[3] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(1, 0, 0)*/);
+            planes[3] = new Plane(new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(1, 0, 0)*/);
             // Z-
-            planes[4] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z)/*, new Location(0, 0, -1)*/);
+            planes[4] = new Plane(new Location(Maxs.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Mins.X, Mins.Y, Mins.Z)/*, new Location(0, 0, -1)*/);
             // Z+
-            planes[5] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(0, 0, 1)*/);
+            planes[5] = new Plane(new Location(Mins.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z)/*, new Location(0, 0, 1)*/);
             return planes;
         }
 
@@ -69,47 +123,47 @@ namespace mcmtestOpenTK.Shared.Collision
         {
             Plane[] planes = new Plane[12];
             // Y-
-            planes[0] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z));
-            planes[1] = new Plane(Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z));
+            planes[0] = new Plane(new Location(Mins.X, Mins.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Maxs.Z));
+            planes[1] = new Plane(new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(Mins.X, Mins.Y, Maxs.Z), new Location(Mins.X, Mins.Y, Mins.Z));
             // Y+
-            planes[2] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z));
-            planes[3] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z));
+            planes[2] = new Plane(new Location(Mins.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Mins.Z));
+            planes[3] = new Plane(new Location(Mins.X, Maxs.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(Mins.X, Maxs.Y, Mins.Z));
             // X-
-            planes[4] = new Plane(Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z));
-            planes[5] = new Plane(Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z));
+            planes[4] = new Plane(new Location(Mins.X, Maxs.Y, Mins.Z), new Location(Mins.X, Mins.Y, Mins.Z), new Location(Mins.X, Maxs.Y, Maxs.Z));
+            planes[5] = new Plane(new Location(Mins.X, Maxs.Y, Maxs.Z), new Location(Mins.X, Mins.Y, Mins.Z), new Location(Mins.X, Mins.Y, Maxs.Z));
             // X+
-            planes[6] = new Plane(Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z));
-            planes[7] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z));
+            planes[6] = new Plane(new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z));
+            planes[7] = new Plane(new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Mins.Y, Mins.Z));
             // Z-
-            planes[8] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Mins.Y, Mins.Z));
-            planes[9] = new Plane(Position + new Location(Mins.X, Mins.Y, Mins.Z), Position + new Location(Mins.X, Maxs.Y, Mins.Z), Position + new Location(Maxs.X, Maxs.Y, Mins.Z));
+            planes[8] = new Plane(new Location(Maxs.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Mins.Y, Mins.Z), new Location(Mins.X, Mins.Y, Mins.Z));
+            planes[9] = new Plane(new Location(Mins.X, Mins.Y, Mins.Z), new Location(Mins.X, Maxs.Y, Mins.Z), new Location(Maxs.X, Maxs.Y, Mins.Z));
             // Z+
-            planes[10] = new Plane(Position + new Location(Mins.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Mins.Y, Maxs.Z), Position + new Location(Maxs.X, Maxs.Y, Maxs.Z));
-            planes[11] = new Plane(Position + new Location(Maxs.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Maxs.Y, Maxs.Z), Position + new Location(Mins.X, Mins.Y, Maxs.Z));
+            planes[10] = new Plane(new Location(Mins.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Mins.Y, Maxs.Z), new Location(Maxs.X, Maxs.Y, Maxs.Z));
+            planes[11] = new Plane(new Location(Maxs.X, Maxs.Y, Maxs.Z), new Location(Mins.X, Maxs.Y, Maxs.Z), new Location(Mins.X, Mins.Y, Maxs.Z));
             return planes;
         }
 
         public bool Point(Location spot)
         {
-            Location lower = Position + Mins;
-            Location upper = Position + Maxs;
+            Location lower = Mins;
+            Location upper = Maxs;
             return lower.X <= spot.X && lower.Y <= spot.Y && lower.Z <= spot.Z &&
                 upper.X >= spot.X && upper.Y >= spot.Y && upper.Z >= spot.Z;
         }
 
         public bool Box(AABB Box2)
         {
-            Location elow = Position + Mins;
-            Location ehigh = Position + Maxs;
-            Location Low = Box2.Position + Box2.Mins;
-            Location High = Box2.Position + Box2.Maxs;
+            Location elow = Mins;
+            Location ehigh = Maxs;
+            Location Low = Box2.Mins;
+            Location High = Box2.Maxs;
             return Low.X <= ehigh.X && Low.Y <= ehigh.Y && Low.Z <= ehigh.Z &&
                         High.X >= elow.X && High.Y >= elow.Y && High.Z >= elow.Z;
         }
 
         public Location TraceLine(Location start, Location target, out Location normal)
         {
-            return AABBClosestBox(Position, Mins, Maxs, Location.Zero, Location.Zero, start, target, out normal);
+            return AABBClosestBox(Location.Zero, Mins, Maxs, Location.Zero, Location.Zero, start, target, out normal);
         }
 
         public Location CollidePlanes(List<Plane> planes, Location start, Location target, out Location normal)
@@ -135,13 +189,13 @@ namespace mcmtestOpenTK.Shared.Collision
 
         public Location TraceBox(AABB Box2, Location start, Location end, out Location normal)
         {
-            return AABBClosestBox(Position, Mins, Maxs, Box2.Position + Box2.Mins, Box2.Position + Box2.Maxs, start, end, out normal);
+            return AABBClosestBox(Location.Zero, Mins, Maxs, Box2.Mins, Box2.Maxs, start, end, out normal);
         }
 
         public Location[] BoxPoints()
         {
-            Location mins = Position + Mins;
-            Location maxs = Position + Maxs;
+            Location mins = Mins;
+            Location maxs = Maxs;
             Location[] points = new Location[8];
             points[0] = new Location(mins.X, mins.Y, mins.Z);
             points[1] = new Location(mins.X, mins.Y, maxs.Z);
@@ -174,7 +228,7 @@ namespace mcmtestOpenTK.Shared.Collision
 
         public override string ToString()
         {
-            return "(BOX:" + Position + ",Min:" + Mins + ",Max:" + Maxs + ")";
+            return "(BOX:Min:" + Mins + ",Max:" + Maxs + ")";
         }
 
         /// <summary>
@@ -314,7 +368,7 @@ namespace mcmtestOpenTK.Shared.Collision
 
         public override bool Equals(object obj)
         {
-            return obj is AABB && Mins == ((AABB)obj).Mins && Maxs == ((AABB)obj).Maxs && Position == ((AABB)obj).Position;
+            return obj is AABB && Mins == ((AABB)obj).Mins && Maxs == ((AABB)obj).Maxs;
         }
     }
 }

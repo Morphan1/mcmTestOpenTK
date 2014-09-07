@@ -128,7 +128,7 @@ namespace mcmtestOpenTK.Shared.Collision
                 if (!hit.IsNaN())
                 {
                     double newdist = (hit - start).LengthSquared();
-                    bool check = box ? Box(new AABB(hit, new Location(-0.01f), new Location(0.01f))) : Point(hit);
+                    bool check = box ? Box(new AABB(new Location(-0.01f) + hit, new Location(0.01f) + hit)) : Point(hit);
                     if (newdist < dist && check)
                     {
                         dist = newdist;

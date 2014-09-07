@@ -30,7 +30,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Solid = true;
             Planes = new List<Plane>();
             Textures = new List<Texture>();
-            BroadCollideBox = new AABB(Location.Zero, Location.Zero, Location.Zero);
+            BroadCollideBox = new AABB(Location.Zero, Location.Zero);
             model = Model.GetModel("test");
         }
 
@@ -132,7 +132,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         {
             //box.Mins += box.Position;
             //box.Maxs += box.Position;
-            box.Position = Location.Zero;
+            // TODO?: box.Position = Location.Zero;
             Minkowski mi;
             if (Minkos.TryGetValue(box, out mi))
             {
@@ -150,9 +150,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
         {
             Location hit = BroadCollideBox.TraceBox(Box2, start, end, out normal);
-            AABB Box3 = new AABB(Box2.Position + start, Box2.Mins, Box2.Maxs);
+            AABB Box3 = new AABB(Box2.Mins + start, Box2.Maxs + start);
             if (!hit.IsNaN() || BroadCollideBox.Box(Box3))
             {
+#if MINKO_METHOD
                 mink = getMinko(Box2);
                 Location anormal;
                 Location got = mink.RayTrace(start, end, out anormal);
@@ -163,6 +164,27 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 //}
                 normal = anormal;
                 return got;
+#else
+                Location current = Location.NaN;
+                Location cnormal = Location.NaN;
+                AABB box3 = new AABB(Box2.Mins + start, Box2.Maxs + start);
+                for (int i = 0; i < Planes.Count; i++)
+                {
+                    Location rad = box3.Radius(Planes[i].Normal * (box3.Extent().X + box3.Extent().Y + box3.Extent().Z));
+                    hit = Planes[i].IntersectLine(box3.Center() + rad, end + rad) - rad;
+                    AABB box4 = new AABB(box3.Mins - new Location(0.1f), box3.Maxs + new Location(0.1f));
+                    box4.Recenter(hit);
+                    if (!hit.IsNaN()
+                        && (current.IsNaN() || (hit - box3.Center()).LengthSquared() < (current - box3.Center()).LengthSquared())
+                        && Box(box4))
+                    {
+                        cnormal = Planes[i].Normal;
+                        current = hit;
+                    }
+                }
+                normal = cnormal;
+                return current;
+#endif
             }
             return Location.NaN;
         }
@@ -194,9 +216,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 Textures.Add(Texture.GetTexture(NetStringManager.GetStringForID(BitConverter.ToInt32(data, (i + 1) * (36 + 4) - 4))));
             }
             //StringBuilder planestr = new StringBuilder(Planes.Count * 36);
-            BroadCollideBox.Position = Planes[0].vec1;
-            BroadCollideBox.Mins = Location.Zero;
-            BroadCollideBox.Maxs = Location.Zero;
+            BroadCollideBox.Mins = Planes[0].vec1;
+            BroadCollideBox.Maxs = Planes[0].vec1;
             for (int i = 0; i < Planes.Count; i++)
             {
                 //planestr.Append(Planes[i].ToString()).Append("_");
