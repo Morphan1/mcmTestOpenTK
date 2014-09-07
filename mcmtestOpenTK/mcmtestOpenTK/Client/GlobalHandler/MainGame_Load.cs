@@ -153,11 +153,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
                 int YAdjust = ClientCVar.r_screenheight.ValueI - ScreenHeight;
                 ScreenWidth = ClientCVar.r_screenwidth.ValueI;
                 ScreenHeight = ClientCVar.r_screenheight.ValueI;
-                PrimaryGameWindow.Size = new Size(ScreenWidth, ScreenHeight);
                 UIConsole.Typing.Position.Y += YAdjust / 2;
                 UIConsole.ScrollText.Position.Y += YAdjust / 2;
                 UIConsole.MaxWidth += XAdjust;
             }
+            PrimaryGameWindow.ClientSize = new Size(ScreenWidth, ScreenHeight);
             // Handle fullscreen state
             if (ClientCVar.r_fullscreen.ValueB)
             {

@@ -70,21 +70,12 @@ namespace mcmtestOpenTK.Client.UIHandlers
 
         public static int MouseX()
         {
-            return intX;
+            return MainGame.PrimaryGameWindow.Mouse.X;
         }
 
         public static int MouseY()
         {
-            return intY;
-        }
-
-        static int intX;
-        static int intY;
-
-        public static void Mouse_Move(object sender, MouseMoveEventArgs e)
-        {
-            intX = e.X;
-            intY = e.Y;
+            return MainGame.PrimaryGameWindow.Mouse.Y;
         }
 
         /// <summary>

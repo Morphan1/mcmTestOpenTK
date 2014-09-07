@@ -43,7 +43,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             PrimaryGameWindow.KeyPress += new EventHandler<KeyPressEventArgs>(KeyHandler.PrimaryGameWindow_KeyPress);
             PrimaryGameWindow.KeyDown += new EventHandler<KeyboardKeyEventArgs>(KeyHandler.PrimaryGameWindow_KeyDown);
             PrimaryGameWindow.KeyUp += new EventHandler<KeyboardKeyEventArgs>(KeyHandler.PrimaryGameWindow_KeyUp);
-            PrimaryGameWindow.Mouse.Move += new EventHandler<MouseMoveEventArgs>(MouseHandler.Mouse_Move);
             // Begin running the game.
             SysConsole.Output(OutputType.INIT, "Starting up main game window...");
             PrimaryGameWindow.Run(Target_cFPS, Target_gFPS);
