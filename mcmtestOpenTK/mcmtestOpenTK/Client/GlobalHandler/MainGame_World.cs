@@ -41,6 +41,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             Solids = new List<Entity>();
             skybox = new Skybox();
             skybox.Init();
+            SpawnEntity(Player.player);
         }
 
         /// <summary>
@@ -112,6 +113,11 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         /// <param name="e">The entity to remove</param>
         public static void Destroy(Entity e)
         {
+            if (e is Player)
+            {
+                ErrorHandler.HandleError("Tried to remove the player!");
+                return;
+            }
             Entities.Remove(e);
             e.IsValid = false;
             if (e.TickMe)
@@ -135,6 +141,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             }
             Entities = new List<Entity>();
             Tickers = new List<Entity>();
+            Solids = new List<Entity>();
+            SpawnEntity(Player.player);
         }
 
         /// <summary>

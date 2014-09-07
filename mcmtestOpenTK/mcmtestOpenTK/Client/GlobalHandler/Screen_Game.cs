@@ -61,9 +61,6 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             X = MouseHandler.MouseX();
             Y = MouseHandler.MouseY();
 
-            // Update player
-            Player.player.Update(MainGame.Delta, false);
-
             // Update world
             MainGame.TickWorld();
 

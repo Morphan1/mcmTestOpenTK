@@ -38,7 +38,7 @@
     <Compile Include="Client\CommonHandlers\ClientCVar.cs" />
     <Compile Include="Client\CommonHandlers\Util.cs" />
     <Compile Include="Client\GameplayHandlers\Entities\Entity.cs" />
-    <Compile Include="Client\GameplayHandlers\Player.cs" />
+    <Compile Include="Client\GameplayHandlers\Entities\Player.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_Exit.cs" />
     <Compile Include="Client\GlobalHandler\MainGame_World.cs" />
     <Compile Include="Client\GraphicsHandlers\Renderable.cs" />

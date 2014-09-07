@@ -11,23 +11,29 @@ using mcmtestOpenTK.Client.Networking;
 using mcmtestOpenTK.Client.Networking.PacketsOut;
 using mcmtestOpenTK.Client.GraphicsHandlers;
 using mcmtestOpenTK.Shared;
-using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using mcmtestOpenTK.Shared.Util;
 using mcmtestOpenTK.Shared.Collision;
 
-namespace mcmtestOpenTK.Client.GameplayHandlers
+namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 {
-    public class Player
+    public class Player: Entity
     {
+        CubeModel model;
+
+        public Player()
+            : base(true, Shared.Game.EntityType.PLAYER)
+        {
+            Mins = new Location(-3f, -3f, 0f);
+            Maxs = new Location(3f, 3f, 16f);
+            Solid = true;
+            UniqueID = ulong.MaxValue;
+            model = new CubeModel(Position + Mins, Maxs - Mins, Texture.Test);
+        }
+
         /// <summary>
         /// The default player - there's only ever one!
         /// </summary>
         public static Player player;
-
-        /// <summary>
-        /// The precise X/Y/Z location of the entity.
-        /// </summary>
-        public Location Position = Location.Zero;
 
         /// <summary>
         /// How much health the player currently has.
@@ -66,7 +72,10 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         public const double JumpPower = 50;
         public const double AirSpeedMult = 0.05f;
 
-        public Location Maxs;
+        public override void Tick()
+        {
+            Update(MainGame.Delta, false);
+        }
 
         /// <summary>
         /// Called to tick the default player.
@@ -308,6 +317,17 @@ namespace mcmtestOpenTK.Client.GameplayHandlers
         ushort lastMove = 0;
         Location lastdir = Location.Zero;
         Location lastvel = Location.Zero;
+
+        public override void Draw()
+        {
+            model.Position = Position + Mins;
+            model.Draw();
+        }
+
+        public override void ReadBytes(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class BroadcastPoint

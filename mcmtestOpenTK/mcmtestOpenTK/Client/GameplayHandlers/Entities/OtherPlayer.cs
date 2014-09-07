@@ -262,8 +262,9 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void Draw()
         {
-            model.Position = new Location(Position.X - model.Scale.X / 2, Position.Y - model.Scale.Y / 2, Position.Z);
+            model.Position = Position + Mins;
             model.Draw();
+            // Draw a line from this player to the main player (debugging)
             GL.Begin(PrimitiveType.Lines);
             GL.Color4(Color4.Green);
             GL.Vertex3(Position.X, Position.Y, Position.Z);

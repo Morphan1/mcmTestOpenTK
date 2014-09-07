@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mcmtestOpenTK.Client.GameplayHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 using OpenTK.Graphics.OpenGL;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Client.GlobalHandler;

@@ -203,7 +203,7 @@ namespace mcmtestOpenTK.Client.GlobalHandler
             if (ClientCVar.r_thirdperson.ValueB)
             {
                 Location start = Player.player.Position + new Location(0, 0, Player.player.down ? 10: 16);
-                Location target = start - Forward * 15;
+                Location target = start - Forward * 30;
                 Location hitnormal;
                 target = Collision.LineBox(start, target, new Location(-1, -1, -1), new Location(1, 1, 1), out hitnormal) - Forward;
                 View = Matrix4.LookAt(Util.LocVec(target), Util.LocVec(start + Forward), new Vector3(0, 0, 1));

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using mcmtestOpenTK.Shared;
 using mcmtestOpenTK.Shared.CommandSystem;
-using mcmtestOpenTK.Client.GameplayHandlers;
+using mcmtestOpenTK.Client.GameplayHandlers.Entities;
 
 namespace mcmtestOpenTK.Client.CommandHandlers.KeyLockCmds
 {
