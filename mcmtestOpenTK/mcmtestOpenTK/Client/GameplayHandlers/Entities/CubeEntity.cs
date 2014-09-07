@@ -23,6 +23,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         public float Texture_VScale;
         public float Texture_HShift;
         public float Texture_VShift;
+        public float Texture_Rotation;
 
         public CubeEntity()
             : base(false, EntityType.CUBE)
@@ -61,7 +62,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public override void ReadBytes(byte[] data)
         {
-            if (data.Length < 12 + 4 * 4 + 1)
+            if (data.Length < 12 + 4 * 5 + 4)
             {
                 throw new ArgumentException("Binary network data for CUBE entity is invalid!");
             }
@@ -75,6 +76,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Texture_HShift = BitConverter.ToSingle(data, pos);
             pos += 4;
             Texture_VShift = BitConverter.ToSingle(data, pos);
+            pos += 4;
+            Texture_Rotation = BitConverter.ToSingle(data, pos);
             pos += 4;
             string texturestr = NetStringManager.GetStringForID(BitConverter.ToInt32(data, pos));
             texture = Texture.GetTexture(texturestr);
