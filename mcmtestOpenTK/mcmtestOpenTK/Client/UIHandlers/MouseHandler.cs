@@ -68,6 +68,25 @@ namespace mcmtestOpenTK.Client.UIHandlers
         public static float pwheelstate;
         public static float cwheelstate;
 
+        public static int MouseX()
+        {
+            return intX;
+        }
+
+        public static int MouseY()
+        {
+            return intY;
+        }
+
+        static int intX;
+        static int intY;
+
+        public static void Mouse_Move(object sender, MouseMoveEventArgs e)
+        {
+            intX = e.X;
+            intY = e.Y;
+        }
+
         /// <summary>
         /// Updates mouse movement.
         /// </summary>
@@ -75,8 +94,8 @@ namespace mcmtestOpenTK.Client.UIHandlers
         {
             if (MainGame.PrimaryGameWindow.Focused && MouseCaptured)
             {
-                double MoveX = (((MainGame.ScreenWidth / 2) - MainGame.PrimaryGameWindow.Mouse.X) * MainGame.Delta * MainGame.MouseSensitivity);
-                double MoveY = (((MainGame.ScreenHeight / 2) - MainGame.PrimaryGameWindow.Mouse.Y) * MainGame.Delta * MainGame.MouseSensitivity);
+                double MoveX = (((MainGame.ScreenWidth / 2) - MouseX()) * MainGame.Delta * MainGame.MouseSensitivity);
+                double MoveY = (((MainGame.ScreenHeight / 2) - MouseY()) * MainGame.Delta * MainGame.MouseSensitivity);
                 MouseDelta = new Vector2((float)MoveX, (float)MoveY);
                 CenterMouse();
                 PreviousMouse = CurrentMouse;

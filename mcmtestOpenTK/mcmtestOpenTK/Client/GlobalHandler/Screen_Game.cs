@@ -58,8 +58,8 @@ namespace mcmtestOpenTK.Client.GlobalHandler
         public override void Tick()
         {
             // Update gameplay
-            X = MainGame.PrimaryGameWindow.Mouse.X;
-            Y = MainGame.PrimaryGameWindow.Mouse.Y;
+            X = MouseHandler.MouseX();
+            Y = MouseHandler.MouseY();
 
             // Update player
             Player.player.Update(MainGame.Delta, false);

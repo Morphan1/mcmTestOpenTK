@@ -114,8 +114,8 @@ namespace mcmtestOpenTK.Client.UIHandlers.Menus
         /// </summary>
         public void Tick()
         {
-            int mx = MainGame.PrimaryGameWindow.Mouse.X;
-            int my = MainGame.PrimaryGameWindow.Mouse.Y;
+            int mx = MouseHandler.MouseX();
+            int my = MouseHandler.MouseY();
             bool pressedleft = MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Left)
                 && !MouseHandler.PreviousMouse.IsButtonDown(MouseButton.Left);
             bool pressedright = MouseHandler.CurrentMouse.IsButtonDown(MouseButton.Right)
