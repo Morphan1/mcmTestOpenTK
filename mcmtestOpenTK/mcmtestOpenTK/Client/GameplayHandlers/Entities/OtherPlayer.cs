@@ -27,6 +27,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
         /// </summary>
         public static Location DefaultMaxes = new Location(3f, 3f, 16f);
 
+        AABB CollisionModel;
+
         CubeModel model;
 
         /// <summary>
@@ -61,15 +63,36 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
 
         public OtherPlayer(): base(true, EntityType.PLAYER)
         {
-            model = new CubeModel(Location.Zero, new Location(6, 6, 16), Texture.Test);
             Mins = DefaultMins;
             Maxs = DefaultMaxes;
+            model = new CubeModel(Location.Zero, Maxs - Mins, Texture.Test);
             Solid = true;
             Gravity = 100;
             PacketsToApply = new List<PlayerPositionPacketIn>();
             LastPacket = new PlayerPositionPacketIn();
             LastPacket.Time = MainGame.GlobalTickTime;
             LastMovement = MainGame.GlobalTickTime;
+            CollisionModel = new AABB(Mins, Maxs);
+        }
+
+        public override bool Box(AABB Box2)
+        {
+            return CollisionModel.Box(Box2);
+        }
+
+        public override Location Closest(Location start, Location target, out Location normal)
+        {
+            return CollisionModel.TraceLine(start, target, out normal);
+        }
+
+        public override bool Point(Location point)
+        {
+            return CollisionModel.Point(point);
+        }
+
+        public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
+        {
+            return CollisionModel.TraceBox(Box2, start, end, out normal);
         }
 
         public override void Tick()
@@ -85,6 +108,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 return;
             }
+            bool psolid = Solid;
+            Solid = false;
             if (!isCustom)
             {
                 int count = PacketsToApply.Count;
@@ -212,6 +237,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             {
                 LastTick = MainGame.GlobalTickTime;
             }
+            Solid = psolid;
+            CollisionModel = new AABB(Position + Mins, Position + Maxs);
         }
 
         public double LastTick;

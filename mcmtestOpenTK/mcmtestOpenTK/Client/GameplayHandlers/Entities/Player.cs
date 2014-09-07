@@ -20,6 +20,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
     {
         CubeModel model;
 
+        AABB CollisionModel;
+
         public Player()
             : base(true, Shared.Game.EntityType.PLAYER)
         {
@@ -28,6 +30,7 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Solid = true;
             UniqueID = ulong.MaxValue;
             model = new CubeModel(Position + Mins, Maxs - Mins, Texture.Test);
+            CollisionModel = new AABB(Position + Mins, Position + Maxs);
         }
 
         /// <summary>
@@ -77,6 +80,26 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
             Update(MainGame.Delta, false);
         }
 
+        public override bool Box(AABB Box2)
+        {
+            return CollisionModel.Box(Box2);
+        }
+
+        public override Location Closest(Location start, Location target, out Location normal)
+        {
+            return CollisionModel.TraceLine(start, target, out normal);
+        }
+
+        public override bool Point(Location point)
+        {
+            return CollisionModel.Point(point);
+        }
+
+        public override Location ClosestBox(AABB Box2, Location start, Location end, out Location normal)
+        {
+            return CollisionModel.TraceBox(Box2, start, end, out normal);
+        }
+
         /// <summary>
         /// Called to tick the default player.
         /// </summary>
@@ -95,6 +118,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
                 return;
             }
+            bool psolid = Solid;
+            Solid = false;
             // Mouse based rotation
             if (!IsCustom)
             {
@@ -253,6 +278,8 @@ namespace mcmtestOpenTK.Client.GameplayHandlers.Entities
                 }
                 //}
             }
+            Solid = psolid;
+            CollisionModel = new AABB(Position + Mins, Position + Maxs);
         }
 
         public bool onground = false;
